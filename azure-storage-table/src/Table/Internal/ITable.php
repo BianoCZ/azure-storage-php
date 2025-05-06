@@ -53,7 +53,7 @@ interface ITable
     * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452238.aspx
     */
     public function getServiceProperties(
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     );
 
     /**
@@ -66,7 +66,7 @@ interface ITable
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452238.aspx
      */
     public function getServicePropertiesAsync(
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     );
 
     /**
@@ -81,7 +81,7 @@ interface ITable
     */
     public function setServiceProperties(
         ServiceProperties $serviceProperties,
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     );
 
     /**
@@ -99,7 +99,7 @@ interface ITable
      */
     public function setServicePropertiesAsync(
         ServiceProperties $serviceProperties,
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     );
 
     /**
@@ -112,7 +112,7 @@ interface ITable
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-table-service-stats
      */
-    public function getServiceStats(ServiceOptions $options = null);
+    public function getServiceStats(?ServiceOptions $options = null);
 
     /**
      * Creates promise that retrieves statistics related to replication for the
@@ -124,7 +124,7 @@ interface ITable
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-table-service-stats
      */
-    public function getServiceStatsAsync(ServiceOptions $options = null);
+    public function getServiceStatsAsync(?ServiceOptions $options = null);
 
     /**
      * Quries tables in the given storage account.
@@ -162,7 +162,7 @@ interface ITable
      */
     public function createTable(
         $table,
-        TableModels\TableServiceCreateOptions $options = null
+        ?TableModels\TableServiceCreateOptions $options = null
     );
 
     /**
@@ -177,7 +177,7 @@ interface ITable
      */
     public function createTableAsync(
         $table,
-        TableModels\TableServiceCreateOptions $options = null
+        ?TableModels\TableServiceCreateOptions $options = null
     );
 
     /**
@@ -190,7 +190,7 @@ interface ITable
      */
     public function getTable(
         $table,
-        TableModels\GetTableOptions $options = null
+        ?TableModels\GetTableOptions $options = null
     );
 
     /**
@@ -203,7 +203,7 @@ interface ITable
      */
     public function getTableAsync(
         $table,
-        TableModels\GetTableOptions $options = null
+        ?TableModels\GetTableOptions $options = null
     );
 
     /**
@@ -218,7 +218,7 @@ interface ITable
      */
     public function deleteTable(
         $table,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -233,7 +233,7 @@ interface ITable
      */
     public function deleteTableAsync(
         $table,
-        TableModels\TableServiceOptions$options = null
+        ?TableModels\TableServiceOptions$options = null
     );
 
     /**
@@ -278,7 +278,7 @@ interface ITable
     public function insertEntity(
         $table,
         TableModels\Entity $entity,
-        TableModels\TableServiceCreateOptions $options = null
+        ?TableModels\TableServiceCreateOptions $options = null
     );
 
     /**
@@ -295,7 +295,7 @@ interface ITable
     public function insertEntityAsync(
         $table,
         TableModels\Entity $entity,
-        TableModels\TableServiceCreateOptions $options = null
+        ?TableModels\TableServiceCreateOptions $options = null
     );
 
     /**
@@ -313,7 +313,7 @@ interface ITable
     public function insertOrMergeEntity(
         $table,
         TableModels\Entity $entity,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -331,7 +331,7 @@ interface ITable
     public function insertOrMergeEntityAsync(
         $table,
         TableModels\Entity $entity,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -349,7 +349,7 @@ interface ITable
     public function insertOrReplaceEntity(
         $table,
         TableModels\Entity $entity,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -366,7 +366,7 @@ interface ITable
     public function insertOrReplaceEntityAsync(
         $table,
         TableModels\Entity $entity,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -384,7 +384,7 @@ interface ITable
     public function updateEntity(
         $table,
         TableModels\Entity $entity,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -402,7 +402,7 @@ interface ITable
     public function updateEntityAsync(
         $table,
         TableModels\Entity $entity,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -420,7 +420,7 @@ interface ITable
     public function mergeEntity(
         $table,
         TableModels\Entity $entity,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -439,7 +439,7 @@ interface ITable
     public function mergeEntityAsync(
         $table,
         TableModels\Entity $entity,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -458,7 +458,7 @@ interface ITable
         $table,
         $partitionKey,
         $rowKey,
-        TableModels\DeleteEntityOptions $options = null
+        ?TableModels\DeleteEntityOptions $options = null
     );
 
     /**
@@ -477,7 +477,7 @@ interface ITable
         $table,
         $partitionKey,
         $rowKey,
-        TableModels\DeleteEntityOptions $options = null
+        ?TableModels\DeleteEntityOptions $options = null
     );
 
     /**
@@ -500,7 +500,7 @@ interface ITable
         $table,
         $partitionKey,
         $rowKey,
-        TableModels\GetEntityOptions $options = null
+        ?TableModels\GetEntityOptions $options = null
     );
 
     /**
@@ -523,7 +523,7 @@ interface ITable
         $table,
         $partitionKey,
         $rowKey,
-        TableModels\GetEntityOptions $options = null
+        ?TableModels\GetEntityOptions $options = null
     );
 
     /**
@@ -536,7 +536,7 @@ interface ITable
      */
     public function batch(
         TableModels\BatchOperations $operations,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -549,7 +549,7 @@ interface ITable
      */
     public function batchAsync(
         TableModels\BatchOperations $batchOperations,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -564,7 +564,7 @@ interface ITable
      */
     public function getTableAcl(
         $table,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -579,7 +579,7 @@ interface ITable
      */
     public function getTableAclAsync(
         $table,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -596,7 +596,7 @@ interface ITable
     public function setTableAcl(
         $table,
         TableModels\TableACL $acl,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 
     /**
@@ -613,6 +613,6 @@ interface ITable
     public function setTableAclAsync(
         $table,
         TableModels\TableACL $acl,
-        TableModels\TableServiceOptions $options = null
+        ?TableModels\TableServiceOptions $options = null
     );
 }

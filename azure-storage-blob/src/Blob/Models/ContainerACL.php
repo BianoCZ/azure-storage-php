@@ -62,7 +62,7 @@ class ContainerACL extends ACLBase
      *
      * @return ContainerACL
      */
-    public static function create($publicAccess, array $parsed = null)
+    public static function create($publicAccess, ?array $parsed = null)
     {
         Validate::isTrue(
             PublicAccessType::isValid($publicAccess),

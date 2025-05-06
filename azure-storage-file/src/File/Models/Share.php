@@ -102,7 +102,7 @@ class Share
      *
      * @return void
      */
-    public function setMetadata(array $metadata = null)
+    public function setMetadata(?array $metadata = null)
     {
         $this->metadata = $metadata;
     }

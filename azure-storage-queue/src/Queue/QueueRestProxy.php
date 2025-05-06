@@ -200,7 +200,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      *
      * @return ListQueuesResult
      */
-    public function listQueues(ListQueuesOptions $options = null)
+    public function listQueues(?ListQueuesOptions $options = null)
     {
         return $this->listQueuesAsync($options)->wait();
     }
@@ -212,7 +212,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      *
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function listQueuesAsync(ListQueuesOptions $options = null)
+    public function listQueuesAsync(?ListQueuesOptions $options = null)
     {
         $method      = Resources::HTTP_GET;
         $headers     = array();
@@ -275,7 +275,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      *
      * @return void
      */
-    public function clearMessages($queueName, QueueServiceOptions $options = null)
+    public function clearMessages($queueName, ?QueueServiceOptions $options = null)
     {
         $this->clearMessagesAsync($queueName, $options)->wait();
     }
@@ -297,7 +297,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function clearMessagesAsync(
         $queueName,
-        QueueServiceOptions $options = null
+        ?QueueServiceOptions $options = null
     ) {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
@@ -340,7 +340,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
     public function createMessage(
         $queueName,
         $messageText,
-        CreateMessageOptions $options = null
+        ?CreateMessageOptions $options = null
     ) {
         return $this->createMessageAsync($queueName, $messageText, $options)->wait();
     }
@@ -358,7 +358,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
     public function createMessageAsync(
         $queueName,
         $messageText,
-        CreateMessageOptions $options = null
+        ?CreateMessageOptions $options = null
     ) {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
@@ -428,7 +428,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function createQueue(
         $queueName,
-        Models\CreateQueueOptions $options = null
+        ?Models\CreateQueueOptions $options = null
     ) {
         $this->createQueueAsync($queueName, $options)->wait();
     }
@@ -443,7 +443,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function createQueueAsync(
         $queueName,
-        Models\CreateQueueOptions $options = null
+        ?Models\CreateQueueOptions $options = null
     ) {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
@@ -490,7 +490,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
         $queueName,
         $messageId,
         $popReceipt,
-        QueueServiceOptions $options = null
+        ?QueueServiceOptions $options = null
     ) {
         $this->deleteMessageAsync(
             $queueName,
@@ -515,7 +515,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
         $queueName,
         $messageId,
         $popReceipt,
-        QueueServiceOptions $options = null
+        ?QueueServiceOptions $options = null
     ) {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
@@ -563,7 +563,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      *
      * @return void
      */
-    public function deleteQueue($queueName, QueueServiceOptions $options = null)
+    public function deleteQueue($queueName, ?QueueServiceOptions $options = null)
     {
         $this->deleteQueueAsync($queueName, $options)->wait();
     }
@@ -578,7 +578,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function deleteQueueAsync(
         $queueName,
-        QueueServiceOptions $options = null
+        ?QueueServiceOptions $options = null
     ) {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
@@ -615,7 +615,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      *
      * @return Models\GetQueueMetadataResult
      */
-    public function getQueueMetadata($queueName, QueueServiceOptions $options = null)
+    public function getQueueMetadata($queueName, ?QueueServiceOptions $options = null)
     {
         return $this->getQueueMetadataAsync($queueName, $options)->wait();
     }
@@ -630,7 +630,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function getQueueMetadataAsync(
         $queueName,
-        QueueServiceOptions $options = null
+        ?QueueServiceOptions $options = null
     ) {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
@@ -679,7 +679,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      *
      * @return Models\ListMessagesResult
      */
-    public function listMessages($queueName, ListMessagesOptions $options = null)
+    public function listMessages($queueName, ?ListMessagesOptions $options = null)
     {
         return $this->listMessagesAsync($queueName, $options)->wait();
     }
@@ -694,7 +694,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function listMessagesAsync(
         $queueName,
-        ListMessagesOptions $options = null
+        ?ListMessagesOptions $options = null
     ) {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
@@ -751,7 +751,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      *
      * @return Models\PeekMessagesResult
      */
-    public function peekMessages($queueName, PeekMessagesOptions $options = null)
+    public function peekMessages($queueName, ?PeekMessagesOptions $options = null)
     {
         return $this->peekMessagesAsync($queueName, $options)->wait();
     }
@@ -767,7 +767,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function peekMessagesAsync(
         $queueName,
-        PeekMessagesOptions $options = null
+        ?PeekMessagesOptions $options = null
     ) {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
@@ -820,8 +820,8 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function setQueueMetadata(
         $queueName,
-        array $metadata = null,
-        QueueServiceOptions $options = null
+        ?array $metadata = null,
+        ?QueueServiceOptions $options = null
     ) {
         $this->setQueueMetadataAsync($queueName, $metadata, $options)->wait();
     }
@@ -838,8 +838,8 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function setQueueMetadataAsync(
         $queueName,
-        array $metadata = null,
-        QueueServiceOptions $options = null
+        ?array $metadata = null,
+        ?QueueServiceOptions $options = null
     ) {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
@@ -901,7 +901,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
         $popReceipt,
         $messageText,
         $visibilityTimeoutInSeconds,
-        QueueServiceOptions $options = null
+        ?QueueServiceOptions $options = null
     ) {
         return $this->updateMessageAsync(
             $queueName,
@@ -940,7 +940,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
         $popReceipt,
         $messageText,
         $visibilityTimeoutInSeconds,
-        QueueServiceOptions $options = null
+        ?QueueServiceOptions $options = null
     ) {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
@@ -1021,7 +1021,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function getQueueAcl(
         $queue,
-        Models\QueueServiceOptions $options = null
+        ?Models\QueueServiceOptions $options = null
     ) {
         return $this->getQueueAclAsync($queue, $options)->wait();
     }
@@ -1038,7 +1038,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      */
     public function getQueueAclAsync(
         $queue,
-        Models\QueueServiceOptions $options = null
+        ?Models\QueueServiceOptions $options = null
     ) {
         Validate::canCastAsString($queue, 'queue');
 
@@ -1092,7 +1092,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
     public function setQueueAcl(
         $queue,
         Models\QueueACL $acl,
-        Models\QueueServiceOptions $options = null
+        ?Models\QueueServiceOptions $options = null
     ) {
         $this->setQueueAclAsync($queue, $acl, $options)->wait();
     }
@@ -1111,7 +1111,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
     public function setQueueAclAsync(
         $queue,
         Models\QueueACL $acl,
-        Models\QueueServiceOptions $options = null
+        ?Models\QueueServiceOptions $options = null
     ) {
         Validate::canCastAsString($queue, 'queue');
         Validate::notNullOrEmpty($acl, 'acl');

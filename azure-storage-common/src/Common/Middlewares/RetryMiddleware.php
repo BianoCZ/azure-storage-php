@@ -142,7 +142,7 @@ class RetryMiddleware extends MiddlewareBase
     private function retry(
         RequestInterface $request,
         array $options,
-        ResponseInterface $response = null
+        ?ResponseInterface $response = null
     ) {
         $options['delay'] = call_user_func(
             $this->intervalCalculator,

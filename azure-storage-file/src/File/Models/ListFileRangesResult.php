@@ -57,7 +57,7 @@ class ListFileRangesResult
      *
      * @return ListFileRangesResult
      */
-    public static function create(array $headers, array $parsed = null)
+    public static function create(array $headers, ?array $parsed = null)
     {
         $result  = new ListFileRangesResult();
         $headers = array_change_key_case($headers);

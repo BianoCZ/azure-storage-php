@@ -52,7 +52,7 @@ interface IFile
     *
     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file-service-properties
     */
-    public function getServiceProperties(ServiceOptions $options = null);
+    public function getServiceProperties(?ServiceOptions $options = null);
 
     /**
      * Creates promise to get the properties of the service.
@@ -63,7 +63,7 @@ interface IFile
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file-service-properties
      */
-    public function getServicePropertiesAsync(ServiceOptions $options = null);
+    public function getServicePropertiesAsync(?ServiceOptions $options = null);
 
     /**
     * Sets the properties of the service.
@@ -77,7 +77,7 @@ interface IFile
     */
     public function setServiceProperties(
         ServiceProperties $serviceProperties,
-        ServiceOptions    $options = null
+        ?ServiceOptions    $options = null
     );
 
     /**
@@ -95,7 +95,7 @@ interface IFile
      */
     public function setServicePropertiesAsync(
         ServiceProperties $serviceProperties,
-        ServiceOptions    $options = null
+        ?ServiceOptions    $options = null
     );
 
     /**
@@ -107,7 +107,7 @@ interface IFile
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-shares
      */
-    public function listShares(FileModels\ListSharesOptions $options = null);
+    public function listShares(?FileModels\ListSharesOptions $options = null);
 
     /**
      * Create a promise to return a list of the shares under the specified account
@@ -118,7 +118,7 @@ interface IFile
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-shares
      */
-    public function listSharesAsync(FileModels\ListSharesOptions $options = null);
+    public function listSharesAsync(?FileModels\ListSharesOptions $options = null);
 
     /**
      * Creates a new share in the given storage account.
@@ -132,7 +132,7 @@ interface IFile
      */
     public function createShare(
         $share,
-        FileModels\CreateShareOptions $options = null
+        ?FileModels\CreateShareOptions $options = null
     );
 
     /**
@@ -147,7 +147,7 @@ interface IFile
      */
     public function createShareAsync(
         $share,
-        FileModels\CreateShareOptions $options = null
+        ?FileModels\CreateShareOptions $options = null
     );
 
     /**
@@ -162,7 +162,7 @@ interface IFile
      */
     public function deleteShare(
         $share,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -177,7 +177,7 @@ interface IFile
      */
     public function deleteShareAsync(
         $share,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -192,7 +192,7 @@ interface IFile
      */
     public function getShareProperties(
         $share,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -207,7 +207,7 @@ interface IFile
      */
     public function getSharePropertiesAsync(
         $share,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -224,7 +224,7 @@ interface IFile
     public function setShareProperties(
         $share,
         $quota,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -241,7 +241,7 @@ interface IFile
     public function setSharePropertiesAsync(
         $share,
         $quota,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -256,7 +256,7 @@ interface IFile
      */
     public function getShareMetadata(
         $share,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -272,7 +272,7 @@ interface IFile
     */
     public function getShareMetadataAsync(
         $share,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -289,7 +289,7 @@ interface IFile
     public function setShareMetadata(
         $share,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -306,7 +306,7 @@ interface IFile
     public function setShareMetadataAsync(
         $share,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -321,7 +321,7 @@ interface IFile
      */
     public function getShareAcl(
         $share,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -336,7 +336,7 @@ interface IFile
      */
     public function getShareAclAsync(
         $share,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -354,7 +354,7 @@ interface IFile
     public function setShareAcl(
         $share,
         FileModels\ShareACL $acl,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -373,7 +373,7 @@ interface IFile
     public function setShareAclAsync(
         $share,
         FileModels\ShareACL $acl,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -388,7 +388,7 @@ interface IFile
      */
     public function getShareStats(
         $share,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -403,7 +403,7 @@ interface IFile
      */
     public function getShareStatsAsync(
         $share,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -422,7 +422,7 @@ interface IFile
     public function listDirectoriesAndFiles(
         $share,
         $path = '',
-        FileModels\ListDirectoriesAndFilesOptions $options = null
+        ?FileModels\ListDirectoriesAndFilesOptions $options = null
     );
 
     /**
@@ -441,7 +441,7 @@ interface IFile
     public function listDirectoriesAndFilesAsync(
         $share,
         $path = '',
-        FileModels\ListDirectoriesAndFilesOptions $options = null
+        ?FileModels\ListDirectoriesAndFilesOptions $options = null
     );
 
     /**
@@ -459,7 +459,7 @@ interface IFile
     public function createDirectory(
         $share,
         $path,
-        FileModels\CreateDirectoryOptions $options = null
+        ?FileModels\CreateDirectoryOptions $options = null
     );
 
     /**
@@ -477,7 +477,7 @@ interface IFile
     public function createDirectoryAsync(
         $share,
         $path,
-        FileModels\CreateDirectoryOptions $options = null
+        ?FileModels\CreateDirectoryOptions $options = null
     );
 
     /**
@@ -495,7 +495,7 @@ interface IFile
     public function deleteDirectory(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -513,7 +513,7 @@ interface IFile
     public function deleteDirectoryAsync(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -530,7 +530,7 @@ interface IFile
     public function getDirectoryProperties(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -548,7 +548,7 @@ interface IFile
     public function getDirectoryPropertiesAsync(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -565,7 +565,7 @@ interface IFile
     public function getDirectoryMetadata(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -583,7 +583,7 @@ interface IFile
     public function getDirectoryMetadataAsync(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -603,7 +603,7 @@ interface IFile
         $share,
         $path,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -624,7 +624,7 @@ interface IFile
         $share,
         $path,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -643,7 +643,7 @@ interface IFile
         $share,
         $path,
         $size,
-        FileModels\CreateFileOptions $options = null
+        ?FileModels\CreateFileOptions $options = null
     );
 
     /**
@@ -662,7 +662,7 @@ interface IFile
         $share,
         $path,
         $size,
-        FileModels\CreateFileOptions $options = null
+        ?FileModels\CreateFileOptions $options = null
     );
 
     /**
@@ -679,7 +679,7 @@ interface IFile
     public function deleteFile(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -696,7 +696,7 @@ interface IFile
     public function deleteFileAsync(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -714,7 +714,7 @@ interface IFile
     public function getFile(
         $share,
         $path,
-        FileModels\GetFileOptions $options = null
+        ?FileModels\GetFileOptions $options = null
     );
 
     /**
@@ -732,7 +732,7 @@ interface IFile
     public function getFileAsync(
         $share,
         $path,
-        FileModels\GetFileOptions $options = null
+        ?FileModels\GetFileOptions $options = null
     );
 
     /**
@@ -749,7 +749,7 @@ interface IFile
     public function getFileProperties(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -767,7 +767,7 @@ interface IFile
     public function getFilePropertiesAsync(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -786,7 +786,7 @@ interface IFile
         $share,
         $path,
         FileModels\FileProperties $properties,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -805,7 +805,7 @@ interface IFile
         $share,
         $path,
         FileModels\FileProperties $properties,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -822,7 +822,7 @@ interface IFile
     public function getFileMetadata(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -840,7 +840,7 @@ interface IFile
     public function getFileMetadataAsync(
         $share,
         $path,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -859,7 +859,7 @@ interface IFile
         $share,
         $path,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -879,7 +879,7 @@ interface IFile
         $share,
         $path,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -901,7 +901,7 @@ interface IFile
         $path,
         $content,
         Range $range,
-        FileModels\PutFileRangeOptions $options = null
+        ?FileModels\PutFileRangeOptions $options = null
     );
 
     /**
@@ -925,7 +925,7 @@ interface IFile
         $path,
         $content,
         Range $range,
-        FileModels\PutFileRangeOptions $options = null
+        ?FileModels\PutFileRangeOptions $options = null
     );
 
     /**
@@ -944,7 +944,7 @@ interface IFile
         $share,
         $path,
         $content,
-        FileModels\CreateFileFromContentOptions $options = null
+        ?FileModels\CreateFileFromContentOptions $options = null
     );
 
     /**
@@ -963,7 +963,7 @@ interface IFile
         $share,
         $path,
         $content,
-        FileModels\CreateFileFromContentOptions $options = null
+        ?FileModels\CreateFileFromContentOptions $options = null
     );
 
     /**
@@ -986,7 +986,7 @@ interface IFile
         $share,
         $path,
         Range $range,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -1010,7 +1010,7 @@ interface IFile
         $share,
         $path,
         Range $range,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -1029,8 +1029,8 @@ interface IFile
     public function listFileRange(
         $share,
         $path,
-        Range $range = null,
-        FileModels\FileServiceOptions $options = null
+        ?Range $range = null,
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -1050,8 +1050,8 @@ interface IFile
     public function listFileRangeAsync(
         $share,
         $path,
-        Range $range = null,
-        FileModels\FileServiceOptions $options = null
+        ?Range $range = null,
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -1086,7 +1086,7 @@ interface IFile
         $path,
         $sourcePath,
         array $metadata = array(),
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -1123,7 +1123,7 @@ interface IFile
         $path,
         $sourcePath,
         array $metadata = array(),
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -1142,7 +1142,7 @@ interface IFile
         $share,
         $path,
         $copyID,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 
     /**
@@ -1161,6 +1161,6 @@ interface IFile
         $share,
         $path,
         $copyID,
-        FileModels\FileServiceOptions $options = null
+        ?FileModels\FileServiceOptions $options = null
     );
 }

@@ -56,7 +56,7 @@ class ListPageBlobRangesResult
      *
      * @return ListPageBlobRangesResult
      */
-    public static function create(array $headers, array $parsed = null)
+    public static function create(array $headers, ?array $parsed = null)
     {
         $result  = new ListPageBlobRangesResult();
         $headers = array_change_key_case($headers);

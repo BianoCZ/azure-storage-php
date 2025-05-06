@@ -111,7 +111,7 @@ abstract class ACLBase
      *
      * @return void
      */
-    public function fromXmlArray(array $parsed = null)
+    public function fromXmlArray(?array $parsed = null)
     {
         $this->setSignedIdentifiers(array());
 

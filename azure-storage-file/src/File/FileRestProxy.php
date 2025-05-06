@@ -184,7 +184,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     private function getSharePropertiesAsyncImpl(
         $share,
-        FileServiceOptions $options = null,
+        ?FileServiceOptions $options = null,
         $operation = null
     ) {
         Validate::canCastAsString($share, 'share');
@@ -256,7 +256,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     private function setSharePropertiesAsyncImpl(
         $share,
         array $properties,
-        FileServiceOptions $options = null,
+        ?FileServiceOptions $options = null,
         $operation = 'properties'
     ) {
         Validate::canCastAsString($share, 'share');
@@ -336,7 +336,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $path,
         $content,
         Range $range,
-        PutFileRangeOptions $options = null,
+        ?PutFileRangeOptions $options = null,
         $useTransactionalMD5 = false
     ) {
         $queryParams  = array();
@@ -447,7 +447,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-shares
      */
-    public function listShares(ListSharesOptions $options = null)
+    public function listShares(?ListSharesOptions $options = null)
     {
         return $this->listSharesAsync($options)->wait();
     }
@@ -461,7 +461,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-shares
      */
-    public function listSharesAsync(ListSharesOptions $options = null)
+    public function listSharesAsync(?ListSharesOptions $options = null)
     {
         $method      = Resources::HTTP_GET;
         $headers     = array();
@@ -538,7 +538,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     public function createShare(
         $share,
-        CreateShareOptions $options = null
+        ?CreateShareOptions $options = null
     ) {
         $this->createShareAsync($share, $options)->wait();
     }
@@ -555,7 +555,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     public function createShareAsync(
         $share,
-        CreateShareOptions $options = null
+        ?CreateShareOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::notNullOrEmpty($share, 'share');
@@ -607,7 +607,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     public function deleteShare(
         $share,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         $this->deleteShareAsync($share, $options)->wait();
     }
@@ -624,7 +624,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     public function deleteShareAsync(
         $share,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::notNullOrEmpty($share, 'share');
@@ -675,7 +675,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     public function getShareProperties(
         $share,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->getSharePropertiesAsync($share, $options)->wait();
     }
@@ -692,7 +692,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     public function getSharePropertiesAsync(
         $share,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->getSharePropertiesAsyncImpl($share, $options, 'properties');
     }
@@ -711,7 +711,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function setShareProperties(
         $share,
         $quota,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         $this->setSharePropertiesAsync($share, $quota, $options)->wait();
     }
@@ -730,7 +730,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function setSharePropertiesAsync(
         $share,
         $quota,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->setSharePropertiesAsyncImpl(
             $share,
@@ -752,7 +752,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     public function getShareMetadata(
         $share,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->getShareMetadataAsync($share, $options)->wait();
     }
@@ -770,7 +770,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     public function getShareMetadataAsync(
         $share,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->getSharePropertiesAsyncImpl($share, $options, 'metadata');
     }
@@ -789,7 +789,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function setShareMetadata(
         $share,
         array $metadata,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         $this->setShareMetadataAsync($share, $metadata, $options)->wait();
     }
@@ -808,7 +808,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function setShareMetadataAsync(
         $share,
         array $metadata,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->setSharePropertiesAsyncImpl(
             $share,
@@ -830,7 +830,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     public function getShareAcl(
         $share,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->getShareAclAsync($share, $options)->wait();
     }
@@ -847,7 +847,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      */
     public function getShareAclAsync(
         $share,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
 
@@ -923,7 +923,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function setShareAcl(
         $share,
         ShareACL $acl,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         $this->setShareAclAsync($share, $acl, $options)->wait();
     }
@@ -943,7 +943,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function setShareAclAsync(
         $share,
         ShareACL $acl,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::notNullOrEmpty($acl, 'acl');
@@ -1002,7 +1002,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-stats
      */
-    public function getShareStats($share, FileServiceOptions $options = null)
+    public function getShareStats($share, ?FileServiceOptions $options = null)
     {
         return $this->getShareStatsAsync($share, $options)->wait();
     }
@@ -1017,7 +1017,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-stats
      */
-    public function getShareStatsAsync($share, FileServiceOptions $options = null)
+    public function getShareStatsAsync($share, ?FileServiceOptions $options = null)
     {
         Validate::canCastAsString($share, 'share');
 
@@ -1082,7 +1082,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function listDirectoriesAndFiles(
         $share,
         $path = '',
-        ListDirectoriesAndFilesOptions $options = null
+        ?ListDirectoriesAndFilesOptions $options = null
     ) {
         return $this->listDirectoriesAndFilesAsync($share, $path, $options)->wait();
     }
@@ -1103,7 +1103,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function listDirectoriesAndFilesAsync(
         $share,
         $path = '',
-        ListDirectoriesAndFilesOptions $options = null
+        ?ListDirectoriesAndFilesOptions $options = null
     ) {
         Validate::notNull($share, 'share');
         Validate::canCastAsString($share, 'share');
@@ -1185,7 +1185,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function createDirectory(
         $share,
         $path,
-        CreateDirectoryOptions $options = null
+        ?CreateDirectoryOptions $options = null
     ) {
         $this->createDirectoryAsync($share, $path, $options)->wait();
     }
@@ -1204,7 +1204,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function createDirectoryAsync(
         $share,
         $path,
-        CreateDirectoryOptions $options = null
+        ?CreateDirectoryOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -1254,7 +1254,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function deleteDirectory(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         $this->deleteDirectoryAsync($share, $path, $options)->wait();
     }
@@ -1273,7 +1273,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function deleteDirectoryAsync(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -1320,7 +1320,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function getDirectoryProperties(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->getDirectoryPropertiesAsync($share, $path, $options)->wait();
     }
@@ -1340,7 +1340,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function getDirectoryPropertiesAsync(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -1390,7 +1390,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function getDirectoryMetadata(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->getDirectoryMetadataAsync($share, $path, $options)->wait();
     }
@@ -1410,7 +1410,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function getDirectoryMetadataAsync(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -1468,7 +1468,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         array $metadata,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         $this->setDirectoryMetadataAsync(
             $share,
@@ -1495,7 +1495,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         array $metadata,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -1551,7 +1551,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         $size,
-        CreateFileOptions $options = null
+        ?CreateFileOptions $options = null
     ) {
         return $this->createFileAsync(
             $share,
@@ -1577,7 +1577,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         $size,
-        CreateFileOptions $options = null
+        ?CreateFileOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::notNullOrEmpty($share, 'share');
@@ -1683,7 +1683,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function deleteFile(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         $this->deleteFileAsync($share, $path, $options)->wait();
     }
@@ -1702,7 +1702,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function deleteFileAsync(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -1750,7 +1750,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function getFile(
         $share,
         $path,
-        GetFileOptions $options = null
+        ?GetFileOptions $options = null
     ) {
         return $this->getFileAsync($share, $path, $options)->wait();
     }
@@ -1770,7 +1770,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function getFileAsync(
         $share,
         $path,
-        GetFileOptions $options = null
+        ?GetFileOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -1840,7 +1840,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function getFileProperties(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->getFilePropertiesAsync($share, $path, $options)->wait();
     }
@@ -1860,7 +1860,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function getFilePropertiesAsync(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -1912,7 +1912,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         FileProperties $properties,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         $this->setFilePropertiesAsync($share, $path, $properties, $options)->wait();
     }
@@ -1933,7 +1933,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         FileProperties $properties,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -2023,7 +2023,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function getFileMetadata(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->getFileMetadataAsync($share, $path, $options)->wait();
     }
@@ -2043,7 +2043,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function getFileMetadataAsync(
         $share,
         $path,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -2101,7 +2101,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         array $metadata,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->setFileMetadataAsync(
             $share,
@@ -2128,7 +2128,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         array $metadata,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -2187,7 +2187,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $path,
         $content,
         Range $range,
-        PutFileRangeOptions $options = null
+        ?PutFileRangeOptions $options = null
     ) {
         $this->putFileRangeAsync(
             $share,
@@ -2219,7 +2219,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $path,
         $content,
         Range $range,
-        PutFileRangeOptions $options = null
+        ?PutFileRangeOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -2301,7 +2301,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         $content,
-        CreateFileFromContentOptions $options = null
+        ?CreateFileFromContentOptions $options = null
     ) {
         $this->createFileFromContentAsync($share, $path, $content, $options)->wait();
     }
@@ -2321,7 +2321,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         $content,
-        CreateFileFromContentOptions $options = null
+        ?CreateFileFromContentOptions $options = null
     ) {
         $stream = Psr7\Utils::streamFor($content);
         $size = $stream->getSize();
@@ -2396,7 +2396,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         Range $range,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         $this->clearFileRangeAsync($share, $path, $range, $options)->wait();
     }
@@ -2422,7 +2422,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         Range $range,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -2491,8 +2491,8 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function listFileRange(
         $share,
         $path,
-        Range $range = null,
-        FileServiceOptions $options = null
+        ?Range $range = null,
+        ?FileServiceOptions $options = null
     ) {
         return $this->listFileRangeAsync($share, $path, $range, $options)->wait();
     }
@@ -2514,8 +2514,8 @@ class FileRestProxy extends ServiceRestProxy implements IFile
     public function listFileRangeAsync(
         $share,
         $path,
-        Range $range = null,
-        FileServiceOptions $options = null
+        ?Range $range = null,
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -2600,7 +2600,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $path,
         $sourcePath,
         array $metadata = array(),
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->copyFileAsync(
             $share,
@@ -2643,7 +2643,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $path,
         $sourcePath,
         array $metadata = array(),
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
@@ -2707,7 +2707,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         $copyID,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         return $this->abortCopyAsync(
             $share,
@@ -2733,7 +2733,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         $share,
         $path,
         $copyID,
-        FileServiceOptions $options = null
+        ?FileServiceOptions $options = null
     ) {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');

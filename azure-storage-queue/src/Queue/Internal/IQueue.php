@@ -51,7 +51,7 @@ interface IQueue
      * @return \MicrosoftAzure\Storage\Common\Models\GetServicePropertiesResult
      */
     public function getServiceProperties(
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     );
 
     /**
@@ -62,7 +62,7 @@ interface IQueue
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getServicePropertiesAsync(
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     );
 
     /**
@@ -78,7 +78,7 @@ interface IQueue
      */
     public function setServiceProperties(
         ServiceProperties $serviceProperties,
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     );
 
     /**
@@ -94,7 +94,7 @@ interface IQueue
      */
     public function setServicePropertiesAsync(
         ServiceProperties $serviceProperties,
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     );
 
     /**
@@ -107,7 +107,7 @@ interface IQueue
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-queue-service-stats
      */
-    public function getServiceStats(ServiceOptions $options = null);
+    public function getServiceStats(?ServiceOptions $options = null);
 
     /**
      * Creates promise that retrieves statistics related to replication for the
@@ -119,7 +119,7 @@ interface IQueue
      *
      * @see  https://docs.microsoft.com/en-us/rest/api/storageservices/get-queue-service-stats
      */
-    public function getServiceStatsAsync(ServiceOptions $options = null);
+    public function getServiceStatsAsync(?ServiceOptions $options = null);
 
     /**
      * Creates a new queue under the storage account.
@@ -131,7 +131,7 @@ interface IQueue
      */
     public function createQueue(
         $queueName,
-        QueueModels\CreateQueueOptions $options = null
+        ?QueueModels\CreateQueueOptions $options = null
     );
 
     /**
@@ -144,7 +144,7 @@ interface IQueue
      */
     public function createQueueAsync(
         $queueName,
-        QueueModels\CreateQueueOptions $options = null
+        ?QueueModels\CreateQueueOptions $options = null
     );
 
     /**
@@ -170,7 +170,7 @@ interface IQueue
      */
     public function deleteQueueAsync(
         $queueName,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -180,7 +180,7 @@ interface IQueue
      *
      * @return QueueModels\ListQueuesResult
      */
-    public function listQueues(QueueModels\ListQueuesOptions $options = null);
+    public function listQueues(?QueueModels\ListQueuesOptions $options = null);
 
     /**
      * Creates promise to list all queues in the storage account.
@@ -189,7 +189,7 @@ interface IQueue
      *
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function listQueuesAsync(QueueModels\ListQueuesOptions $options = null);
+    public function listQueuesAsync(?QueueModels\ListQueuesOptions $options = null);
 
     /**
      * Returns queue properties, including user-defined metadata.
@@ -201,7 +201,7 @@ interface IQueue
      */
     public function getQueueMetadata(
         $queueName,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -214,7 +214,7 @@ interface IQueue
      */
     public function getQueueMetadataAsync(
         $queueName,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -229,8 +229,8 @@ interface IQueue
      */
     public function setQueueMetadata(
         $queueName,
-        array $metadata = null,
-        QueueModels\QueueServiceOptions $options = null
+        ?array $metadata = null,
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -245,8 +245,8 @@ interface IQueue
      */
     public function setQueueMetadataAsync(
         $queueName,
-        array $metadata = null,
-        QueueModels\QueueServiceOptions $options = null
+        ?array $metadata = null,
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -262,7 +262,7 @@ interface IQueue
     public function createMessage(
         $queueName,
         $messageText,
-        QueueModels\CreateMessageOptions $options = null
+        ?QueueModels\CreateMessageOptions $options = null
     );
 
     /**
@@ -279,7 +279,7 @@ interface IQueue
     public function createMessageAsync(
         $queueName,
         $messageText,
-        QueueModels\CreateMessageOptions $options = null
+        ?QueueModels\CreateMessageOptions $options = null
     );
 
     /**
@@ -307,7 +307,7 @@ interface IQueue
         $popReceipt,
         $messageText,
         $visibilityTimeoutInSeconds,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -337,7 +337,7 @@ interface IQueue
         $popReceipt,
         $messageText,
         $visibilityTimeoutInSeconds,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -358,7 +358,7 @@ interface IQueue
         $queueName,
         $messageId,
         $popReceipt,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -379,7 +379,7 @@ interface IQueue
         $queueName,
         $messageId,
         $popReceipt,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -392,7 +392,7 @@ interface IQueue
      */
     public function listMessages(
         $queueName,
-        QueueModels\ListMessagesOptions $options = null
+        ?QueueModels\ListMessagesOptions $options = null
     );
 
     /**
@@ -405,7 +405,7 @@ interface IQueue
      */
     public function listMessagesAsync(
         $queueName,
-        QueueModels\ListMessagesOptions $options = null
+        ?QueueModels\ListMessagesOptions $options = null
     );
 
     /**
@@ -419,7 +419,7 @@ interface IQueue
      */
     public function peekMessages(
         $queueName,
-        QueueModels\PeekMessagesOptions $options = null
+        ?QueueModels\PeekMessagesOptions $options = null
     );
 
     /**
@@ -433,7 +433,7 @@ interface IQueue
      */
     public function peekMessagesAsync(
         $queueName,
-        QueueModels\PeekMessagesOptions $options = null
+        ?QueueModels\PeekMessagesOptions $options = null
     );
 
     /**
@@ -446,7 +446,7 @@ interface IQueue
      */
     public function clearMessages(
         $queueName,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -466,7 +466,7 @@ interface IQueue
      */
     public function clearMessagesAsync(
         $queueName,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -481,7 +481,7 @@ interface IQueue
      */
     public function getQueueAcl(
         $queue,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -496,7 +496,7 @@ interface IQueue
      */
     public function getQueueAclAsync(
         $queue,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -513,7 +513,7 @@ interface IQueue
     public function setQueueAcl(
         $queue,
         QueueModels\QueueACL $acl,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 
     /**
@@ -530,6 +530,6 @@ interface IQueue
     public function setQueueAclAsync(
         $queue,
         QueueModels\QueueACL $acl,
-        QueueModels\QueueServiceOptions $options = null
+        ?QueueModels\QueueServiceOptions $options = null
     );
 }

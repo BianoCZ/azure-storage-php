@@ -54,7 +54,7 @@ class XmlSerializer implements ISerializer
      *
      * @return array
      */
-    private function sxml2arr($sxml, array $arr = null)
+    private function sxml2arr($sxml, ?array $arr = null)
     {
         foreach ((array) $sxml as $key => $value) {
             if (is_object($value) || (is_array($value))) {
@@ -190,7 +190,7 @@ class XmlSerializer implements ISerializer
      *
      * @return string
      */
-    public function serialize(array $array, array $properties = null)
+    public function serialize(array $array, ?array $properties = null)
     {
         $xmlVersion   = '1.0';
         $xmlEncoding  = 'UTF-8';

@@ -47,7 +47,7 @@ trait MarkerContinuationTokenTrait
      * @param MarkerContinuationToken|null $continuationToken the continuation
      *                                                        token to be set.
      */
-    public function setContinuationToken(MarkerContinuationToken $continuationToken = null)
+    public function setContinuationToken(?MarkerContinuationToken $continuationToken = null)
     {
         $this->continuationToken = $continuationToken;
     }

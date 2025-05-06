@@ -58,7 +58,7 @@ class GetContainerACLResult
         $publicAccess,
         $etag,
         \DateTime $lastModified,
-        array $parsed = null
+        ?array $parsed = null
     ) {
         $result = new GetContainerAclResult();
         $result->setETag($etag);

@@ -349,7 +349,7 @@ class ServiceRestProxy extends RestProxy
         $path,
         $expected = Resources::STATUS_OK,
         $body = Resources::EMPTY_STRING,
-        ServiceOptions $serviceOptions = null
+        ?ServiceOptions $serviceOptions = null
     ) {
         if ($serviceOptions == null) {
             $serviceOptions = new ServiceOptions();
@@ -560,7 +560,7 @@ class ServiceRestProxy extends RestProxy
      *
      * @return array
      */
-    protected function addMetadataHeaders(array $headers, array $metadata = null)
+    protected function addMetadataHeaders(array $headers, ?array $metadata = null)
     {
         Utilities::validateMetadata($metadata);
 
@@ -577,7 +577,7 @@ class ServiceRestProxy extends RestProxy
      *
      * @return array
      */
-    public function generateMetadataHeaders(array $metadata = null)
+    public function generateMetadataHeaders(?array $metadata = null)
     {
         $metadataHeaders = array();
 

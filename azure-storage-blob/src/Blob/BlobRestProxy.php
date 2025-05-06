@@ -461,7 +461,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     private function getContainerPropertiesAsyncImpl(
         $container,
-        Models\BlobServiceOptions $options = null,
+        ?Models\BlobServiceOptions $options = null,
         $operation = null
     ) {
         Validate::canCastAsString($container, 'container');
@@ -659,7 +659,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $breakPeriod,
         $expectedStatusCode,
         Models\BlobServiceOptions $options,
-        Models\AccessCondition $accessCondition = null
+        ?Models\AccessCondition $accessCondition = null
     ) {
         Validate::canCastAsString($blob, 'blob');
         Validate::canCastAsString($container, 'container');
@@ -746,7 +746,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         Range $range,
         $content,
-        CreateBlobPagesOptions $options = null
+        ?CreateBlobPagesOptions $options = null
     ) {
         Validate::canCastAsString($blob, 'blob');
         Validate::notNullOrEmpty($blob, 'blob');
@@ -832,7 +832,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179352.aspx
      */
-    public function listContainers(ListContainersOptions $options = null)
+    public function listContainers(?ListContainersOptions $options = null)
     {
         return $this->listContainersAsync($options)->wait();
     }
@@ -846,7 +846,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function listContainersAsync(
-        ListContainersOptions $options = null
+        ?ListContainersOptions $options = null
     ) {
         $method      = Resources::HTTP_GET;
         $headers     = array();
@@ -918,7 +918,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function createContainer(
         $container,
-        Models\CreateContainerOptions $options = null
+        ?Models\CreateContainerOptions $options = null
     ) {
         $this->createContainerAsync($container, $options)->wait();
     }
@@ -935,7 +935,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function createContainerAsync(
         $container,
-        Models\CreateContainerOptions $options = null
+        ?Models\CreateContainerOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::notNullOrEmpty($container, 'container');
@@ -983,7 +983,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function deleteContainer(
         $container,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         $this->deleteContainerAsync($container, $options)->wait();
     }
@@ -998,7 +998,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function deleteContainerAsync(
         $container,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::notNullOrEmpty($container, 'container');
@@ -1055,7 +1055,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function getContainerProperties(
         $container,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->getContainerPropertiesAsync($container, $options)->wait();
     }
@@ -1072,7 +1072,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function getContainerPropertiesAsync(
         $container,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->getContainerPropertiesAsyncImpl($container, $options);
     }
@@ -1089,7 +1089,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function getContainerMetadata(
         $container,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->getContainerMetadataAsync($container, $options)->wait();
     }
@@ -1107,7 +1107,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function getContainerMetadataAsync(
         $container,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->getContainerPropertiesAsyncImpl($container, $options, 'metadata');
     }
@@ -1125,7 +1125,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function getContainerAcl(
         $container,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->getContainerAclAsync($container, $options)->wait();
     }
@@ -1143,7 +1143,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function getContainerAclAsync(
         $container,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
 
@@ -1229,7 +1229,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function setContainerAcl(
         $container,
         Models\ContainerACL $acl,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         $this->setContainerAclAsync($container, $acl, $options)->wait();
     }
@@ -1249,7 +1249,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function setContainerAclAsync(
         $container,
         Models\ContainerACL $acl,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::notNullOrEmpty($acl, 'acl');
@@ -1323,7 +1323,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function setContainerMetadata(
         $container,
         array $metadata,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         $this->setContainerMetadataAsync($container, $metadata, $options)->wait();
     }
@@ -1342,7 +1342,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function setContainerMetadataAsync(
         $container,
         array $metadata,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Utilities::validateMetadata($metadata);
@@ -1407,7 +1407,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function setBlobTier(
         $container,
         $blob,
-        Models\SetBlobTierOptions $options = null
+        ?Models\SetBlobTierOptions $options = null
     ) {
         $this->setBlobTierAsync($container, $blob, $options)->wait();
     }
@@ -1426,7 +1426,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function setBlobTierAsync(
         $container,
         $blob,
-        Models\SetBlobTierOptions $options = null
+        ?Models\SetBlobTierOptions $options = null
     )
     {
         Validate::canCastAsString($container, 'container');
@@ -1479,7 +1479,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd135734.aspx
      */
-    public function listBlobs($container, Models\ListBlobsOptions $options = null)
+    public function listBlobs($container, ?Models\ListBlobsOptions $options = null)
     {
         return $this->listBlobsAsync($container, $options)->wait();
     }
@@ -1496,7 +1496,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function listBlobsAsync(
         $container,
-        Models\ListBlobsOptions $options = null
+        ?Models\ListBlobsOptions $options = null
     ) {
         Validate::notNull($container, 'container');
         Validate::canCastAsString($container, 'container');
@@ -1606,7 +1606,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $length,
-        Models\CreatePageBlobOptions $options = null
+        ?Models\CreatePageBlobOptions $options = null
     ) {
         return $this->createPageBlobAsync(
             $container,
@@ -1638,7 +1638,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $length,
-        Models\CreatePageBlobOptions $options = null
+        ?Models\CreatePageBlobOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -1711,7 +1711,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function createAppendBlob(
         $container,
         $blob,
-        Models\CreateBlobOptions $options = null
+        ?Models\CreateBlobOptions $options = null
     ) {
         return $this->createAppendBlobAsync(
             $container,
@@ -1735,7 +1735,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function createAppendBlobAsync(
         $container,
         $blob,
-        Models\CreateBlobOptions $options = null
+        ?Models\CreateBlobOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::notNullOrEmpty($container, 'container');
@@ -1800,7 +1800,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $content,
-        Models\CreateBlockBlobOptions $options = null
+        ?Models\CreateBlockBlobOptions $options = null
     ) {
         return $this->createBlockBlobAsync(
             $container,
@@ -1833,7 +1833,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $content,
-        Models\CreateBlockBlobOptions $options = null
+        ?Models\CreateBlockBlobOptions $options = null
     ) {
         $body = Utils::streamFor($content);
 
@@ -1883,7 +1883,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         $length,
         $content,
-        Models\CreatePageBlobFromContentOptions $options = null
+        ?Models\CreatePageBlobFromContentOptions $options = null
     ) {
         return $this->createPageBlobFromContentAsync(
             $container,
@@ -1914,7 +1914,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         $length,
         $content,
-        Models\CreatePageBlobFromContentOptions $options = null
+        ?Models\CreatePageBlobFromContentOptions $options = null
     ) {
         $body = Utils::streamFor($content);
         $self = $this;
@@ -1990,7 +1990,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $content,
-        Models\CreateBlobOptions $options = null
+        ?Models\CreateBlobOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -2060,7 +2060,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $content,
-        Models\CreateBlockBlobOptions $options = null
+        ?Models\CreateBlockBlobOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -2192,7 +2192,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $content,
-        Models\CreatePageBlobFromContentOptions $options = null
+        ?Models\CreatePageBlobFromContentOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::notNullOrEmpty($container, 'container');
@@ -2321,7 +2321,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         Range $range,
-        Models\CreateBlobPagesOptions $options = null
+        ?Models\CreateBlobPagesOptions $options = null
     ) {
         return $this->clearBlobPagesAsync(
             $container,
@@ -2351,7 +2351,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         Range $range,
-        Models\CreateBlobPagesOptions $options = null
+        ?Models\CreateBlobPagesOptions $options = null
     ) {
         return $this->updatePageBlobPagesAsyncImpl(
             PageWriteOption::CLEAR_OPTION,
@@ -2384,7 +2384,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         Range $range,
         $content,
-        Models\CreateBlobPagesOptions $options = null
+        ?Models\CreateBlobPagesOptions $options = null
     ) {
         return $this->createBlobPagesAsync(
             $container,
@@ -2416,7 +2416,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         Range $range,
         $content,
-        Models\CreateBlobPagesOptions $options = null
+        ?Models\CreateBlobPagesOptions $options = null
     ) {
         $contentStream = Utils::streamFor($content);
         //because the content is at most 4MB long, can retrieve all the data
@@ -2464,7 +2464,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         $blockId,
         $content,
-        Models\CreateBlobBlockOptions $options = null
+        ?Models\CreateBlobBlockOptions $options = null
     ) {
         return $this->createBlobBlockAsync(
             $container,
@@ -2500,7 +2500,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         $blockId,
         $content,
-        Models\CreateBlobBlockOptions $options = null
+        ?Models\CreateBlobBlockOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -2554,7 +2554,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $content,
-        Models\AppendBlockOptions $options = null
+        ?Models\AppendBlockOptions $options = null
     ) {
         return $this->appendBlockAsync(
             $container,
@@ -2581,7 +2581,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $content,
-        Models\AppendBlockOptions $options = null
+        ?Models\AppendBlockOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::notNullOrEmpty($container, 'container');
@@ -2663,7 +2663,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      *
      * @return array
      */
-    protected function createBlobBlockHeader(Models\CreateBlobBlockOptions $options = null)
+    protected function createBlobBlockHeader(?Models\CreateBlobBlockOptions $options = null)
     {
         $headers = array();
         $this->addOptionalHeader(
@@ -2748,7 +2748,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $blockList,
-        Models\CommitBlobBlocksOptions $options = null
+        ?Models\CommitBlobBlocksOptions $options = null
     ) {
         return $this->commitBlobBlocksAsync(
             $container,
@@ -2782,7 +2782,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $blockList,
-        Models\CommitBlobBlocksOptions $options = null
+        ?Models\CommitBlobBlocksOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -2911,7 +2911,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function listBlobBlocks(
         $container,
         $blob,
-        Models\ListBlobBlocksOptions $options = null
+        ?Models\ListBlobBlocksOptions $options = null
     ) {
         return $this->listBlobBlocksAsync($container, $blob, $options)->wait();
     }
@@ -2939,7 +2939,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function listBlobBlocksAsync(
         $container,
         $blob,
-        Models\ListBlobBlocksOptions $options = null
+        ?Models\ListBlobBlocksOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -3010,7 +3010,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function getBlobProperties(
         $container,
         $blob,
-        Models\GetBlobPropertiesOptions $options = null
+        ?Models\GetBlobPropertiesOptions $options = null
     ) {
         return $this->getBlobPropertiesAsync(
             $container,
@@ -3033,7 +3033,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function getBlobPropertiesAsync(
         $container,
         $blob,
-        Models\GetBlobPropertiesOptions $options = null
+        ?Models\GetBlobPropertiesOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -3094,7 +3094,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function getBlobMetadata(
         $container,
         $blob,
-        Models\GetBlobMetadataOptions $options = null
+        ?Models\GetBlobMetadataOptions $options = null
     ) {
         return $this->getBlobMetadataAsync($container, $blob, $options)->wait();
     }
@@ -3113,7 +3113,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function getBlobMetadataAsync(
         $container,
         $blob,
-        Models\GetBlobMetadataOptions $options = null
+        ?Models\GetBlobMetadataOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -3181,7 +3181,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function listPageBlobRanges(
         $container,
         $blob,
-        Models\ListPageBlobRangesOptions $options = null
+        ?Models\ListPageBlobRangesOptions $options = null
     ) {
         return $this->listPageBlobRangesAsync(
             $container,
@@ -3205,7 +3205,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function listPageBlobRangesAsync(
         $container,
         $blob,
-        Models\ListPageBlobRangesOptions $options = null
+        ?Models\ListPageBlobRangesOptions $options = null
     ) {
         return $this->listPageBlobRangesAsyncImpl($container, $blob, null, $options);
     }
@@ -3235,7 +3235,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $previousSnapshotTime,
-        Models\ListPageBlobRangesOptions $options = null
+        ?Models\ListPageBlobRangesOptions $options = null
     ) {
         return $this->listPageBlobRangesDiffAsync(
             $container,
@@ -3271,7 +3271,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $previousSnapshotTime,
-        Models\ListPageBlobRangesOptions $options = null
+        ?Models\ListPageBlobRangesOptions $options = null
     ) {
         return $this->listPageBlobRangesAsyncImpl(
             $container,
@@ -3305,7 +3305,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $previousSnapshotTime = null,
-        Models\ListPageBlobRangesOptions $options = null
+        ?Models\ListPageBlobRangesOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -3397,7 +3397,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function setBlobProperties(
         $container,
         $blob,
-        Models\SetBlobPropertiesOptions $options = null
+        ?Models\SetBlobPropertiesOptions $options = null
     ) {
         return $this->setBlobPropertiesAsync(
             $container,
@@ -3420,7 +3420,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function setBlobPropertiesAsync(
         $container,
         $blob,
-        Models\SetBlobPropertiesOptions $options = null
+        ?Models\SetBlobPropertiesOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -3539,7 +3539,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         array $metadata,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->setBlobMetadataAsync(
             $container,
@@ -3565,7 +3565,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         array $metadata,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -3635,7 +3635,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $path,
         $container,
         $blob,
-        Models\GetBlobOptions $options = null
+        ?Models\GetBlobOptions $options = null
     ) {
         return $this->saveBlobToFileAsync(
             $path,
@@ -3663,7 +3663,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $path,
         $container,
         $blob,
-        Models\GetBlobOptions $options = null
+        ?Models\GetBlobOptions $options = null
     ) {
         $resource = fopen($path, 'w+');
         if ($resource == null) {
@@ -3703,7 +3703,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function getBlob(
         $container,
         $blob,
-        Models\GetBlobOptions $options = null
+        ?Models\GetBlobOptions $options = null
     ) {
         return $this->getBlobAsync($container, $blob, $options)->wait();
     }
@@ -3723,7 +3723,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function getBlobAsync(
         $container,
         $blob,
-        Models\GetBlobOptions $options = null
+        ?Models\GetBlobOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -3807,7 +3807,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function undeleteBlob(
         $container,
         $blob,
-        Models\UndeleteBlobOptions $options = null
+        ?Models\UndeleteBlobOptions $options = null
     ) {
         $this->undeleteBlobAsync($container, $blob, $options)->wait();
     }
@@ -3826,7 +3826,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function undeleteBlobAsync(
         $container,
         $blob,
-        Models\UndeleteBlobOptions $options = null
+        ?Models\UndeleteBlobOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -3889,7 +3889,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function deleteBlob(
         $container,
         $blob,
-        Models\DeleteBlobOptions $options = null
+        ?Models\DeleteBlobOptions $options = null
     ) {
         $this->deleteBlobAsync($container, $blob, $options)->wait();
     }
@@ -3912,7 +3912,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function deleteBlobAsync(
         $container,
         $blob,
-        Models\DeleteBlobOptions $options = null
+        ?Models\DeleteBlobOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -3982,7 +3982,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function createBlobSnapshot(
         $container,
         $blob,
-        Models\CreateBlobSnapshotOptions $options = null
+        ?Models\CreateBlobSnapshotOptions $options = null
     ) {
         return $this->createBlobSnapshotAsync(
             $container,
@@ -4005,7 +4005,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
     public function createBlobSnapshotAsync(
         $container,
         $blob,
-        Models\CreateBlobSnapshotOptions $options = null
+        ?Models\CreateBlobSnapshotOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -4074,7 +4074,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $destinationBlob,
         $sourceContainer,
         $sourceBlob,
-        Models\CopyBlobOptions $options = null
+        ?Models\CopyBlobOptions $options = null
     ) {
         return $this->copyBlobAsync(
             $destinationContainer,
@@ -4108,7 +4108,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $destinationBlob,
         $sourceContainer,
         $sourceBlob,
-        Models\CopyBlobOptions $options = null
+        ?Models\CopyBlobOptions $options = null
     ) {
         if (is_null($options)) {
             $options = new CopyBlobOptions();
@@ -4151,7 +4151,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $destinationContainer,
         $destinationBlob,
         $sourceURL,
-        Models\CopyBlobFromURLOptions $options = null
+        ?Models\CopyBlobFromURLOptions $options = null
     ) {
         return $this->copyBlobFromURLAsync(
             $destinationContainer,
@@ -4184,7 +4184,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $destinationContainer,
         $destinationBlob,
         $sourceURL,
-        Models\CopyBlobFromURLOptions $options = null
+        ?Models\CopyBlobFromURLOptions $options = null
     ) {
         $method              = Resources::HTTP_PUT;
         $headers             = array();
@@ -4277,7 +4277,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $copyId,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->abortCopyAsync(
             $container,
@@ -4303,7 +4303,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $copyId,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         Validate::canCastAsString($container, 'container');
         Validate::canCastAsString($blob, 'blob');
@@ -4391,7 +4391,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         $proposedLeaseId = null,
         $leaseDuration = null,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->acquireLeaseAsync(
             $container,
@@ -4426,7 +4426,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         $proposedLeaseId = null,
         $leaseDuration = null,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         if ($options === null) {
             $options = new BlobServiceOptions();
@@ -4472,7 +4472,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         $leaseId,
         $proposedLeaseId,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->changeLeaseAsync(
             $container,
@@ -4501,7 +4501,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $blob,
         $leaseId,
         $proposedLeaseId,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->putLeaseAsyncImpl(
             LeaseMode::CHANGE_ACTION,
@@ -4536,7 +4536,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $leaseId,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->renewLeaseAsync(
             $container,
@@ -4562,7 +4562,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $leaseId,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->putLeaseAsyncImpl(
             LeaseMode::RENEW_ACTION,
@@ -4598,7 +4598,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $leaseId,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         $this->releaseLeaseAsync($container, $blob, $leaseId, $options)->wait();
     }
@@ -4620,7 +4620,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $leaseId,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->putLeaseAsyncImpl(
             LeaseMode::RELEASE_ACTION,
@@ -4654,7 +4654,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $breakPeriod = null,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->breakLeaseAsync(
             $container,
@@ -4681,7 +4681,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $container,
         $blob,
         $breakPeriod = null,
-        Models\BlobServiceOptions $options = null
+        ?Models\BlobServiceOptions $options = null
     ) {
         return $this->putLeaseAsyncImpl(
             LeaseMode::BREAK_ACTION,
@@ -4710,7 +4710,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function addOptionalAccessConditionHeader(
         array $headers,
-        array $accessConditions = null
+        ?array $accessConditions = null
     ) {
         if (!empty($accessConditions)) {
             foreach ($accessConditions as $accessCondition) {
@@ -4744,7 +4744,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      */
     public function addOptionalSourceAccessConditionHeader(
         array $headers,
-        array $accessConditions = null
+        ?array $accessConditions = null
     ) {
         if (!empty($accessConditions)) {
             foreach ($accessConditions as $accessCondition) {

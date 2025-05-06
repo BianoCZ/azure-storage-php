@@ -50,7 +50,7 @@ class ListPageBlobRangesDiffResult extends ListPageBlobRangesResult
      *
      * @return ListPageBlobRangesDiffResult
      */
-    public static function create(array $headers, array $parsed = null)
+    public static function create(array $headers, ?array $parsed = null)
     {
         $result  = new ListPageBlobRangesDiffResult();
         $headers = array_change_key_case($headers);

@@ -56,7 +56,7 @@ interface ISerializer
      *
      * @return string
      */
-    public function serialize(array $array, array $properties = null);
+    public function serialize(array $array, ?array $properties = null);
 
 
     /**

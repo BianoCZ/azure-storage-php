@@ -56,7 +56,7 @@ trait ServiceRestTrait
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452239.aspx
      */
     public function getServiceProperties(
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     ) {
         return $this->getServicePropertiesAsync($options)->wait();
     }
@@ -71,7 +71,7 @@ trait ServiceRestTrait
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452239.aspx
      */
     public function getServicePropertiesAsync(
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     ) {
         $method      = Resources::HTTP_GET;
         $headers     = array();
@@ -126,7 +126,7 @@ trait ServiceRestTrait
      */
     public function setServiceProperties(
         ServiceProperties $serviceProperties,
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     ) {
         $this->setServicePropertiesAsync($serviceProperties, $options)->wait();
     }
@@ -146,7 +146,7 @@ trait ServiceRestTrait
      */
     public function setServicePropertiesAsync(
         ServiceProperties $serviceProperties,
-        ServiceOptions $options = null
+        ?ServiceOptions $options = null
     ) {
         Validate::isTrue(
             $serviceProperties instanceof ServiceProperties,
@@ -202,7 +202,7 @@ trait ServiceRestTrait
      *
      * @return GetServiceStatsResult
      */
-    public function getServiceStats(ServiceOptions $options = null)
+    public function getServiceStats(?ServiceOptions $options = null)
     {
         return $this->getServiceStatsAsync($options)->wait();
     }
@@ -215,7 +215,7 @@ trait ServiceRestTrait
      *
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getServiceStatsAsync(ServiceOptions $options = null)
+    public function getServiceStatsAsync(?ServiceOptions $options = null)
     {
         $method      = Resources::HTTP_GET;
         $headers     = array();

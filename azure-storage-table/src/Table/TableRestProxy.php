@@ -374,7 +374,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         $table,
         $partitionKey,
         $rowKey,
-        DeleteEntityOptions $options = null
+        ?DeleteEntityOptions $options = null
     ) {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
@@ -436,7 +436,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         Entity $entity,
         $verb,
         $useETag,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
@@ -499,7 +499,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     private function constructInsertEntityContext(
         $table,
         Entity $entity,
-        TableServiceCreateOptions $options = null
+        ?TableServiceCreateOptions $options = null
     ) {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
@@ -580,7 +580,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         Entity $entity,
         $verb,
         $useETag,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         $context = $this->constructPutOrMergeEntityContext(
             $table,
@@ -902,7 +902,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-table
      */
-    public function createTable($table, TableServiceCreateOptions $options = null)
+    public function createTable($table, ?TableServiceCreateOptions $options = null)
     {
         return $this->createTableAsync($table, $options)->wait();
     }
@@ -919,7 +919,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      */
     public function createTableAsync(
         $table,
-        TableServiceCreateOptions $options = null
+        ?TableServiceCreateOptions $options = null
     ) {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
@@ -973,7 +973,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *
      * @return GetTableResult
      */
-    public function getTable($table, GetTableOptions $options = null)
+    public function getTable($table, ?GetTableOptions $options = null)
     {
         return $this->getTableAsync($table, $options)->wait();
     }
@@ -988,7 +988,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      */
     public function getTableAsync(
         $table,
-        GetTableOptions $options = null
+        ?GetTableOptions $options = null
     ) {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
@@ -1040,7 +1040,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179387.aspx
      */
-    public function deleteTable($table, TableServiceOptions $options = null)
+    public function deleteTable($table, ?TableServiceOptions $options = null)
     {
         $this->deleteTableAsync($table, $options)->wait();
     }
@@ -1057,7 +1057,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      */
     public function deleteTableAsync(
         $table,
-        TableServiceOptions$options = null
+        ?TableServiceOptions$options = null
     ) {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
@@ -1209,7 +1209,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function insertEntity(
         $table,
         Entity $entity,
-        TableServiceCreateOptions $options = null
+        ?TableServiceCreateOptions $options = null
     ) {
         return $this->insertEntityAsync($table, $entity, $options)->wait();
     }
@@ -1228,7 +1228,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function insertEntityAsync(
         $table,
         Entity $entity,
-        TableServiceCreateOptions $options = null
+        ?TableServiceCreateOptions $options = null
     ) {
         $context = $this->constructInsertEntityContext(
             $table,
@@ -1267,7 +1267,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function insertOrMergeEntity(
         $table,
         Entity $entity,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         return $this->insertOrMergeEntityAsync($table, $entity, $options)->wait();
     }
@@ -1287,7 +1287,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function insertOrMergeEntityAsync(
         $table,
         Entity $entity,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         return $this->putOrMergeEntityAsyncImpl(
             $table,
@@ -1313,7 +1313,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function insertOrReplaceEntity(
         $table,
         Entity $entity,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         return $this->insertOrReplaceEntityAsync(
             $table,
@@ -1336,7 +1336,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function insertOrReplaceEntityAsync(
         $table,
         Entity $entity,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         return $this->putOrMergeEntityAsyncImpl(
             $table,
@@ -1362,7 +1362,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function updateEntity(
         $table,
         Entity $entity,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         return $this->updateEntityAsync($table, $entity, $options)->wait();
     }
@@ -1382,7 +1382,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function updateEntityAsync(
         $table,
         Entity $entity,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         return $this->putOrMergeEntityAsyncImpl(
             $table,
@@ -1408,7 +1408,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function mergeEntity(
         $table,
         Entity $entity,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         return $this->mergeEntityAsync($table, $entity, $options)->wait();
     }
@@ -1429,7 +1429,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function mergeEntityAsync(
         $table,
         Entity $entity,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         return $this->putOrMergeEntityAsyncImpl(
             $table,
@@ -1456,7 +1456,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         $table,
         $partitionKey,
         $rowKey,
-        DeleteEntityOptions $options = null
+        ?DeleteEntityOptions $options = null
     ) {
         $this->deleteEntityAsync($table, $partitionKey, $rowKey, $options)->wait();
     }
@@ -1477,7 +1477,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         $table,
         $partitionKey,
         $rowKey,
-        DeleteEntityOptions $options = null
+        ?DeleteEntityOptions $options = null
     ) {
         $context = $this->constructDeleteEntityContext(
             $table,
@@ -1505,7 +1505,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         $table,
         $partitionKey,
         $rowKey,
-        GetEntityOptions $options = null
+        ?GetEntityOptions $options = null
     ) {
         return $this->getEntityAsync(
             $table,
@@ -1531,7 +1531,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         $table,
         $partitionKey,
         $rowKey,
-        GetEntityOptions $options = null
+        ?GetEntityOptions $options = null
     ) {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
@@ -1590,7 +1590,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      */
     public function batch(
         Models\BatchOperations $batchOperations,
-        Models\TableServiceOptions $options = null
+        ?Models\TableServiceOptions $options = null
     ) {
         return $this->batchAsync($batchOperations, $options)->wait();
     }
@@ -1605,7 +1605,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      */
     public function batchAsync(
         Models\BatchOperations $batchOperations,
-        Models\TableServiceOptions $options = null
+        ?Models\TableServiceOptions $options = null
     ) {
         Validate::notNullOrEmpty($batchOperations, 'batchOperations');
 
@@ -1671,7 +1671,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      */
     public function getTableAcl(
         $table,
-        Models\TableServiceOptions $options = null
+        ?Models\TableServiceOptions $options = null
     ) {
         return $this->getTableAclAsync($table, $options)->wait();
     }
@@ -1688,7 +1688,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      */
     public function getTableAclAsync(
         $table,
-        Models\TableServiceOptions $options = null
+        ?Models\TableServiceOptions $options = null
     ) {
         Validate::canCastAsString($table, 'table');
 
@@ -1748,7 +1748,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function setTableAcl(
         $table,
         TableACL $acl,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         $this->setTableAclAsync($table, $acl, $options)->wait();
     }
@@ -1767,7 +1767,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
     public function setTableAclAsync(
         $table,
         TableACL $acl,
-        TableServiceOptions $options = null
+        ?TableServiceOptions $options = null
     ) {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($acl, 'acl');

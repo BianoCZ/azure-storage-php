@@ -45,7 +45,7 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
      *
      * @param BlobProperties $blobProperties The blob properties instance.
      */
-    public function __construct(BlobProperties $blobProperties = null)
+    public function __construct(?BlobProperties $blobProperties = null)
     {
         parent::__construct();
         $this->_blobProperties = is_null($blobProperties)

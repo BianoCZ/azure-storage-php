@@ -49,7 +49,7 @@ class ListMessagesResult
      *
      * @return ListMessagesResult
      */
-    public static function create(array $parsedResponse = null)
+    public static function create(?array $parsedResponse = null)
     {
         $result        = new ListMessagesResult();
         $queueMessages = array();

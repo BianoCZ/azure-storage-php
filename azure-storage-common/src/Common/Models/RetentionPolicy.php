@@ -50,7 +50,7 @@ class RetentionPolicy
      *
      * @return MicrosoftAzure\Storage\Common\Models\RetentionPolicy
      */
-    public static function create(array $parsedResponse = null)
+    public static function create(?array $parsedResponse = null)
     {
         $result = new RetentionPolicy();
         $result->setEnabled(Utilities::toBoolean($parsedResponse['Enabled']));

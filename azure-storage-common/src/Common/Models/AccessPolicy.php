@@ -90,7 +90,7 @@ abstract class AccessPolicy
      *
      * @return void
      */
-    public function setStart(\DateTime $start = null)
+    public function setStart(?\DateTime $start = null)
     {
         if ($start != null) {
             Validate::isDate($start);

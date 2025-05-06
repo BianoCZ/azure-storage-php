@@ -260,7 +260,7 @@ class Utilities
      *
      * @return array
      */
-    private static function _sxml2arr($sxml, array $arr = null)
+    private static function _sxml2arr($sxml, ?array $arr = null)
     {
         foreach ((array) $sxml as $key => $value) {
             if (is_object($value) || (is_array($value))) {
@@ -751,7 +751,7 @@ class Utilities
      *
      * @return void
      */
-    public static function validateMetadata(array $metadata = null)
+    public static function validateMetadata(?array $metadata = null)
     {
         if (!is_null($metadata)) {
             Validate::isArray($metadata, 'metadata');

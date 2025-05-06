@@ -162,7 +162,7 @@ class QueryEntitiesOptions extends TableServiceOptions
      *
      * @return void
      */
-    public function setSelectFields(array $selectFields = null)
+    public function setSelectFields(?array $selectFields = null)
     {
         $this->query->setSelectFields($selectFields);
     }

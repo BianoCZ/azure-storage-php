@@ -59,7 +59,7 @@ class QueueACL extends ACLBase
      *
      * @return QueueACL
      */
-    public static function create(array $parsed = null)
+    public static function create(?array $parsed = null)
     {
         $result = new QueueACL();
         $result->fromXmlArray($parsed);

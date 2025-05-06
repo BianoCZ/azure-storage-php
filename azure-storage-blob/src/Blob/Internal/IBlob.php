@@ -53,7 +53,7 @@ interface IBlob
     *
     * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452239.aspx
     */
-    public function getServiceProperties(ServiceOptions $options = null);
+    public function getServiceProperties(?ServiceOptions $options = null);
 
     /**
      * Creates promise to get the properties of the service.
@@ -64,7 +64,7 @@ interface IBlob
      *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452239.aspx
      */
-    public function getServicePropertiesAsync(ServiceOptions $options = null);
+    public function getServicePropertiesAsync(?ServiceOptions $options = null);
 
     /**
     * Sets the properties of the service.
@@ -78,7 +78,7 @@ interface IBlob
     */
     public function setServiceProperties(
         ServiceProperties $serviceProperties,
-        ServiceOptions    $options = null
+        ?ServiceOptions    $options = null
     );
 
     /**
@@ -91,7 +91,7 @@ interface IBlob
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats
      */
-    public function getServiceStats(ServiceOptions $options = null);
+    public function getServiceStats(?ServiceOptions $options = null);
 
     /**
      * Creates promise that retrieves statistics related to replication for the
@@ -103,7 +103,7 @@ interface IBlob
      *
      * @see  https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats
      */
-    public function getServiceStatsAsync(ServiceOptions $options = null);
+    public function getServiceStatsAsync(?ServiceOptions $options = null);
 
     /**
      * Creates the promise to set the properties of the service.
@@ -120,7 +120,7 @@ interface IBlob
      */
     public function setServicePropertiesAsync(
         ServiceProperties $serviceProperties,
-        ServiceOptions    $options = null
+        ?ServiceOptions    $options = null
     );
 
     /**
@@ -132,7 +132,7 @@ interface IBlob
     *
     * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179352.aspx
     */
-    public function listContainers(BlobModels\ListContainersOptions $options = null);
+    public function listContainers(?BlobModels\ListContainersOptions $options = null);
 
     /**
      * Create a promise for lists all of the containers in the given
@@ -143,7 +143,7 @@ interface IBlob
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function listContainersAsync(
-        BlobModels\ListContainersOptions $options = null
+        ?BlobModels\ListContainersOptions $options = null
     );
 
     /**
@@ -158,7 +158,7 @@ interface IBlob
     */
     public function createContainer(
         $container,
-        BlobModels\CreateContainerOptions $options = null
+        ?BlobModels\CreateContainerOptions $options = null
     );
 
     /**
@@ -173,7 +173,7 @@ interface IBlob
      */
     public function createContainerAsync(
         $container,
-        BlobModels\CreateContainerOptions $options = null
+        ?BlobModels\CreateContainerOptions $options = null
     );
 
     /**
@@ -188,7 +188,7 @@ interface IBlob
     */
     public function deleteContainer(
         $container,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -201,7 +201,7 @@ interface IBlob
      */
     public function deleteContainerAsync(
         $container,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -216,7 +216,7 @@ interface IBlob
     */
     public function getContainerProperties(
         $container,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -231,7 +231,7 @@ interface IBlob
      */
     public function getContainerPropertiesAsync(
         $container,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -246,7 +246,7 @@ interface IBlob
     */
     public function getContainerMetadata(
         $container,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -262,7 +262,7 @@ interface IBlob
      */
     public function getContainerMetadataAsync(
         $container,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -278,7 +278,7 @@ interface IBlob
     */
     public function getContainerAcl(
         $container,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -294,7 +294,7 @@ interface IBlob
      */
     public function getContainerAclAsync(
         $container,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -311,7 +311,7 @@ interface IBlob
     public function setContainerAcl(
         $container,
         BlobModels\ContainerACL $acl,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -329,7 +329,7 @@ interface IBlob
     public function setContainerAclAsync(
         $container,
         BlobModels\ContainerACL $acl,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -346,7 +346,7 @@ interface IBlob
     public function setContainerMetadata(
         $container,
         array $metadata,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -363,7 +363,7 @@ interface IBlob
     public function setContainerMetadataAsync(
         $container,
         array $metadata,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -378,7 +378,7 @@ interface IBlob
     */
     public function listBlobs(
         $container,
-        BlobModels\ListBlobsOptions $options = null
+        ?BlobModels\ListBlobsOptions $options = null
     );
 
     /**
@@ -393,7 +393,7 @@ interface IBlob
      */
     public function listBlobsAsync(
         $container,
-        BlobModels\ListBlobsOptions $options = null
+        ?BlobModels\ListBlobsOptions $options = null
     );
 
     /**
@@ -416,7 +416,7 @@ interface IBlob
         $container,
         $blob,
         $length,
-        BlobModels\CreatePageBlobOptions $options = null
+        ?BlobModels\CreatePageBlobOptions $options = null
     );
 
     /**
@@ -441,7 +441,7 @@ interface IBlob
         $container,
         $blob,
         $length,
-        BlobModels\CreatePageBlobOptions $options = null
+        ?BlobModels\CreatePageBlobOptions $options = null
     );
 
     /**
@@ -459,7 +459,7 @@ interface IBlob
     public function createAppendBlob(
         $container,
         $blob,
-        BlobModels\CreateBlobOptions $options = null
+        ?BlobModels\CreateBlobOptions $options = null
     );
 
 
@@ -478,7 +478,7 @@ interface IBlob
     public function createAppendBlobAsync(
         $container,
         $blob,
-        BlobModels\CreateBlobOptions $options = null
+        ?BlobModels\CreateBlobOptions $options = null
     );
 
     /**
@@ -501,7 +501,7 @@ interface IBlob
         $container,
         $blob,
         $content,
-        BlobModels\CreateBlockBlobOptions $options = null
+        ?BlobModels\CreateBlockBlobOptions $options = null
     );
 
     /**
@@ -527,7 +527,7 @@ interface IBlob
         $container,
         $blob,
         $content,
-        BlobModels\CreateBlockBlobOptions $options = null
+        ?BlobModels\CreateBlockBlobOptions $options = null
     );
 
     /**
@@ -549,7 +549,7 @@ interface IBlob
         $blob,
         $length,
         $content,
-        BlobModels\CreatePageBlobFromContentOptions $options = null
+        ?BlobModels\CreatePageBlobFromContentOptions $options = null
     );
 
     /**
@@ -572,7 +572,7 @@ interface IBlob
         $blob,
         $length,
         $content,
-        BlobModels\CreatePageBlobFromContentOptions $options = null
+        ?BlobModels\CreatePageBlobFromContentOptions $options = null
     );
 
     /**
@@ -592,7 +592,7 @@ interface IBlob
         $container,
         $blob,
         Range $range,
-        BlobModels\CreateBlobPagesOptions $options = null
+        ?BlobModels\CreateBlobPagesOptions $options = null
     );
 
     /**
@@ -615,7 +615,7 @@ interface IBlob
         $container,
         $blob,
         Range $range,
-        BlobModels\CreateBlobPagesOptions $options = null
+        ?BlobModels\CreateBlobPagesOptions $options = null
     );
 
     /**
@@ -636,7 +636,7 @@ interface IBlob
         $blob,
         Range $range,
         $content,
-        BlobModels\CreateBlobPagesOptions $options = null
+        ?BlobModels\CreateBlobPagesOptions $options = null
     );
 
     /**
@@ -660,7 +660,7 @@ interface IBlob
         $blob,
         Range $range,
         $content,
-        BlobModels\CreateBlobPagesOptions $options = null
+        ?BlobModels\CreateBlobPagesOptions $options = null
     );
 
     /**
@@ -683,7 +683,7 @@ interface IBlob
         $blob,
         $blockId,
         $content,
-        BlobModels\CreateBlobBlockOptions $options = null
+        ?BlobModels\CreateBlobBlockOptions $options = null
     );
 
     /**
@@ -712,7 +712,7 @@ interface IBlob
         $blob,
         $blockId,
         $content,
-        BlobModels\CreateBlobBlockOptions $options = null
+        ?BlobModels\CreateBlobBlockOptions $options = null
     );
 
     /**
@@ -731,7 +731,7 @@ interface IBlob
         $container,
         $blob,
         $content,
-        BlobModels\AppendBlockOptions $options = null
+        ?BlobModels\AppendBlockOptions $options = null
     );
 
     /**
@@ -750,7 +750,7 @@ interface IBlob
         $container,
         $blob,
         $content,
-        BlobModels\AppendBlockOptions $options = null
+        ?BlobModels\AppendBlockOptions $options = null
     );
 
     /**
@@ -777,7 +777,7 @@ interface IBlob
         $container,
         $blob,
         $blockList,
-        BlobModels\CommitBlobBlocksOptions $options = null
+        ?BlobModels\CommitBlobBlocksOptions $options = null
     );
 
     /**
@@ -805,7 +805,7 @@ interface IBlob
         $container,
         $blob,
         $blockList,
-        BlobModels\CommitBlobBlocksOptions $options = null
+        ?BlobModels\CommitBlobBlocksOptions $options = null
     );
 
     /**
@@ -830,7 +830,7 @@ interface IBlob
     public function listBlobBlocks(
         $container,
         $blob,
-        BlobModels\ListBlobBlocksOptions $options = null
+        ?BlobModels\ListBlobBlocksOptions $options = null
     );
 
     /**
@@ -856,7 +856,7 @@ interface IBlob
     public function listBlobBlocksAsync(
         $container,
         $blob,
-        BlobModels\ListBlobBlocksOptions $options = null
+        ?BlobModels\ListBlobBlocksOptions $options = null
     );
 
     /**
@@ -873,7 +873,7 @@ interface IBlob
     public function getBlobProperties(
         $container,
         $blob,
-        BlobModels\GetBlobPropertiesOptions $options = null
+        ?BlobModels\GetBlobPropertiesOptions $options = null
     );
 
     /**
@@ -890,7 +890,7 @@ interface IBlob
     public function getBlobPropertiesAsync(
         $container,
         $blob,
-        BlobModels\GetBlobPropertiesOptions $options = null
+        ?BlobModels\GetBlobPropertiesOptions $options = null
     );
 
     /**
@@ -907,7 +907,7 @@ interface IBlob
     public function getBlobMetadata(
         $container,
         $blob,
-        BlobModels\GetBlobMetadataOptions $options = null
+        ?BlobModels\GetBlobMetadataOptions $options = null
     );
 
     /**
@@ -924,7 +924,7 @@ interface IBlob
     public function getBlobMetadataAsync(
         $container,
         $blob,
-        BlobModels\GetBlobMetadataOptions $options = null
+        ?BlobModels\GetBlobMetadataOptions $options = null
     );
 
     /**
@@ -942,7 +942,7 @@ interface IBlob
     public function listPageBlobRanges(
         $container,
         $blob,
-        BlobModels\ListPageBlobRangesOptions $options = null
+        ?BlobModels\ListPageBlobRangesOptions $options = null
     );
 
     /**
@@ -961,7 +961,7 @@ interface IBlob
     public function listPageBlobRangesAsync(
         $container,
         $blob,
-        BlobModels\ListPageBlobRangesOptions $options = null
+        ?BlobModels\ListPageBlobRangesOptions $options = null
     );
 
     /**
@@ -989,7 +989,7 @@ interface IBlob
         $container,
         $blob,
         $previousSnapshotTime,
-        BlobModels\ListPageBlobRangesOptions $options = null
+        ?BlobModels\ListPageBlobRangesOptions $options = null
     );
 
     /**
@@ -1018,7 +1018,7 @@ interface IBlob
         $container,
         $blob,
         $previousSnapshotTime,
-        BlobModels\ListPageBlobRangesOptions $options = null
+        ?BlobModels\ListPageBlobRangesOptions $options = null
     );
 
     /**
@@ -1035,7 +1035,7 @@ interface IBlob
     public function setBlobTier(
         $container,
         $blob,
-        BlobModels\SetBlobTierOptions $options = null
+        ?BlobModels\SetBlobTierOptions $options = null
     );
 
     /**
@@ -1052,7 +1052,7 @@ interface IBlob
     public function setBlobTierAsync(
         $container,
         $blob,
-        BlobModels\SetBlobTierOptions $options = null
+        ?BlobModels\SetBlobTierOptions $options = null
     );
 
     /**
@@ -1069,7 +1069,7 @@ interface IBlob
     public function setBlobProperties(
         $container,
         $blob,
-        BlobModels\SetBlobPropertiesOptions $options = null
+        ?BlobModels\SetBlobPropertiesOptions $options = null
     );
 
     /**
@@ -1086,7 +1086,7 @@ interface IBlob
     public function setBlobPropertiesAsync(
         $container,
         $blob,
-        BlobModels\SetBlobPropertiesOptions $options = null
+        ?BlobModels\SetBlobPropertiesOptions $options = null
     );
 
     /**
@@ -1105,7 +1105,7 @@ interface IBlob
         $container,
         $blob,
         array $metadata,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1124,7 +1124,7 @@ interface IBlob
         $container,
         $blob,
         array $metadata,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1145,7 +1145,7 @@ interface IBlob
         $path,
         $container,
         $blob,
-        BlobModels\GetBlobOptions $options = null
+        ?BlobModels\GetBlobOptions $options = null
     );
 
     /**
@@ -1166,7 +1166,7 @@ interface IBlob
         $path,
         $container,
         $blob,
-        BlobModels\GetBlobOptions $options = null
+        ?BlobModels\GetBlobOptions $options = null
     );
 
     /**
@@ -1183,7 +1183,7 @@ interface IBlob
     public function undeleteBlob(
         $container,
         $blob,
-        BlobModels\UndeleteBlobOptions $options = null
+        ?BlobModels\UndeleteBlobOptions $options = null
     );
     
     /**
@@ -1200,7 +1200,7 @@ interface IBlob
     public function undeleteBlobAsync(
         $container,
         $blob,
-        BlobModels\UndeleteBlobOptions $options = null
+        ?BlobModels\UndeleteBlobOptions $options = null
     );
     
     /**
@@ -1218,7 +1218,7 @@ interface IBlob
     public function getBlob(
         $container,
         $blob,
-        BlobModels\GetBlobOptions $options = null
+        ?BlobModels\GetBlobOptions $options = null
     );
 
     /**
@@ -1236,7 +1236,7 @@ interface IBlob
     public function getBlobAsync(
         $container,
         $blob,
-        BlobModels\GetBlobOptions $options = null
+        ?BlobModels\GetBlobOptions $options = null
     );
 
     /**
@@ -1257,7 +1257,7 @@ interface IBlob
     public function deleteBlob(
         $container,
         $blob,
-        BlobModels\DeleteBlobOptions $options = null
+        ?BlobModels\DeleteBlobOptions $options = null
     );
 
     /**
@@ -1278,7 +1278,7 @@ interface IBlob
     public function deleteBlobAsync(
         $container,
         $blob,
-        BlobModels\DeleteBlobOptions $options = null
+        ?BlobModels\DeleteBlobOptions $options = null
     );
 
     /**
@@ -1295,7 +1295,7 @@ interface IBlob
     public function createBlobSnapshot(
         $container,
         $blob,
-        BlobModels\CreateBlobSnapshotOptions $options = null
+        ?BlobModels\CreateBlobSnapshotOptions $options = null
     );
 
     /**
@@ -1315,7 +1315,7 @@ interface IBlob
     public function createBlobSnapshotAsync(
         $container,
         $blob,
-        BlobModels\CreateBlobSnapshotOptions $options = null
+        ?BlobModels\CreateBlobSnapshotOptions $options = null
     );
 
     /**
@@ -1336,7 +1336,7 @@ interface IBlob
         $destinationBlob,
         $sourceContainer,
         $sourceBlob,
-        BlobModels\CopyBlobOptions $options = null
+        ?BlobModels\CopyBlobOptions $options = null
     );
 
     /**
@@ -1363,7 +1363,7 @@ interface IBlob
         $destinationBlob,
         $sourceContainer,
         $sourceBlob,
-        BlobModels\CopyBlobOptions $options = null
+        ?BlobModels\CopyBlobOptions $options = null
     );
 
     /**
@@ -1389,7 +1389,7 @@ interface IBlob
         $destinationContainer,
         $destinationBlob,
         $sourceURL,
-        BlobModels\CopyBlobFromURLOptions $options = null
+        ?BlobModels\CopyBlobFromURLOptions $options = null
     );
 
     /**
@@ -1415,7 +1415,7 @@ interface IBlob
         $destinationContainer,
         $destinationBlob,
         $sourceURL,
-        BlobModels\CopyBlobFromURLOptions $options = null
+        ?BlobModels\CopyBlobFromURLOptions $options = null
     );
 
     /**
@@ -1434,7 +1434,7 @@ interface IBlob
         $container,
         $blob,
         $copyId,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1453,7 +1453,7 @@ interface IBlob
         $container,
         $blob,
         $copyId,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1477,7 +1477,7 @@ interface IBlob
         $blob,
         $proposedLeaseId = null,
         $leaseDuration = null,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1501,7 +1501,7 @@ interface IBlob
         $blob,
         $proposedLeaseId = null,
         $leaseDuration = null,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1522,7 +1522,7 @@ interface IBlob
         $blob,
         $leaseId,
         $proposedLeaseId,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1543,7 +1543,7 @@ interface IBlob
         $blob,
         $leaseId,
         $proposedLeaseId,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1562,7 +1562,7 @@ interface IBlob
         $container,
         $blob,
         $leaseId,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1581,7 +1581,7 @@ interface IBlob
         $container,
         $blob,
         $leaseId,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
 
@@ -1602,7 +1602,7 @@ interface IBlob
         $container,
         $blob,
         $leaseId,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1622,7 +1622,7 @@ interface IBlob
         $container,
         $blob,
         $leaseId,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1641,7 +1641,7 @@ interface IBlob
         $container,
         $blob,
         $breakPeriod = null,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 
     /**
@@ -1660,6 +1660,6 @@ interface IBlob
         $container,
         $blob,
         $breakPeriod = null,
-        BlobModels\BlobServiceOptions $options = null
+        ?BlobModels\BlobServiceOptions $options = null
     );
 }

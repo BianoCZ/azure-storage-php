@@ -59,7 +59,7 @@ class ShareACL extends ACLBase
      *
      * @return ShareACL
      */
-    public static function create(array $parsed = null)
+    public static function create(?array $parsed = null)
     {
         $result = new ShareACL();
         $result->fromXmlArray($parsed);

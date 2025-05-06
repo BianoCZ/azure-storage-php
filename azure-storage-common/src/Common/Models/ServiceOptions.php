@@ -88,7 +88,7 @@ class ServiceOptions
     /**
      * Initialize the properties to default value.
      */
-    public function __construct(ServiceOptions $options = null)
+    public function __construct(?ServiceOptions $options = null)
     {
         if ($options == null) {
             $this->setNumberOfConcurrency(Resources::NUMBER_OF_CONCURRENCY);

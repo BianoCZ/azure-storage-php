@@ -55,7 +55,7 @@ class GetShareACLResult
     public static function create(
         $etag,
         \DateTime $lastModified,
-        array $parsed = null
+        ?array $parsed = null
     ) {
         $result = new GetShareAclResult();
         $result->setETag($etag);
