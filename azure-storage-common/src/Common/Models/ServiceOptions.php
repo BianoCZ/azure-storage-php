@@ -285,10 +285,10 @@ class ServiceOptions
     /**
      * Validate if the given middleware is of callable or IMiddleware.
      *
-     * @param  void $middleware the middleware to be validated.
+     * @param callable|IMiddleware $middleware the middleware to be validated.
      *
      */
-    private static function validateIsMiddleware(void $middleware): void
+    private static function validateIsMiddleware(callable|IMiddleware $middleware): void
     {
         if (!(is_callable($middleware) || $middleware instanceof IMiddleware)) {
             Validate::isTrue(

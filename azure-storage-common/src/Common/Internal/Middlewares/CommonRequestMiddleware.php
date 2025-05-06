@@ -70,7 +70,7 @@ class CommonRequestMiddleware extends MiddlewareBase
      * @param array       $headers              The headers to be added.
      */
     public function __construct(
-        ?IAuthScheme $authenticationScheme = null,
+        ?IAuthScheme $authenticationScheme,
         string $storageAPIVersion,
         string $serviceSDKVersion,
         array $headers = []
