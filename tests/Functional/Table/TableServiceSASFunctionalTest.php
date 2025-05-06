@@ -27,6 +27,7 @@ namespace MicrosoftAzure\Storage\Tests\Functional\Table;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Tests\Framework\SASFunctionalTestBase;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function count;
 
 /**
  * Tests for service SAS proxy tests.
@@ -40,7 +41,7 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  */
 class TableServiceSASFunctionalTest extends SASFunctionalTestBase
 {
-    public function testTableServiceSAS()
+    public function testTableServiceSAS(): void
     {
         $helper = new TableSharedAccessSignatureHelperMock(
             $this->serviceSettings->getName(),
@@ -50,8 +51,8 @@ class TableServiceSASFunctionalTest extends SASFunctionalTestBase
         //setup the proxies for creating tables
         $this->setUpWithConnectionString($this->connectionString);
 
-        $tableProxies = array();
-        $tables = array();
+        $tableProxies = [];
+        $tables = [];
         $tables[] = TestResources::getInterestingName('tbl');
         $this->safeCreateTable($tables[0]);
         $tables[] = TestResources::getInterestingName('tbl');
@@ -95,25 +96,25 @@ class TableServiceSASFunctionalTest extends SASFunctionalTestBase
             );
             $proxy->deleteEntity($table, '123', '456');
             $result = $proxy->queryEntities($table);
-            $this->assertEquals(0, \count($result->getEntities()));
+            $this->assertEquals(0, count($result->getEntities()));
         }
         //Validate that a cross access with wrong proxy/table pair
         //would not be successfull
-        for ($i= 0; $i < 2; ++$i) {
+        for ($i = 0; $i < 2; ++$i) {
             $proxy = $tableProxies[$i];
             $table = $tables[1 - $i];
             $entity = TestResources::getTestEntity('123', '456');
             //a
             $this->validateServiceExceptionErrorMessage(
                 'This request is not authorized to perform this operation.',
-                function () use ($proxy, $table, $entity) {
+                function () use ($proxy, $table, $entity): void {
                     $proxy->insertEntity($table, $entity);
                 }
             );
             //r
             $this->validateServiceExceptionErrorMessage(
                 'This request is not authorized to perform this operation.',
-                function () use ($proxy, $table) {
+                function () use ($proxy, $table): void {
                     $proxy->queryEntities($table);
                 }
             );
@@ -151,13 +152,13 @@ class TableServiceSASFunctionalTest extends SASFunctionalTestBase
         );
         $tableProxy->deleteEntity($table, '123', '456');
         $result = $tableProxy->queryEntities($table);
-        $this->assertEquals(0, \count($result->getEntities()));
+        $this->assertEquals(0, count($result->getEntities()));
 
         //test out of scope pk cannot be accessed.
         $entity = TestResources::getTestEntity('124', '456');
         $this->validateServiceExceptionErrorMessage(
             'This request is not authorized to perform this operation.',
-            function () use ($tableProxy, $table, $entity) {
+            function () use ($tableProxy, $table, $entity): void {
                 $tableProxy->insertEntity($table, $entity);
             }
         );
@@ -165,7 +166,7 @@ class TableServiceSASFunctionalTest extends SASFunctionalTestBase
         $entity = TestResources::getTestEntity('123', '457');
         $this->validateServiceExceptionErrorMessage(
             'This request is not authorized to perform this operation.',
-            function () use ($tableProxy, $table, $entity) {
+            function () use ($tableProxy, $table, $entity): void {
                 $tableProxy->insertEntity($table, $entity);
             }
         );
@@ -191,4 +192,5 @@ class TableServiceSASFunctionalTest extends SASFunctionalTestBase
 
         return $this->createProxyWithSAS($sas, $accountName, Resources::RESOURCE_TYPE_TABLE);
     }
+
 }

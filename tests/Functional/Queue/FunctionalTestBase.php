@@ -25,16 +25,19 @@
 namespace MicrosoftAzure\Storage\Tests\Functional\Queue;
 
 use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
+use function var_export;
 
 class FunctionalTestBase extends IntegrationTestBase
 {
+
     private static $isOneTimeSetup = false;
 
     protected $accountName;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         $settings = StorageServiceSettings::createFromConnectionString($this->connectionString);
         $this->accountName = $settings->getName();
         if (!self::$isOneTimeSetup) {
@@ -43,7 +46,7 @@ class FunctionalTestBase extends IntegrationTestBase
         }
     }
 
-    private function doOneTimeSetup()
+    private function doOneTimeSetup(): void
     {
         QueueServiceFunctionalTestData::setupData();
 
@@ -57,7 +60,7 @@ class FunctionalTestBase extends IntegrationTestBase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$isOneTimeSetup) {
             $testBase = new FunctionalTestBase();
@@ -67,10 +70,11 @@ class FunctionalTestBase extends IntegrationTestBase
             }
             self::$isOneTimeSetup = false;
         }
+
         parent::tearDownAfterClass();
     }
 
-    public static function println($msg)
+    public static function println($msg): void
     {
         // error_log($msg);
     }
@@ -79,4 +83,5 @@ class FunctionalTestBase extends IntegrationTestBase
     {
         return var_export($obj, true);
     }
+
 }

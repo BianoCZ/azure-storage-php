@@ -24,11 +24,14 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\File\Models;
 
+use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
 use MicrosoftAzure\Storage\File\Models\Directory;
 use MicrosoftAzure\Storage\File\Models\File;
 use MicrosoftAzure\Storage\File\Models\ListDirectoriesAndFilesResult;
-use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use function array_key_exists;
+use function count;
 
 /**
  * Unit tests for class ListDirectoriesAndFilesResult
@@ -40,12 +43,12 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListDirectoriesAndFilesResultTest extends \PHPUnit\Framework\TestCase
+class ListDirectoriesAndFilesResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
-        $samples = array();
+        $samples = [];
         $samples[] =
             TestResources::getInterestingListDirectoriesAndFilesResultArray();
         $samples[] =
@@ -58,7 +61,7 @@ class ListDirectoriesAndFilesResultTest extends \PHPUnit\Framework\TestCase
             TestResources::getInterestingListDirectoriesAndFilesResultArray(5, 5);
 
         // Test
-        $actuals = array();
+        $actuals = [];
         $actuals[] = ListDirectoriesAndFilesResult::create($samples[0]);
         $actuals[] = ListDirectoriesAndFilesResult::create($samples[1]);
         $actuals[] = ListDirectoriesAndFilesResult::create($samples[2]);
@@ -108,4 +111,5 @@ class ListDirectoriesAndFilesResultTest extends \PHPUnit\Framework\TestCase
             );
         }
     }
+
 }

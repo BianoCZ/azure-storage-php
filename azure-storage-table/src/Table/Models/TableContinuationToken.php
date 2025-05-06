@@ -39,8 +39,11 @@ use MicrosoftAzure\Storage\Common\Models\ContinuationToken;
  */
 class TableContinuationToken extends ContinuationToken
 {
+
     private $nextPartitionKey;
+
     private $nextRowKey;
+
     private $nextTableName;
 
     public function __construct(
@@ -50,6 +53,7 @@ class TableContinuationToken extends ContinuationToken
         $location = ''
     ) {
         parent::__construct($location);
+
         $this->setNextTableName($nextTableName);
         $this->setNextPartitionKey($nextPartitionKey);
         $this->setNextRowKey($nextRowKey);
@@ -58,9 +62,8 @@ class TableContinuationToken extends ContinuationToken
     /**
      * Gets entity next partition key.
      *
-     * @return string
      */
-    public function getNextPartitionKey()
+    public function getNextPartitionKey(): string
     {
         return $this->nextPartitionKey;
     }
@@ -70,9 +73,8 @@ class TableContinuationToken extends ContinuationToken
      *
      * @param string $nextPartitionKey The entity next partition key value.
      *
-     * @return void
      */
-    public function setNextPartitionKey($nextPartitionKey)
+    public function setNextPartitionKey(string $nextPartitionKey): void
     {
         Validate::canCastAsString($nextPartitionKey, 'nextPartitionKey');
         $this->nextPartitionKey = $nextPartitionKey;
@@ -81,9 +83,8 @@ class TableContinuationToken extends ContinuationToken
     /**
      * Gets entity next row key.
      *
-     * @return string
      */
-    public function getNextRowKey()
+    public function getNextRowKey(): string
     {
         return $this->nextRowKey;
     }
@@ -93,9 +94,8 @@ class TableContinuationToken extends ContinuationToken
      *
      * @param string $nextRowKey The entity next row key value.
      *
-     * @return void
      */
-    public function setNextRowKey($nextRowKey)
+    public function setNextRowKey(string $nextRowKey): void
     {
         Validate::canCastAsString($nextRowKey, 'nextRowKey');
         $this->nextRowKey = $nextRowKey;
@@ -104,9 +104,8 @@ class TableContinuationToken extends ContinuationToken
     /**
      * Gets nextTableName
      *
-     * @return string
      */
-    public function getNextTableName()
+    public function getNextTableName(): string
     {
         return $this->nextTableName;
     }
@@ -116,11 +115,11 @@ class TableContinuationToken extends ContinuationToken
      *
      * @param string $nextTableName value
      *
-     * @return void
      */
-    public function setNextTableName($nextTableName)
+    public function setNextTableName(string $nextTableName): void
     {
         Validate::canCastAsString($nextTableName, 'nextTableName');
         $this->nextTableName = $nextTableName;
     }
+
 }

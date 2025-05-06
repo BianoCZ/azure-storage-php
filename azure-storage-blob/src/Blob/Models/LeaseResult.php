@@ -39,6 +39,7 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class LeaseResult
 {
+
     private $leaseId;
 
     /**
@@ -48,9 +49,8 @@ class LeaseResult
      *
      * @internal
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\LeaseResult
      */
-    public static function create(array $headers)
+    public static function create(array $headers): LeaseResult
     {
         $result = new LeaseResult();
 
@@ -64,9 +64,8 @@ class LeaseResult
     /**
      * Gets lease Id for the blob
      *
-     * @return string
      */
-    public function getLeaseId()
+    public function getLeaseId(): string
     {
         return $this->leaseId;
     }
@@ -76,10 +75,10 @@ class LeaseResult
      *
      * @param string $leaseId the blob lease id.
      *
-     * @return void
      */
-    protected function setLeaseId($leaseId)
+    protected function setLeaseId(string $leaseId): void
     {
         $this->leaseId = $leaseId;
     }
+
 }

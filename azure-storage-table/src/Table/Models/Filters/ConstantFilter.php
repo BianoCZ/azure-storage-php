@@ -38,7 +38,9 @@ use MicrosoftAzure\Storage\Table\Models\EdmType;
  */
 class ConstantFilter extends Filter
 {
+
     private $_value;
+
     private $_edmType;
 
     /**
@@ -47,7 +49,7 @@ class ConstantFilter extends Filter
      * @param string $edmType The EDM type.
      * @param string $value   The EDM value.
      */
-    public function __construct($edmType, $value)
+    public function __construct(string $edmType, string $value)
     {
         $this->_edmType = EdmType::processType($edmType);
         $this->_value   = $value;
@@ -56,9 +58,8 @@ class ConstantFilter extends Filter
     /**
      * Gets value
      *
-     * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->_value;
     }
@@ -66,10 +67,10 @@ class ConstantFilter extends Filter
     /**
      * Gets the type of the constant.
      *
-     * @return string
      */
-    public function getEdmType()
+    public function getEdmType(): string
     {
         return $this->_edmType;
     }
+
 }

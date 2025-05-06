@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 
@@ -39,9 +40,13 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class PutBlobResult
 {
+
     private $contentMD5;
+
     private $etag;
+
     private $lastModified;
+
     private $requestServerEncrypted;
 
     /**
@@ -51,9 +56,8 @@ class PutBlobResult
      *
      * @internal
      *
-     * @return PutBlobResult
      */
-    public static function create(array $headers)
+    public static function create(array $headers): PutBlobResult
     {
         $result = new PutBlobResult();
 
@@ -64,10 +68,12 @@ class PutBlobResult
             )
         );
 
-        if (Utilities::arrayKeyExistsInsensitive(
-            Resources::LAST_MODIFIED,
-            $headers
-        )) {
+        if (
+            Utilities::arrayKeyExistsInsensitive(
+                Resources::LAST_MODIFIED,
+                $headers
+            )
+        ) {
             $lastModified = Utilities::tryGetValueInsensitive(
                 Resources::LAST_MODIFIED,
                 $headers
@@ -95,9 +101,8 @@ class PutBlobResult
     /**
      * Gets ETag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->etag;
     }
@@ -107,9 +112,8 @@ class PutBlobResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         $this->etag = $etag;
     }
@@ -117,9 +121,8 @@ class PutBlobResult
     /**
      * Gets blob lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }
@@ -129,9 +132,8 @@ class PutBlobResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         $this->lastModified = $lastModified;
     }
@@ -139,9 +141,8 @@ class PutBlobResult
     /**
      * Gets block content MD5.
      *
-     * @return string
      */
-    public function getContentMD5()
+    public function getContentMD5(): string
     {
         return $this->contentMD5;
     }
@@ -151,9 +152,8 @@ class PutBlobResult
      *
      * @param string $contentMD5 conent MD5 as a string.
      *
-     * @return void
      */
-    protected function setContentMD5($contentMD5)
+    protected function setContentMD5(string $contentMD5): void
     {
         $this->contentMD5 = $contentMD5;
     }
@@ -161,9 +161,8 @@ class PutBlobResult
     /**
      * Gets the whether the contents of the request are successfully encrypted.
      *
-     * @return boolean
      */
-    public function getRequestServerEncrypted()
+    public function getRequestServerEncrypted(): bool
     {
         return $this->requestServerEncrypted;
     }
@@ -171,12 +170,11 @@ class PutBlobResult
     /**
      * Sets the request server encryption value.
      *
-     * @param boolean $requestServerEncrypted
      *
-     * @return void
      */
-    public function setRequestServerEncrypted($requestServerEncrypted)
+    public function setRequestServerEncrypted(bool $requestServerEncrypted): void
     {
         $this->requestServerEncrypted = $requestServerEncrypted;
     }
+
 }

@@ -47,4 +47,5 @@ class QueueSharedAccessSignatureHelperMock extends QueueSharedAccessSignatureHel
     {
         return $this->accountKey;
     }
+
 }

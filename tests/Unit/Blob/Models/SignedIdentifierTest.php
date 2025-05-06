@@ -21,10 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Models\BlobAccessPolicy;
 use MicrosoftAzure\Storage\Common\Models\SignedIdentifier;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class SignedIdentifier
@@ -36,9 +39,9 @@ use MicrosoftAzure\Storage\Common\Models\SignedIdentifier;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class SignedIdentifierTest extends \PHPUnit\Framework\TestCase
+class SignedIdentifierTest extends TestCase
 {
-    public function testGetId()
+    public function testGetId(): void
     {
         // Setup
         $signedIdentifier = new SignedIdentifier();
@@ -52,7 +55,7 @@ class SignedIdentifierTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetId()
+    public function testSetId(): void
     {
         // Setup
         $signedIdentifier = new SignedIdentifier();
@@ -65,14 +68,14 @@ class SignedIdentifierTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $signedIdentifier->getId());
     }
 
-    public function testGetAccessPolicy()
+    public function testGetAccessPolicy(): void
     {
         // Setup
         $signedIdentifier = new SignedIdentifier();
         $expected = new BlobAccessPolicy();
-        $expected->setExpiry(new \DateTime('2009-09-29T08:49:37'));
+        $expected->setExpiry(new DateTime('2009-09-29T08:49:37'));
         $expected->setPermission('rwd');
-        $expected->setStart(new \DateTime('2009-09-28T08:49:37'));
+        $expected->setStart(new DateTime('2009-09-28T08:49:37'));
         $signedIdentifier->setAccessPolicy($expected);
 
         // Test
@@ -87,9 +90,9 @@ class SignedIdentifierTest extends \PHPUnit\Framework\TestCase
         // Setup
         $signedIdentifier = new SignedIdentifier();
         $expected = new BlobAccessPolicy();
-        $expected->setExpiry(new \DateTime('2009-09-29T08:49:37'));
+        $expected->setExpiry(new DateTime('2009-09-29T08:49:37'));
         $expected->setPermission('rwd');
-        $expected->setStart(new \DateTime('2009-09-28T08:49:37'));
+        $expected->setStart(new DateTime('2009-09-28T08:49:37'));
 
         // Test
         $signedIdentifier->setAccessPolicy($expected);
@@ -103,7 +106,7 @@ class SignedIdentifierTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testSetAccessPolicy
      */
-    public function testToXml($signedIdentifier)
+    public function testToXml($signedIdentifier): void
     {
         // Setup
         $id = 'MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI=';
@@ -116,4 +119,5 @@ class SignedIdentifierTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($id, $array['SignedIdentifier']['Id']);
         $this->assertArrayHasKey('AccessPolicy', $array['SignedIdentifier']);
     }
+
 }

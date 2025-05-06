@@ -21,9 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Models;
 
 use MicrosoftAzure\Storage\Common\Models\RangeDiff;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class RangeDiff
@@ -35,7 +37,7 @@ use MicrosoftAzure\Storage\Common\Models\RangeDiff;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class RangeDiffTest extends \PHPUnit\Framework\TestCase
+class RangeDiffTest extends TestCase
 {
     public function testConstruct()
     {
@@ -58,7 +60,7 @@ class RangeDiffTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testIsClearedPageRange($obj)
+    public function testIsClearedPageRange($obj): void
     {
         // Setup
         $excepted = true;
@@ -80,4 +82,5 @@ class RangeDiffTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($excepted, $actual);
     }
+
 }

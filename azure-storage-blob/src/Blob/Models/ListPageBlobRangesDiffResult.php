@@ -24,9 +24,13 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Models\RangeDiff;
+use function array_change_key_case;
+use function intval;
+use function is_null;
+use function strtolower;
 
 /**
  * Holds result of calling listPageBlobRangesDiff wrapper
@@ -48,9 +52,8 @@ class ListPageBlobRangesDiffResult extends ListPageBlobRangesResult
      *
      * @internal
      *
-     * @return ListPageBlobRangesDiffResult
      */
-    public static function create(array $headers, array $parsed = null)
+    public static function create(array $headers, ?array $parsed = null): ListPageBlobRangesDiffResult
     {
         $result  = new ListPageBlobRangesDiffResult();
         $headers = array_change_key_case($headers);
@@ -69,12 +72,12 @@ class ListPageBlobRangesDiffResult extends ListPageBlobRangesResult
 
         $parsed = array_change_key_case($parsed);
 
-        $rawRanges = array();
+        $rawRanges = [];
         if (!empty($parsed[strtolower(Resources::XTAG_PAGE_RANGE)])) {
             $rawRanges = Utilities::getArray($parsed[strtolower(Resources::XTAG_PAGE_RANGE)]);
         }
 
-        $pageRanges = array();
+        $pageRanges = [];
         foreach ($rawRanges as $value) {
             $pageRanges[] = new RangeDiff(
                 intval($value[Resources::XTAG_RANGE_START]),
@@ -82,7 +85,7 @@ class ListPageBlobRangesDiffResult extends ListPageBlobRangesResult
             );
         }
 
-        $rawRanges = array();
+        $rawRanges = [];
         if (!empty($parsed[strtolower(Resources::XTAG_CLEAR_RANGE)])) {
             $rawRanges = Utilities::getArray($parsed[strtolower(Resources::XTAG_CLEAR_RANGE)]);
         }
@@ -98,4 +101,5 @@ class ListPageBlobRangesDiffResult extends ListPageBlobRangesResult
         $result->setRanges($pageRanges);
         return $result;
     }
+
 }

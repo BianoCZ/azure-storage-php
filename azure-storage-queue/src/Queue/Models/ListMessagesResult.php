@@ -38,6 +38,7 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class ListMessagesResult
 {
+
     private $_queueMessages;
 
     /**
@@ -47,12 +48,11 @@ class ListMessagesResult
      *
      * @internal
      *
-     * @return ListMessagesResult
      */
-    public static function create(array $parsedResponse = null)
+    public static function create(?array $parsedResponse = null): ListMessagesResult
     {
         $result        = new ListMessagesResult();
-        $queueMessages = array();
+        $queueMessages = [];
 
         if (!empty($parsedResponse)) {
             $rawMessages = Utilities::getArray($parsedResponse['QueueMessage']);
@@ -70,9 +70,8 @@ class ListMessagesResult
     /**
      * Gets queueMessages field.
      *
-     * @return array
      */
-    public function getQueueMessages()
+    public function getQueueMessages(): array
     {
         return $this->_queueMessages;
     }
@@ -84,14 +83,14 @@ class ListMessagesResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setQueueMessages(array $queueMessages)
+    protected function setQueueMessages(array $queueMessages): void
     {
-        $this->_queueMessages = array();
+        $this->_queueMessages = [];
 
         foreach ($queueMessages as $value) {
             $this->_queueMessages[] = clone $value;
         }
     }
+
 }

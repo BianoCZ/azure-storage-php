@@ -21,9 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
 use MicrosoftAzure\Storage\Table\Models\UpdateEntityResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class UpdateEntityResult
@@ -35,12 +37,12 @@ use MicrosoftAzure\Storage\Table\Models\UpdateEntityResult;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class UpdateEntityResultTest extends \PHPUnit\Framework\TestCase
+class UpdateEntityResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
-        $headers = array('ETag' => '0x8CACB9BD7C6B1B2');
+        $headers = ['ETag' => '0x8CACB9BD7C6B1B2'];
 
         // Test
         $result = UpdateEntityResult::create($headers);
@@ -48,4 +50,5 @@ class UpdateEntityResultTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($headers['ETag'], $result->getETag());
     }
+
 }

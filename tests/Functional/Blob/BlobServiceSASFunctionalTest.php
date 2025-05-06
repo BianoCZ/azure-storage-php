@@ -24,9 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Tests\Functional\Blob;
 
-use MicrosoftAzure\Storage\Tests\Framework\SASFunctionalTestBase;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Tests\Framework\SASFunctionalTestBase;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function count;
+use function openssl_random_pseudo_bytes;
+use function stream_get_contents;
 
 /**
  * Tests for service SAS proxy tests.
@@ -40,7 +43,7 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  */
 class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
 {
-    public function testBlobServiceSAS()
+    public function testBlobServiceSAS(): void
     {
         $helper = new BlobSharedAccessSignatureHelperMock(
             $this->serviceSettings->getName(),
@@ -50,8 +53,8 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
         //setup the proxies for creating containers
         $this->setUpWithConnectionString($this->connectionString);
 
-        $containerProxies = array();
-        $containers = array();
+        $containerProxies = [];
+        $containers = [];
         $containers[] = TestResources::getInterestingName('con');
         $this->safeCreateContainer($containers[0]);
         $containers[] = TestResources::getInterestingName('con');
@@ -87,17 +90,17 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
             $result = $proxy->listBlobs($container);
             $this->assertEquals($blob0, $result->getBlobs()[0]->getName());
             //a
-            $content = \openssl_random_pseudo_bytes(1024);
+            $content = openssl_random_pseudo_bytes(1024);
             $proxy->appendBlock($container, $blob0, $content);
             //w
             $blob1 = TestResources::getInterestingName('blob');
             $proxy->createBlockBlob($container, $blob1, $content);
             //r
-            $actualContent = \stream_get_contents(
+            $actualContent = stream_get_contents(
                 $proxy->getBlob($container, $blob0)->getContentStream()
             );
             $this->assertEquals($content, $actualContent);
-            $actualContent = \stream_get_contents(
+            $actualContent = stream_get_contents(
                 $proxy->getBlob($container, $blob1)->getContentStream()
             );
             $this->assertEquals($content, $actualContent);
@@ -105,32 +108,32 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
             $proxy->deleteBlob($container, $blob0);
             $proxy->deleteBlob($container, $blob1);
             $result = $proxy->listBlobs($container);
-            $this->assertEquals(0, \count($result->getBlobs()));
+            $this->assertEquals(0, count($result->getBlobs()));
         }
         //Validate that a cross access with wrong proxy/container pair
         //would not be successful
-        for ($i= 0; $i < 2; ++$i) {
+        for ($i = 0; $i < 2; ++$i) {
             $proxy = $containerProxies[$i];
             $container = $containers[1 - $i];
             $blob0 = TestResources::getInterestingName('blob');
             //c
             $this->validateServiceExceptionErrorMessage(
                 'Server failed to authenticate the request.',
-                function () use ($proxy, $container, $blob0) {
+                function () use ($proxy, $container, $blob0): void {
                     $proxy->createAppendBlob($container, $blob0);
                 }
             );
             //l
             $this->validateServiceExceptionErrorMessage(
                 'Server failed to authenticate the request.',
-                function () use ($proxy, $container) {
+                function () use ($proxy, $container): void {
                     $proxy->listBlobs($container);
                 }
             );
             //w
             $this->validateServiceExceptionErrorMessage(
                 'Server failed to authenticate the request.',
-                function () use ($proxy, $container) {
+                function () use ($proxy, $container): void {
                     $proxy->createBlockBlob($container, 'myblob', 'testcontent');
                 }
             );
@@ -149,7 +152,7 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
         //l
         $this->validateServiceExceptionErrorMessage(
             'Server failed to authenticate the request.',
-            function () use ($proxy, $container) {
+            function () use ($proxy, $container): void {
                 $proxy->listBlobs($container);
             }
         );
@@ -171,11 +174,11 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
         //l cannot be performed
         $this->validateServiceExceptionErrorMessage(
             'The specified signed resource is not allowed for the this resource level',
-            function () use ($blobProxy, $container) {
+            function () use ($blobProxy, $container): void {
                 $blobProxy->listBlobs($container);
             }
         );
-        $content = \openssl_random_pseudo_bytes(20);
+        $content = openssl_random_pseudo_bytes(20);
         //rcwd can be performed.
         $blobProxy->createBlockBlob($container, $blob, $content);
         $actual = stream_get_contents($blobProxy->getBlob($container, $blob)->getContentStream());
@@ -183,7 +186,7 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
         $blobProxy->deleteBlob($container, $blob);
     }
 
-    public function testBlobServiceSASNonUTF8Char()
+    public function testBlobServiceSASNonUTF8Char(): void
     {
         $helper = new BlobSharedAccessSignatureHelperMock(
             $this->serviceSettings->getName(),
@@ -193,8 +196,8 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
         //setup the proxies for creating containers
         $this->setUpWithConnectionString($this->connectionString);
 
-        $containerProxies = array();
-        $containers = array();
+        $containerProxies = [];
+        $containers = [];
         $containers[] = TestResources::getInterestingName('con');
         $this->safeCreateContainer($containers[0]);
         $containers[] = TestResources::getInterestingName('con');
@@ -231,17 +234,17 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
             $result = $proxy->listBlobs($container);
             $this->assertEquals($blob0, $result->getBlobs()[0]->getName());
             //a
-            $content = \openssl_random_pseudo_bytes(1024);
+            $content = openssl_random_pseudo_bytes(1024);
             $proxy->appendBlock($container, $blob0, $content);
             //w
             $blob1 = TestResources::getInterestingName($blobPrefix);
             $proxy->createBlockBlob($container, $blob1, $content);
             //r
-            $actualContent = \stream_get_contents(
+            $actualContent = stream_get_contents(
                 $proxy->getBlob($container, $blob0)->getContentStream()
             );
             $this->assertEquals($content, $actualContent);
-            $actualContent = \stream_get_contents(
+            $actualContent = stream_get_contents(
                 $proxy->getBlob($container, $blob1)->getContentStream()
             );
             $this->assertEquals($content, $actualContent);
@@ -249,32 +252,32 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
             $proxy->deleteBlob($container, $blob0);
             $proxy->deleteBlob($container, $blob1);
             $result = $proxy->listBlobs($container);
-            $this->assertEquals(0, \count($result->getBlobs()));
+            $this->assertEquals(0, count($result->getBlobs()));
         }
         //Validate that a cross access with wrong proxy/container pair
         //would not be successful
-        for ($i= 0; $i < 2; ++$i) {
+        for ($i = 0; $i < 2; ++$i) {
             $proxy = $containerProxies[$i];
             $container = $containers[1 - $i];
             $blob0 = TestResources::getInterestingName($blobPrefix);
             //c
             $this->validateServiceExceptionErrorMessage(
                 'Server failed to authenticate the request.',
-                function () use ($proxy, $container, $blob0) {
+                function () use ($proxy, $container, $blob0): void {
                     $proxy->createAppendBlob($container, $blob0);
                 }
             );
             //l
             $this->validateServiceExceptionErrorMessage(
                 'Server failed to authenticate the request.',
-                function () use ($proxy, $container) {
+                function () use ($proxy, $container): void {
                     $proxy->listBlobs($container);
                 }
             );
             //w
             $this->validateServiceExceptionErrorMessage(
                 'Server failed to authenticate the request.',
-                function () use ($proxy, $container) {
+                function () use ($proxy, $container): void {
                     $proxy->createBlockBlob($container, 'myblob', 'testcontent');
                 }
             );
@@ -293,7 +296,7 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
         //l
         $this->validateServiceExceptionErrorMessage(
             'Server failed to authenticate the request.',
-            function () use ($proxy, $container) {
+            function () use ($proxy, $container): void {
                 $proxy->listBlobs($container);
             }
         );
@@ -315,11 +318,11 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
         //l cannot be performed
         $this->validateServiceExceptionErrorMessage(
             'The specified signed resource is not allowed for the this resource level',
-            function () use ($blobProxy, $container) {
+            function () use ($blobProxy, $container): void {
                 $blobProxy->listBlobs($container);
             }
         );
-        $content = \openssl_random_pseudo_bytes(20);
+        $content = openssl_random_pseudo_bytes(20);
         //rcwd can be performed.
         $blobProxy->createBlockBlob($container, $blob, $content);
         $actual = stream_get_contents($blobProxy->getBlob($container, $blob)->getContentStream());
@@ -349,4 +352,5 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
 
         return $this->createProxyWithSAS($sas, $accountName, $testCase['signedResource']);
     }
+
 }

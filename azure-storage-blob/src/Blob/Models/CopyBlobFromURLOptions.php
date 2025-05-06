@@ -24,6 +24,9 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
+use function is_array;
+use function is_null;
+
 /**
  * optional parameters for CopyBlobOptions wrapper
  *
@@ -36,11 +39,15 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class CopyBlobFromURLOptions extends BlobServiceOptions
 {
+
     use AccessTierTrait;
 
     private $sourceLeaseId;
+
     private $sourceAccessConditions;
+
     private $metadata;
+
     private $isIncrementalCopy;
 
     /**
@@ -48,7 +55,7 @@ class CopyBlobFromURLOptions extends BlobServiceOptions
      *
      * @return AccessCondition[]
      */
-    public function getSourceAccessConditions()
+    public function getSourceAccessConditions(): array
     {
         return $this->sourceAccessConditions;
     }
@@ -58,12 +65,13 @@ class CopyBlobFromURLOptions extends BlobServiceOptions
      *
      * @param array $sourceAccessConditions value to use.
      *
-     * @return void
      */
-    public function setSourceAccessConditions($sourceAccessConditions)
+    public function setSourceAccessConditions(array $sourceAccessConditions): void
     {
-        if (!is_null($sourceAccessConditions) &&
-            is_array($sourceAccessConditions)) {
+        if (
+            !is_null($sourceAccessConditions) &&
+            is_array($sourceAccessConditions)
+        ) {
             $this->sourceAccessConditions = $sourceAccessConditions;
         } else {
             $this->sourceAccessConditions = [$sourceAccessConditions];
@@ -73,9 +81,8 @@ class CopyBlobFromURLOptions extends BlobServiceOptions
     /**
      * Gets metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
@@ -85,9 +92,8 @@ class CopyBlobFromURLOptions extends BlobServiceOptions
      *
      * @param array $metadata value.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata)
+    public function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;
     }
@@ -95,9 +101,8 @@ class CopyBlobFromURLOptions extends BlobServiceOptions
     /**
      * Gets source lease ID.
      *
-     * @return string
      */
-    public function getSourceLeaseId()
+    public function getSourceLeaseId(): string
     {
         return $this->sourceLeaseId;
     }
@@ -107,9 +112,8 @@ class CopyBlobFromURLOptions extends BlobServiceOptions
      *
      * @param string $sourceLeaseId value.
      *
-     * @return void
      */
-    public function setSourceLeaseId($sourceLeaseId)
+    public function setSourceLeaseId(string $sourceLeaseId): void
     {
         $this->sourceLeaseId = $sourceLeaseId;
     }
@@ -117,9 +121,8 @@ class CopyBlobFromURLOptions extends BlobServiceOptions
     /**
      * Gets isIncrementalCopy.
      *
-     * @return boolean
      */
-    public function getIsIncrementalCopy()
+    public function getIsIncrementalCopy(): bool
     {
         return $this->isIncrementalCopy;
     }
@@ -127,12 +130,11 @@ class CopyBlobFromURLOptions extends BlobServiceOptions
     /**
      * Sets isIncrementalCopy.
      *
-     * @param boolean $isIncrementalCopy
      *
-     * @return void
      */
-    public function setIsIncrementalCopy($isIncrementalCopy)
+    public function setIsIncrementalCopy(bool $isIncrementalCopy): void
     {
         $this->isIncrementalCopy = $isIncrementalCopy;
     }
+
 }

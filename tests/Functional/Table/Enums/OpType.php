@@ -26,14 +26,16 @@ namespace MicrosoftAzure\Storage\Tests\Functional\Table\Enums;
 
 class OpType
 {
-    const DELETE_ENTITY            = 'deleteEntity';
-    const INSERT_ENTITY            = 'insertEntity';
-    const INSERT_OR_MERGE_ENTITY   = 'insertOrMergeEntity';
-    const INSERT_OR_REPLACE_ENTITY = 'insertOrReplaceEntity';
-    const MERGE_ENTITY             = 'mergeEntity';
-    const UPDATE_ENTITY            = 'updateEntity';
+    public const string DELETE_ENTITY            = 'deleteEntity';
+    public const string INSERT_ENTITY            = 'insertEntity';
+    public const string INSERT_OR_MERGE_ENTITY   = 'insertOrMergeEntity';
+    public const string INSERT_OR_REPLACE_ENTITY = 'insertOrReplaceEntity';
+    public const string MERGE_ENTITY             = 'mergeEntity';
+    public const string UPDATE_ENTITY            = 'updateEntity';
+
     public static function values()
     {
-        return array('deleteEntity', 'insertEntity', 'insertOrMergeEntity', 'insertOrReplaceEntity', 'mergeEntity', 'updateEntity');
+        return ['deleteEntity', 'insertEntity', 'insertOrMergeEntity', 'insertOrReplaceEntity', 'mergeEntity', 'updateEntity'];
     }
+
 }

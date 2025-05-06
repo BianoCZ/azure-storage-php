@@ -24,7 +24,6 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\Models\Range;
 
 /**
@@ -39,17 +38,20 @@ use MicrosoftAzure\Storage\Common\Models\Range;
  */
 class ListPageBlobRangesOptions extends BlobServiceOptions
 {
+
     private $snapshot;
+
     private $range;
+
     private $_rangeStart;
+
     private $_rangeEnd;
 
     /**
      * Gets blob snapshot.
      *
-     * @return string
      */
-    public function getSnapshot()
+    public function getSnapshot(): string
     {
         return $this->snapshot;
     }
@@ -59,9 +61,8 @@ class ListPageBlobRangesOptions extends BlobServiceOptions
      *
      * @param string $snapshot value.
      *
-     * @return void
      */
-    public function setSnapshot($snapshot)
+    public function setSnapshot(string $snapshot): void
     {
         $this->snapshot = $snapshot;
     }
@@ -69,9 +70,8 @@ class ListPageBlobRangesOptions extends BlobServiceOptions
     /**
      * Gets Blob range.
      *
-     * @return Range
      */
-    public function getRange()
+    public function getRange(): Range
     {
         return $this->range;
     }
@@ -81,10 +81,10 @@ class ListPageBlobRangesOptions extends BlobServiceOptions
      *
      * @param Range $range value.
      *
-     * @return void
      */
-    public function setRange(Range $range)
+    public function setRange(Range $range): void
     {
         $this->range = $range;
     }
+
 }

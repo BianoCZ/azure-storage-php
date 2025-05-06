@@ -24,9 +24,13 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal;
 
-use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
+use function implode;
+use function sprintf;
 
 /**
  * Unit tests for class StorageServiceSettings
@@ -38,18 +42,19 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
+class StorageServiceSettingsTest extends TestCase
 {
+
     private $_accountName = 'mytestaccount';
 
-    public function setUp()
+    public function setUp(): void
     {
-        $property = new \ReflectionProperty('MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings', 'isInitialized');
+        $property = new ReflectionProperty('MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings', 'isInitialized');
         $property->setAccessible(true);
         $property->setValue(false);
     }
 
-    public function testCreateFromConnectionStringWithUseDevStore()
+    public function testCreateFromConnectionStringWithUseDevStore(): void
     {
         // Setup
         $connectionString = 'UseDevelopmentStorage=true';
@@ -70,7 +75,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedTableEndpoint, $actual->getTableEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithUseDevStoreUri()
+    public function testCreateFromConnectionStringWithUseDevStoreUri(): void
     {
         // Setup
         $myProxyUri = 'http://222.3.5.6';
@@ -92,7 +97,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedTableEndpoint, $actual->getTableEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithInvalidUseDevStoreFail()
+    public function testCreateFromConnectionStringWithInvalidUseDevStoreFail(): void
     {
         // Setup
         $invalidValue = 'invalid_value';
@@ -100,7 +105,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $expectedMsg = sprintf(
             Resources::INVALID_CONFIG_VALUE,
             $invalidValue,
-            implode("\n", array('true'))
+            implode("\n", ['true'])
         );
         $this->setExpectedException('\RuntimeException', $expectedMsg);
 
@@ -108,7 +113,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         StorageServiceSettings::createFromConnectionString($connectionString);
     }
 
-    public function testCreateFromConnectionStringWithEmptyConnectionStringFail()
+    public function testCreateFromConnectionStringWithEmptyConnectionStringFail(): void
     {
         // Setup
         $connectionString = '';
@@ -118,7 +123,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         StorageServiceSettings::createFromConnectionString($connectionString);
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         // Setup
         $expected = 'myname';
@@ -131,7 +136,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetKey()
+    public function testGetKey(): void
     {
         // Setup
         $expected = 'mykey';
@@ -144,7 +149,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetBlobEndpointUri()
+    public function testGetBlobEndpointUri(): void
     {
         // Setup
         $expected = 'myblobEndpointUri';
@@ -157,7 +162,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetQueueEndpointUri()
+    public function testGetQueueEndpointUri(): void
     {
         // Setup
         $expected = 'myqueueEndpointUri';
@@ -170,7 +175,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetTableEndpointUri()
+    public function testGetTableEndpointUri(): void
     {
         // Setup
         $expected = 'mytableEndpointUri';
@@ -183,7 +188,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetFileEndpointUri()
+    public function testGetFileEndpointUri(): void
     {
         // Setup
         $expected = 'myfileEndpointUri';
@@ -196,7 +201,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetSasToken()
+    public function testGetSasToken(): void
     {
         // Setup
         $expected = 'mysas=bla&mysas2=bla%2F';
@@ -209,7 +214,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testCreateFromConnectionStringWithAutomatic()
+    public function testCreateFromConnectionStringWithAutomatic(): void
     {
         // Setup
         $protocol = 'https';
@@ -231,7 +236,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedTableEndpoint, $actual->getTableEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithTableEndpointSpecified()
+    public function testCreateFromConnectionStringWithTableEndpointSpecified(): void
     {
         // Setup
         $protocol = 'https';
@@ -255,7 +260,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedFileEndpoint, $actual->getFileEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithBlobEndpointSpecified()
+    public function testCreateFromConnectionStringWithBlobEndpointSpecified(): void
     {
         // Setup
         $protocol = 'https';
@@ -279,7 +284,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedFileEndpoint, $actual->getFileEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithQueueEndpointSpecified()
+    public function testCreateFromConnectionStringWithQueueEndpointSpecified(): void
     {
         // Setup
         $protocol = 'https';
@@ -303,7 +308,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedFileEndpoint, $actual->getFileEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithFileEndpointSpecified()
+    public function testCreateFromConnectionStringWithFileEndpointSpecified(): void
     {
         // Setup
         $protocol = 'https';
@@ -327,7 +332,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedFileEndpoint, $actual->getFileEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithQueueAndBlobEndpointSpecified()
+    public function testCreateFromConnectionStringWithQueueAndBlobEndpointSpecified(): void
     {
         // Setup
         $protocol = 'https';
@@ -351,7 +356,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedFileEndpoint, $actual->getFileEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithAutomaticMissingProtocolFail()
+    public function testCreateFromConnectionStringWithAutomaticMissingProtocolFail(): void
     {
         // Setup
         $expectedName = $this->_accountName;
@@ -364,7 +369,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         StorageServiceSettings::createFromConnectionString($connectionString);
     }
 
-    public function testCreateFromConnectionStringWithAutomaticMissingAccountNameFail()
+    public function testCreateFromConnectionStringWithAutomaticMissingAccountNameFail(): void
     {
         // Setup
         $expectedKey = TestResources::KEY4;
@@ -376,7 +381,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         StorageServiceSettings::createFromConnectionString($connectionString);
     }
 
-    public function testCreateFromConnectionStringWithAutomaticCorruptedAccountKeyFail()
+    public function testCreateFromConnectionStringWithAutomaticCorruptedAccountKeyFail(): void
     {
         // Setup
         $expectedName = $this->_accountName;
@@ -389,7 +394,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         StorageServiceSettings::createFromConnectionString($connectionString);
     }
 
-    public function testCreateFromConnectionStringWithQueueEndpointSpecfied()
+    public function testCreateFromConnectionStringWithQueueEndpointSpecfied(): void
     {
         // Setup
         $expectedName = $this->_accountName;
@@ -410,14 +415,13 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedTableEndpoint, $actual->getTableEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithQueueAndBlobEndpointSpecfied()
+    public function testCreateFromConnectionStringWithQueueAndBlobEndpointSpecfied(): void
     {
         // Setup
         $expectedName = $this->_accountName;
         $expectedKey = TestResources::KEY4;
         $expectedTableEndpoint = null;
         $expectedBlobEndpoint = 'http://myprivateblobdns.com';
-        ;
         $expectedQueueEndpoint = 'http://myprivatequeuedns.com';
         $connectionString  = "QueueEndpoint=$expectedQueueEndpoint;BlobEndpoint=$expectedBlobEndpoint;AccountName=$expectedName;AccountKey=$expectedKey";
 
@@ -432,14 +436,13 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedTableEndpoint, $actual->getTableEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithQueueAndBlobAndTableEndpointSpecfied()
+    public function testCreateFromConnectionStringWithQueueAndBlobAndTableEndpointSpecfied(): void
     {
         // Setup
         $expectedName = $this->_accountName;
         $expectedKey = TestResources::KEY4;
         $expectedTableEndpoint = 'http://myprivatetabledns.com';
         $expectedBlobEndpoint = 'http://myprivateblobdns.com';
-        ;
         $expectedQueueEndpoint = 'http://myprivatequeuedns.com';
         $connectionString  = "TableEndpoint=$expectedTableEndpoint;QueueEndpoint=$expectedQueueEndpoint;BlobEndpoint=$expectedBlobEndpoint;AccountName=$expectedName;AccountKey=$expectedKey";
 
@@ -454,7 +457,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedTableEndpoint, $actual->getTableEndpointUri());
     }
 
-    public function testCreateFromConnectionStringWithEndpointSuffixSpecfied()
+    public function testCreateFromConnectionStringWithEndpointSuffixSpecfied(): void
     {
         // Setup
         $protocol = 'https';
@@ -472,7 +475,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedFileSecondaryEndpoint, $actual->getFileSecondaryEndpointUri());
     }
 
-    public function testCreateFromConnectionStringMissingServicesEndpointsFail()
+    public function testCreateFromConnectionStringMissingServicesEndpointsFail(): void
     {
         // Setup
         $expectedName = $this->_accountName;
@@ -488,7 +491,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($actual);
     }
 
-    public function testCreateFromConnectionStringWithInvalidBlobEndpointUriFail()
+    public function testCreateFromConnectionStringWithInvalidBlobEndpointUriFail(): void
     {
         // Setup
         $expectedName = $this->_accountName;
@@ -502,12 +505,12 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         StorageServiceSettings::createFromConnectionString($connectionString);
     }
 
-    public function testCreateFromConnectionStringWithInvalidSettingKeyFail()
+    public function testCreateFromConnectionStringWithInvalidSettingKeyFail(): void
     {
         // Setup
         $expectedName = $this->_accountName;
         $expectedKey = TestResources::KEY4;
-        $validKeys = array();
+        $validKeys = [];
         $validKeys[] = Resources::USE_DEVELOPMENT_STORAGE_NAME;
         $validKeys[] = Resources::DEVELOPMENT_STORAGE_PROXY_URI_NAME;
         $validKeys[] = Resources::DEFAULT_ENDPOINTS_PROTOCOL_NAME;
@@ -531,7 +534,7 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         StorageServiceSettings::createFromConnectionString($connectionString);
     }
 
-    public function testCreateFromConnectionStringWithCaseInsensitive()
+    public function testCreateFromConnectionStringWithCaseInsensitive(): void
     {
         // Setup
         $protocol = 'https';
@@ -554,4 +557,5 @@ class StorageServiceSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedTableEndpoint, $actual->getTableEndpointUri());
         $this->assertEquals($expectedFileEndpoint, $actual->getFileEndpointUri());
     }
+
 }

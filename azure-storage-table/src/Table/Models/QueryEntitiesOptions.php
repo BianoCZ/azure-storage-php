@@ -38,6 +38,7 @@ use MicrosoftAzure\Storage\Table\Internal\AcceptOptionTrait;
  */
 class QueryEntitiesOptions extends TableServiceOptions
 {
+
     use TableContinuationTokenTrait;
     use AcceptOptionTrait;
 
@@ -49,15 +50,15 @@ class QueryEntitiesOptions extends TableServiceOptions
     public function __construct()
     {
         parent::__construct();
+
         $this->query = new Query();
     }
 
     /**
      * Gets query.
      *
-     * @return Query
      */
-    public function getQuery()
+    public function getQuery(): Query
     {
         return $this->query;
     }
@@ -70,9 +71,8 @@ class QueryEntitiesOptions extends TableServiceOptions
      *
      * @param Query $query The query instance.
      *
-     * @return void
      */
-    public function setQuery(Query $query)
+    public function setQuery(Query $query): void
     {
         $this->query = $query;
     }
@@ -80,9 +80,8 @@ class QueryEntitiesOptions extends TableServiceOptions
     /**
      * Gets filter.
      *
-     * @return Filters\Filter
      */
-    public function getFilter()
+    public function getFilter(): Filters\Filter
     {
         return $this->query->getFilter();
     }
@@ -95,9 +94,8 @@ class QueryEntitiesOptions extends TableServiceOptions
      *
      * @param Filters\Filter $filter value.
      *
-     * @return void
      */
-    public function setFilter(Filters\Filter $filter)
+    public function setFilter(Filters\Filter $filter): void
     {
         $this->query->setFilter($filter);
     }
@@ -105,9 +103,8 @@ class QueryEntitiesOptions extends TableServiceOptions
     /**
      * Gets top.
      *
-     * @return integer
      */
-    public function getTop()
+    public function getTop(): int
     {
         return $this->query->getTop();
     }
@@ -118,11 +115,10 @@ class QueryEntitiesOptions extends TableServiceOptions
      * You can either use this individual function or use setQuery to set the whole
      * query object.
      *
-     * @param integer $top value.
+     * @param int $top value.
      *
-     * @return void
      */
-    public function setTop($top)
+    public function setTop(int $top): void
     {
         $this->query->setTop($top);
     }
@@ -135,9 +131,8 @@ class QueryEntitiesOptions extends TableServiceOptions
      *
      * @param string $field The value of the field.
      *
-     * @return void
      */
-    public function addSelectField($field)
+    public function addSelectField(string $field): void
     {
         $this->query->addSelectField($field);
     }
@@ -145,9 +140,8 @@ class QueryEntitiesOptions extends TableServiceOptions
     /**
      * Gets selectFields.
      *
-     * @return array
      */
-    public function getSelectFields()
+    public function getSelectFields(): array
     {
         return $this->query->getSelectFields();
     }
@@ -160,10 +154,10 @@ class QueryEntitiesOptions extends TableServiceOptions
      *
      * @param array $selectFields value.
      *
-     * @return void
      */
-    public function setSelectFields(array $selectFields = null)
+    public function setSelectFields(?array $selectFields = null): void
     {
         $this->query->setSelectFields($selectFields);
     }
+
 }

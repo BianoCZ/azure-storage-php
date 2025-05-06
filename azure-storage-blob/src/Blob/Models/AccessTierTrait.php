@@ -36,6 +36,7 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 trait AccessTierTrait
 {
+
     /**
      * @var string $accessTier Version 2017-04-17 and newer. For page blobs on a premium storage account, otherwise a block blob
      *                         on blob storage account or storageV2 general account.
@@ -44,14 +45,13 @@ trait AccessTierTrait
      *                         Check following link for a full list of supported tiers.
      *                         https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-tier
      */
-    private $accessTier;
+    private string $accessTier;
 
     /**
      * Gets blob access tier.
      *
-     * @return string
      */
-    public function getAccessTier()
+    public function getAccessTier(): string
     {
         return $this->accessTier;
     }
@@ -61,10 +61,10 @@ trait AccessTierTrait
      *
      * @param string $accessTier value.
      *
-     * @return void
      */
-    public function setAccessTier($accessTier)
+    public function setAccessTier(string $accessTier): void
     {
         $this->accessTier = $accessTier;
     }
+
 }

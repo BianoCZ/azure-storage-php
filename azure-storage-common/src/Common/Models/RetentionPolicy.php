@@ -25,6 +25,8 @@
 namespace MicrosoftAzure\Storage\Common\Models;
 
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use function intval;
+use function strval;
 
 /**
  * Holds elements of queue properties retention policy field.
@@ -38,7 +40,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class RetentionPolicy
 {
+
     private $_enabled;
+
     private $_days;
 
     /**
@@ -48,9 +52,8 @@ class RetentionPolicy
      *
      * @internal
      *
-     * @return MicrosoftAzure\Storage\Common\Models\RetentionPolicy
      */
-    public static function create(array $parsedResponse = null)
+    public static function create(?array $parsedResponse = null): MicrosoftAzure\Storage\Common\Models\RetentionPolicy
     {
         $result = new RetentionPolicy();
         $result->setEnabled(Utilities::toBoolean($parsedResponse['Enabled']));
@@ -64,9 +67,8 @@ class RetentionPolicy
     /**
      * Gets enabled.
      *
-     * @return bool
      */
-    public function getEnabled()
+    public function getEnabled(): bool
     {
         return $this->_enabled;
     }
@@ -76,9 +78,8 @@ class RetentionPolicy
      *
      * @param bool $enabled value to use.
      *
-     * @return void
      */
-    public function setEnabled($enabled)
+    public function setEnabled(bool $enabled): void
     {
         $this->_enabled = $enabled;
     }
@@ -86,9 +87,8 @@ class RetentionPolicy
     /**
      * Gets days field.
      *
-     * @return int
      */
-    public function getDays()
+    public function getDays(): int
     {
         return $this->_days;
     }
@@ -98,9 +98,8 @@ class RetentionPolicy
      *
      * @param int $days value to use.
      *
-     * @return void
      */
-    public function setDays($days)
+    public function setDays(int $days): void
     {
         $this->_days = $days;
     }
@@ -110,15 +109,15 @@ class RetentionPolicy
      *
      * @internal
      *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        $array = array('Enabled' => Utilities::booleanToString($this->_enabled));
+        $array = ['Enabled' => Utilities::booleanToString($this->_enabled)];
         if (isset($this->_days)) {
             $array['Days'] = strval($this->_days);
         }
 
         return $array;
     }
+
 }

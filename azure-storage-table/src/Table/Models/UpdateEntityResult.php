@@ -39,6 +39,7 @@ use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
  */
 class UpdateEntityResult
 {
+
     private $_etag;
 
     /**
@@ -48,9 +49,8 @@ class UpdateEntityResult
      *
      * @internal
      *
-     * @return UpdateEntityResult
      */
-    public static function create(array $headers)
+    public static function create(array $headers): UpdateEntityResult
     {
         $result = new UpdateEntityResult();
         $result->setETag(
@@ -63,9 +63,8 @@ class UpdateEntityResult
     /**
      * Gets entity etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->_etag;
     }
@@ -75,10 +74,10 @@ class UpdateEntityResult
      *
      * @param string $etag The entity ETag.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         $this->_etag = $etag;
     }
+
 }

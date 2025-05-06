@@ -49,4 +49,5 @@ class FileAccessPolicyTest extends AccessPolicyTest
     {
         return FileResources::RESOURCE_TYPE_FILE;
     }
+
 }

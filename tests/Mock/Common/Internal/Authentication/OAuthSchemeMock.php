@@ -66,4 +66,5 @@ class OAuthSchemeMock extends OAuthScheme
     {
         return $this->oauthService;
     }
+
 }

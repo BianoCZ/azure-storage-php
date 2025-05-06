@@ -26,6 +26,7 @@ namespace MicrosoftAzure\Storage\File\Models;
 
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
+use function intval;
 
 /**
  * Holds result of getShareStats.
@@ -39,21 +40,20 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class GetShareStatsResult
 {
+
     /**
      * The approximate size of the data stored on the share, rounded up to the
      * nearest gigabyte. Note that this value may not include all recently
      * created or recently resized files.
      *
-     * @var int
      */
-    private $shareUsage;
+    private int $shareUsage;
 
     /**
      * Gets file shareUsage.
      *
-     * @return int
      */
-    public function getShareUsage()
+    public function getShareUsage(): int
     {
         return $this->shareUsage;
     }
@@ -63,9 +63,8 @@ class GetShareStatsResult
      *
      * @param int $shareUsage value.
      *
-     * @return void
      */
-    protected function setShareUsage($shareUsage)
+    protected function setShareUsage(int $shareUsage): void
     {
         $this->shareUsage = $shareUsage;
     }
@@ -77,17 +76,17 @@ class GetShareStatsResult
      *
      * @internal
      *
-     * @return GetShareStatsResult
      */
-    public static function create(array $parsed)
+    public static function create(array $parsed): GetShareStatsResult
     {
-        $result   = new GetShareStatsResult();
+        $result = new GetShareStatsResult();
 
-        $result->setShareUsage(\intval(Utilities::tryGetValueInsensitive(
+        $result->setShareUsage(intval(Utilities::tryGetValueInsensitive(
             Resources::XTAG_SHARE_USAGE,
             $parsed
         )));
 
         return $result;
     }
+
 }

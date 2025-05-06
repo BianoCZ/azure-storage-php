@@ -47,4 +47,5 @@ class TableSharedAccessSignatureHelperMock extends TableSharedAccessSignatureHel
     {
         return $this->accountKey;
     }
+
 }

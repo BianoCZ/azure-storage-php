@@ -24,10 +24,14 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\Models\Range;
+use function array_change_key_case;
+use function intval;
+use function strtolower;
 
 /**
  * Holds result of calling listPageBlobRanges wrapper
@@ -41,9 +45,13 @@ use MicrosoftAzure\Storage\Common\Models\Range;
  */
 class ListPageBlobRangesResult
 {
+
     private $_lastModified;
+
     private $_etag;
+
     private $_contentLength;
+
     private $_pageRanges;
 
     /**
@@ -54,9 +62,8 @@ class ListPageBlobRangesResult
      *
      * @internal
      *
-     * @return ListPageBlobRangesResult
      */
-    public static function create(array $headers, array $parsed = null)
+    public static function create(array $headers, ?array $parsed = null): ListPageBlobRangesResult
     {
         $result  = new ListPageBlobRangesResult();
         $headers = array_change_key_case($headers);
@@ -64,14 +71,14 @@ class ListPageBlobRangesResult
         $date          = $headers[Resources::LAST_MODIFIED];
         $date          = Utilities::rfc1123ToDateTime($date);
         $blobLength    = intval($headers[Resources::X_MS_BLOB_CONTENT_LENGTH]);
-        $rawRanges = array();
+        $rawRanges = [];
 
         if (!empty($parsed[Resources::XTAG_PAGE_RANGE])) {
             $parsed        = array_change_key_case($parsed);
             $rawRanges = Utilities::getArray($parsed[strtolower(RESOURCES::XTAG_PAGE_RANGE)]);
         }
 
-        $pageRanges = array();
+        $pageRanges = [];
         foreach ($rawRanges as $value) {
             $pageRanges[] = new Range(
                 intval($value[Resources::XTAG_RANGE_START]),
@@ -89,9 +96,8 @@ class ListPageBlobRangesResult
     /**
      * Gets blob lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->_lastModified;
     }
@@ -101,9 +107,8 @@ class ListPageBlobRangesResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         Validate::isDate($lastModified);
         $this->_lastModified = $lastModified;
@@ -112,9 +117,8 @@ class ListPageBlobRangesResult
     /**
      * Gets blob etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->_etag;
     }
@@ -124,9 +128,8 @@ class ListPageBlobRangesResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         Validate::canCastAsString($etag, 'etag');
         $this->_etag = $etag;
@@ -135,9 +138,8 @@ class ListPageBlobRangesResult
     /**
      * Gets blob contentLength.
      *
-     * @return integer
      */
-    public function getContentLength()
+    public function getContentLength(): int
     {
         return $this->_contentLength;
     }
@@ -145,11 +147,10 @@ class ListPageBlobRangesResult
     /**
      * Sets blob contentLength.
      *
-     * @param integer $contentLength value.
+     * @param int $contentLength value.
      *
-     * @return void
      */
-    protected function setContentLength($contentLength)
+    protected function setContentLength(int $contentLength): void
     {
         Validate::isInteger($contentLength, 'contentLength');
         $this->_contentLength = $contentLength;
@@ -158,9 +159,8 @@ class ListPageBlobRangesResult
     /**
      * Gets page ranges
      *
-     * @return array
      */
-    public function getRanges()
+    public function getRanges(): array
     {
         return $this->_pageRanges;
     }
@@ -170,13 +170,13 @@ class ListPageBlobRangesResult
      *
      * @param array $pageRanges page ranges to set
      *
-     * @return void
      */
-    protected function setRanges(array $pageRanges)
+    protected function setRanges(array $pageRanges): void
     {
-        $this->_pageRanges = array();
+        $this->_pageRanges = [];
         foreach ($pageRanges as $pageRange) {
             $this->_pageRanges[] = clone $pageRange;
         }
     }
+
 }

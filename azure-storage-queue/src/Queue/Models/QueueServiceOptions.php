@@ -38,4 +38,5 @@ use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
  */
 class QueueServiceOptions extends ServiceOptions
 {
+
 }

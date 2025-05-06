@@ -24,6 +24,8 @@
 
 namespace MicrosoftAzure\Storage\File\Models;
 
+use DateTime;
+
 /**
  * Holds share ACL
  *
@@ -36,8 +38,11 @@ namespace MicrosoftAzure\Storage\File\Models;
  */
 class GetShareACLResult
 {
+
     private $shareACL;
+
     private $lastModified;
+
     private $etag;
 
     /**
@@ -50,13 +55,12 @@ class GetShareACLResult
      *
      * @internal
      *
-     * @return self
      */
     public static function create(
-        $etag,
-        \DateTime $lastModified,
-        array $parsed = null
-    ) {
+        string $etag,
+        DateTime $lastModified,
+        ?array $parsed = null
+    ): self {
         $result = new GetShareAclResult();
         $result->setETag($etag);
         $result->setLastModified($lastModified);
@@ -69,9 +73,8 @@ class GetShareACLResult
     /**
      * Gets share ACL
      *
-     * @return ShareACL
      */
-    public function getShareAcl()
+    public function getShareAcl(): ShareACL
     {
         return $this->shareACL;
     }
@@ -81,9 +84,8 @@ class GetShareACLResult
      *
      * @param ShareACL $shareACL value.
      *
-     * @return void
      */
-    protected function setShareAcl(ShareACL $shareACL)
+    protected function setShareAcl(ShareACL $shareACL): void
     {
         $this->shareACL = $shareACL;
     }
@@ -103,9 +105,8 @@ class GetShareACLResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         $this->lastModified = $lastModified;
     }
@@ -113,9 +114,8 @@ class GetShareACLResult
     /**
      * Gets share etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->etag;
     }
@@ -125,10 +125,10 @@ class GetShareACLResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         $this->etag = $etag;
     }
+
 }

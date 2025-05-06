@@ -38,10 +38,12 @@ use MicrosoftAzure\Storage\Table\Internal\AcceptOptionTrait;
  */
 class QueryTablesOptions extends TableServiceOptions
 {
+
     use TableContinuationTokenTrait;
     use AcceptOptionTrait;
 
     private $query;
+
     private $prefix;
 
     /**
@@ -50,15 +52,15 @@ class QueryTablesOptions extends TableServiceOptions
     public function __construct()
     {
         parent::__construct();
+
         $this->query = new Query();
     }
 
     /**
      * Gets prefix
      *
-     * @return string
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->prefix;
     }
@@ -68,9 +70,8 @@ class QueryTablesOptions extends TableServiceOptions
      *
      * @param string $prefix value
      *
-     * @return void
      */
-    public function setPrefix($prefix)
+    public function setPrefix(string $prefix): void
     {
         $this->prefix = $prefix;
     }
@@ -78,9 +79,8 @@ class QueryTablesOptions extends TableServiceOptions
     /**
      * Gets top.
      *
-     * @return integer
      */
-    public function getTop()
+    public function getTop(): int
     {
         return $this->query->getTop();
     }
@@ -88,11 +88,10 @@ class QueryTablesOptions extends TableServiceOptions
     /**
      * Sets top.
      *
-     * @param integer $top value.
+     * @param int $top value.
      *
-     * @return void
      */
-    public function setTop($top)
+    public function setTop(int $top): void
     {
         $this->query->setTop($top);
     }
@@ -100,9 +99,8 @@ class QueryTablesOptions extends TableServiceOptions
     /**
      * Gets query.
      *
-     * @return Query
      */
-    public function getQuery()
+    public function getQuery(): Query
     {
         return $this->query;
     }
@@ -110,9 +108,8 @@ class QueryTablesOptions extends TableServiceOptions
     /**
      * Gets filter.
      *
-     * @return Filters\Filter
      */
-    public function getFilter()
+    public function getFilter(): Filters\Filter
     {
         return $this->query->getFilter();
     }
@@ -122,9 +119,8 @@ class QueryTablesOptions extends TableServiceOptions
      *
      * @param Filters\Filter $filter value.
      *
-     * @return void
      */
-    public function setFilter(Filters\Filter $filter)
+    public function setFilter(Filters\Filter $filter): void
     {
         $this->query->setFilter($filter);
     }
@@ -137,10 +133,10 @@ class QueryTablesOptions extends TableServiceOptions
      *
      * @param array $selectFields value.
      *
-     * @return void
      */
-    public function setSelectFields(array $selectFields = null)
+    public function setSelectFields(?array $selectFields = null): void
     {
         $this->query->setSelectFields($selectFields);
     }
+
 }

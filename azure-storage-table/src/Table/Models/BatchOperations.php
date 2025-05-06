@@ -26,6 +26,7 @@ namespace MicrosoftAzure\Storage\Table\Models;
 
 use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
+use function is_null;
 
 /**
  * Holds batch operation change set.
@@ -39,6 +40,7 @@ use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
  */
 class BatchOperations
 {
+
     private $_operations;
 
     /**
@@ -46,15 +48,14 @@ class BatchOperations
      */
     public function __construct()
     {
-        $this->_operations = array();
+        $this->_operations = [];
     }
 
     /**
      * Gets the batch operations.
      *
-     * @return array
      */
-    public function getOperations()
+    public function getOperations(): array
     {
         return $this->_operations;
     }
@@ -64,11 +65,10 @@ class BatchOperations
      *
      * @param array $operations The batch operations.
      *
-     * @return void
      */
-    public function setOperations(array $operations)
+    public function setOperations(array $operations): void
     {
-        $this->_operations = array();
+        $this->_operations = [];
         foreach ($operations as $operation) {
             $this->addOperation($operation);
         }
@@ -79,9 +79,8 @@ class BatchOperations
      *
      * @param mixed $operation The operation to add.
      *
-     * @return void
      */
-    public function addOperation($operation)
+    public function addOperation(mixed $operation): void
     {
         Validate::isTrue(
             $operation instanceof BatchOperation,
@@ -97,9 +96,8 @@ class BatchOperations
      * @param string $table  The table name.
      * @param Entity $entity The entity instance.
      *
-     * @return void
      */
-    public function addInsertEntity($table, Entity $entity)
+    public function addInsertEntity(string $table, Entity $entity): void
     {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($entity, 'entity');
@@ -118,9 +116,8 @@ class BatchOperations
      * @param string $table  The table name.
      * @param Entity $entity The entity instance.
      *
-     * @return void
      */
-    public function addUpdateEntity($table, Entity $entity)
+    public function addUpdateEntity(string $table, Entity $entity): void
     {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($entity, 'entity');
@@ -139,9 +136,8 @@ class BatchOperations
      * @param string $table  The table name.
      * @param Entity $entity The entity instance.
      *
-     * @return void
      */
-    public function addMergeEntity($table, Entity $entity)
+    public function addMergeEntity(string $table, Entity $entity): void
     {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($entity, 'entity');
@@ -160,9 +156,8 @@ class BatchOperations
      * @param string $table  The table name.
      * @param Entity $entity The entity instance.
      *
-     * @return void
      */
-    public function addInsertOrReplaceEntity($table, Entity $entity)
+    public function addInsertOrReplaceEntity(string $table, Entity $entity): void
     {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($entity, 'entity');
@@ -181,9 +176,8 @@ class BatchOperations
      * @param string $table  The table name.
      * @param Entity $entity The entity instance.
      *
-     * @return void
      */
-    public function addInsertOrMergeEntity($table, Entity $entity)
+    public function addInsertOrMergeEntity(string $table, Entity $entity): void
     {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($entity, 'entity');
@@ -204,9 +198,8 @@ class BatchOperations
      * @param string $rowKey       The entity row key.
      * @param string $etag         The entity etag.
      *
-     * @return void
      */
-    public function addDeleteEntity($table, $partitionKey, $rowKey, $etag = null)
+    public function addDeleteEntity(string $table, string $partitionKey, string $rowKey, ?string $etag = null): void
     {
         Validate::canCastAsString($table, 'table');
         Validate::isTrue(!is_null($partitionKey), Resources::NULL_TABLE_KEY_MSG);
@@ -224,4 +217,5 @@ class BatchOperations
         );
         $this->addOperation($operation);
     }
+
 }

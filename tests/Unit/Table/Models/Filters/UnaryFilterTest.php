@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models\Filters;
 
 use MicrosoftAzure\Storage\Table\Models\Filters\UnaryFilter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class UnaryFilter
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Table\Models\Filters\UnaryFilter;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class UnaryFilterTest extends \PHPUnit\Framework\TestCase
+class UnaryFilterTest extends TestCase
 {
-    public function testGetOperator()
+    public function testGetOperator(): void
     {
         // Setup
         $expected = 'x';
@@ -48,7 +49,7 @@ class UnaryFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $filter->getOperator());
     }
 
-    public function testGetOperand()
+    public function testGetOperand(): void
     {
         // Setup
         $expected = null;
@@ -57,4 +58,5 @@ class UnaryFilterTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $filter->getOperand());
     }
+
 }

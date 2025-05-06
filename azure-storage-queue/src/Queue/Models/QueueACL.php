@@ -24,8 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Queue\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\Internal\ACLBase;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Queue\Internal\QueueResources as Resources;
 
 /**
@@ -57,9 +57,8 @@ class QueueACL extends ACLBase
      *
      * @internal
      *
-     * @return QueueACL
      */
-    public static function create(array $parsed = null)
+    public static function create(?array $parsed = null): QueueACL
     {
         $result = new QueueACL();
         $result->fromXmlArray($parsed);
@@ -76,9 +75,8 @@ class QueueACL extends ACLBase
      *
      * @internal
      *
-     * @return void
      */
-    protected static function validateResourceType($resourceType)
+    protected static function validateResourceType(string $resourceType): void
     {
         Validate::isTrue(
             $resourceType == Resources::RESOURCE_TYPE_QUEUE,
@@ -89,10 +87,10 @@ class QueueACL extends ACLBase
     /**
      * Create a QueueAccessPolicy object.
      *
-     * @return QueueAccessPolicy
      */
-    protected static function createAccessPolicy()
+    protected static function createAccessPolicy(): QueueAccessPolicy
     {
         return new QueueAccessPolicy();
     }
+
 }

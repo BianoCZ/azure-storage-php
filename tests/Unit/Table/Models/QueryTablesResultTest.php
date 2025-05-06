@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
 use MicrosoftAzure\Storage\Table\Models\QueryTablesResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class QueryTablesResult
@@ -36,13 +37,13 @@ use MicrosoftAzure\Storage\Table\Models\QueryTablesResult;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class QueryTablesResultTest extends \PHPUnit\Framework\TestCase
+class QueryTablesResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
-        $entries = array('querytablessimple1', 'querytablessimple2');
-        $headers = array('x-ms-continuation-nexttablename' => 'nextTable');
+        $entries = ['querytablessimple1', 'querytablessimple2'];
+        $headers = ['x-ms-continuation-nexttablename' => 'nextTable'];
 
         // Test
         $result = QueryTablesResult::create($headers, $entries);
@@ -51,4 +52,5 @@ class QueryTablesResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($entries, $result->getTables());
         $this->assertEquals($headers['x-ms-continuation-nexttablename'], $result->getNextTableName());
     }
+
 }

@@ -25,7 +25,12 @@
 namespace MicrosoftAzure\Storage\Common\Internal\Authentication;
 
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use function explode;
+use function sprintf;
+use function str_replace;
 
 /**
  * Base class for azure authentication schemes.
@@ -40,6 +45,7 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  */
 class SharedAccessSignatureAuthScheme implements IAuthScheme
 {
+
     /**
      * The sas token
      */
@@ -51,13 +57,13 @@ class SharedAccessSignatureAuthScheme implements IAuthScheme
      * @param string $sasToken shared access signature token.
      *
      */
-    public function __construct($sasToken)
+    public function __construct(string $sasToken)
     {
         // Remove '?' in front of the SAS token if existing
         $this->sasToken = str_replace('?', '', $sasToken, $i);
 
         if ($i > 1) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     Resources::INVALID_SAS_TOKEN,
                     $sasToken
@@ -73,9 +79,8 @@ class SharedAccessSignatureAuthScheme implements IAuthScheme
      *
      * @abstract
      *
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function signRequest(Request $request)
+    public function signRequest(Request $request): Request
     {
         // initial URI
         $uri = $request->getUri();
@@ -85,12 +90,13 @@ class SharedAccessSignatureAuthScheme implements IAuthScheme
 
         // append SAS token query values to existing URI
         foreach ($queryValues as $queryField) {
-            list($key, $value) = explode('=', $queryField);
+            [$key, $value] = explode('=', $queryField);
 
-            $uri = \GuzzleHttp\Psr7\Uri::withQueryValue($uri, $key, $value);
+            $uri = Uri::withQueryValue($uri, $key, $value);
         }
 
         // replace URI
         return $request->withUri($uri, true);
     }
+
 }

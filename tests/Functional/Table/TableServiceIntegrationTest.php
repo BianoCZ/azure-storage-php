@@ -24,59 +24,86 @@
 
 namespace MicrosoftAzure\Storage\Tests\Functional\Table;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use DateTime;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Table\Models\BatchOperations;
 use MicrosoftAzure\Storage\Table\Models\DeleteEntityOptions;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
 use MicrosoftAzure\Storage\Table\Models\Entity;
+use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
 use MicrosoftAzure\Storage\Table\Models\InsertEntityResult;
 use MicrosoftAzure\Storage\Table\Models\Query;
 use MicrosoftAzure\Storage\Table\Models\QueryEntitiesOptions;
 use MicrosoftAzure\Storage\Table\Models\QueryTablesOptions;
 use MicrosoftAzure\Storage\Table\Models\UpdateEntityResult;
-use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function array_push;
+use function chr;
+use function count;
+use function in_array;
+use function intval;
+use function is_null;
+use function is_string;
+use function rand;
+use function sleep;
+use function strlen;
+use function strval;
 
 class TableServiceIntegrationTest extends IntegrationTestBase
 {
+
     private static $testTablesPrefix = 'sdktest';
+
     private static $createableTablesPrefix = 'csdktest';
+
     private static $testTable1;
+
     private static $testTable2;
+
     private static $testTable3;
+
     private static $testTable4;
+
     private static $testTable5;
+
     private static $testTable6;
+
     private static $testTable7;
+
     private static $testTable8;
+
     private static $createTable1;
+
     private static $createTable2;
+
     private static $creatableTables;
+
     private static $testTables;
 
     private static $isOneTimeSetup = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         if (!self::$isOneTimeSetup) {
             $this->doOneTimeSetup();
             self::$isOneTimeSetup = true;
         }
     }
 
-    private function doOneTimeSetup()
+    private function doOneTimeSetup(): void
     {
         self::$testTablesPrefix .= rand(0, 1000);
         // Setup container names array (list of container names used by
         // integration tests)
-        self::$testTables = array();
+        self::$testTables = [];
         for ($i = 0; $i < 10; $i++) {
             self::$testTables[$i] = self::$testTablesPrefix . ($i + 1);
         }
 
-        self::$creatableTables = array();
+        self::$creatableTables = [];
         for ($i = 0; $i < 10; $i++) {
             self::$creatableTables[$i] = self::$createableTablesPrefix . ($i + 1);
         }
@@ -99,7 +126,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->createTables(self::$testTablesPrefix, self::$testTables);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$isOneTimeSetup) {
             $tmp = new TableServiceIntegrationTest();
@@ -108,16 +135,17 @@ class TableServiceIntegrationTest extends IntegrationTestBase
             $tmp->deleteTables(self::$createableTablesPrefix, self::$creatableTables);
             self::$isOneTimeSetup = false;
         }
+
         parent::tearDownAfterClass();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // tearDown of parent will delete the container created in setUp
         // Do nothing here
     }
 
-    private function createTables($prefix, $list)
+    private function createTables($prefix, $list): void
     {
         $containers = $this->listTables($prefix);
         foreach ($list as $item) {
@@ -127,7 +155,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         }
     }
 
-    private function deleteTables($prefix, $list)
+    private function deleteTables($prefix, $list): void
     {
         $containers = $this->listTables($prefix);
         foreach ($list as $item) {
@@ -137,7 +165,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         }
     }
 
-    private function deleteAllTables($list)
+    private function deleteAllTables($list): void
     {
         foreach ($list as $item) {
             $this->safeDeleteTable($item);
@@ -146,7 +174,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
 
     private function listTables($prefix)
     {
-        $result = array();
+        $result = [];
         $qto = new QueryTablesOptions();
         $qto->setPrefix($prefix);
         $list = $this->restProxy->queryTables($qto);
@@ -156,7 +184,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         return $result;
     }
 
-    public function testGetServicePropertiesWorks()
+    public function testGetServicePropertiesWorks(): void
     {
         // Arrange
 
@@ -187,7 +215,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($props->getHourMetrics()->getVersion(), '$props->getHourMetrics()->getVersion');
     }
 
-    public function testSetServicePropertiesWorks()
+    public function testSetServicePropertiesWorks(): void
     {
         // Arrange
 
@@ -212,7 +240,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $props->getLogging()->setRead(true);
         $this->restProxy->setServiceProperties($props);
 
-        \sleep(30);
+        sleep(30);
 
         $props = $this->restProxy->getServiceProperties()->getValue();
 
@@ -226,7 +254,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($props->getHourMetrics()->getVersion(), '$props->getHourMetrics()->getVersion');
     }
 
-    public function testCreateTablesWorks()
+    public function testCreateTablesWorks(): void
     {
         // Act
         try {
@@ -243,7 +271,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($result, '$result');
     }
 
-    public function testDeleteTablesWorks()
+    public function testDeleteTablesWorks(): void
     {
         // Act
         $this->restProxy->createTable(self::$createTable2);
@@ -262,7 +290,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($result, '$result');
     }
 
-    public function testQueryTablesWorks()
+    public function testQueryTablesWorks(): void
     {
         // Act
         $result = $this->restProxy->queryTables();
@@ -271,7 +299,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($result, '$result');
     }
 
-    public function testQueryTablesWithPrefixWorks()
+    public function testQueryTablesWithPrefixWorks(): void
     {
         // Act
         $qto = new QueryTablesOptions();
@@ -282,7 +310,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($result, '$result');
     }
 
-    public function testGetTableWorks()
+    public function testGetTableWorks(): void
     {
         // Act
         $result = $this->restProxy->getTable(self::$testTable1);
@@ -291,7 +319,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($result, '$result');
     }
 
-    public function testInsertEntityWorks()
+    public function testInsertEntityWorks(): void
     {
         // Arrange
         $binaryData = chr(1) . chr(2) . chr(3) . chr(4);
@@ -303,7 +331,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
         $entity->addProperty('test6', EdmType::BINARY, $binaryData);
         $entity->addProperty('test7', EdmType::GUID, $uuid);
 
@@ -365,7 +393,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
             '$result->getEntity()->getProperty(\'test5\')'
         );
         $this->assertTrue(
-            $result->getEntity()->getProperty('test5')->getValue() instanceof \DateTime,
+            $result->getEntity()->getProperty('test5')->getValue() instanceof DateTime,
             '$result->getEntity()->getProperty(\'test5\')->getValue() instanceof \DateTime'
         );
 
@@ -384,7 +412,8 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         );
         $this->assertEquals($uuid, $result->getEntity()->getPropertyValue('test7'), 'GUIDs are the same');
     }
-    public function testUpdateEntityWorks()
+
+    public function testUpdateEntityWorks(): void
     {
         // Arrange
         $entity = new Entity();
@@ -394,7 +423,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         // Act
         $result = $this->restProxy->insertEntity(self::$testTable2, $entity);
@@ -405,7 +434,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue(true, 'Expect success in testUpdateEntityWorks');
     }
 
-    public function testInsertOrReplaceEntityWorks()
+    public function testInsertOrReplaceEntityWorks(): void
     {
         // Arrange
         $entity = new Entity();
@@ -415,7 +444,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         // Act
         if ($this->isEmulated()) {
@@ -436,7 +465,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         }
     }
 
-    public function testInsertOrMergeEntityWorks()
+    public function testInsertOrMergeEntityWorks(): void
     {
         // Arrange
         $entity = new Entity();
@@ -446,7 +475,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         // Act
         if ($this->isEmulated()) {
@@ -467,7 +496,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         }
     }
 
-    public function testMergeEntityWorks()
+    public function testMergeEntityWorks(): void
     {
         // Arrange
         $entity = new Entity();
@@ -477,7 +506,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         // Act
         $result = $this->restProxy->insertEntity(self::$testTable2, $entity);
@@ -490,7 +519,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue(true, 'expect no errors');
     }
 
-    public function testDeleteEntityWorks()
+    public function testDeleteEntityWorks(): void
     {
         // Arrange
         $entity = new Entity();
@@ -500,7 +529,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         // Act
         $result = $this->restProxy->insertEntity(self::$testTable2, $entity);
@@ -515,7 +544,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue(true, 'expect no errors');
     }
 
-    public function testDeleteEntityTroublesomeKeyWorks()
+    public function testDeleteEntityTroublesomeKeyWorks(): void
     {
         // The service does not allow the following common characters in keys:
         // * chr(35) = '#'
@@ -624,7 +653,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         }
     }
 
-    public function testDeleteEntityWithETagWorks()
+    public function testDeleteEntityWithETagWorks(): void
     {
         // Arrange
         $entity = new Entity();
@@ -634,7 +663,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         // Act
         $result = $this->restProxy->insertEntity(self::$testTable2, $entity);
@@ -652,7 +681,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue(true, 'expect no errors');
     }
 
-    public function testGetEntityWorks()
+    public function testGetEntityWorks(): void
     {
         // Arrange
         $binaryData = chr(1) . chr(2) . chr(3) . chr(4);
@@ -664,7 +693,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
         $entity->addProperty('test6', EdmType::BINARY, $binaryData);
         $entity->addProperty('test7', EdmType::GUID, $uuid);
 
@@ -726,7 +755,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
             '$result->getEntity()->getProperty(\'test5\')'
         );
         $this->assertTrue(
-            $result->getEntity()->getProperty('test5')->getValue() instanceof \DateTime,
+            $result->getEntity()->getProperty('test5')->getValue() instanceof DateTime,
             '$result->getEntity()->getProperty(\'test5\')->getValue() instanceof \DateTime'
         );
 
@@ -750,7 +779,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertEquals($uuid, $result->getEntity()->getPropertyValue('test7'), 'GUIDs are the same');
     }
 
-    public function testQueryEntitiesWorks()
+    public function testQueryEntitiesWorks(): void
     {
         // Arrange
         $entity = new Entity();
@@ -760,7 +789,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         // Act
         $this->restProxy->insertEntity(self::$testTable3, $entity);
@@ -808,12 +837,12 @@ class TableServiceIntegrationTest extends IntegrationTestBase
 
         $this->assertNotNull($entities[0]->getProperty('test5'), '$entities[0]->getProperty(\'test5\')');
         $this->assertTrue(
-            $entities[0]->getProperty('test5')->getValue() instanceof \DateTime,
+            $entities[0]->getProperty('test5')->getValue() instanceof DateTime,
             '$entities[0]->getProperty(\'test5\')->getValue() instanceof \DateTime'
         );
     }
 
-    public function testQueryEntitiesWithPaginationWorks()
+    public function testQueryEntitiesWithPaginationWorks(): void
     {
         // Arrange
         $table = self::$testTable4;
@@ -826,7 +855,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
             $entity->addProperty('test2', EdmType::STRING, 'value');
             $entity->addProperty('test3', EdmType::INT32, 3);
             $entity->addProperty('test4', EdmType::INT64, '12345678901');
-            $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+            $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
             $this->restProxy->insertEntity($table, $entity);
         }
@@ -855,12 +884,12 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertEquals($numberOfEntries, $entryCount, '$entryCount');
     }
 
-    public function testQueryEntitiesWithFilterWorks()
+    public function testQueryEntitiesWithFilterWorks(): void
     {
         // Arrange
         $table = self::$testTable5;
         $numberOfEntries = 5;
-        $entities = array();
+        $entities = [];
         for ($i = 0; $i < $numberOfEntries; $i++) {
             $entity = new Entity();
             $entity->setPartitionKey('001');
@@ -869,7 +898,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
             $entity->addProperty('test2', EdmType::STRING, '\'value" ' . $i);
             $entity->addProperty('test3', EdmType::INT32, $i);
             $entity->addProperty('test4', EdmType::INT64, strval('12345678901' + $i));
-            $entity->addProperty('test5', EdmType::DATETIME, new \DateTime('2012-01-0' . $i));
+            $entity->addProperty('test5', EdmType::DATETIME, new DateTime('2012-01-0' . $i));
             $entity->addProperty('test6', EdmType::BINARY, chr($i));
             $entity->addProperty('test7', EdmType::GUID, Utilities::getGuid());
             $entities[$i] = $entity;
@@ -882,7 +911,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
                 Filter::applyPropertyName('RowKey'),
                 Filter::applyConstant('queryEntitiesWithFilterWorks-3', EdmType::STRING)
             );
-            $q =new Query();
+            $q = new Query();
             $q->setFilter($f);
             $qeo = new QueryEntitiesOptions();
             $qeo->setQuery($q);
@@ -974,7 +1003,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
             $q->setFilter(
                 Filter::applyEq(
                     Filter::applyPropertyName('test5'),
-                    Filter::applyConstant(new \DateTime('2012-01-03'), EdmType::DATETIME)
+                    Filter::applyConstant(new DateTime('2012-01-03'), EdmType::DATETIME)
                 )
             );
             $qeo = new QueryEntitiesOptions();
@@ -1031,7 +1060,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         }
     }
 
-    public function testBatchInsertWorks()
+    public function testBatchInsertWorks(): void
     {
         // Arrange
         $table = self::$testTable6;
@@ -1045,7 +1074,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         $bo = new BatchOperations();
         $bo->addInsertEntity($table, $entity);
@@ -1058,7 +1087,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue($ents[0] instanceof InsertEntityResult, '$result->getEntries()->get(0)->getClass()');
     }
 
-    public function testBatchUpdateWorks()
+    public function testBatchUpdateWorks(): void
     {
         // Arrange
         $table = self::$testTable6;
@@ -1070,7 +1099,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
         $entity = $this->restProxy->insertEntity($table, $entity)->getEntity();
 
         // Act
@@ -1086,7 +1115,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue($ents[0] instanceof UpdateEntityResult, '$result->getEntries()->get(0)->getClass()');
     }
 
-    public function testBatchMergeWorks()
+    public function testBatchMergeWorks(): void
     {
         // Arrange
         $table = self::$testTable6;
@@ -1098,7 +1127,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
         $entity = $this->restProxy->insertEntity($table, $entity)->getEntity();
 
         // Act
@@ -1113,7 +1142,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue($ents[0] instanceof UpdateEntityResult, '$result->getEntries()->get(0)->getClass()');
     }
 
-    public function testBatchInsertOrReplaceWorks()
+    public function testBatchInsertOrReplaceWorks(): void
     {
         $this->skipIfEmulated();
 
@@ -1128,7 +1157,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         $bo = new BatchOperations();
         $bo->addInsertOrReplaceEntity($table, $entity);
@@ -1141,7 +1170,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue($ents[0] instanceof UpdateEntityResult, '$result->getEntries()->get(0)->getClass()');
     }
 
-    public function testBatchInsertOrMergeWorks()
+    public function testBatchInsertOrMergeWorks(): void
     {
         $this->skipIfEmulated();
 
@@ -1156,7 +1185,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         $bo = new BatchOperations();
         $bo->addInsertOrMergeEntity($table, $entity);
@@ -1169,7 +1198,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue($ents[0] instanceof UpdateEntityResult, '$result->getEntries()->get(0)->getClass()');
     }
 
-    public function testBatchDeleteWorks()
+    public function testBatchDeleteWorks(): void
     {
         // Arrange
         $table = self::$testTable6;
@@ -1181,7 +1210,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
         $entity = $this->restProxy->insertEntity($table, $entity)->getEntity();
 
         // Act
@@ -1196,7 +1225,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue(is_string($ents[0]), '$result->getEntries()[0] is string');
     }
 
-    public function testBatchLotsOfInsertsWorks()
+    public function testBatchLotsOfInsertsWorks(): void
     {
         // Arrange
         $table = self::$testTable7;
@@ -1213,7 +1242,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
             $entity->addProperty('test2', EdmType::STRING, 'value');
             $entity->addProperty('test3', EdmType::INT32, 3);
             $entity->addProperty('test4', EdmType::INT64, '12345678901');
-            $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+            $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
 
             $batchOperations->addInsertEntity($table, $entity);
         }
@@ -1261,13 +1290,13 @@ class TableServiceIntegrationTest extends IntegrationTestBase
 
             $this->assertNotNull($entity->getProperty('test5'), '$entity->getProperty(\'test5\')');
             $this->assertTrue(
-                $entity->getProperty('test5')->getValue() instanceof \DateTime,
+                $entity->getProperty('test5')->getValue() instanceof DateTime,
                 '$entity->getProperty(\'test5\')->getValue() instanceof \DateTime'
             );
         }
     }
 
-    public function testBatchAllOperationsTogetherWorks()
+    public function testBatchAllOperationsTogetherWorks(): void
     {
         // Arrange
         $table = self::$testTable8;
@@ -1281,7 +1310,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity1->addProperty('test2', EdmType::STRING, 'value');
         $entity1->addProperty('test3', EdmType::INT32, 3);
         $entity1->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity1->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity1->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         $entity1 = $this->restProxy->insertEntity($table, $entity1)->getEntity();
 
@@ -1292,7 +1321,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity2->addProperty('test2', EdmType::STRING, 'value');
         $entity2->addProperty('test3', EdmType::INT32, 3);
         $entity2->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity2->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity2->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         $entity2 = $this->restProxy->insertEntity($table, $entity2)->getEntity();
 
@@ -1303,7 +1332,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity3->addProperty('test2', EdmType::STRING, 'value');
         $entity3->addProperty('test3', EdmType::INT32, 3);
         $entity3->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity3->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity3->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         $entity3 = $this->restProxy->insertEntity($table, $entity3)->getEntity();
 
@@ -1314,7 +1343,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity4->addProperty('test2', EdmType::STRING, 'value');
         $entity4->addProperty('test3', EdmType::INT32, 3);
         $entity4->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity4->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity4->addProperty('test5', EdmType::DATETIME, new DateTime());
 
         $entity4 = $this->restProxy->insertEntity($table, $entity4)->getEntity();
 
@@ -1328,7 +1357,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity->addProperty('test2', EdmType::STRING, 'value');
         $entity->addProperty('test3', EdmType::INT32, 3);
         $entity->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity->addProperty('test5', EdmType::DATETIME, new DateTime());
         $batchOperations->addInsertEntity($table, $entity);
         $batchOperations->addDeleteEntity(
             $table,
@@ -1355,7 +1384,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $entity5->addProperty('test2', EdmType::STRING, 'value');
         $entity5->addProperty('test3', EdmType::INT32, 3);
         $entity5->addProperty('test4', EdmType::INT64, '12345678901');
-        $entity5->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $entity5->addProperty('test5', EdmType::DATETIME, new DateTime());
         // Use different behavior in the emulator, as v1.6 does not support this method
         if ($this->isEmulated()) {
             $batchOperations->addInsertEntity($table, $entity5);
@@ -1386,7 +1415,7 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         }
     }
 
-    public function testBatchNegativeWorks()
+    public function testBatchNegativeWorks(): void
     {
         // Arrange
         $table = self::$testTable8;
@@ -1439,4 +1468,5 @@ class TableServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue($batchErrored, 'Batch should have returned error');
         $this->assertEquals(412, $code, 'Error\'s status code');
     }
+
 }

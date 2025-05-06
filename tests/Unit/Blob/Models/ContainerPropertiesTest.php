@@ -24,7 +24,9 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Models\ContainerProperties;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ContainerProperties
@@ -36,9 +38,9 @@ use MicrosoftAzure\Storage\Blob\Models\ContainerProperties;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ContainerPropertiesTest extends \PHPUnit\Framework\TestCase
+class ContainerPropertiesTest extends TestCase
 {
-    public function testGetETag()
+    public function testGetETag(): void
     {
         // Setup
         $properties = new ContainerProperties();
@@ -52,7 +54,7 @@ class ContainerPropertiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetETag()
+    public function testSetETag(): void
     {
         // Setup
         $properties = new ContainerProperties();
@@ -66,11 +68,11 @@ class ContainerPropertiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetLastModified()
+    public function testGetLastModified(): void
     {
         // Setup
         $properties = new ContainerProperties();
-        $expected = new \DateTime('Fri, 09 Oct 2009 21:04:30 GMT');
+        $expected = new DateTime('Fri, 09 Oct 2009 21:04:30 GMT');
         $properties->setLastModified($expected);
 
         // Test
@@ -80,11 +82,11 @@ class ContainerPropertiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetLastModified()
+    public function testSetLastModified(): void
     {
         // Setup
         $properties = new ContainerProperties();
-        $expected = new \DateTime('Fri, 09 Oct 2009 21:04:30 GMT');
+        $expected = new DateTime('Fri, 09 Oct 2009 21:04:30 GMT');
 
         // Test
         $properties->setLastModified($expected);
@@ -93,4 +95,5 @@ class ContainerPropertiesTest extends \PHPUnit\Framework\TestCase
         $actual = $properties->getLastModified();
         $this->assertEquals($expected, $actual);
     }
+
 }

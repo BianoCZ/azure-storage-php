@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\File\Models;
 
 use Psr\Http\Message\StreamInterface;
+use function is_null;
 
 /**
  * Holds result of GetFile API.
@@ -38,8 +39,11 @@ use Psr\Http\Message\StreamInterface;
  */
 class GetFileResult
 {
+
     private $properties;
+
     private $metadata;
+
     private $contentStream;
 
     /**
@@ -51,17 +55,16 @@ class GetFileResult
      *
      * @internal
      *
-     * @return GetFileResult
      */
     public static function create(
         array $headers,
         StreamInterface $body,
         array $metadata
-    ) {
+    ): GetFileResult {
         $result = new GetFileResult();
         $result->setContentStream($body->detach());
         $result->setProperties(FileProperties::createFromHttpHeaders($headers));
-        $result->setMetadata(is_null($metadata) ? array() : $metadata);
+        $result->setMetadata(is_null($metadata) ? [] : $metadata);
 
         return $result;
     }
@@ -69,9 +72,8 @@ class GetFileResult
     /**
      * Gets file metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
@@ -81,9 +83,8 @@ class GetFileResult
      *
      * @param array $metadata value.
      *
-     * @return void
      */
-    protected function setMetadata(array $metadata)
+    protected function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;
     }
@@ -91,9 +92,8 @@ class GetFileResult
     /**
      * Gets file properties.
      *
-     * @return FileProperties
      */
-    public function getProperties()
+    public function getProperties(): FileProperties
     {
         return $this->properties;
     }
@@ -103,9 +103,8 @@ class GetFileResult
      *
      * @param FileProperties $properties value.
      *
-     * @return void
      */
-    protected function setProperties(FileProperties $properties)
+    protected function setProperties(FileProperties $properties): void
     {
         $this->properties = $properties;
     }
@@ -125,10 +124,10 @@ class GetFileResult
      *
      * @param resource $contentStream The stream handle.
      *
-     * @return void
      */
-    protected function setContentStream($contentStream)
+    protected function setContentStream($contentStream): void
     {
         $this->contentStream = $contentStream;
     }
+
 }

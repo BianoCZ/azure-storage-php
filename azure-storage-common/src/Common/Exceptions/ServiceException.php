@@ -24,9 +24,17 @@
 
 namespace MicrosoftAzure\Storage\Common\Exceptions;
 
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use Exception;
+use LogicException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
+use function array_key_exists;
+use function implode;
+use function libxml_get_errors;
+use function libxml_use_internal_errors;
+use function sprintf;
 
 /**
  * Fires when the response code is incorrect.
@@ -38,10 +46,13 @@ use Psr\Http\Message\ResponseInterface;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ServiceException extends \LogicException
+class ServiceException extends LogicException
 {
+
     private $response;
+
     private $errorText;
+
     private $errorMessage;
 
     /**
@@ -64,6 +75,7 @@ class ServiceException extends \LogicException
                 $response->getBody()
             )
         );
+
         $this->code         = $response->getStatusCode();
         $this->response     = $response;
         $this->errorText    = $response->getReasonPhrase();
@@ -77,9 +89,8 @@ class ServiceException extends \LogicException
      *
      * @internal
      *
-     * @return string
      */
-    protected static function parseErrorMessage(ResponseInterface $response)
+    protected static function parseErrorMessage(ResponseInterface $response): string
     {
         //try to parse using xml serializer, if failed, return the whole body
         //as the error message.
@@ -88,12 +99,12 @@ class ServiceException extends \LogicException
         try {
             $internalErrors = libxml_use_internal_errors(true);
             $parsedArray = $serializer->unserialize($response->getBody());
-            $messages = array();
+            $messages = [];
             foreach (libxml_get_errors() as $error) {
                 $messages[] = $error->message;
             }
             if (!empty($messages)) {
-                throw new \Exception(
+                throw new Exception(
                     sprintf(Resources::ERROR_CANNOT_PARSE_XML, implode('; ', $messages))
                 );
             }
@@ -103,7 +114,7 @@ class ServiceException extends \LogicException
             } else {
                 $errorMessage = $response->getBody();
             }
-        } catch (\Exception $e) {
+        } catch (Throwable) {
             $errorMessage = $response->getBody();
         }
         return $errorMessage;
@@ -112,9 +123,8 @@ class ServiceException extends \LogicException
     /**
      * Gets error text.
      *
-     * @return string
      */
-    public function getErrorText()
+    public function getErrorText(): string
     {
         return $this->errorText;
     }
@@ -122,9 +132,8 @@ class ServiceException extends \LogicException
     /**
      * Gets detailed error message.
      *
-     * @return string
      */
-    public function getErrorMessage()
+    public function getErrorMessage(): string
     {
         return $this->errorMessage;
     }
@@ -132,15 +141,16 @@ class ServiceException extends \LogicException
     /**
      * Gets the request ID of the failure.
      *
-     * @return string
      */
-    public function getRequestID()
+    public function getRequestID(): string
     {
         $requestID = '';
-        if (array_key_exists(
-            Resources::X_MS_REQUEST_ID,
-            $this->getResponse()->getHeaders()
-        )) {
+        if (
+            array_key_exists(
+                Resources::X_MS_REQUEST_ID,
+                $this->getResponse()->getHeaders()
+            )
+        ) {
             $requestID = $this->getResponse()
                 ->getHeaders()[Resources::X_MS_REQUEST_ID][0];
         }
@@ -150,15 +160,16 @@ class ServiceException extends \LogicException
     /**
      * Gets the Date of the failure.
      *
-     * @return string
      */
-    public function getDate()
+    public function getDate(): string
     {
         $date = '';
-        if (array_key_exists(
-            Resources::DATE,
-            $this->getResponse()->getHeaders()
-        )) {
+        if (
+            array_key_exists(
+                Resources::DATE,
+                $this->getResponse()->getHeaders()
+            )
+        ) {
             $date = $this->getResponse()
                 ->getHeaders()[Resources::DATE][0];
         }
@@ -168,10 +179,10 @@ class ServiceException extends \LogicException
     /**
      * Gets the response of the failue.
      *
-     * @return ResponseInterface
      */
-    public function getResponse()
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }
+
 }

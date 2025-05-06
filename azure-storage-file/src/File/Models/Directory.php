@@ -24,8 +24,8 @@
 
 namespace MicrosoftAzure\Storage\File\Models;
 
-use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
 
 /**
  * Represents windows azure directory object
@@ -39,14 +39,14 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class Directory
 {
+
     private $name;
 
     /**
      * Gets directory name.
      *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -56,9 +56,8 @@ class Directory
      *
      * @param string $name value.
      *
-     * @return void
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -68,9 +67,8 @@ class Directory
      *
      * @param  array $parsed The parsed array that contains the object information.
      *
-     * @return Directory
      */
-    public static function create(array $parsed)
+    public static function create(array $parsed): Directory
     {
         $result = new Directory();
         $name = Utilities::tryGetValue($parsed, Resources::QP_NAME);
@@ -78,4 +76,5 @@ class Directory
 
         return $result;
     }
+
 }

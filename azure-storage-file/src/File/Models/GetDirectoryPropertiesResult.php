@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\File\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
 
@@ -39,8 +40,11 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class GetDirectoryPropertiesResult
 {
+
     private $lastModified;
+
     private $etag;
+
     private $metadata;
 
     /**
@@ -60,9 +64,8 @@ class GetDirectoryPropertiesResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         $this->lastModified = $lastModified;
     }
@@ -71,9 +74,8 @@ class GetDirectoryPropertiesResult
      * The entity tag for the share. If the request version is 2011-08-18 or
      * newer, the ETag value will be in quotes.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->etag;
     }
@@ -83,9 +85,8 @@ class GetDirectoryPropertiesResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         $this->etag = $etag;
     }
@@ -93,9 +94,8 @@ class GetDirectoryPropertiesResult
     /**
      * Gets user defined metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
@@ -106,9 +106,8 @@ class GetDirectoryPropertiesResult
      *
      * @param array $metadata user defined metadata object in array form.
      *
-     * @return void
      */
-    protected function setMetadata(array $metadata)
+    protected function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;
     }
@@ -120,9 +119,8 @@ class GetDirectoryPropertiesResult
      *
      * @internal
      *
-     * @return GetSharePropertiesResult
      */
-    public static function create(array $responseHeaders)
+    public static function create(array $responseHeaders): GetSharePropertiesResult
     {
         $result   = new GetDirectoryPropertiesResult();
         $metadata = Utilities::getMetadataArray($responseHeaders);
@@ -140,4 +138,5 @@ class GetDirectoryPropertiesResult
 
         return $result;
     }
+
 }

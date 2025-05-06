@@ -39,6 +39,7 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class BreakLeaseResult
 {
+
     private $_leaseTime;
 
     /**
@@ -46,9 +47,8 @@ class BreakLeaseResult
      *
      * @param array $headers response headers
      *
-     * @return BreakLeaseResult
      */
-    public static function create($headers)
+    public static function create(array $headers): BreakLeaseResult
     {
         $result = new BreakLeaseResult();
 
@@ -62,9 +62,8 @@ class BreakLeaseResult
     /**
      * Gets lease time.
      *
-     * @return string
      */
-    public function getLeaseTime()
+    public function getLeaseTime(): string
     {
         return $this->_leaseTime;
     }
@@ -74,10 +73,10 @@ class BreakLeaseResult
      *
      * @param string $leaseTime the blob lease time.
      *
-     * @return void
      */
-    protected function setLeaseTime($leaseTime)
+    protected function setLeaseTime(string $leaseTime): void
     {
         $this->_leaseTime = $leaseTime;
     }
+
 }

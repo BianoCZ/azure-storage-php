@@ -24,21 +24,40 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal;
 
-use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
-use MicrosoftAzure\Storage\Common\Internal\RetryMiddlewareFactory;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
-use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
-use MicrosoftAzure\Storage\Common\Internal\Http\HttpCallContext;
-use MicrosoftAzure\Storage\Common\Internal\Middlewares\MiddlewareBase;
-use MicrosoftAzure\Storage\Common\Middlewares\MiddlewareStack;
-use MicrosoftAzure\Storage\Common\LocationMode;
-use GuzzleHttp\Promise\EachPromise;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Uri;
+use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\EachPromise;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Uri;
+use InvalidArgumentException;
+use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
+use MicrosoftAzure\Storage\Common\Internal\Http\HttpCallContext;
+use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Common\LocationMode;
+use MicrosoftAzure\Storage\Common\Middlewares\MiddlewareStack;
+use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
+use Throwable;
+use function array_key_exists;
+use function array_merge;
+use function call_user_func;
+use function getenv;
+use function in_array;
+use function is_array;
+use function is_callable;
+use function is_null;
+use function sort;
+use function strpos;
+use function substr;
+use function trim;
+use const CURLOPT_SSLVERSION;
+use const CURL_SSLVERSION_TLSv1_2;
 
 /**
  * Base class for all services rest proxies.
@@ -53,10 +72,15 @@ use Psr\Http\Message\ResponseInterface;
  */
 class ServiceRestProxy extends RestProxy
 {
+
     private $accountName;
+
     private $psrPrimaryUri;
+
     private $psrSecondaryUri;
+
     private $options;
+
     private $client;
 
     /**
@@ -71,21 +95,22 @@ class ServiceRestProxy extends RestProxy
      *                                                  the service
      */
     public function __construct(
-        $primaryUri,
-        $secondaryUri,
-        $accountName,
+        string $primaryUri,
+        string $secondaryUri,
+        string $accountName,
         array $options = []
     ) {
         $primaryUri   = Utilities::appendDelimiter($primaryUri, '/');
         $secondaryUri = Utilities::appendDelimiter($secondaryUri, '/');
 
         $dataSerializer = new XmlSerializer();
+
         parent::__construct($dataSerializer);
 
         $this->accountName     = $accountName;
         $this->psrPrimaryUri   = new Uri($primaryUri);
         $this->psrSecondaryUri = new Uri($secondaryUri);
-        $this->options         = array_merge(array('http' => array()), $options);
+        $this->options         = array_merge(['http' => []], $options);
         $this->client          = self::createClient($this->options['http']);
     }
 
@@ -94,9 +119,8 @@ class ServiceRestProxy extends RestProxy
      *
      * @param  array $options Optional parameters for the client.
      *
-     * @return Client
      */
-    private static function createClient(array $options)
+    private static function createClient(array $options): Client
     {
         $verify = true;
         //Disable SSL if proxy has been set, and set the proxy in the client.
@@ -112,33 +136,32 @@ class ServiceRestProxy extends RestProxy
             $verify = $options['verify'];
         }
 
-        return (new \GuzzleHttp\Client(
+        return new Client(
             array_merge(
                 $options,
-                array(
-                    "defaults" => array(
+                [
+                    "defaults" => [
                         "allow_redirects" => true,
                         "exceptions" => true,
                         "decode_content" => true,
                         "config" => [
                             "curl" => [
-                                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2
-                            ]
-                        ]
-                    ),
+                                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+                            ],
+                        ],
+                    ],
                     'cookies' => true,
                     'verify' => $verify,
-                )
+                ]
             )
-        ));
+        );
     }
 
     /**
      * Gets the account name.
      *
-     * @return string
      */
-    public function getAccountName()
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -148,9 +171,8 @@ class ServiceRestProxy extends RestProxy
      *
      * @param  ServiceOptions  $serviceOptions The options user passed in.
      *
-     * @return MiddlewareStack
      */
-    protected function createMiddlewareStack(ServiceOptions $serviceOptions)
+    protected function createMiddlewareStack(ServiceOptions $serviceOptions): MiddlewareStack
     {
         //If handler stack is not defined by the user, create a default
         //middleware stack.
@@ -165,7 +187,7 @@ class ServiceRestProxy extends RestProxy
 
         //Push all the middlewares specified in the $serviceOptions to the
         //handlerstack.
-        if ($serviceOptions->getMiddlewares() != array()) {
+        if ($serviceOptions->getMiddlewares() != []) {
             foreach ($serviceOptions->getMiddlewares() as $middleware) {
                 $stack->push($middleware);
             }
@@ -200,13 +222,12 @@ class ServiceRestProxy extends RestProxy
      * @param  ServiceOptions $options     The service options for the concurrent
      *                                     requests.
      *
-     * @return \GuzzleHttp\Promise\Promise|\GuzzleHttp\Promise\PromiseInterface
      */
     protected function sendConcurrentAsync(
         callable $generator,
-        $statusCode,
+        int $statusCode,
         ServiceOptions $options
-    ) {
+    ): Promise|PromiseInterface {
         $client = $this->client;
         $middlewareStack = $this->createMiddlewareStack($options);
 
@@ -221,37 +242,36 @@ class ServiceRestProxy extends RestProxy
 
         $requestOptions = $this->generateRequestOptions($options, $handler);
 
-        $promises = \call_user_func(
+        $promises = call_user_func(
             function () use (
                 $generator,
                 $handler,
                 $requestOptions
             ) {
                 while (is_callable($generator) && ($request = $generator())) {
-                    yield \call_user_func($handler, $request, $requestOptions);
+                    yield call_user_func($handler, $request, $requestOptions);
                 }
             }
         );
 
         $eachPromise = new EachPromise($promises, [
             'concurrency' => $options->getNumberOfConcurrency(),
-            'fulfilled' => function ($response, $index) use ($statusCode) {
+            'fulfilled' => function ($response, $index) use ($statusCode): void {
                 //the promise is fulfilled, evaluate the response
                 self::throwIfError(
                     $response,
                     $statusCode
                 );
             },
-            'rejected' => function ($reason, $index) {
+            'rejected' => function ($reason, $index): void {
                 //Still rejected even if the retry logic has been applied.
                 //Throwing exception.
                 throw $reason;
-            }
+            },
         ]);
 
         return $eachPromise->promise();
     }
-
 
     /**
      * Create the request to be sent.
@@ -263,19 +283,20 @@ class ServiceRestProxy extends RestProxy
      * @param  string $path           URL path
      * @param  string $body           Request body
      *
-     * @return \GuzzleHttp\Psr7\Request
      */
     protected function createRequest(
-        $method,
+        string $method,
         array $headers,
         array $queryParams,
         array $postParameters,
-        $path,
+        string $path,
         $locationMode,
-        $body = Resources::EMPTY_STRING
-    ) {
-        if ($locationMode == LocationMode::SECONDARY_ONLY ||
-            $locationMode == LocationMode::SECONDARY_THEN_PRIMARY) {
+        string $body = Resources::EMPTY_STRING
+    ): Request {
+        if (
+            $locationMode == LocationMode::SECONDARY_ONLY ||
+            $locationMode == LocationMode::SECONDARY_THEN_PRIMARY
+        ) {
             $uri = $this->psrSecondaryUri;
         } else {
             $uri = $this->psrPrimaryUri;
@@ -339,18 +360,17 @@ class ServiceRestProxy extends RestProxy
      * @param  string         $body           Request body
      * @param  ServiceOptions $serviceOptions Service options
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     protected function sendAsync(
-        $method,
+        string $method,
         array $headers,
         array $queryParams,
         array $postParameters,
-        $path,
-        $expected = Resources::STATUS_OK,
-        $body = Resources::EMPTY_STRING,
-        ServiceOptions $serviceOptions = null
-    ) {
+        string $path,
+        array|int $expected = Resources::STATUS_OK,
+        string $body = Resources::EMPTY_STRING,
+        ?ServiceOptions $serviceOptions = null
+    ): PromiseInterface {
         if ($serviceOptions == null) {
             $serviceOptions = new ServiceOptions();
         }
@@ -387,7 +407,7 @@ class ServiceRestProxy extends RestProxy
             $requestOptions[Resources::ROS_DECODE_CONTENT] = false;
         }
 
-        $promise = \call_user_func($handler, $request, $requestOptions);
+        $promise = call_user_func($handler, $request, $requestOptions);
 
         return $promise->then(
             function ($response) use ($expected, $requestOptions) {
@@ -411,12 +431,11 @@ class ServiceRestProxy extends RestProxy
      * @param  string|\Exception $reason   Rejection reason.
      * @param  array|int         $expected Expected Status Codes.
      *
-     * @return ResponseInterface
      */
-    protected function onRejected($reason, $expected)
+    protected function onRejected(string|Throwable $reason, array|int $expected): ResponseInterface
     {
-        if (!($reason instanceof \Exception)) {
-            throw new \RuntimeException($reason);
+        if (!($reason instanceof Exception)) {
+            throw new RuntimeException($reason);
         }
         if (!($reason instanceof RequestException)) {
             throw $reason;
@@ -442,13 +461,12 @@ class ServiceRestProxy extends RestProxy
      *                                        generate request options.
      * @param  callable       $handler        The handler used to send the
      *                                        request.
-     * @return array
      */
     protected function generateRequestOptions(
         ServiceOptions $serviceOptions,
         callable $handler
-    ) {
-        $result = array();
+    ): array {
+        $result = [];
         $result[Resources::ROS_LOCATION_MODE]  = $serviceOptions->getLocationMode();
         $result[Resources::ROS_STREAM]         = $serviceOptions->getIsStreaming();
         $result[Resources::ROS_DECODE_CONTENT] = $serviceOptions->getDecodeContent();
@@ -463,9 +481,8 @@ class ServiceRestProxy extends RestProxy
      * Sends the context.
      *
      * @param  HttpCallContext $context The context of the request.
-     * @return \GuzzleHttp\Psr7\Response
      */
-    protected function sendContext(HttpCallContext $context)
+    protected function sendContext(HttpCallContext $context): Response
     {
         return $this->sendContextAsync($context)->wait();
     }
@@ -475,9 +492,8 @@ class ServiceRestProxy extends RestProxy
      *
      * @param  HttpCallContext $context The context of the request.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    protected function sendContextAsync(HttpCallContext $context)
+    protected function sendContextAsync(HttpCallContext $context): PromiseInterface
     {
         return $this->sendAsync(
             $context->getMethod(),
@@ -497,13 +513,11 @@ class ServiceRestProxy extends RestProxy
      * @param ResponseInterface $response The response received
      * @param array|int         $expected The expected status codes.
      *
-     * @return void
-     *
      * @throws ServiceException
      */
-    public static function throwIfError(ResponseInterface $response, $expected)
+    public static function throwIfError(ResponseInterface $response, array|int $expected): void
     {
-        $expectedStatusCodes = is_array($expected) ? $expected : array($expected);
+        $expectedStatusCodes = is_array($expected) ? $expected : [$expected];
 
         if (!in_array($response->getStatusCode(), $expectedStatusCodes)) {
             throw new ServiceException($response);
@@ -517,13 +531,12 @@ class ServiceRestProxy extends RestProxy
      * @param string $key            The key of a HTTP POST parameter.
      * @param string $value          the value of a HTTP POST parameter.
      *
-     * @return array
      */
     public function addPostParameter(
         array $postParameters,
-        $key,
-        $value
-    ) {
+        string $key,
+        string $value
+    ): array {
         Validate::isArray($postParameters, 'postParameters');
         $postParameters[$key] = $value;
         return $postParameters;
@@ -534,9 +547,8 @@ class ServiceRestProxy extends RestProxy
      *
      * @param array $values array of values to be grouped.
      *
-     * @return string
      */
-    public static function groupQueryValues(array $values)
+    public static function groupQueryValues(array $values): string
     {
         Validate::isArray($values, 'values');
         $joined = Resources::EMPTY_STRING;
@@ -558,9 +570,8 @@ class ServiceRestProxy extends RestProxy
      * @param array $headers  HTTP request headers
      * @param array $metadata user specified metadata
      *
-     * @return array
      */
-    protected function addMetadataHeaders(array $headers, array $metadata = null)
+    protected function addMetadataHeaders(array $headers, ?array $metadata = null): array
     {
         Utilities::validateMetadata($metadata);
 
@@ -575,19 +586,19 @@ class ServiceRestProxy extends RestProxy
      *
      * @param array $metadata user defined metadata.
      *
-     * @return array
      */
-    public function generateMetadataHeaders(array $metadata = null)
+    public function generateMetadataHeaders(?array $metadata = null): array
     {
-        $metadataHeaders = array();
+        $metadataHeaders = [];
 
         if (is_array($metadata) && !is_null($metadata)) {
             foreach ($metadata as $key => $value) {
                 $headerName = Resources::X_MS_META_HEADER_PREFIX;
-                if (strpos($value, "\r") !== false
+                if (
+                    strpos($value, "\r") !== false
                     || strpos($value, "\n") !== false
                 ) {
-                    throw new \InvalidArgumentException(Resources::INVALID_META_MSG);
+                    throw new InvalidArgumentException(Resources::INVALID_META_MSG);
                 }
 
                 // Metadata name is case-presrved and case insensitive
@@ -602,9 +613,8 @@ class ServiceRestProxy extends RestProxy
     /**
      * Get the primary URI in PSR form.
      *
-     * @return Uri
      */
-    public function getPsrPrimaryUri()
+    public function getPsrPrimaryUri(): Uri
     {
         return $this->psrPrimaryUri;
     }
@@ -612,9 +622,8 @@ class ServiceRestProxy extends RestProxy
     /**
      * Get the secondary URI in PSR form.
      *
-     * @return Uri
      */
-    public function getPsrSecondaryUri()
+    public function getPsrSecondaryUri(): Uri
     {
         return $this->psrSecondaryUri;
     }
@@ -622,12 +631,11 @@ class ServiceRestProxy extends RestProxy
     /**
      * Adds the header that indicates the location mode to the response header.
      *
-     * @return  ResponseInterface
      */
     private static function addLocationHeaderToResponse(
         ResponseInterface $response,
         $locationMode
-    ) {
+    ): ResponseInterface {
         //If the response already has this header, return itself.
         if ($response->hasHeader(Resources::X_MS_CONTINUATION_LOCATION_MODE)) {
             return $response;
@@ -646,8 +654,10 @@ class ServiceRestProxy extends RestProxy
                 Resources::X_MS_CONTINUATION_LOCATION_MODE,
                 LocationMode::SECONDARY_ONLY
             );
-        } elseif ($locationMode == LocationMode::SECONDARY_ONLY  ||
-                  $locationMode == LocationMode::PRIMARY_ONLY) {
+        } elseif (
+            $locationMode == LocationMode::SECONDARY_ONLY ||
+                  $locationMode == LocationMode::PRIMARY_ONLY
+        ) {
             $response = $response->withHeader(
                 Resources::X_MS_CONTINUATION_LOCATION_MODE,
                 $locationMode
@@ -655,4 +665,5 @@ class ServiceRestProxy extends RestProxy
         }
         return $response;
     }
+
 }

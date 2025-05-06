@@ -21,9 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Models;
 
 use MicrosoftAzure\Storage\Common\Models\Range;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class Range
@@ -35,7 +37,7 @@ use MicrosoftAzure\Storage\Common\Models\Range;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class RangeTest extends \PHPUnit\Framework\TestCase
+class RangeTest extends TestCase
 {
     public function testConstruct()
     {
@@ -56,7 +58,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testSetStart($obj)
+    public function testSetStart($obj): void
     {
         // Setup
         $expected = 10;
@@ -71,7 +73,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testSetEnd($obj)
+    public function testSetEnd($obj): void
     {
         // Setup
         $expected = 10;
@@ -86,7 +88,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testSetLength($obj)
+    public function testSetLength($obj): void
     {
         // Setup
         $expected = 10;
@@ -102,7 +104,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testGetLength($obj)
+    public function testGetLength($obj): void
     {
         // Setup
         $expected = 10;
@@ -114,4 +116,5 @@ class RangeTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

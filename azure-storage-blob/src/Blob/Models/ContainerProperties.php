@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
 
@@ -39,19 +40,24 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class ContainerProperties
 {
+
     private $etag;
+
     private $lastModified;
+
     private $leaseDuration;
+
     private $leaseStatus;
+
     private $leaseState;
+
     private $publicAccess;
 
     /**
      * Gets container lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }
@@ -61,9 +67,8 @@ class ContainerProperties
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    public function setLastModified(\DateTime $lastModified)
+    public function setLastModified(DateTime $lastModified): void
     {
         $this->lastModified = $lastModified;
     }
@@ -71,9 +76,8 @@ class ContainerProperties
     /**
      * Gets container etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->etag;
     }
@@ -83,9 +87,8 @@ class ContainerProperties
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    public function setETag($etag)
+    public function setETag(string $etag): void
     {
         $this->etag = $etag;
     }
@@ -93,9 +96,8 @@ class ContainerProperties
     /**
      * Gets blob leaseStatus.
      *
-     * @return string
      */
-    public function getLeaseStatus()
+    public function getLeaseStatus(): string
     {
         return $this->leaseStatus;
     }
@@ -105,9 +107,8 @@ class ContainerProperties
      *
      * @param string $leaseStatus value.
      *
-     * @return void
      */
-    public function setLeaseStatus($leaseStatus)
+    public function setLeaseStatus(string $leaseStatus): void
     {
         $this->leaseStatus = $leaseStatus;
     }
@@ -115,9 +116,8 @@ class ContainerProperties
     /**
      * Gets blob lease state.
      *
-     * @return string
      */
-    public function getLeaseState()
+    public function getLeaseState(): string
     {
         return $this->leaseState;
     }
@@ -127,9 +127,8 @@ class ContainerProperties
      *
      * @param string $leaseState value.
      *
-     * @return void
      */
-    public function setLeaseState($leaseState)
+    public function setLeaseState(string $leaseState): void
     {
         $this->leaseState = $leaseState;
     }
@@ -137,9 +136,8 @@ class ContainerProperties
     /**
      * Gets blob lease duration.
      *
-     * @return string
      */
-    public function getLeaseDuration()
+    public function getLeaseDuration(): string
     {
         return $this->leaseDuration;
     }
@@ -149,9 +147,8 @@ class ContainerProperties
      *
      * @param string $leaseDuration value.
      *
-     * @return void
      */
-    public function setLeaseDuration($leaseDuration)
+    public function setLeaseDuration(string $leaseDuration): void
     {
         $this->leaseDuration = $leaseDuration;
     }
@@ -159,9 +156,8 @@ class ContainerProperties
     /**
      * Gets container publicAccess.
      *
-     * @return string
      */
-    public function getPublicAccess()
+    public function getPublicAccess(): string
     {
         return $this->publicAccess;
     }
@@ -171,9 +167,8 @@ class ContainerProperties
      *
      * @param string $publicAccess value.
      *
-     * @return void
      */
-    public function setPublicAccess($publicAccess)
+    public function setPublicAccess(string $publicAccess): void
     {
         Validate::isTrue(
             PublicAccessType::isValid($publicAccess),
@@ -181,4 +176,5 @@ class ContainerProperties
         );
         $this->publicAccess = $publicAccess;
     }
+
 }

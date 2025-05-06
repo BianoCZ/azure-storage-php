@@ -36,14 +36,14 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class BlobPrefix
 {
+
     private $_name;
 
     /**
      * Gets blob name.
      *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->_name;
     }
@@ -53,10 +53,10 @@ class BlobPrefix
      *
      * @param string $name value.
      *
-     * @return void
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->_name = $name;
     }
+
 }

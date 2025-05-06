@@ -36,4 +36,5 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class UndeleteBlobOptions extends BlobServiceOptions
 {
+
 }

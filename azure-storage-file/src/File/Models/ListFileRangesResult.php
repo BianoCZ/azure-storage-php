@@ -24,10 +24,13 @@
 
 namespace MicrosoftAzure\Storage\File\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
+use DateTime;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\Models\Range;
 use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
+use function array_change_key_case;
+use function intval;
 
 /**
  * Holds result of calling ListFileRangesResult wrapper
@@ -41,9 +44,13 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class ListFileRangesResult
 {
+
     private $lastModified;
+
     private $etag;
+
     private $contentLength;
+
     private $ranges;
 
     /**
@@ -55,9 +62,8 @@ class ListFileRangesResult
      *
      * @internal
      *
-     * @return ListFileRangesResult
      */
-    public static function create(array $headers, array $parsed = null)
+    public static function create(array $headers, ?array $parsed = null): ListFileRangesResult
     {
         $result  = new ListFileRangesResult();
         $headers = array_change_key_case($headers);
@@ -65,12 +71,12 @@ class ListFileRangesResult
         $date          = $headers[Resources::LAST_MODIFIED];
         $date          = Utilities::rfc1123ToDateTime($date);
         $fileLength    = intval($headers[Resources::X_MS_CONTENT_LENGTH]);
-        $rawRanges = array();
+        $rawRanges = [];
         if (!empty($parsed['Range'])) {
             $rawRanges = Utilities::getArray($parsed['Range']);
         }
 
-        $ranges = array();
+        $ranges = [];
         foreach ($rawRanges as $value) {
             $ranges[] = new Range(
                 intval($value['Start']),
@@ -88,9 +94,8 @@ class ListFileRangesResult
     /**
      * Gets file lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }
@@ -100,9 +105,8 @@ class ListFileRangesResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         Validate::isDate($lastModified);
         $this->lastModified = $lastModified;
@@ -111,9 +115,8 @@ class ListFileRangesResult
     /**
      * Gets file etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->etag;
     }
@@ -123,9 +126,8 @@ class ListFileRangesResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         Validate::canCastAsString($etag, 'etag');
         $this->etag = $etag;
@@ -134,9 +136,8 @@ class ListFileRangesResult
     /**
      * Gets file contentLength.
      *
-     * @return integer
      */
-    public function getContentLength()
+    public function getContentLength(): int
     {
         return $this->contentLength;
     }
@@ -144,11 +145,10 @@ class ListFileRangesResult
     /**
      * Sets file contentLength.
      *
-     * @param integer $contentLength value.
+     * @param int $contentLength value.
      *
-     * @return void
      */
-    protected function setContentLength($contentLength)
+    protected function setContentLength(int $contentLength): void
     {
         Validate::isInteger($contentLength, 'contentLength');
         $this->contentLength = $contentLength;
@@ -157,9 +157,8 @@ class ListFileRangesResult
     /**
      * Gets ranges
      *
-     * @return array
      */
-    public function getRanges()
+    public function getRanges(): array
     {
         return $this->ranges;
     }
@@ -169,13 +168,13 @@ class ListFileRangesResult
      *
      * @param array $ranges ranges to set
      *
-     * @return void
      */
-    protected function setRanges(array $ranges)
+    protected function setRanges(array $ranges): void
     {
-        $this->ranges = array();
+        $this->ranges = [];
         foreach ($ranges as $range) {
             $this->ranges[] = clone $range;
         }
     }
+
 }

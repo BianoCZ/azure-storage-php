@@ -24,14 +24,19 @@
 
 namespace MicrosoftAzure\Storage\Tests\Framework;
 
-use MicrosoftAzure\Storage\File\FileRestProxy;
-use MicrosoftAzure\Storage\Tests\Framework\ServiceRestProxyTestBase;
-use MicrosoftAzure\Storage\File\Models\CreateShareOptions;
-use MicrosoftAzure\Storage\File\Models\CreateDirectoryOptions;
-use MicrosoftAzure\Storage\File\Models\ListSharesOptions;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Middlewares\RetryMiddlewareFactory;
+use MicrosoftAzure\Storage\File\FileRestProxy;
+use MicrosoftAzure\Storage\File\Models\CreateDirectoryOptions;
+use MicrosoftAzure\Storage\File\Models\CreateShareOptions;
+use MicrosoftAzure\Storage\File\Models\ListSharesOptions;
+use Throwable;
+use function array_push;
+use function array_reverse;
+use function array_search;
+use function error_log;
+use function is_null;
+use function sleep;
 
 /**
  * TestBase class for each unit test class.
@@ -45,20 +50,25 @@ use MicrosoftAzure\Storage\Common\Middlewares\RetryMiddlewareFactory;
  */
 class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
 {
+
     protected $createdShares;
+
     protected $createdDirectories;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         $fileRestProxy = FileRestProxy::createFileService($this->connectionString);
         $fileRestProxy->pushMiddleware(RetryMiddlewareFactory::create());
+
         parent::setProxy($fileRestProxy);
-        $this->createdShares = array();
-        $this->createdDirectories = array();
+
+        $this->createdShares = [];
+        $this->createdDirectories = [];
     }
 
-    public function createShare($shareName, $options = null)
+    public function createShare($shareName, $options = null): void
     {
         if (is_null($options)) {
             $options = new CreateShareOptions();
@@ -68,7 +78,7 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
         $this->createdShares[] = $shareName;
     }
 
-    public function createDirectory($shareName, $path, $options = null)
+    public function createDirectory($shareName, $path, $options = null): void
     {
         if (is_null($options)) {
             $options = new CreateDirectoryOptions();
@@ -83,7 +93,7 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
         $shareName,
         $options = null,
         $retryCount = 6
-    ) {
+    ): void {
         // Shares cannot be recreated within a minute of them being
         // deleted; the service will give response of 409:Conflict.
         // So, if get that error, wait a bit then retry.
@@ -95,8 +105,10 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
                 $this->createShare($shareName, $options);
                 $ok = true;
             } catch (ServiceException $e) {
-                if ($e->getCode() != TestResources::STATUS_CONFLICT ||
-                        $counter > $retryCount) {
+                if (
+                    $e->getCode() != TestResources::STATUS_CONFLICT ||
+                        $counter > $retryCount
+                ) {
                     throw $e;
                 }
                 sleep(10);
@@ -105,7 +117,7 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
         } while (!$ok);
     }
 
-    public function createShares($shareList, $sharePrefix = null)
+    public function createShares($shareList, $sharePrefix = null): void
     {
         $shares = $this->listShares($sharePrefix);
         foreach ($shareList as $share) {
@@ -117,7 +129,7 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
                 foreach ($blobs as $blob) {
                     try {
                         $this->restProxy->deleteFile($share, $blob->getName());
-                    } catch (\Exception $e) {
+                    } catch (Throwable $e) {
                         // Ignore exception and continue.
                         error_log($e->getMessage());
                     }
@@ -126,7 +138,7 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
         }
     }
 
-    public function deleteShare($shareName)
+    public function deleteShare($shareName): void
     {
         if (($key = array_search($shareName, $this->createdShares)) !== false) {
             unset($this->createdShares[$key]);
@@ -134,7 +146,7 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
         $this->restProxy->deleteShare($shareName);
     }
 
-    public function deleteDirectory($shareName, $path)
+    public function deleteDirectory($shareName, $path): void
     {
         if (($key = array_search([$shareName, $path], $this->createdDirectories)) !== false) {
             unset($this->createdDirectories[$key]);
@@ -142,7 +154,7 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
         $this->restProxy->deleteDirectory($shareName, $path);
     }
 
-    public function deleteShares($shareList, $sharePrefix = null)
+    public function deleteShares($shareList, $sharePrefix = null): void
     {
         $shares = $this->listShares($sharePrefix);
         foreach ($shareList as $share) {
@@ -154,7 +166,7 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
 
     public function listShares($sharePrefix = null)
     {
-        $result = array();
+        $result = [];
         $opts = new ListSharesOptions();
         if (!is_null($sharePrefix)) {
             $opts->setPrefix($sharePrefix);
@@ -168,14 +180,14 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
         return $result;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
         foreach ($this->createdShares as $value) {
             try {
                 $this->deleteShare($value);
-            } catch (\Exception $e) {
+            } catch (Throwable $e) {
                 // Ignore exception and continue, will assume that this share doesn't exist in the sotrage account
                 error_log($e->getMessage());
             }
@@ -185,10 +197,11 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
         foreach ($reverseDirectories as $value) {
             try {
                 $this->deleteDirectory($value[0], $value[1]);
-            } catch (\Exception $e) {
+            } catch (Throwable $e) {
                 // Ignore exception and continue, will assume that this share doesn't exist in the sotrage account
                 error_log($e->getMessage());
             }
         }
     }
+
 }

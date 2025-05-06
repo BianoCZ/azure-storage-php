@@ -21,9 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\LeaseResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class LeaseResult
@@ -35,13 +37,13 @@ use MicrosoftAzure\Storage\Blob\Models\LeaseResult;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class LeaseResultTest extends \PHPUnit\Framework\TestCase
+class LeaseResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $expected = '0x8CAFB82EFF70C46';
-        $headers = array('x-ms-lease-id' => $expected);
+        $headers = ['x-ms-lease-id' => $expected];
 
         // Test
         $result = LeaseResult::create($headers);
@@ -49,4 +51,5 @@ class LeaseResultTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $result->getLeaseId());
     }
+
 }

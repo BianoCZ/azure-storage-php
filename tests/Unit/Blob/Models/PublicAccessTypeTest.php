@@ -21,10 +21,12 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class PublicAccessType
@@ -36,12 +38,13 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class PublicAccessTypeTest extends \PHPUnit\Framework\TestCase
+class PublicAccessTypeTest extends TestCase
 {
-    public function testPublicAccessType()
+    public function testPublicAccessType(): void
     {
         $this->assertEquals(PublicAccessType::BLOBS_ONLY, 'blob');
         $this->assertEquals(PublicAccessType::CONTAINER_AND_BLOBS, 'container');
         $this->assertEquals(PublicAccessType::NONE, Resources::EMPTY_STRING);
     }
+
 }

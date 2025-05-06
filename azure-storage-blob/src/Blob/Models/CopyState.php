@@ -24,8 +24,14 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use function array_change_key_case;
+use function explode;
+use function intval;
+use function is_null;
+use function strpos;
 
 /**
  * Represents blob copy state
@@ -39,12 +45,19 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class CopyState
 {
+
     private $_copyId;
+
     private $_completionTime;
+
     private $_status;
+
     private $_statusDescription;
+
     private $_source;
+
     private $_bytesCopied;
+
     private $_totalBytes;
 
     /**
@@ -54,9 +67,8 @@ class CopyState
      *
      * @internal
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\CopyState
      */
-    public static function createFromXml(array $parsed)
+    public static function createFromXml(array $parsed): CopyState
     {
         $result = new CopyState();
         $clean  = array_change_key_case($parsed);
@@ -93,9 +105,8 @@ class CopyState
      *
      * @internal
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\CopyState
      */
-    public static function createFromHttpHeaders(array $parsed)
+    public static function createFromHttpHeaders(array $parsed): CopyState
     {
         $result = new CopyState();
         $clean  = array_change_key_case($parsed);
@@ -127,9 +138,8 @@ class CopyState
     /**
      * Gets copy Id
      *
-     * @return string
      */
-    public function getCopyId()
+    public function getCopyId(): string
     {
         return $this->_copyId;
     }
@@ -141,9 +151,8 @@ class CopyState
      *
      * @internal
      *
-     * @return void
      */
-    protected function setCopyId($copyId)
+    protected function setCopyId(string $copyId): void
     {
         $this->_copyId = $copyId;
     }
@@ -151,9 +160,8 @@ class CopyState
     /**
      * Gets copy completion time
      *
-     * @return \DateTime
      */
-    public function getCompletionTime()
+    public function getCompletionTime(): DateTime
     {
         return $this->_completionTime;
     }
@@ -165,9 +173,8 @@ class CopyState
      *
      * @internal
      *
-     * @return void
      */
-    protected function setCompletionTime($completionTime)
+    protected function setCompletionTime(DateTime $completionTime): void
     {
         $this->_completionTime = $completionTime;
     }
@@ -175,9 +182,8 @@ class CopyState
     /**
      * Gets copy status
      *
-     * @return string
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->_status;
     }
@@ -189,9 +195,8 @@ class CopyState
      *
      * @internal
      *
-     * @return void
      */
-    protected function setStatus($status)
+    protected function setStatus(string $status): void
     {
         $this->_status = $status;
     }
@@ -199,9 +204,8 @@ class CopyState
     /**
      * Gets copy status description
      *
-     * @return string
      */
-    public function getStatusDescription()
+    public function getStatusDescription(): string
     {
         return $this->_statusDescription;
     }
@@ -213,9 +217,8 @@ class CopyState
      *
      * @internal
      *
-     * @return void
      */
-    protected function setStatusDescription($statusDescription)
+    protected function setStatusDescription(string $statusDescription): void
     {
         $this->_statusDescription = $statusDescription;
     }
@@ -223,9 +226,8 @@ class CopyState
     /**
      * Gets copy source
      *
-     * @return string
      */
-    public function getSource()
+    public function getSource(): string
     {
         return $this->_source;
     }
@@ -237,9 +239,8 @@ class CopyState
      *
      * @internal
      *
-     * @return void
      */
-    protected function setSource($source)
+    protected function setSource(string $source): void
     {
         $this->_source = $source;
     }
@@ -247,9 +248,8 @@ class CopyState
     /**
      * Gets bytes copied
      *
-     * @return int
      */
-    public function getBytesCopied()
+    public function getBytesCopied(): int
     {
         return $this->_bytesCopied;
     }
@@ -261,9 +261,8 @@ class CopyState
      *
      * @internal
      *
-     * @return void
      */
-    protected function setBytesCopied($bytesCopied)
+    protected function setBytesCopied(int $bytesCopied): void
     {
         $this->_bytesCopied = $bytesCopied;
     }
@@ -271,9 +270,8 @@ class CopyState
     /**
      * Gets total bytes to be copied
      *
-     * @return int
      */
-    public function getTotalBytes()
+    public function getTotalBytes(): int
     {
         return $this->_bytesCopied;
     }
@@ -285,10 +283,10 @@ class CopyState
      *
      * @internal
      *
-     * @return void
      */
-    protected function setTotalBytes($totalBytes)
+    protected function setTotalBytes(int $totalBytes): void
     {
         $this->_totalBytes = $totalBytes;
     }
+
 }

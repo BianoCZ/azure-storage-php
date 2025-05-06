@@ -24,9 +24,15 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
+use function array_change_key_case;
+use function array_key_exists;
+use function intval;
+use function is_array;
+use function is_null;
 
 /**
  * Holds result of listBlobBlocks
@@ -40,11 +46,17 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class ListBlobBlocksResult
 {
+
     private $lastModified;
+
     private $etag;
+
     private $contentType;
+
     private $contentLength;
+
     private $committedBlocks;
+
     private $uncommittedBlocks;
 
     /**
@@ -53,18 +65,18 @@ class ListBlobBlocksResult
      * @param array  $parsed HTTP response
      * @param string $type   Block type
      *
-     * @return array
      */
-    private static function getEntries(array $parsed, $type)
+    private static function getEntries(array $parsed, string $type): array
     {
-        $entries = array();
+        $entries = [];
 
         if (is_array($parsed)) {
-            $rawEntries = array();
+            $rawEntries = [];
 
-            if (array_key_exists($type, $parsed)
-                &&     is_array($parsed[$type])
-                &&     !empty($parsed[$type])
+            if (
+                array_key_exists($type, $parsed)
+                && is_array($parsed[$type])
+                && !empty($parsed[$type])
             ) {
                 $rawEntries = Utilities::getArray($parsed[$type]['Block']);
             }
@@ -85,9 +97,8 @@ class ListBlobBlocksResult
      *
      * @internal
      *
-     * @return ListBlobBlocksResult
      */
-    public static function create(array $headers, array $parsed)
+    public static function create(array $headers, array $parsed): ListBlobBlocksResult
     {
         $result = new ListBlobBlocksResult();
         $clean  = array_change_key_case($headers);
@@ -119,9 +130,8 @@ class ListBlobBlocksResult
     /**
      * Gets blob lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }
@@ -131,9 +141,8 @@ class ListBlobBlocksResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         Validate::isDate($lastModified);
         $this->lastModified = $lastModified;
@@ -142,9 +151,8 @@ class ListBlobBlocksResult
     /**
      * Gets blob etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->etag;
     }
@@ -154,9 +162,8 @@ class ListBlobBlocksResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         $this->etag = $etag;
     }
@@ -164,9 +171,8 @@ class ListBlobBlocksResult
     /**
      * Gets blob contentType.
      *
-     * @return string
      */
-    public function getContentType()
+    public function getContentType(): string
     {
         return $this->contentType;
     }
@@ -176,9 +182,8 @@ class ListBlobBlocksResult
      *
      * @param string $contentType value.
      *
-     * @return void
      */
-    protected function setContentType($contentType)
+    protected function setContentType(string $contentType): void
     {
         $this->contentType = $contentType;
     }
@@ -186,9 +191,8 @@ class ListBlobBlocksResult
     /**
      * Gets blob contentLength.
      *
-     * @return integer
      */
-    public function getContentLength()
+    public function getContentLength(): int
     {
         return $this->contentLength;
     }
@@ -196,11 +200,10 @@ class ListBlobBlocksResult
     /**
      * Sets blob contentLength.
      *
-     * @param integer $contentLength value.
+     * @param int $contentLength value.
      *
-     * @return void
      */
-    protected function setContentLength($contentLength)
+    protected function setContentLength(int $contentLength): void
     {
         Validate::isInteger($contentLength, 'contentLength');
         $this->contentLength = $contentLength;
@@ -209,9 +212,8 @@ class ListBlobBlocksResult
     /**
      * Gets uncommitted blocks
      *
-     * @return array
      */
-    public function getUncommittedBlocks()
+    public function getUncommittedBlocks(): array
     {
         return $this->uncommittedBlocks;
     }
@@ -221,9 +223,8 @@ class ListBlobBlocksResult
      *
      * @param array $uncommittedBlocks The uncommitted blocks entries
      *
-     * @return void
      */
-    protected function setUncommittedBlocks(array $uncommittedBlocks)
+    protected function setUncommittedBlocks(array $uncommittedBlocks): void
     {
         $this->uncommittedBlocks = $uncommittedBlocks;
     }
@@ -231,9 +232,8 @@ class ListBlobBlocksResult
     /**
      * Gets committed blocks
      *
-     * @return array
      */
-    public function getCommittedBlocks()
+    public function getCommittedBlocks(): array
     {
         return $this->committedBlocks;
     }
@@ -243,10 +243,10 @@ class ListBlobBlocksResult
      *
      * @param array $committedBlocks The committed blocks entries
      *
-     * @return void
      */
-    protected function setCommittedBlocks(array $committedBlocks)
+    protected function setCommittedBlocks(array $committedBlocks): void
     {
         $this->committedBlocks = $committedBlocks;
     }
+
 }

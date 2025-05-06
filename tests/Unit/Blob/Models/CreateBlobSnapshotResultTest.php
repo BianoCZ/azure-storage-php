@@ -21,11 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlobSnapshotResult;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class SnapshotBlobResult
@@ -37,9 +39,9 @@ use MicrosoftAzure\Storage\Blob\Models\CreateBlobSnapshotResult;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CreateBlobSnapshotResultTest extends \PHPUnit\Framework\TestCase
+class CreateBlobSnapshotResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::listBlobsOneEntry();
@@ -55,4 +57,5 @@ class CreateBlobSnapshotResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected['Etag'], $actual->getETag());
         $this->assertEquals($expected['x-ms-snapshot'], $actual->getSnapshot());
     }
+
 }

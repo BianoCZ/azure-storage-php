@@ -28,17 +28,19 @@ use MicrosoftAzure\Storage\Tests\Framework\TableServiceRestProxyTestBase;
 
 class IntegrationTestBase extends TableServiceRestProxyTestBase
 {
+
     private static $isOneTimeSetup = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         if (!self::$isOneTimeSetup) {
             self::$isOneTimeSetup = true;
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$isOneTimeSetup) {
             $integrationTestBase = new IntegrationTestBase();
@@ -49,6 +51,8 @@ class IntegrationTestBase extends TableServiceRestProxyTestBase
             }
             self::$isOneTimeSetup = false;
         }
+
         parent::tearDownAfterClass();
     }
+
 }

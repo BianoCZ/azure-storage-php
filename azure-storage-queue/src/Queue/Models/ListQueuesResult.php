@@ -24,10 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Queue\Models;
 
-use MicrosoftAzure\Storage\Common\Models\MarkerContinuationToken;
-use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
+use MicrosoftAzure\Storage\Common\Models\MarkerContinuationToken;
 use MicrosoftAzure\Storage\Queue\Internal\QueueResources as Resources;
+use function is_null;
 
 /**
  * Container to hold list queue response object.
@@ -41,12 +42,17 @@ use MicrosoftAzure\Storage\Queue\Internal\QueueResources as Resources;
  */
 class ListQueuesResult
 {
+
     use MarkerContinuationTokenTrait;
 
     private $_queues;
+
     private $_prefix;
+
     private $_marker;
+
     private $_maxResults;
+
     private $_accountName;
 
     /**
@@ -58,9 +64,8 @@ class ListQueuesResult
      *
      * @internal
      *
-     * @return ListQueuesResult
      */
-    public static function create(array $parsedResponse, $location = '')
+    public static function create(array $parsedResponse, string $location = ''): ListQueuesResult
     {
         $result               = new ListQueuesResult();
         $serviceEndpoint      = Utilities::tryGetKeysChainValue(
@@ -95,8 +100,8 @@ class ListQueuesResult
             $parsedResponse,
             Resources::QP_MAX_RESULTS
         ));
-        $queues      = array();
-        $rawQueues            = array();
+        $queues      = [];
+        $rawQueues            = [];
 
         if (!empty($parsedResponse['Queues'])) {
             $rawQueues = Utilities::getArray($parsedResponse['Queues']['Queue']);
@@ -105,7 +110,7 @@ class ListQueuesResult
         foreach ($rawQueues as $value) {
             $queue    = new Queue($value['Name'], $serviceEndpoint . $value['Name']);
             $metadata = Utilities::tryGetValue($value, Resources::QP_METADATA);
-            $queue->setMetadata(is_null($metadata) ? array() : $metadata);
+            $queue->setMetadata(is_null($metadata) ? [] : $metadata);
             $queues[] = $queue;
         }
         $result->setQueues($queues);
@@ -115,9 +120,8 @@ class ListQueuesResult
     /**
      * Gets queues.
      *
-     * @return array
      */
-    public function getQueues()
+    public function getQueues(): array
     {
         return $this->_queues;
     }
@@ -129,11 +133,10 @@ class ListQueuesResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setQueues(array $queues)
+    protected function setQueues(array $queues): void
     {
-        $this->_queues = array();
+        $this->_queues = [];
         foreach ($queues as $queue) {
             $this->_queues[] = clone $queue;
         }
@@ -142,9 +145,8 @@ class ListQueuesResult
     /**
      * Gets prefix.
      *
-     * @return string
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->_prefix;
     }
@@ -156,9 +158,8 @@ class ListQueuesResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setPrefix($prefix)
+    protected function setPrefix(string $prefix): void
     {
         $this->_prefix = $prefix;
     }
@@ -166,9 +167,8 @@ class ListQueuesResult
     /**
      * Gets marker.
      *
-     * @return string
      */
-    public function getMarker()
+    public function getMarker(): string
     {
         return $this->_marker;
     }
@@ -180,9 +180,8 @@ class ListQueuesResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setMarker($marker)
+    protected function setMarker(string $marker): void
     {
         $this->_marker = $marker;
     }
@@ -190,9 +189,8 @@ class ListQueuesResult
     /**
      * Gets max results.
      *
-     * @return string
      */
-    public function getMaxResults()
+    public function getMaxResults(): string
     {
         return $this->_maxResults;
     }
@@ -204,9 +202,8 @@ class ListQueuesResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setMaxResults($maxResults)
+    protected function setMaxResults(string $maxResults): void
     {
         $this->_maxResults = $maxResults;
     }
@@ -214,9 +211,8 @@ class ListQueuesResult
     /**
      * Gets account name.
      *
-     * @return string
      */
-    public function getAccountName()
+    public function getAccountName(): string
     {
         return $this->_accountName;
     }
@@ -228,10 +224,10 @@ class ListQueuesResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setAccountName($accountName)
+    protected function setAccountName(string $accountName): void
     {
         $this->_accountName = $accountName;
     }
+
 }

@@ -24,8 +24,9 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models\Filters;
 
-use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
+use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class Filter
@@ -37,9 +38,9 @@ use MicrosoftAzure\Storage\Table\Models\EdmType;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class FilterTest extends \PHPUnit\Framework\TestCase
+class FilterTest extends TestCase
 {
-    public function testApplyAnd()
+    public function testApplyAnd(): void
     {
         // Setup
         $left = Filter::applyPropertyName('test');
@@ -53,7 +54,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($right, $actual->getRight());
     }
 
-    public function testApplyNot()
+    public function testApplyNot(): void
     {
         // Setup
         $operand = Filter::applyConstant('test', EdmType::STRING);
@@ -65,7 +66,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($operand, $actual->getOperand());
     }
 
-    public function testApplyOr()
+    public function testApplyOr(): void
     {
         // Setup
         $left = Filter::applyPropertyName('test');
@@ -79,7 +80,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($right, $actual->getRight());
     }
 
-    public function testApplyEq()
+    public function testApplyEq(): void
     {
         // Setup
         $left = Filter::applyPropertyName('test');
@@ -93,7 +94,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($right, $actual->getRight());
     }
 
-    public function testApplyNe()
+    public function testApplyNe(): void
     {
         // Setup
         $left = Filter::applyPropertyName('test');
@@ -107,7 +108,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($right, $actual->getRight());
     }
 
-    public function testApplyGe()
+    public function testApplyGe(): void
     {
         // Setup
         $left = Filter::applyPropertyName('test');
@@ -121,7 +122,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($right, $actual->getRight());
     }
 
-    public function testApplyGt()
+    public function testApplyGt(): void
     {
         // Setup
         $left = Filter::applyPropertyName('test');
@@ -135,7 +136,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($right, $actual->getRight());
     }
 
-    public function testApplyLt()
+    public function testApplyLt(): void
     {
         // Setup
         $left = Filter::applyPropertyName('test');
@@ -149,7 +150,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($right, $actual->getRight());
     }
 
-    public function testApplyLe()
+    public function testApplyLe(): void
     {
         // Setup
         $left = Filter::applyPropertyName('test');
@@ -162,4 +163,5 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($left, $actual->getLeft());
         $this->assertEquals($right, $actual->getRight());
     }
+
 }

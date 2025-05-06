@@ -21,9 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
 use MicrosoftAzure\Storage\Table\Models\QueryEntitiesResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class QueryEntitiesResult
@@ -35,16 +37,17 @@ use MicrosoftAzure\Storage\Table\Models\QueryEntitiesResult;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class QueryEntitiesResultTest extends \PHPUnit\Framework\TestCase
+class QueryEntitiesResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Test
-        $result = QueryEntitiesResult::create(array(), array());
+        $result = QueryEntitiesResult::create([], []);
 
         // Assert
         $this->assertCount(0, $result->getEntities());
         $this->assertNull($result->getNextPartitionKey());
         $this->assertNull($result->getNextRowKey());
     }
+
 }

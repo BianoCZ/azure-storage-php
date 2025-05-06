@@ -25,6 +25,10 @@
 namespace MicrosoftAzure\Storage\Common;
 
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use function error_log;
+use function is_array;
+use function is_object;
+use function print_r;
 
 /**
  * Logger class for debugging purpose.
@@ -38,10 +42,8 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  */
 class Logger
 {
-    /**
-     * @var string
-     */
-    private static $_filePath;
+
+    private static string $_filePath;
 
     /**
      * Logs $var to file.
@@ -49,9 +51,8 @@ class Logger
      * @param mixed  $var The data to log.
      * @param string $tip The help message.
      *
-     * @return void
      */
-    public static function log($var, $tip = Resources::EMPTY_STRING)
+    public static function log(mixed $var, string $tip = Resources::EMPTY_STRING): void
     {
         if (!empty($tip)) {
             error_log($tip . "\n", 3, self::$_filePath);
@@ -68,10 +69,10 @@ class Logger
      * Sets file path to use.
      *
      * @param string $filePath The log file path.
-     * @return void
      */
-    public static function setLogFile($filePath)
+    public static function setLogFile(string $filePath): void
     {
         self::$_filePath = $filePath;
     }
+
 }

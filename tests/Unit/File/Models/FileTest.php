@@ -24,10 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\File\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\File\Internal\FileResources;
 use MicrosoftAzure\Storage\File\Models\File;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
+use PHPUnit\Framework\TestCase;
+use function count;
 
 /**
  * Unit tests for class File
@@ -39,12 +41,9 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class FileTest extends \PHPUnit\Framework\TestCase
+class FileTest extends TestCase
 {
-    /**
-     *
-     */
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $listArray =
@@ -52,7 +51,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $samples = $listArray[Resources::QP_ENTRIES][FileResources::QP_FILE];
 
         // Test
-        $actuals = array();
+        $actuals = [];
         $actuals[] = File::create($samples[0]);
         $actuals[] = File::create($samples[1]);
         $actuals[] = File::create($samples[2]);
@@ -71,4 +70,5 @@ class FileTest extends \PHPUnit\Framework\TestCase
             );
         }
     }
+
 }

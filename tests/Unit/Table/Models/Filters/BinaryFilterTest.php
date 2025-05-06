@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models\Filters;
 
 use MicrosoftAzure\Storage\Table\Models\Filters\BinaryFilter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class BinaryFilter
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Table\Models\Filters\BinaryFilter;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BinaryFilterTest extends \PHPUnit\Framework\TestCase
+class BinaryFilterTest extends TestCase
 {
-    public function testGetOperator()
+    public function testGetOperator(): void
     {
         // Setup
         $expected = 'x';
@@ -48,7 +49,7 @@ class BinaryFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $filter->getOperator());
     }
 
-    public function testGetLeft()
+    public function testGetLeft(): void
     {
         // Setup
         $expected = null;
@@ -58,7 +59,7 @@ class BinaryFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $filter->getLeft());
     }
 
-    public function testGetRight()
+    public function testGetRight(): void
     {
         // Setup
         $expected = null;
@@ -67,4 +68,5 @@ class BinaryFilterTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $filter->getRight());
     }
+
 }

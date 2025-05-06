@@ -24,12 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Queue;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use MicrosoftAzure\Storage\Common\Internal\Authentication\SharedAccessSignatureAuthScheme;
 use MicrosoftAzure\Storage\Common\Internal\Authentication\SharedKeyAuthScheme;
 use MicrosoftAzure\Storage\Common\Internal\Authentication\TokenAuthScheme;
 use MicrosoftAzure\Storage\Common\Internal\Http\HttpFormatter;
 use MicrosoftAzure\Storage\Common\Internal\Middlewares\CommonRequestMiddleware;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 use MicrosoftAzure\Storage\Common\Internal\ServiceRestProxy;
 use MicrosoftAzure\Storage\Common\Internal\ServiceRestTrait;
 use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
@@ -52,6 +52,8 @@ use MicrosoftAzure\Storage\Queue\Models\QueueACL;
 use MicrosoftAzure\Storage\Queue\Models\QueueMessage;
 use MicrosoftAzure\Storage\Queue\Models\QueueServiceOptions;
 use MicrosoftAzure\Storage\Queue\Models\UpdateMessageResult;
+use function intval;
+use function is_null;
 
 /**
  * This class constructs HTTP requests and receive HTTP responses for queue
@@ -66,6 +68,7 @@ use MicrosoftAzure\Storage\Queue\Models\UpdateMessageResult;
  */
 class QueueRestProxy extends ServiceRestProxy implements IQueue
 {
+
     use ServiceRestTrait;
 
     /**
@@ -86,12 +89,11 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string $connectionString The configuration connection string.
      * @param array  $options          Array of options to pass to the service
      *
-     * @return QueueRestProxy
      */
     public static function createQueueService(
-        $connectionString,
+        string $connectionString,
         array $options = []
-    ) {
+    ): QueueRestProxy {
         $settings = StorageServiceSettings::createFromConnectionString(
             $connectionString
         );
@@ -151,13 +153,12 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string $connectionString The configuration connection string.
      * @param array  $options          Array of options to pass to the service
      *
-     * @return QueueRestProxy
      */
     public static function createQueueServiceWithTokenCredential(
-        &$token,
-        $connectionString,
+        string &$token,
+        string $connectionString,
         array $options = []
-    ) {
+    ): QueueRestProxy {
         $settings = StorageServiceSettings::createFromConnectionStringForTokenCredential(
             $connectionString
         );
@@ -198,9 +199,8 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      *
      * @param ListQueuesOptions $options The optional list queue options.
      *
-     * @return ListQueuesResult
      */
-    public function listQueues(ListQueuesOptions $options = null)
+    public function listQueues(?ListQueuesOptions $options = null): ListQueuesResult
     {
         return $this->listQueuesAsync($options)->wait();
     }
@@ -210,14 +210,13 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      *
      * @param ListQueuesOptions $options The optional list queue options.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function listQueuesAsync(ListQueuesOptions $options = null)
+    public function listQueuesAsync(?ListQueuesOptions $options = null): PromiseInterface
     {
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = Resources::EMPTY_STRING;
 
         if (is_null($options)) {
@@ -273,9 +272,8 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string              $queueName The name of the queue.
      * @param QueueServiceOptions $options   The optional parameters.
      *
-     * @return void
      */
-    public function clearMessages($queueName, QueueServiceOptions $options = null)
+    public function clearMessages(string $queueName, ?QueueServiceOptions $options = null): void
     {
         $this->clearMessagesAsync($queueName, $options)->wait();
     }
@@ -293,19 +291,18 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string              $queueName The name of the queue.
      * @param QueueServiceOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function clearMessagesAsync(
-        $queueName,
-        QueueServiceOptions $options = null
-    ) {
+        string $queueName,
+        ?QueueServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
 
         $method      = Resources::HTTP_DELETE;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = $queueName . '/messages';
         $body        = Resources::EMPTY_STRING;
 
@@ -335,13 +332,12 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string               $messageText The message contents.
      * @param CreateMessageOptions $options     The optional parameters.
      *
-     * @return CreateMessageResult
      */
     public function createMessage(
-        $queueName,
-        $messageText,
-        CreateMessageOptions $options = null
-    ) {
+        string $queueName,
+        string $messageText,
+        ?CreateMessageOptions $options = null
+    ): CreateMessageResult {
         return $this->createMessageAsync($queueName, $messageText, $options)->wait();
     }
 
@@ -353,27 +349,25 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string               $messageText The message contents.
      * @param CreateMessageOptions $options     The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function createMessageAsync(
-        $queueName,
-        $messageText,
-        CreateMessageOptions $options = null
-    ) {
+        string $queueName,
+        string $messageText,
+        ?CreateMessageOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
         Validate::canCastAsString($messageText, 'messageText');
 
         $method      = Resources::HTTP_POST;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = $queueName . '/messages';
         $body        = Resources::EMPTY_STRING;
         $message     = new QueueMessage();
         $message->setMessageText($messageText);
         $body = $message->toXml($this->dataSerializer);
-
 
         if (is_null($options)) {
             $options = new CreateMessageOptions();
@@ -424,12 +418,11 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string                    $queueName The queue name.
      * @param Models\CreateQueueOptions  $options   The Optional parameters.
      *
-     * @return void
      */
     public function createQueue(
-        $queueName,
-        Models\CreateQueueOptions $options = null
-    ) {
+        string $queueName,
+        ?Models\CreateQueueOptions $options = null
+    ): void {
         $this->createQueueAsync($queueName, $options)->wait();
     }
 
@@ -439,19 +432,18 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string                     $queueName The queue name.
      * @param Models\CreateQueueOptions  $options   The Optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function createQueueAsync(
-        $queueName,
-        Models\CreateQueueOptions $options = null
-    ) {
+        string $queueName,
+        ?Models\CreateQueueOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
 
         $method      = Resources::HTTP_PUT;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = $queueName;
 
         if (is_null($options)) {
@@ -469,7 +461,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
             $queryParams,
             $postParams,
             $path,
-            array(Resources::STATUS_CREATED, Resources::STATUS_NO_CONTENT),
+            [Resources::STATUS_CREATED, Resources::STATUS_NO_CONTENT],
             Resources::EMPTY_STRING,
             $options
         );
@@ -484,14 +476,13 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * from an earlier call to the Get Messages or Update Message operation.
      * @param QueueServiceOptions $options    The optional parameters.
      *
-     * @return void
      */
     public function deleteMessage(
-        $queueName,
-        $messageId,
-        $popReceipt,
-        QueueServiceOptions $options = null
-    ) {
+        string $queueName,
+        string $messageId,
+        string $popReceipt,
+        ?QueueServiceOptions $options = null
+    ): void {
         $this->deleteMessageAsync(
             $queueName,
             $messageId,
@@ -509,14 +500,13 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * from an earlier call to the Get Messages or Update Message operation.
      * @param QueueServiceOptions $options    The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteMessageAsync(
-        $queueName,
-        $messageId,
-        $popReceipt,
-        QueueServiceOptions $options = null
-    ) {
+        string $queueName,
+        string $messageId,
+        string $popReceipt,
+        ?QueueServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
         Validate::canCastAsString($messageId, 'messageId');
@@ -525,9 +515,9 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
         Validate::notNullOrEmpty($popReceipt, 'popReceipt');
 
         $method      = Resources::HTTP_DELETE;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = $queueName . '/messages/' . $messageId;
         $body        = Resources::EMPTY_STRING;
 
@@ -561,9 +551,8 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string              $queueName The queue name.
      * @param QueueServiceOptions $options   The optional parameters.
      *
-     * @return void
      */
-    public function deleteQueue($queueName, QueueServiceOptions $options = null)
+    public function deleteQueue(string $queueName, ?QueueServiceOptions $options = null): void
     {
         $this->deleteQueueAsync($queueName, $options)->wait();
     }
@@ -574,19 +563,18 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string              $queueName The queue name.
      * @param QueueServiceOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteQueueAsync(
-        $queueName,
-        QueueServiceOptions $options = null
-    ) {
+        string $queueName,
+        ?QueueServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
 
         $method      = Resources::HTTP_DELETE;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = $queueName;
 
         if (is_null($options)) {
@@ -613,9 +601,8 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string              $queueName The queue name.
      * @param QueueServiceOptions $options   The optional parameters.
      *
-     * @return Models\GetQueueMetadataResult
      */
-    public function getQueueMetadata($queueName, QueueServiceOptions $options = null)
+    public function getQueueMetadata(string $queueName, ?QueueServiceOptions $options = null): Models\GetQueueMetadataResult
     {
         return $this->getQueueMetadataAsync($queueName, $options)->wait();
     }
@@ -626,19 +613,18 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string              $queueName The queue name.
      * @param QueueServiceOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getQueueMetadataAsync(
-        $queueName,
-        QueueServiceOptions $options = null
-    ) {
+        string $queueName,
+        ?QueueServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
 
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = $queueName;
         $body        = Resources::EMPTY_STRING;
 
@@ -677,9 +663,8 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string              $queueName The queue name.
      * @param ListMessagesOptions $options   The optional parameters.
      *
-     * @return Models\ListMessagesResult
      */
-    public function listMessages($queueName, ListMessagesOptions $options = null)
+    public function listMessages(string $queueName, ?ListMessagesOptions $options = null): Models\ListMessagesResult
     {
         return $this->listMessagesAsync($queueName, $options)->wait();
     }
@@ -690,19 +675,18 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string              $queueName The queue name.
      * @param ListMessagesOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function listMessagesAsync(
-        $queueName,
-        ListMessagesOptions $options = null
-    ) {
+        string $queueName,
+        ?ListMessagesOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
 
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $queryParams = array();
-        $postParams  = array();
+        $headers     = [];
+        $queryParams = [];
+        $postParams  = [];
         $path        = $queueName . '/messages';
 
         if (is_null($options)) {
@@ -749,9 +733,8 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string              $queueName The queue name.
      * @param PeekMessagesOptions $options   The optional parameters.
      *
-     * @return Models\PeekMessagesResult
      */
-    public function peekMessages($queueName, PeekMessagesOptions $options = null)
+    public function peekMessages(string $queueName, ?PeekMessagesOptions $options = null): Models\PeekMessagesResult
     {
         return $this->peekMessagesAsync($queueName, $options)->wait();
     }
@@ -763,19 +746,18 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string              $queueName The queue name.
      * @param PeekMessagesOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function peekMessagesAsync(
-        $queueName,
-        PeekMessagesOptions $options = null
-    ) {
+        string $queueName,
+        ?PeekMessagesOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
 
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $queryParams = array();
-        $postParams  = array();
+        $headers     = [];
+        $queryParams = [];
+        $postParams  = [];
         $path        = $queueName . '/messages';
 
         if (is_null($options)) {
@@ -816,13 +798,12 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param array               $metadata  The metadata array.
      * @param QueueServiceOptions $options   The optional parameters.
      *
-     * @return void
      */
     public function setQueueMetadata(
-        $queueName,
-        array $metadata = null,
-        QueueServiceOptions $options = null
-    ) {
+        string $queueName,
+        ?array $metadata = null,
+        ?QueueServiceOptions $options = null
+    ): void {
         $this->setQueueMetadataAsync($queueName, $metadata, $options)->wait();
     }
 
@@ -834,21 +815,20 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param array               $metadata  The metadata array.
      * @param QueueServiceOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function setQueueMetadataAsync(
-        $queueName,
-        array $metadata = null,
-        QueueServiceOptions $options = null
-    ) {
+        string $queueName,
+        ?array $metadata = null,
+        ?QueueServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
         Utilities::validateMetadata($metadata);
 
         $method      = Resources::HTTP_PUT;
-        $headers     = array();
-        $queryParams = array();
-        $postParams  = array();
+        $headers     = [];
+        $queryParams = [];
+        $postParams  = [];
         $path        = $queueName;
         $body        = Resources::EMPTY_STRING;
 
@@ -893,16 +873,15 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param QueueServiceOptions $options                    The optional
      * parameters.
      *
-     * @return Models\UpdateMessageResult
      */
     public function updateMessage(
-        $queueName,
-        $messageId,
-        $popReceipt,
-        $messageText,
-        $visibilityTimeoutInSeconds,
-        QueueServiceOptions $options = null
-    ) {
+        string $queueName,
+        string $messageId,
+        string $popReceipt,
+        string $messageText,
+        int $visibilityTimeoutInSeconds,
+        ?QueueServiceOptions $options = null
+    ): Models\UpdateMessageResult {
         return $this->updateMessageAsync(
             $queueName,
             $messageId,
@@ -932,16 +911,15 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param QueueServiceOptions $options                    The optional
      * parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function updateMessageAsync(
-        $queueName,
-        $messageId,
-        $popReceipt,
-        $messageText,
-        $visibilityTimeoutInSeconds,
-        QueueServiceOptions $options = null
-    ) {
+        string $queueName,
+        string $messageId,
+        string $popReceipt,
+        string $messageText,
+        int $visibilityTimeoutInSeconds,
+        ?QueueServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queueName, 'queueName');
         Validate::notNullOrEmpty($queueName, 'queueName');
         Validate::canCastAsString($messageId, 'messageId');
@@ -959,9 +937,9 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
         );
 
         $method      = Resources::HTTP_PUT;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = $queueName . '/messages' . '/' . $messageId;
         $body        = Resources::EMPTY_STRING;
 
@@ -1015,14 +993,12 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string                     $queue   The queue name.
      * @param Models\QueueServiceOptions $options The optional parameters.
      *
-     * @return Models\QueueACL
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/get-queue-acl
      */
     public function getQueueAcl(
-        $queue,
-        Models\QueueServiceOptions $options = null
-    ) {
+        string $queue,
+        ?Models\QueueServiceOptions $options = null
+    ): Models\QueueACL {
         return $this->getQueueAclAsync($queue, $options)->wait();
     }
 
@@ -1032,20 +1008,18 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param string                     $queue   The queue name.
      * @param Models\QueueServiceOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/get-queue-acl
      */
     public function getQueueAclAsync(
-        $queue,
-        Models\QueueServiceOptions $options = null
-    ) {
+        string $queue,
+        ?Models\QueueServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queue, 'queue');
 
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $statusCode  = Resources::STATUS_OK;
         $path        = $queue;
 
@@ -1073,7 +1047,7 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
         );
 
         return $promise->then(function ($response) use ($dataSerializer) {
-            $parsed       = $dataSerializer->unserialize($response->getBody());
+            $parsed = $dataSerializer->unserialize($response->getBody());
             return QueueACL::create($parsed);
         }, null);
     }
@@ -1085,15 +1059,13 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param Models\QueueACL            $acl     access control list for Queue
      * @param Models\QueueServiceOptions $options optional parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/set-queue-acl
      */
     public function setQueueAcl(
-        $queue,
+        string $queue,
         Models\QueueACL $acl,
-        Models\QueueServiceOptions $options = null
-    ) {
+        ?Models\QueueServiceOptions $options = null
+    ): void {
         $this->setQueueAclAsync($queue, $acl, $options)->wait();
     }
 
@@ -1104,22 +1076,20 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
      * @param Models\QueueACL            $acl     access control list for Queue
      * @param Models\QueueServiceOptions $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/set-queue-acl
      */
     public function setQueueAclAsync(
-        $queue,
+        string $queue,
         Models\QueueACL $acl,
-        Models\QueueServiceOptions $options = null
-    ) {
+        ?Models\QueueServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($queue, 'queue');
         Validate::notNullOrEmpty($acl, 'acl');
 
         $method      = Resources::HTTP_PUT;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $body        = $acl->toXml($this->dataSerializer);
         $path        = $queue;
 
@@ -1146,4 +1116,5 @@ class QueueRestProxy extends ServiceRestProxy implements IQueue
             $options
         );
     }
+
 }

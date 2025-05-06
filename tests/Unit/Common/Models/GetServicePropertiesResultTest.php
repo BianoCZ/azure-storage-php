@@ -27,6 +27,7 @@ namespace MicrosoftAzure\Storage\Tests\Unit\Common\Models;
 use MicrosoftAzure\Storage\Common\Models\GetServicePropertiesResult;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class GetServicePropertiesResult
@@ -38,9 +39,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetServicePropertiesResultTest extends \PHPUnit\Framework\TestCase
+class GetServicePropertiesResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Test
         $result = GetServicePropertiesResult::create(TestResources::getServicePropertiesSample());
@@ -50,4 +51,5 @@ class GetServicePropertiesResultTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(isset($result));
         $this->assertEquals($expected, $result->getValue());
     }
+
 }

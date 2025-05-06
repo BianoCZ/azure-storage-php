@@ -24,49 +24,64 @@
 
 namespace MicrosoftAzure\Storage\Tests\Functional\Table;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use DateTime;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Models\CORS;
 use MicrosoftAzure\Storage\Common\Models\Logging;
 use MicrosoftAzure\Storage\Common\Models\Metrics;
-use MicrosoftAzure\Storage\Common\Models\CORS;
 use MicrosoftAzure\Storage\Common\Models\RetentionPolicy;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
 use MicrosoftAzure\Storage\Table\Models\Entity;
+use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
 use MicrosoftAzure\Storage\Table\Models\QueryTablesOptions;
 use MicrosoftAzure\Storage\Table\Models\TableServiceOptions;
-use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function array_push;
+use function chr;
+use function count;
+use function floatval;
+use function mt_rand;
+use function mt_srand;
+use function pi;
+use function rand;
+use function strval;
 
 class TableServiceFunctionalTestData
 {
+
     private static $tempTableCounter;
+
     private static $nonExistTablePrefix;
+
     public static $testUniqueId;
+
     public static $testTableNames;
 
-    const INT_MAX_VALUE = 2147483647;
+    public const int INT_MAX_VALUE = 2147483647;
+
     // Intent is to be a constant, but cannot represent in code.
     public static $INT_MIN_VALUE;
-    const LONG_BIG_VALUE = 1234567890;
-    const LONG_BIG_VALUE_NEGATIVE = -123456789032;
+    public const int LONG_BIG_VALUE = 1234567890;
+    public const int LONG_BIG_VALUE_NEGATIVE = -123456789032;
 
     public function __construct()
     {
-        self:: $setupData;
+        self::$setupData;
     }
 
-    public static function setupData()
+    public static function setupData(): void
     {
         self::$INT_MIN_VALUE = -1 - self::INT_MAX_VALUE;
         $rint = rand(0, 1000000);
         self::$testUniqueId = 'qaX' . $rint . 'X';
         self::$nonExistTablePrefix = 'qaX' . ($rint + 1) . 'X';
-        self::$testTableNames = array(
+        self::$testTableNames = [
             self::$testUniqueId . 'a1',
             self::$testUniqueId . 'a2',
-            self::$testUniqueId . 'b1'
-        );
+            self::$testUniqueId . 'b1',
+        ];
     }
 
     public static function getInterestingTableName()
@@ -81,15 +96,15 @@ class TableServiceFunctionalTestData
 
     public static function getUnicodeString()
     {
-        return  chr(0xEB) . chr(0x8B) . chr(0xA4) . // \uB2E4 in UTF-8
+        return chr(0xEB) . chr(0x8B) . chr(0xA4) . // \uB2E4 in UTF-8
                 chr(0xEB) . chr(0xA5) . chr(0xB4) . // \uB974 in UTF-8
                 chr(0xEB) . chr(0x8B) . chr(0xA4) . // \uB2E4 in UTF-8
                 chr(0xEB) . chr(0x8A) . chr(0x94) . // \uB294 in UTF-8
-                chr(0xD8) . chr(0xA5) .             // \u0625 in UTF-8
+                chr(0xD8) . chr(0xA5) . // \u0625 in UTF-8
                 ' ' .
-                chr(0xD9) . chr(0x8A) .             // \u064A in UTF-8
-                chr(0xD8) . chr(0xAF) .             // \u062F in UTF-8
-                chr(0xD9) . chr(0x8A) .             // \u064A in UTF-8
+                chr(0xD9) . chr(0x8A) . // \u064A in UTF-8
+                chr(0xD8) . chr(0xAF) . // \u062F in UTF-8
+                chr(0xD9) . chr(0x8A) . // \u064A in UTF-8
                 chr(0xD9) . chr(0x88);              // \u0648 in UTF-8
     }
 
@@ -119,7 +134,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingServiceProperties()
     {
-        $ret = array();
+        $ret = [];
 
         // This is the default that comes from the server.
         array_push($ret, self::getDefaultServiceProperties());
@@ -149,7 +164,7 @@ class TableServiceFunctionalTestData
             $sp = new ServiceProperties();
             $sp->setLogging($l);
             $sp->setHourMetrics($m);
-            $sp->setCorses(array($c));
+            $sp->setCorses([$c]);
 
             array_push($ret, $sp);
         }
@@ -182,7 +197,7 @@ class TableServiceFunctionalTestData
             $sp = new ServiceProperties();
             $sp->setLogging($l);
             $sp->setHourMetrics($m);
-            $sp->setCorses(array($c0, $c1));
+            $sp->setCorses([$c0, $c1]);
 
             array_push($ret, $sp);
         }
@@ -216,7 +231,7 @@ class TableServiceFunctionalTestData
             $sp = new ServiceProperties();
             $sp->setLogging($l);
             $sp->setHourMetrics($m);
-            $sp->setCorses(array($c0, $c1));
+            $sp->setCorses([$c0, $c1]);
 
             array_push($ret, $sp);
         }
@@ -226,8 +241,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingQueryTablesOptions($isEmulated)
     {
-        $ret = array();
-
+        $ret = [];
 
         $options = new QueryTablesOptions();
         array_push($ret, $options);
@@ -339,7 +353,6 @@ class TableServiceFunctionalTestData
         $options->setNextTableName($nextTableName);
         array_push($ret, $options);
 
-
         return $ret;
     }
 
@@ -358,7 +371,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingEntities()
     {
-        $ret = array();
+        $ret = [];
 
         array_push($ret, self::getSimpleEntity());
 
@@ -377,8 +390,8 @@ class TableServiceFunctionalTestData
         $e->addProperty('GUID', EdmType::GUID, '90ab64d6-d3f8-49ec-b837-b8b5b6367b74');
         $e->addProperty('INT32', EdmType::INT32, 23);
         $e->addProperty('INT64', EdmType::INT64, '-1');
-        $now = new \DateTime();
-        $e->addProperty('STRING', EdmType::STRING, $now->format(\DateTime::COOKIE));
+        $now = new DateTime();
+        $e->addProperty('STRING', EdmType::STRING, $now->format(DateTime::COOKIE));
         array_push($ret, $e);
 
         $e = new Entity();
@@ -388,7 +401,7 @@ class TableServiceFunctionalTestData
         $e->addProperty('test2', EdmType::STRING, 'value');
         $e->addProperty('test3', EdmType::INT32, 3);
         $e->addProperty('test4', EdmType::INT64, '12345678901');
-        $e->addProperty('test5', EdmType::DATETIME, new \DateTime());
+        $e->addProperty('test5', EdmType::DATETIME, new DateTime());
         array_push($ret, $e);
 
         $e = new Entity();
@@ -410,7 +423,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingBadEntities()
     {
-        $ret = array();
+        $ret = [];
 
         $e = new Entity();
         array_push($ret, $e);
@@ -428,7 +441,7 @@ class TableServiceFunctionalTestData
 
     public static function getSimpleEntities($count)
     {
-        $ret = array();
+        $ret = [];
 
         $e = new Entity();
         $e->setPartitionKey('singlePartition');
@@ -466,7 +479,7 @@ class TableServiceFunctionalTestData
         return $ret;
     }
 
-    public static function addProperty($e, $name, $edmType, $binaries)
+    public static function addProperty($e, $name, $edmType, $binaries): void
     {
         $index = mt_rand(0, count($binaries));
         if ($index < count($binaries)) {
@@ -476,7 +489,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingGoodBooleans()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, true);
         array_push($ret, false);
 //        array_push($ret, 'TRUE');
@@ -486,28 +499,28 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingBadBooleans()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, 'BOO!');
         return $ret;
     }
 
     public static function getInterestingGoodDates()
     {
-        $ret = array();
+        $ret = [];
 
-        array_push($ret, new \DateTime());
+        array_push($ret, new DateTime());
 
-        $c = new \DateTime;
+        $c = new DateTime();
         $c->setDate(2010, 2, 3);
         $c->setTime(20, 3, 4);
         array_push($ret, $c);
 
-        $c = new \DateTime;
+        $c = new DateTime();
         $c->setDate(2012, 1, 27);
         $c->setTime(21, 46, 59);
         array_push($ret, $c);
 
-        $c = new \DateTime('27 Jan 2012 22:00:00.800 GMT');
+        $c = new DateTime('27 Jan 2012 22:00:00.800 GMT');
         array_push($ret, $c);
 
         return $ret;
@@ -515,7 +528,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingBadDates()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, true);
         array_push($ret, 0);
         return $ret;
@@ -523,7 +536,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingGoodDoubles()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, pi());
         array_push($ret, 0.0);
         array_push($ret, floatval(self::INT_MAX_VALUE));
@@ -535,14 +548,14 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingBadDoubles()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, 'ABCDEFGH-D3F8-49EC-B837-B8B5B6367B74');
         return $ret;
     }
 
     public static function getInterestingGoodGuids()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, '90ab64d6-d3f8-49ec-b837-b8b5b6367b74');
         array_push($ret, '00000000-0000-0000-0000-000000000000');
         return $ret;
@@ -550,7 +563,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingBadGuids()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, 'ABCDEFGH-D3F8-49EC-B837-B8B5B6367B74');
         array_push($ret, '');
         return $ret;
@@ -558,7 +571,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingGoodInts()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, 0);
         array_push($ret, self::INT_MAX_VALUE);
         array_push($ret, self::$INT_MIN_VALUE);
@@ -568,7 +581,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingBadInts()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, false);
         array_push($ret, self::INT_MAX_VALUE + 1);
         return $ret;
@@ -576,7 +589,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingGoodLongs()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, '0');
         array_push($ret, strval(self::LONG_BIG_VALUE));
         array_push($ret, strval(self::LONG_BIG_VALUE_NEGATIVE));
@@ -586,7 +599,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingBadLongs()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, false);
         array_push($ret, '9223372036854775808');
         return $ret;
@@ -594,7 +607,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingGoodBinaries()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, '');
         array_push($ret, chr(1) . chr(2) . chr(3) . chr(4) . chr(5));
         array_push($ret, chr(255) . chr(254) . chr(253));
@@ -603,15 +616,15 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingBadBinaries()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, 12345);
-        array_push($ret, new \DateTime());
+        array_push($ret, new DateTime());
         return $ret;
     }
 
     public static function getInterestingGoodStrings()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, 'AQIDBAU='); // Base-64 encoded byte array { 0x01, 0x02, 0x03, 0x04, 0x05 };
         array_push($ret, 'false');
         array_push($ret, '12345');
@@ -626,8 +639,7 @@ class TableServiceFunctionalTestData
 
     public static function getInterestingBadStrings()
     {
-        $ret = array();
-        // Are there any?
-        return $ret;
+        return [];
     }
+
 }

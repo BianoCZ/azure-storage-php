@@ -24,6 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
+use function is_null;
+
 /**
  * Optional parameters for setBlobProperties wrapper
  *
@@ -36,7 +38,9 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class SetBlobPropertiesOptions extends BlobServiceOptions
 {
+
     private $_blobProperties;
+
     private $_sequenceNumberAction;
 
     /**
@@ -45,9 +49,10 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
      *
      * @param BlobProperties $blobProperties The blob properties instance.
      */
-    public function __construct(BlobProperties $blobProperties = null)
+    public function __construct(?BlobProperties $blobProperties = null)
     {
         parent::__construct();
+
         $this->_blobProperties = is_null($blobProperties)
                                  ? new BlobProperties() : clone $blobProperties;
     }
@@ -55,9 +60,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
     /**
      * Gets blob sequenceNumber.
      *
-     * @return integer
      */
-    public function getSequenceNumber()
+    public function getSequenceNumber(): int
     {
         return $this->_blobProperties->getSequenceNumber();
     }
@@ -65,11 +69,10 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
     /**
      * Sets blob sequenceNumber.
      *
-     * @param integer $sequenceNumber value.
+     * @param int $sequenceNumber value.
      *
-     * @return void
      */
-    public function setSequenceNumber($sequenceNumber)
+    public function setSequenceNumber(int $sequenceNumber): void
     {
         $this->_blobProperties->setSequenceNumber($sequenceNumber);
     }
@@ -77,9 +80,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
     /**
      * Gets lease Id for the blob
      *
-     * @return string
      */
-    public function getSequenceNumberAction()
+    public function getSequenceNumberAction(): string
     {
         return $this->_sequenceNumberAction;
     }
@@ -89,9 +91,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
      *
      * @param string $sequenceNumberAction action.
      *
-     * @return void
      */
-    public function setSequenceNumberAction($sequenceNumberAction)
+    public function setSequenceNumberAction(string $sequenceNumberAction): void
     {
         $this->_sequenceNumberAction = $sequenceNumberAction;
     }
@@ -99,9 +100,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
     /**
      * Gets blob contentLength.
      *
-     * @return integer
      */
-    public function getContentLength()
+    public function getContentLength(): int
     {
         return $this->_blobProperties->getContentLength();
     }
@@ -109,11 +109,10 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
     /**
      * Sets blob contentLength.
      *
-     * @param integer $contentLength value.
+     * @param int $contentLength value.
      *
-     * @return void
      */
-    public function setContentLength($contentLength)
+    public function setContentLength(int $contentLength): void
     {
         $this->_blobProperties->setContentLength($contentLength);
     }
@@ -121,9 +120,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
     /**
      * Gets ContentType.
      *
-     * @return string
      */
-    public function getContentType()
+    public function getContentType(): string
     {
         return $this->_blobProperties->getContentType();
     }
@@ -133,9 +131,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
      *
      * @param string $contentType value.
      *
-     * @return void
      */
-    public function setContentType($contentType)
+    public function setContentType(string $contentType): void
     {
         $this->_blobProperties->setContentType($contentType);
     }
@@ -143,9 +140,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
     /**
      * Gets ContentEncoding.
      *
-     * @return string
      */
-    public function getContentEncoding()
+    public function getContentEncoding(): string
     {
         return $this->_blobProperties->getContentEncoding();
     }
@@ -155,9 +151,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
      *
      * @param string $contentEncoding value.
      *
-     * @return void
      */
-    public function setContentEncoding($contentEncoding)
+    public function setContentEncoding(string $contentEncoding): void
     {
         $this->_blobProperties->setContentEncoding($contentEncoding);
     }
@@ -165,9 +160,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
     /**
      * Gets ContentLanguage.
      *
-     * @return string
      */
-    public function getContentLanguage()
+    public function getContentLanguage(): string
     {
         return $this->_blobProperties->getContentLanguage();
     }
@@ -177,9 +171,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
      *
      * @param string $contentLanguage value.
      *
-     * @return void
      */
-    public function setContentLanguage($contentLanguage)
+    public function setContentLanguage(string $contentLanguage): void
     {
         $this->_blobProperties->setContentLanguage($contentLanguage);
     }
@@ -199,9 +192,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
      *
      * @param string $contentMD5 value.
      *
-     * @return void
      */
-    public function setContentMD5($contentMD5)
+    public function setContentMD5(string $contentMD5): void
     {
         $this->_blobProperties->setContentMD5($contentMD5);
     }
@@ -209,9 +201,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
     /**
      * Gets cache control.
      *
-     * @return string
      */
-    public function getCacheControl()
+    public function getCacheControl(): string
     {
         return $this->_blobProperties->getCacheControl();
     }
@@ -221,9 +212,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
      *
      * @param string $cacheControl value to use.
      *
-     * @return void
      */
-    public function setCacheControl($cacheControl)
+    public function setCacheControl(string $cacheControl): void
     {
         $this->_blobProperties->setCacheControl($cacheControl);
     }
@@ -231,9 +221,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
     /**
      * Gets content disposition.
      *
-     * @return string
      */
-    public function getContentDisposition()
+    public function getContentDisposition(): string
     {
         return $this->_blobProperties->getContentDisposition();
     }
@@ -243,10 +232,10 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
      *
      * @param string $contentDisposition value to use.
      *
-     * @return void
      */
-    public function setContentDisposition($contentDisposition)
+    public function setContentDisposition(string $contentDisposition): void
     {
         $this->_blobProperties->setContentDisposition($contentDisposition);
     }
+
 }

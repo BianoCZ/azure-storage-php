@@ -36,9 +36,9 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class BlobBlockType
 {
-    const COMMITTED_TYPE   = 'Committed';
-    const UNCOMMITTED_TYPE = 'Uncommitted';
-    const LATEST_TYPE      = 'Latest';
+    public const string COMMITTED_TYPE   = 'Committed';
+    public const string UNCOMMITTED_TYPE = 'Uncommitted';
+    public const string LATEST_TYPE      = 'Latest';
 
     /**
      * Validates the provided type.
@@ -47,9 +47,8 @@ class BlobBlockType
      *
      * @internal
      *
-     * @return boolean
      */
-    public static function isValid($type)
+    public static function isValid(string $type): bool
     {
         switch ($type) {
             case self::COMMITTED_TYPE:
@@ -61,4 +60,5 @@ class BlobBlockType
                 return false;
         }
     }
+
 }

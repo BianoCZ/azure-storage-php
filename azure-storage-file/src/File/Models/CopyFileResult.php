@@ -24,9 +24,11 @@
 
 namespace MicrosoftAzure\Storage\File\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
+use DateTime;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
+use function array_change_key_case;
 
 /**
  * Holds result of calling CopyFileResult wrapper
@@ -40,9 +42,13 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class CopyFileResult
 {
+
     private $lastModified;
+
     private $etag;
+
     private $copyID;
+
     private $copyStatus;
 
     /**
@@ -52,9 +58,8 @@ class CopyFileResult
      *
      * @internal
      *
-     * @return CopyFileResult
      */
-    public static function create(array $headers)
+    public static function create(array $headers): CopyFileResult
     {
         $result  = new CopyFileResult();
         $headers = array_change_key_case($headers);
@@ -73,9 +78,8 @@ class CopyFileResult
     /**
      * Gets file lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }
@@ -85,9 +89,8 @@ class CopyFileResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         Validate::isDate($lastModified);
         $this->lastModified = $lastModified;
@@ -96,9 +99,8 @@ class CopyFileResult
     /**
      * Gets file etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->etag;
     }
@@ -108,9 +110,8 @@ class CopyFileResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         Validate::canCastAsString($etag, 'etag');
         $this->etag = $etag;
@@ -119,9 +120,8 @@ class CopyFileResult
     /**
      * Gets file copyID.
      *
-     * @return string
      */
-    public function getCopyID()
+    public function getCopyID(): string
     {
         return $this->copyID;
     }
@@ -131,9 +131,8 @@ class CopyFileResult
      *
      * @param string $copyID value.
      *
-     * @return void
      */
-    protected function setCopyID($copyID)
+    protected function setCopyID(string $copyID): void
     {
         Validate::canCastAsString($copyID, 'copyID');
         $this->copyID = $copyID;
@@ -142,9 +141,8 @@ class CopyFileResult
     /**
      * Gets copyStatus
      *
-     * @return string
      */
-    public function getCopyStatus()
+    public function getCopyStatus(): string
     {
         return $this->copyStatus;
     }
@@ -154,11 +152,11 @@ class CopyFileResult
      *
      * @param string $copyStatus copyStatus to set
      *
-     * @return void
      */
-    protected function setCopyStatus($copyStatus)
+    protected function setCopyStatus(string $copyStatus): void
     {
         Validate::canCastAsString($copyStatus, 'copyStatus');
         $this->copyStatus = $copyStatus;
     }
+
 }

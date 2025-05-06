@@ -39,8 +39,11 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class Share
 {
+
     private $name;
+
     private $metadata;
+
     private $properties;
 
     /**
@@ -48,14 +51,13 @@ class Share
      *
      * @param  array  $parsedResponse The response array.
      *
-     * @return Share
      */
-    public static function create(array $parsedResponse)
+    public static function create(array $parsedResponse): Share
     {
         $result = new Share();
         $result->setName($parsedResponse[Resources::QP_NAME]);
         $result->setMetadata(
-            Utilities::tryGetValue($parsedResponse, Resources::QP_METADATA, array())
+            Utilities::tryGetValue($parsedResponse, Resources::QP_METADATA, [])
         );
         $result->setProperties(ShareProperties::create(
             $parsedResponse[Resources::QP_PROPERTIES]
@@ -66,9 +68,8 @@ class Share
     /**
      * Gets share name.
      *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -78,9 +79,8 @@ class Share
      *
      * @param string $name value.
      *
-     * @return void
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -88,9 +88,8 @@ class Share
     /**
      * Gets share metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
@@ -100,9 +99,8 @@ class Share
      *
      * @param array $metadata value.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata = null)
+    public function setMetadata(?array $metadata = null): void
     {
         $this->metadata = $metadata;
     }
@@ -110,9 +108,8 @@ class Share
     /**
      * Gets share properties
      *
-     * @return ShareProperties
      */
-    public function getProperties()
+    public function getProperties(): ShareProperties
     {
         return $this->properties;
     }
@@ -122,10 +119,10 @@ class Share
      *
      * @param ShareProperties $properties share properties
      *
-     * @return void
      */
-    public function setProperties(ShareProperties $properties)
+    public function setProperties(ShareProperties $properties): void
     {
         $this->properties = $properties;
     }
+
 }

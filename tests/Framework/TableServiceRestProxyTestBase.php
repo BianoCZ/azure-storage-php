@@ -21,11 +21,14 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Framework;
 
-use MicrosoftAzure\Storage\Table\TableRestProxy;
-use MicrosoftAzure\Storage\Tests\Framework\ServiceRestProxyTestBase;
 use MicrosoftAzure\Storage\Common\Middlewares\RetryMiddlewareFactory;
+use MicrosoftAzure\Storage\Table\TableRestProxy;
+use Throwable;
+use function array_search;
+use function error_log;
 
 /**
  * TestBase class for each unit test class.
@@ -39,24 +42,28 @@ use MicrosoftAzure\Storage\Common\Middlewares\RetryMiddlewareFactory;
  */
 class TableServiceRestProxyTestBase extends ServiceRestProxyTestBase
 {
+
     protected $_createdTables;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         $tableRestProxy = TableRestProxy::createTableService($this->connectionString);
         $tableRestProxy->pushMiddleware(RetryMiddlewareFactory::create());
+
         parent::setProxy($tableRestProxy);
-        $this->_createdTables = array();
+
+        $this->_createdTables = [];
     }
 
-    public function createTable($tableName, $options = null)
+    public function createTable($tableName, $options = null): void
     {
         $this->restProxy->createTable($tableName, $options);
         $this->_createdTables[] = $tableName;
     }
 
-    public function deleteTable($tableName)
+    public function deleteTable($tableName): void
     {
         if (($key = array_search($tableName, $this->_createdTables)) !== false) {
             unset($this->_createdTables[$key]);
@@ -64,17 +71,17 @@ class TableServiceRestProxyTestBase extends ServiceRestProxyTestBase
         $this->restProxy->deleteTable($tableName);
     }
 
-    public function safeDeleteTable($tableName)
+    public function safeDeleteTable($tableName): void
     {
         try {
             $this->deleteTable($tableName);
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             // Ignore exception and continue, will assume that this table doesn't exist in the sotrage account
             error_log($e->getMessage());
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -82,4 +89,5 @@ class TableServiceRestProxyTestBase extends ServiceRestProxyTestBase
             $this->safeDeleteTable($value);
         }
     }
+
 }

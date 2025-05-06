@@ -36,6 +36,7 @@ namespace MicrosoftAzure\Storage\Table\Models\Filters;
  */
 class PropertyNameFilter extends Filter
 {
+
     private $_propertyName;
 
     /**
@@ -43,7 +44,7 @@ class PropertyNameFilter extends Filter
      *
      * @param string $propertyName The propertyName.
      */
-    public function __construct($propertyName)
+    public function __construct(string $propertyName)
     {
         $this->_propertyName = $propertyName;
     }
@@ -51,10 +52,10 @@ class PropertyNameFilter extends Filter
     /**
      * Gets propertyName
      *
-     * @return string
      */
-    public function getPropertyName()
+    public function getPropertyName(): string
     {
         return $this->_propertyName;
     }
+
 }

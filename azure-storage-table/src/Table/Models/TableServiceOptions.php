@@ -38,4 +38,5 @@ use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
  */
 class TableServiceOptions extends ServiceOptions
 {
+
 }

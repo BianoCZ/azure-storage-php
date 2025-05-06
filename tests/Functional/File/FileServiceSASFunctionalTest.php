@@ -28,7 +28,9 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\File\Models\CreateFileFromContentOptions;
 use MicrosoftAzure\Storage\Tests\Framework\SASFunctionalTestBase;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Tests\Functional\File\FileSharedAccessSignatureHelperMock;
+use function count;
+use function openssl_random_pseudo_bytes;
+use function stream_get_contents;
 
 /**
  * Tests for service SAS proxy tests.
@@ -42,7 +44,7 @@ use MicrosoftAzure\Storage\Tests\Functional\File\FileSharedAccessSignatureHelper
  */
 class FileServiceSASFunctionalTest extends SASFunctionalTestBase
 {
-    public function testFileServiceSAS()
+    public function testFileServiceSAS(): void
     {
         $helper = new FileSharedAccessSignatureHelperMock(
             $this->serviceSettings->getName(),
@@ -52,8 +54,8 @@ class FileServiceSASFunctionalTest extends SASFunctionalTestBase
         //setup the proxies for creating shares
         $this->setUpWithConnectionString($this->connectionString);
 
-        $shareProxies = array();
-        $shares = array();
+        $shareProxies = [];
+        $shares = [];
         $shares[] = TestResources::getInterestingName('sha');
         $this->safeCreateShare($shares[0]);
         $shares[] = TestResources::getInterestingName('sha');
@@ -90,32 +92,32 @@ class FileServiceSASFunctionalTest extends SASFunctionalTestBase
             $result = $proxy->listDirectoriesAndFiles($share);
             $this->assertEquals($file, $result->getFiles()[0]->getName());
             //r
-            $actualContent = \stream_get_contents(
+            $actualContent = stream_get_contents(
                 $proxy->getFile($share, $file)->getContentStream()
             );
             $this->assertEquals($content, $actualContent);
             //d
             $proxy->deleteFile($share, $file);
             $result = $proxy->listDirectoriesAndFiles($share);
-            $this->assertEquals(0, \count($result->getFiles()));
+            $this->assertEquals(0, count($result->getFiles()));
         }
         //Validate that a cross access with wrong proxy/share pair
         //would not be successful
-        for ($i= 0; $i < 2; ++$i) {
+        for ($i = 0; $i < 2; ++$i) {
             $proxy = $shareProxies[$i];
             $share = $shares[1 - $i];
             $file = TestResources::getInterestingName('file');
             //c
             $this->validateServiceExceptionErrorMessage(
                 'Server failed to authenticate the request.',
-                function () use ($proxy, $share, $file) {
+                function () use ($proxy, $share, $file): void {
                     $proxy->createFile($share, $file, Resources::MB_IN_BYTES_1);
                 }
             );
             //l
             $this->validateServiceExceptionErrorMessage(
                 'Server failed to authenticate the request.',
-                function () use ($proxy, $share) {
+                function () use ($proxy, $share): void {
                     $proxy->listDirectoriesAndFiles($share);
                 }
             );
@@ -134,7 +136,7 @@ class FileServiceSASFunctionalTest extends SASFunctionalTestBase
         //l
         $this->validateServiceExceptionErrorMessage(
             'Server failed to authenticate the request.',
-            function () use ($proxy, $share) {
+            function () use ($proxy, $share): void {
                 $proxy->listDirectoriesAndFiles($share);
             }
         );
@@ -156,11 +158,11 @@ class FileServiceSASFunctionalTest extends SASFunctionalTestBase
         //l cannot be performed
         $this->validateServiceExceptionErrorMessage(
             'The specified signed resource is not allowed for the this resource level',
-            function () use ($fileProxy, $share) {
+            function () use ($fileProxy, $share): void {
                 $fileProxy->listDirectoriesAndFiles($share);
             }
         );
-        $content = \openssl_random_pseudo_bytes(20);
+        $content = openssl_random_pseudo_bytes(20);
         //rcwd can be performed.
         $options = new CreateFileFromContentOptions();
         $options->setUseTransactionalMD5(true);
@@ -192,4 +194,5 @@ class FileServiceSASFunctionalTest extends SASFunctionalTestBase
 
         return $this->createProxyWithSAS($sas, $accountName, $testCase['signedResource']);
     }
+
 }

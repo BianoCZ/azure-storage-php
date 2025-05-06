@@ -24,10 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Queue\Internal;
 
-use MicrosoftAzure\Storage\Queue\Models as QueueModels;
-use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
-use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
+use GuzzleHttp\Promise\PromiseInterface;
+use MicrosoftAzure\Storage\Common\Models\GetServicePropertiesResult;
 use MicrosoftAzure\Storage\Common\Models\GetServiceStatsResult;
+use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
+use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
+use MicrosoftAzure\Storage\Queue\Models as QueueModels;
 
 /**
  * This interface has all REST APIs provided by Windows Azure for queue service
@@ -48,22 +50,20 @@ interface IQueue
      *
      * @param ServiceOptions $options The optional parameters.
      *
-     * @return \MicrosoftAzure\Storage\Common\Models\GetServicePropertiesResult
      */
     public function getServiceProperties(
-        ServiceOptions $options = null
-    );
+        ?ServiceOptions $options = null
+    ): GetServicePropertiesResult;
 
     /**
      * Creates promise to get the properties of the service.
      *
      * @param ServiceOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getServicePropertiesAsync(
-        ServiceOptions $options = null
-    );
+        ?ServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Sets the properties of the service.
@@ -74,12 +74,11 @@ interface IQueue
      * @param ServiceProperties $serviceProperties The new service properties.
      * @param ServiceOptions    $options           The optional parameters.
      *
-     * @return void
      */
     public function setServiceProperties(
         ServiceProperties $serviceProperties,
-        ServiceOptions $options = null
-    );
+        ?ServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to set the properties of the service.
@@ -90,12 +89,11 @@ interface IQueue
      * @param ServiceProperties $serviceProperties The new service properties.
      * @param ServiceOptions    $options           The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function setServicePropertiesAsync(
         ServiceProperties $serviceProperties,
-        ServiceOptions $options = null
-    );
+        ?ServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Retieves statistics related to replication for the service. The operation
@@ -103,11 +101,9 @@ interface IQueue
      *
      * @param  ServiceOptions|null $options The options this operation sends with.
      *
-     * @return GetServiceStatsResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-queue-service-stats
      */
-    public function getServiceStats(ServiceOptions $options = null);
+    public function getServiceStats(?ServiceOptions $options = null): GetServiceStatsResult;
 
     /**
      * Creates promise that retrieves statistics related to replication for the
@@ -115,11 +111,9 @@ interface IQueue
      *
      * @param  ServiceOptions|null $options The options this operation sends with.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see  https://docs.microsoft.com/en-us/rest/api/storageservices/get-queue-service-stats
      */
-    public function getServiceStatsAsync(ServiceOptions $options = null);
+    public function getServiceStatsAsync(?ServiceOptions $options = null): PromiseInterface;
 
     /**
      * Creates a new queue under the storage account.
@@ -127,12 +121,11 @@ interface IQueue
      * @param string                         $queueName The queue name.
      * @param QueueModels\CreateQueueOptions $options   The optional queue create options.
      *
-     * @return void
      */
     public function createQueue(
-        $queueName,
-        QueueModels\CreateQueueOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\CreateQueueOptions $options = null
+    ): void;
 
     /**
      * Creates promise to create a new queue under the storage account.
@@ -140,12 +133,11 @@ interface IQueue
      * @param string                     $queueName The queue name.
      * @param QueueModels\CreateQueueOptions  $options   The Optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function createQueueAsync(
-        $queueName,
-        QueueModels\CreateQueueOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\CreateQueueOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Deletes a queue.
@@ -153,12 +145,11 @@ interface IQueue
      * @param string                          $queueName The queue name.
      * @param QueueModels\QueueServiceOptions $options   The optional parameters.
      *
-     * @return void
      */
     public function deleteQueue(
-        $queueName,
+        string $queueName,
         QueueModels\QueueServiceOptions $options
-    );
+    ): void;
 
     /**
      * Creates promise to delete a queue.
@@ -166,30 +157,27 @@ interface IQueue
      * @param string                          $queueName The queue name.
      * @param QueueModels\QueueServiceOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteQueueAsync(
-        $queueName,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Lists all queues in the storage account.
      *
      * @param QueueModels\ListQueuesOptions $options The optional parameters.
      *
-     * @return QueueModels\ListQueuesResult
      */
-    public function listQueues(QueueModels\ListQueuesOptions $options = null);
+    public function listQueues(?QueueModels\ListQueuesOptions $options = null): QueueModels\ListQueuesResult;
 
     /**
      * Creates promise to list all queues in the storage account.
      *
      * @param QueueModels\ListQueuesOptions $options The optional list queue options.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function listQueuesAsync(QueueModels\ListQueuesOptions $options = null);
+    public function listQueuesAsync(?QueueModels\ListQueuesOptions $options = null): PromiseInterface;
 
     /**
      * Returns queue properties, including user-defined metadata.
@@ -197,12 +185,11 @@ interface IQueue
      * @param string                          $queueName The queue name.
      * @param QueueModels\QueueServiceOptions $options   The optional parameters.
      *
-     * @return QueueModels\GetQueueMetadataResult
      */
     public function getQueueMetadata(
-        $queueName,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): QueueModels\GetQueueMetadataResult;
 
     /**
      * Creates promise to return queue properties, including user-defined metadata.
@@ -210,12 +197,11 @@ interface IQueue
      * @param string                          $queueName The queue name.
      * @param QueueModels\QueueServiceOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getQueueMetadataAsync(
-        $queueName,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Sets user-defined metadata on the queue. To delete queue metadata, call
@@ -225,13 +211,12 @@ interface IQueue
      * @param array                           $metadata  The metadata array.
      * @param QueueModels\QueueServiceOptions $options   The optional parameters.
      *
-     * @return void
      */
     public function setQueueMetadata(
-        $queueName,
-        array $metadata = null,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        ?array $metadata = null,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to set user-defined metadata on the queue. To delete
@@ -241,13 +226,12 @@ interface IQueue
      * @param array                           $metadata  The metadata array.
      * @param QueueModels\QueueServiceOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function setQueueMetadataAsync(
-        $queueName,
-        array $metadata = null,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        ?array $metadata = null,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Adds a message to the queue and optionally sets a visibility timeout
@@ -257,13 +241,12 @@ interface IQueue
      * @param string                           $messageText The message contents.
      * @param QueueModels\CreateMessageOptions $options     The optional parameters.
      *
-     * @return QueueModels\CreateMessageResult
      */
     public function createMessage(
-        $queueName,
-        $messageText,
-        QueueModels\CreateMessageOptions $options = null
-    );
+        string $queueName,
+        string $messageText,
+        ?QueueModels\CreateMessageOptions $options = null
+    ): QueueModels\CreateMessageResult;
 
     /**
      * Creates promise to add a message to the queue and optionally sets a
@@ -274,13 +257,12 @@ interface IQueue
      * @param QueueModels\CreateMessageOptions $options     The optional
      *                                                      parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function createMessageAsync(
-        $queueName,
-        $messageText,
-        QueueModels\CreateMessageOptions $options = null
-    );
+        string $queueName,
+        string $messageText,
+        ?QueueModels\CreateMessageOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Updates the visibility timeout of a message and/or the message contents.
@@ -299,16 +281,15 @@ interface IQueue
      * deleted or has expired.
      * @param QueueModels\QueueServiceOptions $options The optional parameters.
      *
-     * @return QueueModels\UpdateMessageResult
      */
     public function updateMessage(
-        $queueName,
-        $messageId,
-        $popReceipt,
-        $messageText,
-        $visibilityTimeoutInSeconds,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        string $messageId,
+        string $popReceipt,
+        string $messageText,
+        int $visibilityTimeoutInSeconds,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): QueueModels\UpdateMessageResult;
 
     /**
      * Creates promise to update the visibility timeout of a message and/or the
@@ -329,16 +310,15 @@ interface IQueue
      * @param QueueModels\QueueServiceOptions $options        The optional
      * parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function updateMessageAsync(
-        $queueName,
-        $messageId,
-        $popReceipt,
-        $messageText,
-        $visibilityTimeoutInSeconds,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        string $messageId,
+        string $popReceipt,
+        string $messageText,
+        int $visibilityTimeoutInSeconds,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Deletes a specified message from the queue.
@@ -352,14 +332,13 @@ interface IQueue
      *                                                    update Message operation.
      * @param QueueModels\QueueServiceOptions $options    The optional parameters.
      *
-     * @return void
      */
     public function deleteMessage(
-        $queueName,
-        $messageId,
-        $popReceipt,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        string $messageId,
+        string $popReceipt,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to delete a specified message from the queue.
@@ -373,14 +352,13 @@ interface IQueue
      *                                                    update Message operation.
      * @param QueueModels\QueueServiceOptions $options    The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteMessageAsync(
-        $queueName,
-        $messageId,
-        $popReceipt,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        string $messageId,
+        string $popReceipt,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Lists all messages in the queue.
@@ -388,12 +366,11 @@ interface IQueue
      * @param string                          $queueName The queue name.
      * @param QueueModels\ListMessagesOptions $options   The optional parameters.
      *
-     * @return QueueModels\ListMessagesResult
      */
     public function listMessages(
-        $queueName,
-        QueueModels\ListMessagesOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\ListMessagesOptions $options = null
+    ): QueueModels\ListMessagesResult;
 
     /**
      * Creates promise to list all messages in the queue.
@@ -401,12 +378,11 @@ interface IQueue
      * @param string              $queueName The queue name.
      * @param QueueModels\ListMessagesOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function listMessagesAsync(
-        $queueName,
-        QueueModels\ListMessagesOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\ListMessagesOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Retrieves a message from the front of the queue, without changing
@@ -415,12 +391,11 @@ interface IQueue
      * @param string                          $queueName The queue name.
      * @param QueueModels\PeekMessagesOptions $options   The optional parameters.
      *
-     * @return QueueModels\PeekMessagesResult
      */
     public function peekMessages(
-        $queueName,
-        QueueModels\PeekMessagesOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\PeekMessagesOptions $options = null
+    ): QueueModels\PeekMessagesResult;
 
     /**
      * Creates promise to retrieve a message from the front of the queue,
@@ -429,12 +404,11 @@ interface IQueue
      * @param string                          $queueName The queue name.
      * @param QueueModels\PeekMessagesOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function peekMessagesAsync(
-        $queueName,
-        QueueModels\PeekMessagesOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\PeekMessagesOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Clears all messages from the queue.
@@ -442,12 +416,11 @@ interface IQueue
      * @param string                          $queueName The queue name.
      * @param QueueModels\QueueServiceOptions $options   The optional parameters.
      *
-     * @return QueueModels\PeekMessagesResult
      */
     public function clearMessages(
-        $queueName,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): QueueModels\PeekMessagesResult;
 
     /**
      * Creates promise to clear all messages from the queue.
@@ -462,12 +435,11 @@ interface IQueue
      * @param string                          $queueName The name of the queue.
      * @param QueueModels\QueueServiceOptions $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function clearMessagesAsync(
-        $queueName,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queueName,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Gets the access control list (ACL)
@@ -475,14 +447,12 @@ interface IQueue
      * @param string                          $queue   The queue name.
      * @param QueueModels\QueueServiceOptions $options The optional parameters.
      *
-     * @return QueueModels\QueueACL
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/get-queue-acl
      */
     public function getQueueAcl(
-        $queue,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queue,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): QueueModels\QueueACL;
 
     /**
      * Creates the promise to gets the access control list (ACL)
@@ -490,14 +460,12 @@ interface IQueue
      * @param string                          $queue   The queue name.
      * @param QueueModels\QueueServiceOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/get-queue-acl
      */
     public function getQueueAclAsync(
-        $queue,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        string $queue,
+        ?QueueModels\QueueServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Sets the ACL.
@@ -506,15 +474,13 @@ interface IQueue
      * @param QueueModels\QueueACL            $acl     access control list
      * @param QueueModels\QueueServiceOptions $options optional parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/set-queue-acl
      */
     public function setQueueAcl(
-        $queue,
+        string $queue,
         QueueModels\QueueACL $acl,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        ?QueueModels\QueueServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to set the ACL
@@ -523,13 +489,12 @@ interface IQueue
      * @param QueueModels\QueueACL            $acl     access control list
      * @param QueueModels\QueueServiceOptions $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/set-queue-acl
      */
     public function setQueueAclAsync(
-        $queue,
+        string $queue,
         QueueModels\QueueACL $acl,
-        QueueModels\QueueServiceOptions $options = null
-    );
+        ?QueueModels\QueueServiceOptions $options = null
+    ): PromiseInterface;
+
 }

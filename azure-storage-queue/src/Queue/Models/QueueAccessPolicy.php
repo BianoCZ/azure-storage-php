@@ -42,13 +42,10 @@ class QueueAccessPolicy extends AccessPolicy
     /**
      * Get the valid permissions for the given resource.
      *
-     * @return array
      */
-    public static function getResourceValidPermissions()
+    public static function getResourceValidPermissions(): array
     {
-        return QueueResources::ACCESS_PERMISSIONS[
-            QueueResources::RESOURCE_TYPE_QUEUE
-        ];
+        return QueueResources::ACCESS_PERMISSIONS[QueueResources::RESOURCE_TYPE_QUEUE];
     }
 
     /**
@@ -58,4 +55,5 @@ class QueueAccessPolicy extends AccessPolicy
     {
         parent::__construct(QueueResources::RESOURCE_TYPE_QUEUE);
     }
+
 }

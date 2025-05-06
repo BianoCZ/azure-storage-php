@@ -27,6 +27,10 @@ namespace MicrosoftAzure\Storage\Table\Internal\Authentication;
 use MicrosoftAzure\Storage\Common\Internal\Authentication\SharedKeyAuthScheme;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
+use function base64_decode;
+use function base64_encode;
+use function hash_hmac;
+use function implode;
 
 /**
  * Provides shared key authentication scheme for blob and queue. For more info
@@ -42,6 +46,7 @@ use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
  */
 class TableSharedKeyLiteAuthScheme extends SharedKeyAuthScheme
 {
+
     /**
      * The invaluded headers
      */
@@ -55,12 +60,12 @@ class TableSharedKeyLiteAuthScheme extends SharedKeyAuthScheme
      *
      * @return TableSharedKeyLiteAuthScheme
      */
-    public function __construct($accountName, $accountKey)
+    public function __construct(string $accountName, string $accountKey)
     {
         $this->accountKey  = $accountKey;
         $this->accountName = $accountName;
 
-        $this->includedHeaders   = array();
+        $this->includedHeaders   = [];
         $this->includedHeaders[] = Resources::DATE;
     }
 
@@ -75,20 +80,19 @@ class TableSharedKeyLiteAuthScheme extends SharedKeyAuthScheme
      * @see Blob and Queue Services (Shared Key Authentication) at
      *      http://msdn.microsoft.com/en-us/library/windowsazure/dd179428.aspx
      *
-     * @return string
      */
     protected function computeSignature(
         array $headers,
-        $url,
+        string $url,
         array $queryParams,
-        $httpMethod
-    ) {
+        string $httpMethod
+    ): string {
         $canonicalizedResource = $this->computeCanonicalizedResourceForTable(
             $url,
             $queryParams
         );
 
-        $stringToSign = array();
+        $stringToSign = [];
 
         foreach ($this->includedHeaders as $header) {
             $stringToSign[] = Utilities::tryGetValue($headers, $header);
@@ -111,14 +115,13 @@ class TableSharedKeyLiteAuthScheme extends SharedKeyAuthScheme
      * @see Specifying the Authorization Header section at
      *      http://msdn.microsoft.com/en-us/library/windowsazure/dd179428.aspx
      *
-     * @return string
      */
     public function getAuthorizationHeader(
         array $headers,
-        $url,
+        string $url,
         array $queryParams,
-        $httpMethod
-    ) {
+        string $httpMethod
+    ): string {
         $signature = $this->computeSignature(
             $headers,
             $url,
@@ -130,4 +133,5 @@ class TableSharedKeyLiteAuthScheme extends SharedKeyAuthScheme
             hash_hmac('sha256', $signature, base64_decode($this->accountKey), true)
         );
     }
+
 }

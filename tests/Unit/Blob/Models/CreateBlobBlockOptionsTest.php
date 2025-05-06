@@ -21,9 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\CreateBlobBlockOptions;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class CreateBlobBlockOptions
@@ -35,9 +37,9 @@ use MicrosoftAzure\Storage\Blob\Models\CreateBlobBlockOptions;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CreateBlobBlockOptionsTest extends \PHPUnit\Framework\TestCase
+class CreateBlobBlockOptionsTest extends TestCase
 {
-    public function testSetContentMD5()
+    public function testSetContentMD5(): void
     {
         // Setup
         $expected = '0x8CAFB82EFF70C46';
@@ -51,7 +53,7 @@ class CreateBlobBlockOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getContentMD5());
     }
 
-    public function testSetLeaseId()
+    public function testSetLeaseId(): void
     {
         // Setup
         $expected = '0x8CAFB82EFF70C46';
@@ -64,4 +66,5 @@ class CreateBlobBlockOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $options->getLeaseId());
     }
+
 }

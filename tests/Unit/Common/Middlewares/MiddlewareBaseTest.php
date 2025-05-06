@@ -24,12 +24,13 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Middlewares;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use MicrosoftAzure\Storage\Common\Middlewares\MiddlewareBase;
 use MicrosoftAzure\Storage\Tests\Framework\ReflectionTestBase;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Client;
+use function is_callable;
 
 /**
  * Unit tests for class MiddlewareBase
@@ -43,7 +44,7 @@ use GuzzleHttp\Client;
  */
 class MiddlewareBaseTest extends ReflectionTestBase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $middlewareBase = new MiddlewareBase();
         $client = new Client();
@@ -58,24 +59,24 @@ class MiddlewareBaseTest extends ReflectionTestBase
     /**
      * @depends testInvoke
      */
-    public function testOnRequest()
+    public function testOnRequest(): void
     {
         $middlewareBase = new MiddlewareBase();
         $onRequest = self::getMethod('onRequest', $middlewareBase);
         $request = new Request('GET', 'http://www.bing.com');
-        $newRequest = $onRequest->invokeArgs($middlewareBase, array($request));
+        $newRequest = $onRequest->invokeArgs($middlewareBase, [$request]);
         $this->assertTrue($request === $newRequest, 'Not equal to original request');
     }
 
     /**
      * @depends testInvoke
      */
-    public function testOnFulfilled()
+    public function testOnFulfilled(): void
     {
         $middlewareBase = new MiddlewareBase();
         $onFulfilled = self::getMethod('onFulfilled', $middlewareBase);
         $request = new Request('GET', 'http://www.bing.com');
-        $callable = $onFulfilled->invokeArgs($middlewareBase, array($request, array()));
+        $callable = $onFulfilled->invokeArgs($middlewareBase, [$request, []]);
         $response = new Response();
         $newResponse = $callable($response);
         $this->assertTrue($response === $newResponse, 'Not equal to original response');
@@ -84,12 +85,12 @@ class MiddlewareBaseTest extends ReflectionTestBase
     /**
      * @depends testInvoke
      */
-    public function testOnRejected()
+    public function testOnRejected(): void
     {
         $middlewareBase = new MiddlewareBase();
         $onFulfilled = self::getMethod('onRejected', $middlewareBase);
         $request = new Request('GET', 'http://www.bing.com');
-        $callable = $onFulfilled->invokeArgs($middlewareBase, array($request, array()));
+        $callable = $onFulfilled->invokeArgs($middlewareBase, [$request, []]);
         $reason = new RequestException('test message', $request);
         $promise = $callable($reason);
         $newReason = null;
@@ -100,4 +101,5 @@ class MiddlewareBaseTest extends ReflectionTestBase
         }
         $this->assertTrue($reason === $newReason, 'Not equal to original response');
     }
+
 }

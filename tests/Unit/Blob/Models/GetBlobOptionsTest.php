@@ -21,12 +21,14 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
-use MicrosoftAzure\Storage\Common\Models\Range;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
 use MicrosoftAzure\Storage\Blob\Models\AccessCondition;
 use MicrosoftAzure\Storage\Blob\Models\GetBlobOptions;
+use MicrosoftAzure\Storage\Common\Models\Range;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class GetBlobOptions
@@ -38,9 +40,9 @@ use MicrosoftAzure\Storage\Blob\Models\GetBlobOptions;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetBlobOptionsTest extends \PHPUnit\Framework\TestCase
+class GetBlobOptionsTest extends TestCase
 {
-    public function testSetLeaseId()
+    public function testSetLeaseId(): void
     {
         // Setup
         $expected = '0x8CAFB82EFF70C46';
@@ -54,7 +56,7 @@ class GetBlobOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getLeaseId());
     }
 
-    public function testGetAccessConditions()
+    public function testGetAccessConditions(): void
     {
         // Setup
         $expected = AccessCondition::none();
@@ -68,7 +70,7 @@ class GetBlobOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual[0]);
     }
 
-    public function testSetAccessConditions()
+    public function testSetAccessConditions(): void
     {
         // Setup
         $expected = AccessCondition::none();
@@ -81,7 +83,7 @@ class GetBlobOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $result->getAccessConditions()[0]);
     }
 
-    public function testSetSnapshot()
+    public function testSetSnapshot(): void
     {
         // Setup
         $blob = new GetBlobOptions();
@@ -94,7 +96,7 @@ class GetBlobOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $blob->getSnapshot());
     }
 
-    public function testGetSnapshot()
+    public function testGetSnapshot(): void
     {
         // Setup
         $blob = new GetBlobOptions();
@@ -108,7 +110,7 @@ class GetBlobOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetRange()
+    public function testSetRange(): void
     {
         // Setup
         $expected = new Range(0, 123);
@@ -121,7 +123,7 @@ class GetBlobOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getRange());
     }
 
-    public function testSetRangeGetContentMD5()
+    public function testSetRangeGetContentMD5(): void
     {
         // Setup
         $options = new GetBlobOptions();
@@ -134,7 +136,7 @@ class GetBlobOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getRangeGetContentMD5());
     }
 
-    public function testGetRangeGetContentMD5()
+    public function testGetRangeGetContentMD5(): void
     {
         // Setup
         $options = new GetBlobOptions();
@@ -147,4 +149,5 @@ class GetBlobOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

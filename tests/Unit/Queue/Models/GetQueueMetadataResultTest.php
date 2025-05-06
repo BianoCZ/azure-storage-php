@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
 use MicrosoftAzure\Storage\Queue\Models\GetQueueMetadataResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class GetQueueMetadataResult
@@ -36,13 +37,13 @@ use MicrosoftAzure\Storage\Queue\Models\GetQueueMetadataResult;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetQueueMetadataResultTest extends \PHPUnit\Framework\TestCase
+class GetQueueMetadataResultTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         // Setup
         $count = 10;
-        $metadata = array('key1' => 'value1', 'key2' => 'value2');
+        $metadata = ['key1' => 'value1', 'key2' => 'value2'];
 
         // Test
         $actual = new GetQueueMetadataResult($count, $metadata);
@@ -51,4 +52,5 @@ class GetQueueMetadataResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($count, $actual->getApproximateMessageCount());
         $this->assertEquals($metadata, $actual->getMetadata());
     }
+
 }

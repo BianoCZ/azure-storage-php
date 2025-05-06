@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Common;
 
 use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ServiceOptions
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ServiceOptionsTest extends \PHPUnit\Framework\TestCase
+class ServiceOptionsTest extends TestCase
 {
-    public function testSetGetTimeout()
+    public function testSetGetTimeout(): void
     {
         // Setup
         $options = new ServiceOptions();
@@ -50,4 +51,5 @@ class ServiceOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($value, $options->getTimeout());
     }
+
 }

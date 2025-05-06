@@ -26,14 +26,20 @@ namespace MicrosoftAzure\Storage\Tests\Functional\File;
 
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
+use function count;
+use function error_log;
+use function strpos;
+use function substr;
 
 class FunctionalTestBase extends IntegrationTestBase
 {
+
     private static $isOneTimeSetup = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         $settings = StorageServiceSettings::createFromConnectionString($this->connectionString);
         $accountName = $settings->getFileEndpointUri();
         $firstSlash = strpos($accountName, '/');
@@ -48,22 +54,23 @@ class FunctionalTestBase extends IntegrationTestBase
         }
 
         FileServiceFunctionalTestData::$trackedShareCount =
-            \count($this->listShares(FileServiceFunctionalTestData::$testUniqueId));
+            count($this->listShares(FileServiceFunctionalTestData::$testUniqueId));
 
         if (!self::$isOneTimeSetup) {
             self::$isOneTimeSetup = true;
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         foreach (FileServiceFunctionalTestData::$testShareNames as $name) {
             $this->safeDeleteShare($name);
         }
+
         parent::tearDown();
     }
 
-    protected function safeDeleteShare($name)
+    protected function safeDeleteShare($name): void
     {
         try {
             $this->deleteShare($name);
@@ -72,7 +79,7 @@ class FunctionalTestBase extends IntegrationTestBase
         }
     }
 
-    protected function safeCreateShare($name)
+    protected function safeCreateShare($name): void
     {
         try {
             $this->createShare($name);
@@ -80,4 +87,5 @@ class FunctionalTestBase extends IntegrationTestBase
             error_log($e->getMessage());
         }
     }
+
 }

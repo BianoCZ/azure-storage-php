@@ -38,5 +38,7 @@ use MicrosoftAzure\Storage\Common\Models\TransactionalMD5Trait;
  */
 class CreateFileFromContentOptions extends CreateFileOptions
 {
+
     use TransactionalMD5Trait;
+
 }

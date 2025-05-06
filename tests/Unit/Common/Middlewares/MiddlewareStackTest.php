@@ -25,6 +25,8 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Middlewares;
 
 use MicrosoftAzure\Storage\Common\Middlewares\MiddlewareStack;
+use PHPUnit\Framework\TestCase;
+use function call_user_func;
 
 /**
  * Unit tests for class MiddlewareStack
@@ -36,11 +38,12 @@ use MicrosoftAzure\Storage\Common\Middlewares\MiddlewareStack;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class MiddlewareStackTest extends \PHPUnit\Framework\TestCase
+class MiddlewareStackTest extends TestCase
 {
+
     private $count;
 
-    public function testPushAndApply()
+    public function testPushAndApply(): void
     {
         $middlewares = $this->getInterestingMiddlewares(5);
 
@@ -66,15 +69,16 @@ class MiddlewareStackTest extends \PHPUnit\Framework\TestCase
 
     private function getInterestingMiddlewares($count)
     {
-        $middlewares = array();
+        $middlewares = [];
         for ($i = $count; $i > 0; --$i) {
             $callable = function (callable $handler) use ($i) {
                 ++$this->count;
-                return \call_user_func($handler, $i - 1, $handler);
+                return call_user_func($handler, $i - 1, $handler);
             };
             $middlewares[] = $callable;
         }
 
         return $middlewares;
     }
+
 }

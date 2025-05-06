@@ -129,24 +129,24 @@ class EdmType
             case EdmType::STRING:
             case EdmType::INT64:
             case null:
-                // NULL also is treated as EdmType::STRING
-                $condition = 'is_string';
+                    // NULL also is treated as EdmType::STRING
+                    $condition = 'is_string';
                 return is_string($value);
 
             case EdmType::DOUBLE:
-                $condition = 'is_double or is_string';
+                    $condition = 'is_double or is_string';
                 return is_double($value) || is_int($value) || is_string($value);
 
             case EdmType::INT32:
-                $condition = 'is_int or is_string';
+                    $condition = 'is_int or is_string';
                 return is_int($value) || is_string($value);
 
             case EdmType::DATETIME:
-                $condition = 'instanceof \DateTimeInterface';
+                    $condition = 'instanceof \DateTimeInterface';
                 return $value instanceof \DateTimeInterface;
 
             case EdmType::BOOLEAN:
-                $condition = 'is_bool';
+                    $condition = 'is_bool';
                 return is_bool($value);
 
             default:
@@ -214,7 +214,7 @@ class EdmType
     {
         switch ($type) {
         case EdmType::DATETIME:
-            $edmDate = Utilities::convertToEdmDateTime($value);
+                $edmDate = Utilities::convertToEdmDateTime($value);
             return 'datetime\'' . $edmDate . '\'';
 
         case EdmType::BINARY:
@@ -235,7 +235,7 @@ class EdmType
 
         case null:
         case EdmType::STRING:
-            // NULL also is treated as EdmType::STRING
+                // NULL also is treated as EdmType::STRING
             return '\'' . str_replace('\'', '\'\'', $value) . '\'';
 
         default:
@@ -311,7 +311,7 @@ class EdmType
         case $type == self::INT64:
         case $type == self::STRING:
         case $type == null:
-            // NULL also is treated as EdmType::STRING
+                // NULL also is treated as EdmType::STRING
             return true;
 
         default:
@@ -321,4 +321,5 @@ class EdmType
     }
 
     // @codingStandardsIgnoreEnd
+
 }

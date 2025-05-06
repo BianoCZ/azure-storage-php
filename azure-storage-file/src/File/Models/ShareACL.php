@@ -24,8 +24,8 @@
 
 namespace MicrosoftAzure\Storage\File\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\Internal\ACLBase;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
 
 /**
@@ -57,9 +57,8 @@ class ShareACL extends ACLBase
      *
      * @internal
      *
-     * @return ShareACL
      */
-    public static function create(array $parsed = null)
+    public static function create(?array $parsed = null): ShareACL
     {
         $result = new ShareACL();
         $result->fromXmlArray($parsed);
@@ -76,9 +75,8 @@ class ShareACL extends ACLBase
      *
      * @internal
      *
-     * @return void
      */
-    protected static function validateResourceType($resourceType)
+    protected static function validateResourceType(string $resourceType): void
     {
         Validate::isTrue(
             $resourceType == Resources::RESOURCE_TYPE_SHARE ||
@@ -90,10 +88,10 @@ class ShareACL extends ACLBase
     /**
      * Create a ShareAccessPolicy object.
      *
-     * @return ShareAccessPolicy
      */
-    protected static function createAccessPolicy()
+    protected static function createAccessPolicy(): ShareAccessPolicy
     {
         return new ShareAccessPolicy();
     }
+
 }

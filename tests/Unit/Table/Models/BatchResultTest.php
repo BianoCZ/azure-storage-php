@@ -24,11 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
-use MicrosoftAzure\Storage\Table\Models\BatchResult;
-use MicrosoftAzure\Storage\Table\Internal\MimeReaderWriter;
 use MicrosoftAzure\Storage\Table\Internal\JsonODataReaderWriter;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Table\Internal\MimeReaderWriter;
+use MicrosoftAzure\Storage\Table\Models\BatchResult;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class BatchResult
@@ -40,9 +40,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BatchResultTest extends \PHPUnit\Framework\TestCase
+class BatchResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $contexts       = TestResources::getBatchContexts();
@@ -64,4 +64,5 @@ class BatchResultTest extends \PHPUnit\Framework\TestCase
         //Assert
         $this->assertEquals($entries, $result->getEntries());
     }
+
 }

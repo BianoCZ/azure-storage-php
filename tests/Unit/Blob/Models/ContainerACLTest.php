@@ -21,13 +21,12 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\ContainerACL;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ContainerACL
@@ -39,12 +38,12 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ContainerACLTest extends \PHPUnit\Framework\TestCase
+class ContainerACLTest extends TestCase
 {
-    public function testCreateEmpty()
+    public function testCreateEmpty(): void
     {
         // Setup
-        $sample = array();
+        $sample = [];
         $expectedPublicAccess = 'container';
 
         // Test
@@ -55,7 +54,7 @@ class ContainerACLTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(0, $acl->getSignedIdentifiers());
     }
 
-    public function testCreateOneEntry()
+    public function testCreateOneEntry(): void
     {
         // Setup
         $sample = TestResources::getContainerAclOneEntrySample();
@@ -85,7 +84,7 @@ class ContainerACLTest extends \PHPUnit\Framework\TestCase
         return $acl;
     }
 
-    public function testSetPublicAccess()
+    public function testSetPublicAccess(): void
     {
         // Setup
         $expected = 'container';
@@ -98,4 +97,5 @@ class ContainerACLTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $acl->getPublicAccess());
     }
+
 }

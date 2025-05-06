@@ -21,11 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
-use MicrosoftAzure\Storage\Table\Models\GetTableResult;
 use MicrosoftAzure\Storage\Table\Internal\JsonODataReaderWriter;
+use MicrosoftAzure\Storage\Table\Models\GetTableResult;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class GetTableResult
@@ -37,9 +39,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetTableResultTest extends \PHPUnit\Framework\TestCase
+class GetTableResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sampleBody = TestResources::getTableSampleBody();
@@ -51,4 +53,5 @@ class GetTableResultTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($serializer->parseTable($sampleBody), $result->getName());
     }
+
 }

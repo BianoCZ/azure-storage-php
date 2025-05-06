@@ -36,16 +36,18 @@ namespace MicrosoftAzure\Storage\Table\Models;
  */
 class Query
 {
+
     private $_selectFields;
+
     private $_filter;
+
     private $_top;
 
     /**
      * Gets filter.
      *
-     * @return Filters\Filter
      */
-    public function getFilter()
+    public function getFilter(): Filters\Filter
     {
         return $this->_filter;
     }
@@ -55,9 +57,8 @@ class Query
      *
      * @param Filters\Filter $filter value.
      *
-     * @return void
      */
-    public function setFilter($filter)
+    public function setFilter(Filters\Filter $filter): void
     {
         $this->_filter = $filter;
     }
@@ -65,9 +66,8 @@ class Query
     /**
      * Gets top.
      *
-     * @return integer
      */
-    public function getTop()
+    public function getTop(): int
     {
         return $this->_top;
     }
@@ -75,11 +75,10 @@ class Query
     /**
      * Sets top.
      *
-     * @param integer $top value.
+     * @param int $top value.
      *
-     * @return void
      */
-    public function setTop($top)
+    public function setTop(int $top): void
     {
         $this->_top = $top;
     }
@@ -89,9 +88,8 @@ class Query
      *
      * @param string $field The value of the field.
      *
-     * @return void
      */
-    public function addSelectField($field)
+    public function addSelectField(string $field): void
     {
         $this->_selectFields[] = $field;
     }
@@ -99,9 +97,8 @@ class Query
     /**
      * Gets selectFields.
      *
-     * @return array
      */
-    public function getSelectFields()
+    public function getSelectFields(): array
     {
         return $this->_selectFields;
     }
@@ -111,10 +108,10 @@ class Query
      *
      * @param array $selectFields value.
      *
-     * @return void
      */
-    public function setSelectFields(array $selectFields = null)
+    public function setSelectFields(?array $selectFields = null): void
     {
         $this->_selectFields = $selectFields;
     }
+
 }

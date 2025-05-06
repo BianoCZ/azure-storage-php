@@ -24,9 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Queue\Models\ListMessagesResult;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use PHPUnit\Framework\TestCase;
+use function intval;
 
 /**
  * Unit tests for class ListMessagesResult
@@ -38,13 +40,12 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListMessagesResultTest extends \PHPUnit\Framework\TestCase
+class ListMessagesResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::listMessagesSample();
-
 
         // Test
         $result = ListMessagesResult::create($sample);
@@ -61,7 +62,7 @@ class ListMessagesResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($sample['QueueMessage']['MessageText'], $actual[0]->getMessageText());
     }
 
-    public function testCreateMultiple()
+    public function testCreateMultiple(): void
     {
         // Setup
         $sample = TestResources::listMessagesMultipleMessagesSample();
@@ -88,4 +89,5 @@ class ListMessagesResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(intval($sample['QueueMessage'][1]['DequeueCount']), $actual[1]->getDequeueCount());
         $this->assertEquals($sample['QueueMessage'][1]['MessageText'], $actual[1]->getMessageText());
     }
+
 }

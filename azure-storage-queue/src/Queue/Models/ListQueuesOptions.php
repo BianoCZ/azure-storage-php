@@ -24,8 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Queue\Models;
 
-use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
+use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
 
 /**
  * Options for listQueues API.
@@ -39,18 +39,20 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class ListQueuesOptions extends QueueServiceOptions
 {
+
     use MarkerContinuationTokenTrait;
 
     private $_prefix;
+
     private $_maxResults;
+
     private $_includeMetadata;
 
     /**
      * Gets prefix.
      *
-     * @return string
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->_prefix;
     }
@@ -60,9 +62,8 @@ class ListQueuesOptions extends QueueServiceOptions
      *
      * @param string $prefix value.
      *
-     * @return void
      */
-    public function setPrefix($prefix)
+    public function setPrefix(string $prefix): void
     {
         Validate::canCastAsString($prefix, 'prefix');
         $this->_prefix = $prefix;
@@ -71,9 +72,8 @@ class ListQueuesOptions extends QueueServiceOptions
     /**
      * Gets max results.
      *
-     * @return string
      */
-    public function getMaxResults()
+    public function getMaxResults(): string
     {
         return $this->_maxResults;
     }
@@ -83,9 +83,8 @@ class ListQueuesOptions extends QueueServiceOptions
      *
      * @param string $maxResults value.
      *
-     * @return void
      */
-    public function setMaxResults($maxResults)
+    public function setMaxResults(string $maxResults): void
     {
         Validate::canCastAsString($maxResults, 'maxResults');
         $this->_maxResults = $maxResults;
@@ -94,9 +93,8 @@ class ListQueuesOptions extends QueueServiceOptions
     /**
      * Indicates if metadata is included or not.
      *
-     * @return boolean
      */
-    public function getIncludeMetadata()
+    public function getIncludeMetadata(): bool
     {
         return $this->_includeMetadata;
     }
@@ -106,11 +104,11 @@ class ListQueuesOptions extends QueueServiceOptions
      *
      * @param bool $includeMetadata value.
      *
-     * @return void
      */
-    public function setIncludeMetadata($includeMetadata)
+    public function setIncludeMetadata(bool $includeMetadata): void
     {
         Validate::isBoolean($includeMetadata);
         $this->_includeMetadata = $includeMetadata;
     }
+
 }

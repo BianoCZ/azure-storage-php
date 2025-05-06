@@ -24,9 +24,14 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal\Serialization;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
+use Exception;
 use GuzzleHttp\Exception\RequestException;
+use InvalidArgumentException;
+use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
+use Throwable;
+use function method_exists;
+use function sprintf;
 
 /**
  * Provides functionality to serialize a message to a string.
@@ -50,15 +55,16 @@ class MessageSerializer
      *
      * @param object $message The message to be serialized.
      *
-     * @return string
      */
-    public static function objectSerialize($targetObject)
+    public static function objectSerialize($targetObject): string
     {
         //if the object is of exception type, serialize it using the methods
         //without checking the methods.
         if ($targetObject instanceof RequestException) {
             return self::serializeRequestException($targetObject);
-        } elseif ($targetObject instanceof \Exception) {
+        }
+
+        if ($targetObject instanceof Exception) {
             return self::serializeException($targetObject);
         }
 
@@ -66,17 +72,23 @@ class MessageSerializer
         Validate::methodExists($targetObject, 'getProtocolVersion', 'targetObject');
 
         // Serialize according to the implemented method.
-        if (method_exists($targetObject, 'getUri') &&
-            method_exists($targetObject, 'getMethod')) {
+        if (
+            method_exists($targetObject, 'getUri') &&
+            method_exists($targetObject, 'getMethod')
+        ) {
             return self::serializeRequest($targetObject);
-        } elseif (method_exists($targetObject, 'getStatusCode') &&
-                   method_exists($targetObject, 'getReasonPhrase')) {
-            return self::serializeResponse($targetObject);
-        } else {
-            throw new \InvalidArgumentException(
-                Resources::INVALID_MESSAGE_OBJECT_TO_SERIALIZE
-            );
         }
+
+        if (
+            method_exists($targetObject, 'getStatusCode') &&
+                   method_exists($targetObject, 'getReasonPhrase')
+        ) {
+            return self::serializeResponse($targetObject);
+        }
+
+        throw new InvalidArgumentException(
+            Resources::INVALID_MESSAGE_OBJECT_TO_SERIALIZE
+        );
     }
 
     /**
@@ -88,9 +100,8 @@ class MessageSerializer
      *
      * @param  object $request The request to be serialized.
      *
-     * @return string
      */
-    private static function serializeRequest($request)
+    private static function serializeRequest(object $request): string
     {
         $headers = $request->getHeaders();
         $version = $request->getProtocolVersion();
@@ -113,9 +124,8 @@ class MessageSerializer
      *
      * @param  object $response The response to be serialized
      *
-     * @return string
      */
-    private static function serializeResponse($response)
+    private static function serializeResponse(object $response): string
     {
         $headers = $response->getHeaders();
         $version = $response->getProtocolVersion();
@@ -135,9 +145,8 @@ class MessageSerializer
      *
      * @param  array  $headers The headers to be serialized.
      *
-     * @return string
      */
-    private static function serializeHeaders(array $headers)
+    private static function serializeHeaders(array $headers): string
     {
         $resultString = "Headers:\n";
         foreach ($headers as $key => $value) {
@@ -152,9 +161,8 @@ class MessageSerializer
      *
      * @param  RequestException $e the request exception to be serialized.
      *
-     * @return string
      */
-    private static function serializeRequestException(RequestException $e)
+    private static function serializeRequestException(RequestException $e): string
     {
         $resultString = sprintf("Reason:\n%s\n", $e);
         if ($e->hasResponse()) {
@@ -169,10 +177,10 @@ class MessageSerializer
      *
      * @param  \Exception $e general exception to be serialized.
      *
-     * @return string
      */
-    private static function serializeException(\Exception $e)
+    private static function serializeException(Throwable $e): string
     {
         return sprintf("Reason:\n%s\n", $e);
     }
+
 }

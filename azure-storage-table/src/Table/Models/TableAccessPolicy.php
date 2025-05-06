@@ -42,13 +42,10 @@ class TableAccessPolicy extends AccessPolicy
     /**
      * Get the valid permissions for the given resource.
      *
-     * @return array
      */
-    public static function getResourceValidPermissions()
+    public static function getResourceValidPermissions(): array
     {
-        return TableResources::ACCESS_PERMISSIONS[
-            TableResources::RESOURCE_TYPE_TABLE
-        ];
+        return TableResources::ACCESS_PERMISSIONS[TableResources::RESOURCE_TYPE_TABLE];
     }
 
     /**
@@ -58,4 +55,5 @@ class TableAccessPolicy extends AccessPolicy
     {
         parent::__construct(TableResources::RESOURCE_TYPE_TABLE);
     }
+
 }

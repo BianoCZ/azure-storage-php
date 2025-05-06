@@ -36,5 +36,7 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class CreatePageBlobOptions extends CreateBlobOptions
 {
+
     use AccessTierTrait;
+
 }

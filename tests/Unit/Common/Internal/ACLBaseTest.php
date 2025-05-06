@@ -21,15 +21,15 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Tests\Framework\ReflectionTestBase;
-use MicrosoftAzure\Storage\Common\Internal\ACLBase;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Queue\Models\QueueACL;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ACLBase
@@ -41,9 +41,9 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ACLBaseTest extends \PHPUnit\Framework\TestCase
+class ACLBaseTest extends TestCase
 {
-    public function testSetGetSignedIdentifiers()
+    public function testSetGetSignedIdentifiers(): void
     {
         // Setup
         $sample = TestResources::getQueueACLMultipleEntriesSample();
@@ -60,7 +60,7 @@ class ACLBaseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $child->getSignedIdentifiers());
     }
 
-    public function testToXml()
+    public function testToXml(): void
     {
         // Setup
         $sample = TestResources::getQueueACLMultipleEntriesSample();
@@ -81,7 +81,7 @@ class ACLBaseTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         // Setup
         $sample = TestResources::getQueueACLMultipleUnencodedEntriesSample();
@@ -107,7 +107,7 @@ class ACLBaseTest extends \PHPUnit\Framework\TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage There can be at most 5 signed identifiers
      */
-    public function testAddRemoveSignedIdentifier()
+    public function testAddRemoveSignedIdentifier(): void
     {
         $sample = TestResources::getQueueACLMultipleArraySample();
         $acl = new QueueACL();
@@ -152,4 +152,5 @@ class ACLBaseTest extends \PHPUnit\Framework\TestCase
             $sample[5]['AccessPolicy']['Permission']
         );
     }
+
 }

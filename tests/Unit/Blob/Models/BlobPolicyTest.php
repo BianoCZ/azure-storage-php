@@ -49,4 +49,5 @@ class BlobAccessPolicyTest extends AccessPolicyTest
     {
         return BlobResources::RESOURCE_TYPE_BLOB;
     }
+
 }

@@ -24,10 +24,19 @@
 
 namespace MicrosoftAzure\Storage\Queue;
 
+use Datetime;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\SharedAccessSignatureHelper;
 use MicrosoftAzure\Storage\Queue\Internal\QueueResources as Resources;
+use function base64_decode;
+use function base64_encode;
+use function hash_hmac;
+use function implode;
+use function sprintf;
+use function strlen;
+use function strtolower;
+use function urlencode;
 
 /**
  * Provides methods to generate Azure Storage Shared Access Signature
@@ -48,7 +57,7 @@ class QueueSharedAccessSignatureHelper extends SharedAccessSignatureHelper
      * @param string $accountKey the shared key of the storage account
      *
      */
-    public function __construct($accountName, $accountKey)
+    public function __construct(string $accountName, string $accountKey)
     {
         parent::__construct($accountName, $accountKey);
     }
@@ -68,17 +77,16 @@ class QueueSharedAccessSignatureHelper extends SharedAccessSignatureHelper
      *
      * @see Constructing an service SAS at
      * https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
-     * @return string
      */
     public function generateQueueServiceSharedAccessSignatureToken(
-        $queueName,
-        $signedPermissions,
-        $signedExpiry,
-        $signedStart = "",
-        $signedIP = "",
-        $signedProtocol = "",
-        $signedIdentifier = ""
-    ) {
+        string $queueName,
+        string $signedPermissions,
+        Datetime|string $signedExpiry,
+        Datetime|string $signedStart = "",
+        string $signedIP = "",
+        string $signedProtocol = "",
+        string $signedIdentifier = ""
+    ): string {
         // check that queue name is valid.
         Validate::notNullOrEmpty($queueName, 'queueName');
         Validate::canCastAsString($queueName, 'queueName');
@@ -90,7 +98,7 @@ class QueueSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         );
 
         // check that expiry is valid
-        if ($signedExpiry instanceof \Datetime) {
+        if ($signedExpiry instanceof Datetime) {
             $signedExpiry = Utilities::isoDate($signedExpiry);
         }
         Validate::notNullOrEmpty($signedExpiry, 'signedExpiry');
@@ -98,7 +106,7 @@ class QueueSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         Validate::isDateString($signedExpiry, 'signedExpiry');
 
         // check that signed start is valid
-        if ($signedStart instanceof \Datetime) {
+        if ($signedStart instanceof Datetime) {
             $signedStart = Utilities::isoDate($signedStart);
         }
         Validate::canCastAsString($signedStart, 'signedStart');
@@ -118,7 +126,7 @@ class QueueSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         );
 
         // construct an array with the parameters to generate the shared access signature at the account level
-        $parameters = array();
+        $parameters = [];
         $parameters[] = $signedPermissions;
         $parameters[] = $signedStart;
         $parameters[] = $signedExpiry;
@@ -145,17 +153,17 @@ class QueueSharedAccessSignatureHelper extends SharedAccessSignatureHelper
             return $string === '' ? '' : $abrv . $string;
         };
         //adding all the components for account SAS together.
-        $sas  = 'sv='    . Resources::STORAGE_API_LATEST_VERSION;
+        $sas  = 'sv=' . Resources::STORAGE_API_LATEST_VERSION;
         $sas .= $buildOptQueryStr($signedStart, '&st=');
-        $sas .= '&se='   . $signedExpiry;
-        $sas .= '&sp='   . $signedPermissions;
+        $sas .= '&se=' . $signedExpiry;
+        $sas .= '&sp=' . $signedPermissions;
         $sas .= $buildOptQueryStr($signedIP, '&sip=');
         $sas .= $buildOptQueryStr($signedProtocol, '&spr=');
         $sas .= $buildOptQueryStr($signedIdentifier, '&si=');
-        $sas .= '&sig='  . $sig;
+        $sas .= '&sig=' . $sig;
 
         // return the signature
         return $sas;
-
     }
+
 }

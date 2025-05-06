@@ -21,9 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\LeaseMode;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class LeaseMode
@@ -35,13 +37,14 @@ use MicrosoftAzure\Storage\Blob\Models\LeaseMode;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class LeaseModeTest extends \PHPUnit\Framework\TestCase
+class LeaseModeTest extends TestCase
 {
-    public function testLeaseMode()
+    public function testLeaseMode(): void
     {
         $this->assertEquals(LeaseMode::ACQUIRE_ACTION, 'acquire');
         $this->assertEquals(LeaseMode::BREAK_ACTION, 'break');
         $this->assertEquals(LeaseMode::RELEASE_ACTION, 'release');
         $this->assertEquals(LeaseMode::RENEW_ACTION, 'renew');
     }
+
 }

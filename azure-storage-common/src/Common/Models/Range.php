@@ -36,18 +36,20 @@ namespace MicrosoftAzure\Storage\Common\Models;
  */
 class Range
 {
+
     private $start;
+
     private $end;
 
     /**
      * Constructor
      *
-     * @param integer $start the resource start value
-     * @param integer $end   the resource end value
+     * @param int $start the resource start value
+     * @param int $end   the resource end value
      *
      * @return Range
      */
-    public function __construct($start, $end = null)
+    public function __construct(int $start, ?int $end = null)
     {
         $this->start = $start;
         $this->end   = $end;
@@ -56,11 +58,10 @@ class Range
     /**
      * Sets resource start range
      *
-     * @param integer $start the resource range start
+     * @param int $start the resource range start
      *
-     * @return void
      */
-    public function setStart($start)
+    public function setStart(int $start): void
     {
         $this->start = $start;
     }
@@ -68,9 +69,8 @@ class Range
     /**
      * Gets resource start range
      *
-     * @return integer
      */
-    public function getStart()
+    public function getStart(): int
     {
         return $this->start;
     }
@@ -78,11 +78,10 @@ class Range
     /**
      * Sets resource end range
      *
-     * @param integer $end the resource range end
+     * @param int $end the resource range end
      *
-     * @return void
      */
-    public function setEnd($end)
+    public function setEnd(int $end): void
     {
         $this->end = $end;
     }
@@ -90,9 +89,8 @@ class Range
     /**
      * Gets resource end range
      *
-     * @return integer
      */
-    public function getEnd()
+    public function getEnd(): int
     {
         return $this->end;
     }
@@ -100,25 +98,23 @@ class Range
     /**
      * Gets resource range length
      *
-     * @return integer
      */
-    public function getLength()
+    public function getLength(): int
     {
         if ($this->end != null) {
             return $this->end - $this->start + 1;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
      * Sets resource range length
      *
-     * @param integer $value new resource range
+     * @param int $value new resource range
      *
-     * @return void
      */
-    public function setLength($value)
+    public function setLength(int $value): void
     {
         $this->end = $this->start + $value - 1;
     }
@@ -126,9 +122,8 @@ class Range
     /**
      * Constructs the range string according to the set start and end
      *
-     * @return string
      */
-    public function getRangeString()
+    public function getRangeString(): string
     {
         $rangeString = '';
 
@@ -139,4 +134,5 @@ class Range
 
         return $rangeString;
     }
+
 }

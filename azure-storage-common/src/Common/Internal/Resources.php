@@ -419,4 +419,5 @@ class Resources
     const ROS_HANDLER        = 'requestHandler';
 
     // @codingStandardsIgnoreEnd
+
 }

@@ -25,7 +25,55 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal;
 
+use DateTime;
+use DateTimeInterface;
+use DateTimeZone;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
+use SimpleXMLElement;
+use XmlWriter;
+use function array_change_key_case;
+use function array_key_exists;
+use function array_map;
+use function base64_encode;
+use function bcadd;
+use function bcmul;
+use function count;
+use function explode;
+use function fclose;
+use function filter_var;
+use function fopen;
+use function func_get_args;
+use function func_num_args;
+use function fwrite;
+use function gettype;
+use function implode;
+use function in_array;
+use function is_array;
+use function is_double;
+use function is_int;
+use function is_null;
+use function is_numeric;
+use function is_object;
+use function is_string;
+use function md5;
+use function openssl_random_pseudo_bytes;
+use function ord;
+use function parse_url;
+use function sprintf;
+use function str_ireplace;
+use function str_replace;
+use function strcmp;
+use function strlen;
+use function strpos;
+use function strtolower;
+use function substr;
+use function urlencode;
+use const FILTER_VALIDATE_BOOLEAN;
+use const PHP_INT_SIZE;
+use const PHP_URL_HOST;
+use const PHP_URL_SCHEME;
 
 /**
  * Utilities for the project
@@ -47,9 +95,8 @@ class Utilities
      * @param mixed $key     The array key.
      * @param mixed $default The value to return if $key is not found in $array.
      *
-     * @return mixed
      */
-    public static function tryGetValue($array, $key, $default = null)
+    public static function tryGetValue(array $array, mixed $key, mixed $default = null): mixed
     {
         return (!is_null($array)) && is_array($array) && array_key_exists($key, $array)
             ? $array[$key]
@@ -62,9 +109,8 @@ class Utilities
      * @param string $url    The URL.
      * @param string $scheme The scheme. By default HTTP
      *
-     * @return string
      */
-    public static function tryAddUrlScheme($url, $scheme = 'http')
+    public static function tryAddUrlScheme(string $url, string $scheme = 'http'): string
     {
         if ($url == null) {
             return $url;
@@ -84,9 +130,8 @@ class Utilities
      *
      * @param string $url The endpoint $url
      *
-     * @return string
      */
-    public static function tryParseAccountNameFromUrl($url)
+    public static function tryParseAccountNameFromUrl(string $url): string
     {
         $host = parse_url($url, PHP_URL_HOST);
 
@@ -101,25 +146,23 @@ class Utilities
      *
      * @param string $uri The primary endpoint url string.
      *
-     * @return null|string
      */
-    public static function tryGetSecondaryEndpointFromPrimaryEndpoint($uri)
+    public static function tryGetSecondaryEndpointFromPrimaryEndpoint(string $uri): ?string
     {
         $splitTokens = explode('.', $uri);
         if (count($splitTokens) > 0 && $splitTokens[0] != '') {
             $schemaAccountToken = $splitTokens[0];
             $schemaAccountSplitTokens = explode('/', $schemaAccountToken);
-            if (count($schemaAccountSplitTokens) > 0 &&
-                $schemaAccountSplitTokens[0] != '') {
-                $accountName = $schemaAccountSplitTokens[
-                    count($schemaAccountSplitTokens) - 1
-                ];
+            if (
+                count($schemaAccountSplitTokens) > 0 &&
+                $schemaAccountSplitTokens[0] != ''
+            ) {
+                $accountName = $schemaAccountSplitTokens[count($schemaAccountSplitTokens) - 1];
                 $schemaAccountSplitTokens[count($schemaAccountSplitTokens) - 1] =
                     $accountName . Resources::SECONDARY_STRING;
 
                 $splitTokens[0] = implode('/', $schemaAccountSplitTokens);
-                $secondaryUri = implode('.', $splitTokens);
-                return $secondaryUri;
+                return implode('.', $splitTokens);
             }
         }
         return null;
@@ -133,11 +176,10 @@ class Utilities
      * @param string $key   The index name.
      * @param array  $array The array object.
      *
-     * @return array
      */
-    public static function tryGetArray($key, array $array)
+    public static function tryGetArray(string $key, array $array): array
     {
-        return Utilities::getArray(Utilities::tryGetValue($array, $key));
+        return self::getArray(self::tryGetValue($array, $key));
     }
 
     /**
@@ -150,9 +192,8 @@ class Utilities
      * @param string $value  The value.
      * @param array  &$array The array. If NULL will be used as array.
      *
-     * @return void
      */
-    public static function addIfNotEmpty($key, $value, array &$array)
+    public static function addIfNotEmpty(string $key, string $value, array &$array): void
     {
         if (!is_null($array)) {
             Validate::isArray($array, 'array');
@@ -169,9 +210,8 @@ class Utilities
      *
      * @param array $array Array to be used.
      *
-     * @return mixed
      */
-    public static function tryGetKeysChainValue(array $array)
+    public static function tryGetKeysChainValue(array $array): mixed
     {
         $arguments    = func_get_args();
         $numArguments = func_num_args();
@@ -197,18 +237,17 @@ class Utilities
      *
      * @param string  $string     word to seaech in
      * @param string  $prefix     prefix to be matched
-     * @param boolean $ignoreCase true to ignore case during the comparison;
+     * @param bool $ignoreCase true to ignore case during the comparison;
      * otherwise, false
      *
-     * @return boolean
      */
-    public static function startsWith($string, $prefix, $ignoreCase = false)
+    public static function startsWith(string $string, string $prefix, bool $ignoreCase = false): bool
     {
         if ($ignoreCase) {
             $string = strtolower($string);
             $prefix = strtolower($prefix);
         }
-        return ($prefix == substr($string, 0, strlen($prefix)));
+        return $prefix == substr($string, 0, strlen($prefix));
     }
 
     /**
@@ -216,21 +255,23 @@ class Utilities
      *
      * @param array $var item to group
      *
-     * @return array
      */
-    public static function getArray(array $var)
+    public static function getArray(array $var): array
     {
         if (is_null($var) || empty($var)) {
-            return array();
+            return [];
         }
 
         foreach ($var as $value) {
-            if ((gettype($value) == 'object')
-                && (get_class($value) == 'SimpleXMLElement')
+            if (
+                (gettype($value) == 'object')
+                && ($value::class == 'SimpleXMLElement')
             ) {
                 return (array) $var;
-            } elseif (!is_array($value)) {
-                return array($var);
+            }
+
+            if (!is_array($value)) {
+                return [$var];
             }
         }
 
@@ -242,11 +283,10 @@ class Utilities
      *
      * @param string $xml XML to be parsed.
      *
-     * @return array
      */
-    public static function unserialize($xml)
+    public static function unserialize(string $xml): array
     {
-        $sxml = new \SimpleXMLElement($xml);
+        $sxml = new SimpleXMLElement($xml);
 
         return self::_sxml2arr($sxml);
     }
@@ -258,9 +298,8 @@ class Utilities
      * @param string $sxml SimpleXML object
      * @param array  $arr  Array into which to store results
      *
-     * @return array
      */
-    private static function _sxml2arr($sxml, array $arr = null)
+    private static function _sxml2arr(string $sxml, ?array $arr = null): array
     {
         foreach ((array) $sxml as $key => $value) {
             if (is_object($value) || (is_array($value))) {
@@ -282,14 +321,13 @@ class Utilities
      * @param string $defaultTag default tag for non-tagged elements.
      * @param string $standalone adds 'standalone' header tag, values 'yes'/'no'
      *
-     * @return string
      */
     public static function serialize(
         array $array,
-        $rootName,
-        $defaultTag = null,
-        $standalone = null
-    ) {
+        string $rootName,
+        ?string $defaultTag = null,
+        ?string $standalone = null
+    ): string {
         $xmlVersion  = '1.0';
         $xmlEncoding = 'UTF-8';
 
@@ -297,7 +335,7 @@ class Utilities
             return false;
         }
 
-        $xmlw = new \XmlWriter();
+        $xmlw = new XmlWriter();
         $xmlw->openMemory();
         $xmlw->startDocument($xmlVersion, $xmlEncoding, $standalone);
 
@@ -318,13 +356,12 @@ class Utilities
      * @param array     $data       Array to be converted to XML
      * @param string    $defaultTag Default XML tag to be used if none specified.
      *
-     * @return void
      */
     private static function _arr2xml(
         \XMLWriter $xmlw,
         array $data,
-        $defaultTag = null
-    ) {
+        ?string $defaultTag = null
+    ): void {
         foreach ($data as $key => $value) {
             if (strcmp($key, '@attributes') == 0) {
                 foreach ($value as $attributeName => $attributeValue) {
@@ -358,9 +395,8 @@ class Utilities
      * @param bool   $skipNull  If $skipNull is set, will return NULL directly
      *                          when $obj is NULL.
      *
-     * @return bool
      */
-    public static function toBoolean($obj, $skipNull = false)
+    public static function toBoolean(string $obj, bool $skipNull = false): bool
     {
         if ($skipNull && is_null($obj)) {
             return null;
@@ -374,9 +410,8 @@ class Utilities
      *
      * @param bool $obj boolean value to convert.
      *
-     * @return string
      */
-    public static function booleanToString($obj)
+    public static function booleanToString(bool $obj): string
     {
         return $obj ? 'true' : 'false';
     }
@@ -386,14 +421,13 @@ class Utilities
      *
      * @param string $date windows azure date ins string representation.
      *
-     * @return \DateTime
      */
-    public static function rfc1123ToDateTime($date)
+    public static function rfc1123ToDateTime(string $date): DateTime
     {
-        $timeZone = new \DateTimeZone('GMT');
+        $timeZone = new DateTimeZone('GMT');
         $format   = Resources::AZURE_DATE_FORMAT;
 
-        return \DateTime::createFromFormat($format, $date, $timeZone);
+        return DateTime::createFromFormat($format, $date, $timeZone);
     }
 
     /**
@@ -401,12 +435,11 @@ class Utilities
      *
      * @param \DateTimeInterface $date The date value to convert
      *
-     * @return string
      */
-    public static function isoDate(\DateTimeInterface $date)
+    public static function isoDate(DateTimeInterface $date): string
     {
         $date = clone $date;
-        $date = $date->setTimezone(new \DateTimeZone('UTC'));
+        $date = $date->setTimezone(new DateTimeZone('UTC'));
 
         return str_replace('+00:00', 'Z', $date->format('c'));
     }
@@ -417,9 +450,8 @@ class Utilities
      *
      * @param mixed $value The datetime value.
      *
-     * @return string
      */
-    public static function convertToEdmDateTime($value)
+    public static function convertToEdmDateTime(mixed $value): string
     {
         if (empty($value)) {
             return $value;
@@ -432,7 +464,7 @@ class Utilities
         Validate::isDate($value);
 
         $cloned = clone $value;
-        $cloned->setTimezone(new \DateTimeZone('UTC'));
+        $cloned->setTimezone(new DateTimeZone('UTC'));
         return str_replace('+00:00', 'Z', $cloned->format("Y-m-d\TH:i:s.u0P"));
     }
 
@@ -441,11 +473,10 @@ class Utilities
      *
      * @param string $value The string value to parse.
      *
-     * @return \DateTime
      */
-    public static function convertToDateTime($value)
+    public static function convertToDateTime(string $value): DateTime
     {
-        if ($value instanceof \DateTime) {
+        if ($value instanceof DateTime) {
             return $value;
         }
 
@@ -453,7 +484,7 @@ class Utilities
             $value = substr($value, 0, strlen($value) - 1);
         }
 
-        return new \DateTime($value, new \DateTimeZone('UTC'));
+        return new DateTime($value, new DateTimeZone('UTC'));
     }
 
     /**
@@ -463,7 +494,7 @@ class Utilities
      *
      * @return resource
      */
-    public static function stringToStream($string)
+    public static function stringToStream(string $string)
     {
         return fopen('data://text/plain,' . urlencode($string), 'rb');
     }
@@ -474,11 +505,10 @@ class Utilities
      * @param array $array The array to sort.
      * @param array $order The keys order array.
      *
-     * @return array
      */
-    public static function orderArray(array $array, array $order)
+    public static function orderArray(array $array, array $order): array
     {
-        $ordered = array();
+        $ordered = [];
 
         foreach ($order as $key) {
             if (array_key_exists($key, $array)) {
@@ -496,9 +526,8 @@ class Utilities
      * @param string $needle   The searched value.
      * @param array  $haystack The array.
      *
-     * @return boolean
      */
-    public static function inArrayInsensitive($needle, array $haystack)
+    public static function inArrayInsensitive(string $needle, array $haystack): bool
     {
         return in_array(strtolower($needle), array_map('strtolower', $haystack));
     }
@@ -510,9 +539,8 @@ class Utilities
      * @param string $key    The value to check.
      * @param array  $search The array with keys to check.
      *
-     * @return boolean
      */
-    public static function arrayKeyExistsInsensitive($key, array $search)
+    public static function arrayKeyExistsInsensitive(string $key, array $search): bool
     {
         return array_key_exists(strtolower($key), array_change_key_case($search));
     }
@@ -526,12 +554,11 @@ class Utilities
      * @param array  $haystack The array to be used.
      * @param mixed  $default  The value to return if $key is not found in $array.
      *
-     * @return mixed
      */
-    public static function tryGetValueInsensitive($key, $haystack, $default = null)
+    public static function tryGetValueInsensitive(string $key, array $haystack, mixed $default = null): mixed
     {
         $array = array_change_key_case($haystack);
-        return Utilities::tryGetValue($array, strtolower($key), $default);
+        return self::tryGetValue($array, strtolower($key), $default);
     }
 
     /**
@@ -547,7 +574,7 @@ class Utilities
      *
      * @return string A new GUID.
      */
-    public static function getGuid()
+    public static function getGuid(): string
     {
         // @codingStandardsIgnoreStart
 
@@ -578,11 +605,10 @@ class Utilities
      * @param array  $parsed The object in array representation
      * @param string $class  The class name. Must have static method create.
      *
-     * @return array
      */
-    public static function createInstanceList(array $parsed, $class)
+    public static function createInstanceList(array $parsed, string $class): array
     {
-        $list = array();
+        $list = [];
 
         foreach ($parsed as $value) {
             $list[] = $class::create($value);
@@ -596,12 +622,11 @@ class Utilities
      *
      * @param string  $haystack   The string to search in.
      * @param string  $needle     postfix to match.
-     * @param boolean $ignoreCase Set true to ignore case during the comparison;
+     * @param bool $ignoreCase Set true to ignore case during the comparison;
      * otherwise, false
      *
-     * @return boolean
      */
-    public static function endsWith($haystack, $needle, $ignoreCase = false)
+    public static function endsWith(string $haystack, string $needle, bool $ignoreCase = false): bool
     {
         if ($ignoreCase) {
             $haystack = strtolower($haystack);
@@ -612,7 +637,7 @@ class Utilities
             return true;
         }
 
-        return (substr($haystack, -$length) === $needle);
+        return substr($haystack, -$length) === $needle;
     }
 
     /**
@@ -624,18 +649,17 @@ class Utilities
      * @param string        $type   Entity type to validate
      * @param string        $method Methods that gets id (getId by default)
      *
-     * @return string
      */
-    public static function getEntityId($entity, $type, $method = 'getId')
+    public static function getEntityId(object|string $entity, string $type, string $method = 'getId'): string
     {
         if (is_string($entity)) {
             return $entity;
-        } else {
-            Validate::isA($entity, $type, 'entity');
-            Validate::methodExists($entity, $method, $type);
-
-            return $entity->$method();
         }
+
+        Validate::isA($entity, $type, 'entity');
+        Validate::methodExists($entity, $method, $type);
+
+        return $entity->$method();
     }
 
     /**
@@ -644,10 +668,10 @@ class Utilities
      *
      * @param int $length Length of the string in bytes
      *
-     * @return string|boolean Generated string of bytes on success, or FALSE on
+     * @return string|bool Generated string of bytes on success, or FALSE on
      *                        failure.
      */
-    public static function generateCryptoKey($length)
+    public static function generateCryptoKey(int $length): string|bool
     {
         return openssl_random_pseudo_bytes($length);
     }
@@ -659,7 +683,7 @@ class Utilities
      *
      * @return string Decimal number
      */
-    public static function base256ToDec($number)
+    public static function base256ToDec(string $number): string
     {
         Validate::canCastAsString($number, 'number');
 
@@ -677,12 +701,13 @@ class Utilities
      * To evaluate if the stream is larger than a certain size. To restore
      * the stream, it has to be seekable, so will return true if the stream
      * is not seekable.
+     *
      * @param  StreamInterface $stream The stream to be evaluated.
      * @param  int             $size   The size if the string is larger than.
      *
-     * @return boolean         true if the stream is larger than the given size.
+     * @return bool         true if the stream is larger than the given size.
      */
-    public static function isStreamLargerThanSizeOrNotSeekable(StreamInterface $stream, $size)
+    public static function isStreamLargerThanSizeOrNotSeekable(StreamInterface $stream, int $size): bool
     {
         Validate::isInteger($size, 'size');
         Validate::isTrue(
@@ -694,7 +719,7 @@ class Utilities
             $position = $stream->tell();
             try {
                 $stream->seek($size);
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $pos = strpos(
                     $e->getMessage(),
                     'to seek to stream position '
@@ -719,13 +744,12 @@ class Utilities
      *
      * @param array $headers HTTP headers containing metadata elements.
      *
-     * @return array
      */
-    public static function getMetadataArray(array $headers)
+    public static function getMetadataArray(array $headers): array
     {
-        $metadata = array();
+        $metadata = [];
         foreach ($headers as $key => $value) {
-            $isMetadataHeader = Utilities::startsWith(
+            $isMetadataHeader = self::startsWith(
                 strtolower($key),
                 Resources::X_MS_META_HEADER_PREFIX
             );
@@ -749,14 +773,13 @@ class Utilities
      *
      * @param array $metadata The metadata array.
      *
-     * @return void
      */
-    public static function validateMetadata(array $metadata = null)
+    public static function validateMetadata(?array $metadata = null): void
     {
         if (!is_null($metadata)) {
             Validate::isArray($metadata, 'metadata');
         } else {
-            $metadata = array();
+            $metadata = [];
         }
 
         foreach ($metadata as $key => $value) {
@@ -767,12 +790,12 @@ class Utilities
 
     /**
      * Append the content to file.
+     *
      * @param  string $path    The file to append to.
      * @param  string $content The content to append.
      *
-     * @return void
      */
-    public static function appendToFile($path, $content)
+    public static function appendToFile(string $path, string $content): void
     {
         $resource = @fopen($path, 'a+');
         if ($resource != null) {
@@ -785,9 +808,8 @@ class Utilities
      * Check if all the bytes are zero.
      *
      * @param string $content The content.
-     * @return bool
      */
-    public static function allZero($content)
+    public static function allZero(string $content): bool
     {
         $size = strlen($content);
 
@@ -808,9 +830,8 @@ class Utilities
      * @param string $string    The string to add delimiter to.
      * @param string $delimiter The delimiter to be added.
      *
-     * @return string
      */
-    public static function appendDelimiter($string, $delimiter)
+    public static function appendDelimiter(string $string, string $delimiter): string
     {
         if (!self::endsWith($string, $delimiter)) {
             $string .= $delimiter;
@@ -828,16 +849,15 @@ class Utilities
      *                                                    request. Must contain
      *                                                    Resources::ROS_SECONDARY_URI
      *
-     * @return boolean
      */
     public static function requestSentToSecondary(
-        \Psr\Http\Message\RequestInterface $request,
+        RequestInterface $request,
         array $options
-    ) {
+    ): bool {
         $uri = $request->getUri();
         $secondaryUri = $options[Resources::ROS_SECONDARY_URI];
         $isSecondary = false;
-        if (strpos((string)$uri, (string)$secondaryUri) !== false) {
+        if (strpos((string) $uri, (string) $secondaryUri) !== false) {
             $isSecondary = true;
         }
         return $isSecondary;
@@ -848,17 +868,16 @@ class Utilities
      *
      * @param  array  $headers request/response headers.
      *
-     * @return string
      */
-    public static function getLocationFromHeaders(array $headers)
+    public static function getLocationFromHeaders(array $headers): string
     {
-        $value = Utilities::tryGetValue(
+        $value = self::tryGetValue(
             $headers,
             Resources::X_MS_CONTINUATION_LOCATION_MODE
         );
 
         $result = '';
-        if (\is_string($value)) {
+        if (is_string($value)) {
             $result = $value;
         } elseif (!empty($value)) {
             $result = $value[0];
@@ -872,9 +891,8 @@ class Utilities
      *
      * @param  mixed  $value The value to be verified.
      *
-     * @return boolean
      */
-    public static function isDouble($value)
+    public static function isDouble(mixed $value): bool
     {
         return is_numeric($value) && is_double($value + 0);
     }
@@ -885,9 +903,8 @@ class Utilities
      *
      * @param  string $content the content to be calculated.
      *
-     * @return string
      */
-    public static function calculateContentMD5($content)
+    public static function calculateContentMD5(string $content): string
     {
         Validate::notNull($content, 'content');
         Validate::canCastAsString($content, 'content');
@@ -898,10 +915,10 @@ class Utilities
     /**
      * Return if the environment is in 64 bit PHP.
      *
-     * @return bool
      */
-    public static function is64BitPHP()
+    public static function is64BitPHP(): bool
     {
         return PHP_INT_SIZE == 8;
     }
+
 }

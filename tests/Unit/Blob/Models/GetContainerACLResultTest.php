@@ -21,13 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
-use MicrosoftAzure\Storage\Blob\Models\GetContainerACLResult;
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Models\ContainerACL;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Blob\Models\GetContainerACLResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class GetContainerACLResult
@@ -39,14 +39,14 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetContainerACLResultTest extends \PHPUnit\Framework\TestCase
+class GetContainerACLResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
-        $sample = array();
+        $sample = [];
         $expectedETag = '0x8CAFB82EFF70C46';
-        $expectedDate = new \DateTime('Sun, 25 Sep 2011 19:42:18 GMT');
+        $expectedDate = new DateTime('Sun, 25 Sep 2011 19:42:18 GMT');
         $expectedPublicAccess = 'container';
         $expectedContainerACL = ContainerACL::create($expectedPublicAccess, $sample);
 
@@ -63,4 +63,5 @@ class GetContainerACLResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedDate, $result->getLastModified());
         $this->assertEquals($expectedETag, $result->getETag());
     }
+
 }

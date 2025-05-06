@@ -24,11 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\File\Models;
 
-use MicrosoftAzure\Storage\File\Models\ShareProperties;
-use MicrosoftAzure\Storage\File\Models\Share;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\File\Models\Share;
+use MicrosoftAzure\Storage\File\Models\ShareProperties;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class Share
@@ -40,13 +41,13 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ShareTest extends \PHPUnit\Framework\TestCase
+class ShareTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $responseArray = TestResources::getInterestingShareArray();
         $share = Share::create($responseArray);
-        $expectedMeta = Utilities::tryGetValue($responseArray, Resources::QP_METADATA, array());
+        $expectedMeta = Utilities::tryGetValue($responseArray, Resources::QP_METADATA, []);
         $expectedName = $responseArray[Resources::QP_NAME];
         $expectedProperties = ShareProperties::create(
             $responseArray[Resources::QP_PROPERTIES]
@@ -56,4 +57,5 @@ class ShareTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedName, $share->getName());
         $this->assertEquals($expectedProperties, $share->getProperties());
     }
+
 }

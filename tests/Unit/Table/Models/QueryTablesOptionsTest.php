@@ -24,10 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
-use MicrosoftAzure\Storage\Table\Models\QueryTablesOptions;
-use MicrosoftAzure\Storage\Table\Models\Query;
-use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
+use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
+use MicrosoftAzure\Storage\Table\Models\Query;
+use MicrosoftAzure\Storage\Table\Models\QueryTablesOptions;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class QueryTablesOptions
@@ -39,9 +40,9 @@ use MicrosoftAzure\Storage\Table\Models\EdmType;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class QueryTablesOptionsTest extends \PHPUnit\Framework\TestCase
+class QueryTablesOptionsTest extends TestCase
 {
-    public function testSetNextTableName()
+    public function testSetNextTableName(): void
     {
         // Setup
         $options = new QueryTablesOptions();
@@ -54,7 +55,7 @@ class QueryTablesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getNextTableName());
     }
 
-    public function testSetPrefix()
+    public function testSetPrefix(): void
     {
         // Setup
         $options = new QueryTablesOptions();
@@ -67,7 +68,7 @@ class QueryTablesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getPrefix());
     }
 
-    public function testSetTop()
+    public function testSetTop(): void
     {
         // Setup
         $options = new QueryTablesOptions();
@@ -80,7 +81,7 @@ class QueryTablesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getTop());
     }
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         // Setup
         $options = new QueryTablesOptions();
@@ -93,7 +94,7 @@ class QueryTablesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetFilter()
+    public function testSetFilter(): void
     {
         // Setup
         $options = new QueryTablesOptions();
@@ -105,4 +106,5 @@ class QueryTablesOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $options->getFilter());
     }
+
 }

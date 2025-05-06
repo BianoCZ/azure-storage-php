@@ -21,10 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
 use MicrosoftAzure\Storage\Table\Models\DeleteEntityOptions;
-use MicrosoftAzure\Storage\Table\Models\ETag;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class DeleteEntityOptions
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Table\Models\ETag;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class DeleteEntityOptionsTest extends \PHPUnit\Framework\TestCase
+class DeleteEntityOptionsTest extends TestCase
 {
-    public function testSetETag()
+    public function testSetETag(): void
     {
         // Setup
         $options = new DeleteEntityOptions();
@@ -50,4 +51,5 @@ class DeleteEntityOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($ETag, $options->getETag());
     }
+
 }

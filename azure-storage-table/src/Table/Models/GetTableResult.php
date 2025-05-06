@@ -36,6 +36,7 @@ namespace MicrosoftAzure\Storage\Table\Models;
  */
 class GetTableResult
 {
+
     private $_name;
 
     /**
@@ -46,9 +47,8 @@ class GetTableResult
      *
      * @internal
      *
-     * @return GetTableResult
      */
-    public static function create($body, $odataSerializer)
+    public static function create(string $body, IODataReaderWriter $odataSerializer): GetTableResult
     {
         $result = new GetTableResult();
         $name = $odataSerializer->parseTable($body);
@@ -60,9 +60,8 @@ class GetTableResult
     /**
      * Gets the name.
      *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->_name;
     }
@@ -72,10 +71,10 @@ class GetTableResult
      *
      * @param string $name The table name.
      *
-     * @return void
      */
-    protected function setName($name)
+    protected function setName(string $name): void
     {
         $this->_name = $name;
     }
+
 }

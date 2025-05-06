@@ -25,9 +25,14 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal;
 
+use DateTime;
+use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 use MicrosoftAzure\Storage\Common\Models\AccessPolicy;
 use MicrosoftAzure\Storage\Common\Models\SignedIdentifier;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use function array_splice;
+use function count;
+use function is_array;
+use function urldecode;
 
 /**
  * Provide base class for service ACLs.
@@ -41,15 +46,16 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
  */
 abstract class ACLBase
 {
-    private $signedIdentifiers = array();
+
+    private $signedIdentifiers = [];
+
     private $resourceType = '';
 
     /**
      * Create an AccessPolicy object by resource type.
      *
-     * @return AccessPolicy
      */
-    abstract protected static function createAccessPolicy();
+    abstract protected static function createAccessPolicy(): AccessPolicy;
 
     /**
      * Validate if the resource type for the class.
@@ -60,20 +66,18 @@ abstract class ACLBase
      *
      * @internal
      *
-     * @return void
      */
-    abstract protected static function validateResourceType($resourceType);
+    abstract protected static function validateResourceType(string $resourceType): void;
 
     /**
      * Converts signed identifiers to array representation for XML serialization
      *
      * @internal
      *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        $array = array();
+        $array = [];
 
         foreach ($this->getSignedIdentifiers() as $value) {
             $array[] = $value->toArray();
@@ -89,14 +93,13 @@ abstract class ACLBase
      *
      * @internal
      *
-     * @return string
      */
-    public function toXml(XmlSerializer $serializer)
+    public function toXml(XmlSerializer $serializer): string
     {
-        $properties = array(
+        $properties = [
             XmlSerializer::DEFAULT_TAG => Resources::XTAG_SIGNED_IDENTIFIER,
-            XmlSerializer::ROOT_NAME   => Resources::XTAG_SIGNED_IDENTIFIERS
-        );
+            XmlSerializer::ROOT_NAME   => Resources::XTAG_SIGNED_IDENTIFIERS,
+        ];
 
         return $serializer->serialize($this->toArray(), $properties);
     }
@@ -109,14 +112,14 @@ abstract class ACLBase
      *
      * @internal
      *
-     * @return void
      */
-    public function fromXmlArray(array $parsed = null)
+    public function fromXmlArray(?array $parsed = null): void
     {
-        $this->setSignedIdentifiers(array());
+        $this->setSignedIdentifiers([]);
 
         // Initialize signed identifiers.
-        if (!empty($parsed) &&
+        if (
+            !empty($parsed) &&
                 is_array($parsed[Resources::XTAG_SIGNED_IDENTIFIER])
         ) {
             $entries = $parsed[Resources::XTAG_SIGNED_IDENTIFIER];
@@ -144,9 +147,8 @@ abstract class ACLBase
      *
      * @internal
      *
-     * @return string
      */
-    protected function getResourceType()
+    protected function getResourceType(): string
     {
         return $this->resourceType;
     }
@@ -156,9 +158,8 @@ abstract class ACLBase
      *
      * @internal
      *
-     * @return void
      */
-    protected function setResourceType($resourceType)
+    protected function setResourceType($resourceType): void
     {
         static::validateResourceType($resourceType);
         $this->resourceType = $resourceType;
@@ -179,16 +180,14 @@ abstract class ACLBase
      *                               Access Signature. The user is restricted to
      *                               operations allowed by the permissions.
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/establishing-a-stored-access-policy
      */
     public function addSignedIdentifier(
-        $id,
-        \DateTime $start,
-        \DateTime $expiry,
-        $permissions
-    ) {
+        string $id,
+        DateTime $start,
+        DateTime $expiry,
+        string $permissions
+    ): void {
         Validate::canCastAsString($id, 'id');
         if ($start != null) {
             Validate::isDate($start);
@@ -222,9 +221,8 @@ abstract class ACLBase
      *
      * @param  string $id The ID of the signed identifier to be removed.
      *
-     * @return boolean
      */
-    public function removeSignedIdentifier($id)
+    public function removeSignedIdentifier(string $id): bool
     {
         Validate::canCastAsString($id, 'id');
         //var_dump($this->signedIdentifiers);
@@ -241,14 +239,13 @@ abstract class ACLBase
     /**
      * Gets signed identifiers.
      *
-     * @return array
      */
-    public function getSignedIdentifiers()
+    public function getSignedIdentifiers(): array
     {
         return $this->signedIdentifiers;
     }
 
-    public function setSignedIdentifiers(array $signedIdentifiers)
+    public function setSignedIdentifiers(array $signedIdentifiers): void
     {
         // There can be no more than 5 signed identifiers at the same time.
         Validate::isTrue(
@@ -257,4 +254,5 @@ abstract class ACLBase
         );
         $this->signedIdentifiers = $signedIdentifiers;
     }
+
 }

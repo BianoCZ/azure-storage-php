@@ -24,51 +24,61 @@
 
 namespace MicrosoftAzure\Storage\Table;
 
+use GuzzleHttp\Promise\PromiseInterface;
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Common\Internal\Authentication\SharedAccessSignatureAuthScheme;
+use MicrosoftAzure\Storage\Common\Internal\Http\HttpCallContext;
+use MicrosoftAzure\Storage\Common\Internal\Http\HttpFormatter;
 use MicrosoftAzure\Storage\Common\Internal\Middlewares\CommonRequestMiddleware;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Common\Internal\ServiceRestProxy;
 use MicrosoftAzure\Storage\Common\Internal\ServiceRestTrait;
 use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
-use MicrosoftAzure\Storage\Common\Internal\Http\HttpCallContext;
-use MicrosoftAzure\Storage\Common\Internal\ServiceRestProxy;
 use MicrosoftAzure\Storage\Common\LocationMode;
 use MicrosoftAzure\Storage\Table\Internal\Authentication\TableSharedKeyLiteAuthScheme;
+use MicrosoftAzure\Storage\Table\Internal\IMimeReaderWriter;
+use MicrosoftAzure\Storage\Table\Internal\IODataReaderWriter;
 use MicrosoftAzure\Storage\Table\Internal\ITable;
 use MicrosoftAzure\Storage\Table\Internal\JsonODataReaderWriter;
 use MicrosoftAzure\Storage\Table\Internal\MimeReaderWriter;
 use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
-use MicrosoftAzure\Storage\Table\Models\TableServiceOptions;
+use MicrosoftAzure\Storage\Table\Models\BatchOperationParameterName;
+use MicrosoftAzure\Storage\Table\Models\BatchOperationType;
+use MicrosoftAzure\Storage\Table\Models\BatchResult;
+use MicrosoftAzure\Storage\Table\Models\DeleteEntityOptions;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
 use MicrosoftAzure\Storage\Table\Models\Entity;
-use MicrosoftAzure\Storage\Table\Models\Query;
+use MicrosoftAzure\Storage\Table\Models\Filters\BinaryFilter;
+use MicrosoftAzure\Storage\Table\Models\Filters\ConstantFilter;
 use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
 use MicrosoftAzure\Storage\Table\Models\Filters\PropertyNameFilter;
-use MicrosoftAzure\Storage\Table\Models\Filters\ConstantFilter;
-use MicrosoftAzure\Storage\Table\Models\Filters\UnaryFilter;
-use MicrosoftAzure\Storage\Table\Models\Filters\BinaryFilter;
 use MicrosoftAzure\Storage\Table\Models\Filters\QueryStringFilter;
-use MicrosoftAzure\Storage\Table\Models\GetTableResult;
-use MicrosoftAzure\Storage\Table\Models\GetTableOptions;
+use MicrosoftAzure\Storage\Table\Models\Filters\UnaryFilter;
 use MicrosoftAzure\Storage\Table\Models\GetEntityOptions;
-use MicrosoftAzure\Storage\Table\Models\TableServiceCreateOptions;
-use MicrosoftAzure\Storage\Table\Models\QueryTablesOptions;
-use MicrosoftAzure\Storage\Table\Models\QueryTablesResult;
+use MicrosoftAzure\Storage\Table\Models\GetEntityResult;
+use MicrosoftAzure\Storage\Table\Models\GetTableOptions;
+use MicrosoftAzure\Storage\Table\Models\GetTableResult;
 use MicrosoftAzure\Storage\Table\Models\InsertEntityResult;
-use MicrosoftAzure\Storage\Table\Models\UpdateEntityResult;
+use MicrosoftAzure\Storage\Table\Models\Query;
 use MicrosoftAzure\Storage\Table\Models\QueryEntitiesOptions;
 use MicrosoftAzure\Storage\Table\Models\QueryEntitiesResult;
-use MicrosoftAzure\Storage\Table\Models\DeleteEntityOptions;
-use MicrosoftAzure\Storage\Table\Models\GetEntityResult;
-use MicrosoftAzure\Storage\Table\Models\BatchOperationType;
-use MicrosoftAzure\Storage\Table\Models\BatchOperationParameterName;
-use MicrosoftAzure\Storage\Table\Models\BatchResult;
+use MicrosoftAzure\Storage\Table\Models\QueryTablesOptions;
+use MicrosoftAzure\Storage\Table\Models\QueryTablesResult;
 use MicrosoftAzure\Storage\Table\Models\TableACL;
-use MicrosoftAzure\Storage\Common\Internal\Http\HttpFormatter;
-use MicrosoftAzure\Storage\Table\Internal\IODataReaderWriter;
-use MicrosoftAzure\Storage\Table\Internal\IMimeReaderWriter;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\ISerializer;
+use MicrosoftAzure\Storage\Table\Models\TableServiceCreateOptions;
+use MicrosoftAzure\Storage\Table\Models\TableServiceOptions;
+use MicrosoftAzure\Storage\Table\Models\UpdateEntityResult;
+use Psr\Http\Message\ResponseInterface;
+use function array_key_exists;
+use function count;
+use function implode;
+use function is_null;
+use function is_string;
+use function rawurlencode;
+use function str_replace;
+use function strlen;
+use function strval;
 
 /**
  * This class constructs HTTP requests and receive HTTP responses for table
@@ -83,17 +93,12 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\ISerializer;
  */
 class TableRestProxy extends ServiceRestProxy implements ITable
 {
+
     use ServiceRestTrait;
 
-    /**
-     * @var Internal\IODataReaderWriter
-     */
-    private $odataSerializer;
+    private Internal\IODataReaderWriter $odataSerializer;
 
-    /**
-     * @var Internal\IMimeReaderWriter
-     */
-    private $mimeSerializer;
+    private Internal\IMimeReaderWriter $mimeSerializer;
 
     /**
      * Builds a table service object, it accepts the following
@@ -113,12 +118,11 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string $connectionString The configuration connection string.
      * @param array  $options          Array of options to pass to the service
      *
-     * @return TableRestProxy
      */
     public static function createTableService(
-        $connectionString,
+        string $connectionString,
         array $options = []
-    ) {
+    ): TableRestProxy {
         $settings = StorageServiceSettings::createFromConnectionString(
             $connectionString
         );
@@ -142,7 +146,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         );
 
         // Adding headers filter
-        $headers               = array();
+        $headers               = [];
         $currentVersion        = Resources::DATA_SERVICE_VERSION_VALUE;
         $maxVersion            = Resources::MAX_DATA_SERVICE_VERSION_VALUE;
         $accept                = Resources::ACCEPT_HEADER_VALUE;
@@ -182,13 +186,11 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *
      * @param array $operations The batch operations array.
      *
-     * @return array
-     *
      * @throws \InvalidArgumentException
      */
-    private function createOperationsContexts(array $operations)
+    private function createOperationsContexts(array $operations): array
     {
-        $contexts = array();
+        $contexts = [];
 
         foreach ($operations as $operation) {
             $context = null;
@@ -233,7 +235,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
                     break;
 
                 default:
-                    throw new \InvalidArgumentException();
+                    throw new InvalidArgumentException();
             }
 
             $contexts[] = $context;
@@ -249,11 +251,9 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity $entity The entity object.
      * @param string $type   The API type.
      *
-     * @return \MicrosoftAzure\Storage\Common\Internal\Http\HttpCallContext
-     *
      * @throws \InvalidArgumentException
      */
-    private function getOperationContext($table, Entity $entity, $type)
+    private function getOperationContext(string $table, Entity $entity, string $type): HttpCallContext
     {
         switch ($type) {
             case BatchOperationType::INSERT_ENTITY_OPERATION:
@@ -296,7 +296,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
                 );
 
             default:
-                throw new \InvalidArgumentException();
+                throw new InvalidArgumentException();
         }
     }
 
@@ -306,13 +306,11 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param array $operations The batch operations.
      * @param array $contexts   The contexts objects.
      *
-     * @return array
-     *
      * @throws \InvalidArgumentException
      */
-    private function createBatchRequestBody(array $operations, array $contexts)
+    private function createBatchRequestBody(array $operations, array $contexts): array
     {
-        $mimeBodyParts = array();
+        $mimeBodyParts = [];
         $contentId     = 1;
         $count         = count($operations);
 
@@ -348,7 +346,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
                     break;
 
                 default:
-                    throw new \InvalidArgumentException();
+                    throw new InvalidArgumentException();
             }
 
             $context->addOptionalHeader(Resources::CONTENT_ID, $contentId);
@@ -368,22 +366,21 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string              $rowKey       The entity row key.
      * @param DeleteEntityOptions $options      The optional parameters.
      *
-     * @return HttpCallContext
      */
     private function constructDeleteEntityContext(
-        $table,
-        $partitionKey,
-        $rowKey,
-        DeleteEntityOptions $options = null
-    ) {
+        string $table,
+        string $partitionKey,
+        string $rowKey,
+        ?DeleteEntityOptions $options = null
+    ): HttpCallContext {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
         Validate::isTrue(!is_null($partitionKey), Resources::NULL_TABLE_KEY_MSG);
         Validate::isTrue(!is_null($rowKey), Resources::NULL_TABLE_KEY_MSG);
 
         $method      = Resources::HTTP_DELETE;
-        $headers     = array();
-        $queryParams = array();
+        $headers     = [];
+        $queryParams = [];
         $statusCode  = Resources::STATUS_NO_CONTENT;
         $path        = $this->getEntityPath($table, $partitionKey, $rowKey);
 
@@ -426,26 +423,25 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string              $table   The table name.
      * @param Entity              $entity  The entity instance to use.
      * @param string              $verb    The HTTP method.
-     * @param boolean             $useETag The flag to include etag or not.
+     * @param bool             $useETag The flag to include etag or not.
      * @param TableServiceOptions $options The optional parameters.
      *
-     * @return HttpCallContext
      */
     private function constructPutOrMergeEntityContext(
-        $table,
+        string $table,
         Entity $entity,
-        $verb,
-        $useETag,
-        TableServiceOptions $options = null
-    ) {
+        string $verb,
+        bool $useETag,
+        ?TableServiceOptions $options = null
+    ): HttpCallContext {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
         Validate::notNullOrEmpty($entity, 'entity');
         Validate::isTrue($entity->isValid($msg), $msg);
 
         $method       = $verb;
-        $headers      = array();
-        $queryParams  = array();
+        $headers      = [];
+        $queryParams  = [];
         $statusCode   = Resources::STATUS_NO_CONTENT;
         $partitionKey = $entity->getPartitionKey();
         $rowKey       = $entity->getRowKey();
@@ -494,13 +490,12 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity                    $entity  The table entity.
      * @param TableServiceCreateOptions $options The optional parameters.
      *
-     * @return HttpCallContext
      */
     private function constructInsertEntityContext(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceCreateOptions $options = null
-    ) {
+        ?TableServiceCreateOptions $options = null
+    ): HttpCallContext {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
         Validate::notNullOrEmpty($entity, 'entity');
@@ -508,8 +503,8 @@ class TableRestProxy extends ServiceRestProxy implements ITable
 
         $method      = Resources::HTTP_POST;
         $context     = new HttpCallContext();
-        $headers     = array();
-        $queryParams = array();
+        $headers     = [];
+        $queryParams = [];
         $statusCode  = Resources::STATUS_CREATED;
         $path        = $table;
         $body        = $this->odataSerializer->getEntity($entity);
@@ -553,9 +548,8 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string $partitionKey The entity's partition key.
      * @param string $rowKey       The entity's row key.
      *
-     * @return string
      */
-    private function getEntityPath($table, $partitionKey, $rowKey)
+    private function getEntityPath(string $table, string $partitionKey, string $rowKey): string
     {
         $encodedPK = $this->encodeODataUriValue($partitionKey);
         $encodedRK = $this->encodeODataUriValue($rowKey);
@@ -570,18 +564,17 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string              $table   The table name.
      * @param Entity              $entity  The entity instance to use.
      * @param string              $verb    The HTTP method.
-     * @param boolean             $useETag The flag to include etag or not.
+     * @param bool             $useETag The flag to include etag or not.
      * @param TableServiceOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     private function putOrMergeEntityAsyncImpl(
-        $table,
+        string $table,
         Entity $entity,
-        $verb,
-        $useETag,
-        TableServiceOptions $options = null
-    ) {
+        string $verb,
+        bool $useETag,
+        ?TableServiceOptions $options = null
+    ): PromiseInterface {
         $context = $this->constructPutOrMergeEntityContext(
             $table,
             $entity,
@@ -602,9 +595,8 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *
      * @param Filter $filter The filter object
      *
-     * @return string
      */
-    private function buildFilterExpression(Filter $filter)
+    private function buildFilterExpression(Filter $filter): string
     {
         $e = Resources::EMPTY_STRING;
         $this->buildFilterExpressionRec($filter, $e);
@@ -618,9 +610,8 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Filter $filter The filter object
      * @param string &$e     The filter expression
      *
-     * @return string
      */
-    private function buildFilterExpressionRec(Filter $filter, &$e)
+    private function buildFilterExpressionRec(Filter $filter, string &$e): string
     {
         if (is_null($filter)) {
             return;
@@ -663,9 +654,8 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param array $queryParam The URI query parameters
      * @param Query $query      The query object
      *
-     * @return array
      */
-    private function addOptionalQuery(array $queryParam, Query $query)
+    private function addOptionalQuery(array $queryParam, Query $query): array
     {
         if (!is_null($query)) {
             $selectedFields = $query->getSelectFields();
@@ -707,11 +697,10 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *
      * @param array $values The OData URL values
      *
-     * @return array
      */
-    private function encodeODataUriValues(array $values)
+    private function encodeODataUriValues(array $values): array
     {
-        $list = array();
+        $list = [];
 
         foreach ($values as $value) {
             $list[] = $this->encodeODataUriValue($value);
@@ -725,9 +714,8 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *
      * @param string $value The OData URL value
      *
-     * @return string
      */
-    private function encodeODataUriValue($value)
+    private function encodeODataUriValue(string $value): string
     {
         // Replace each single quote (') with double single quotes ('') not doudle
         // quotes (")
@@ -750,8 +738,8 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *                                            the service
      */
     public function __construct(
-        $primaryUri,
-        $secondaryUri,
+        string $primaryUri,
+        string $secondaryUri,
         IODataReaderWriter $odataSerializer,
         IMimeReaderWriter $mimeSerializer,
         array $options = []
@@ -762,6 +750,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
             Resources::EMPTY_STRING,
             $options
         );
+
         $this->odataSerializer = $odataSerializer;
         $this->mimeSerializer = $mimeSerializer;
     }
@@ -773,11 +762,9 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *                                                  parameters, table prefix
      *                                                  or filter to apply.
      *
-     * @return QueryTablesResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/query-tables
      */
-    public function queryTables($options = null)
+    public function queryTables(QueryTablesOptions|string|Filter|null $options = null): QueryTablesResult
     {
         return $this->queryTablesAsync($options)->wait();
     }
@@ -789,16 +776,14 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *                                                  parameters, table prefix
      *                                                  or filter to apply.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/query-tables
      */
-    public function queryTablesAsync($options = null)
+    public function queryTablesAsync(QueryTablesOptions|string|Filter|null $options = null): PromiseInterface
     {
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = 'Tables';
 
         if (is_null($options)) {
@@ -866,7 +851,8 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         // Azure Table service where this does not engage on the server unless
         // $filter appears in the URL. The current behavior is to just ignore the
         // NextTableName options, which is not expected or easily detectable.
-        if (array_key_exists(Resources::QP_NEXT_TABLE_NAME, $queryParams)
+        if (
+            array_key_exists(Resources::QP_NEXT_TABLE_NAME, $queryParams)
             && !array_key_exists(Resources::QP_FILTER, $queryParams)
         ) {
             $queryParams[Resources::QP_FILTER] = Resources::EMPTY_STRING;
@@ -898,11 +884,9 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string                    $table   The name of the table.
      * @param TableServiceCreateOptions $options The optional parameters.
      *
-     * @return \Psr\Http\Message\ResponseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-table
      */
-    public function createTable($table, TableServiceCreateOptions $options = null)
+    public function createTable(string $table, ?TableServiceCreateOptions $options = null): ResponseInterface
     {
         return $this->createTableAsync($table, $options)->wait();
     }
@@ -913,21 +897,19 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string                    $table   The name of the table.
      * @param TableServiceCreateOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-table
      */
     public function createTableAsync(
-        $table,
-        TableServiceCreateOptions $options = null
-    ) {
+        string $table,
+        ?TableServiceCreateOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
 
         $method      = Resources::HTTP_POST;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = 'Tables';
         $body        = $this->odataSerializer->getTable($table);
 
@@ -971,9 +953,8 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string          $table   The name of the table.
      * @param GetTableOptions $options The optional parameters.
      *
-     * @return GetTableResult
      */
-    public function getTable($table, GetTableOptions $options = null)
+    public function getTable(string $table, ?GetTableOptions $options = null): GetTableResult
     {
         return $this->getTableAsync($table, $options)->wait();
     }
@@ -984,19 +965,18 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string          $table   The name of the table.
      * @param GetTableOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getTableAsync(
-        $table,
-        GetTableOptions $options = null
-    ) {
+        string $table,
+        ?GetTableOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
 
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = "Tables('$table')";
 
         if (is_null($options)) {
@@ -1036,11 +1016,9 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string              $table   The name of the table.
      * @param TableServiceOptions $options optional parameters
      *
-     * @return void
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179387.aspx
      */
-    public function deleteTable($table, TableServiceOptions $options = null)
+    public function deleteTable(string $table, ?TableServiceOptions $options = null): void
     {
         $this->deleteTableAsync($table, $options)->wait();
     }
@@ -1051,21 +1029,19 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string              $table   The name of the table.
      * @param TableServiceOptions $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179387.aspx
      */
     public function deleteTableAsync(
-        $table,
-        TableServiceOptions$options = null
-    ) {
+        string $table,
+        ?TableServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
 
         $method      = Resources::HTTP_DELETE;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = "Tables('$table')";
 
         if (is_null($options)) {
@@ -1094,11 +1070,9 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *                                                    string or filter to
      *                                                    apply.
      *
-     * @return QueryEntitiesResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/query-entities
      */
-    public function queryEntities($table, $options = null)
+    public function queryEntities(string $table, QueryEntitiesOptions|string|Filter|null $options = null): QueryEntitiesResult
     {
         return $this->queryEntitiesAsync($table, $options)->wait();
     }
@@ -1112,19 +1086,17 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *                                                    string or filter to
      *                                                    apply.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/query-entities
      */
-    public function queryEntitiesAsync($table, $options = null)
+    public function queryEntitiesAsync(string $table, QueryEntitiesOptions|string|Filter|null $options = null): PromiseInterface
     {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
 
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $path        = $table;
 
         if (is_null($options)) {
@@ -1202,15 +1174,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity                    $entity  table entity.
      * @param TableServiceCreateOptions $options optional parameters.
      *
-     * @return InsertEntityResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/insert-entity
      */
     public function insertEntity(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceCreateOptions $options = null
-    ) {
+        ?TableServiceCreateOptions $options = null
+    ): InsertEntityResult {
         return $this->insertEntityAsync($table, $entity, $options)->wait();
     }
 
@@ -1221,15 +1191,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity                    $entity  table entity.
      * @param TableServiceCreateOptions $options optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/insert-entity
      */
     public function insertEntityAsync(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceCreateOptions $options = null
-    ) {
+        ?TableServiceCreateOptions $options = null
+    ): PromiseInterface {
         $context = $this->constructInsertEntityContext(
             $table,
             $entity,
@@ -1260,15 +1228,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity              $entity  table entity
      * @param TableServiceOptions $options optional parameters
      *
-     * @return UpdateEntityResult
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452241.aspx
      */
     public function insertOrMergeEntity(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceOptions $options = null
-    ) {
+        ?TableServiceOptions $options = null
+    ): UpdateEntityResult {
         return $this->insertOrMergeEntityAsync($table, $entity, $options)->wait();
     }
 
@@ -1280,15 +1246,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity              $entity  table entity
      * @param TableServiceOptions $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452241.aspx
      */
     public function insertOrMergeEntityAsync(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceOptions $options = null
-    ) {
+        ?TableServiceOptions $options = null
+    ): PromiseInterface {
         return $this->putOrMergeEntityAsyncImpl(
             $table,
             $entity,
@@ -1306,15 +1270,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity              $entity  table entity
      * @param TableServiceOptions $options optional parameters
      *
-     * @return UpdateEntityResult
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452242.aspx
      */
     public function insertOrReplaceEntity(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceOptions $options = null
-    ) {
+        ?TableServiceOptions $options = null
+    ): UpdateEntityResult {
         return $this->insertOrReplaceEntityAsync(
             $table,
             $entity,
@@ -1329,15 +1291,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity              $entity  table entity
      * @param TableServiceOptions $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452242.aspx
      */
     public function insertOrReplaceEntityAsync(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceOptions $options = null
-    ) {
+        ?TableServiceOptions $options = null
+    ): PromiseInterface {
         return $this->putOrMergeEntityAsyncImpl(
             $table,
             $entity,
@@ -1355,15 +1315,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity              $entity  The table entity.
      * @param TableServiceOptions $options The optional parameters.
      *
-     * @return UpdateEntityResult
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179427.aspx
      */
     public function updateEntity(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceOptions $options = null
-    ) {
+        ?TableServiceOptions $options = null
+    ): UpdateEntityResult {
         return $this->updateEntityAsync($table, $entity, $options)->wait();
     }
 
@@ -1375,15 +1333,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity              $entity  The table entity.
      * @param TableServiceOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179427.aspx
      */
     public function updateEntityAsync(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceOptions $options = null
-    ) {
+        ?TableServiceOptions $options = null
+    ): PromiseInterface {
         return $this->putOrMergeEntityAsyncImpl(
             $table,
             $entity,
@@ -1401,15 +1357,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity              $entity  The table entity.
      * @param TableServiceOptions $options The optional parameters.
      *
-     * @return Models\UpdateEntityResult
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179392.aspx
      */
     public function mergeEntity(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceOptions $options = null
-    ) {
+        ?TableServiceOptions $options = null
+    ): Models\UpdateEntityResult {
         return $this->mergeEntityAsync($table, $entity, $options)->wait();
     }
 
@@ -1422,15 +1376,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param Entity              $entity  The table entity.
      * @param TableServiceOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179392.aspx
      */
     public function mergeEntityAsync(
-        $table,
+        string $table,
         Entity $entity,
-        TableServiceOptions $options = null
-    ) {
+        ?TableServiceOptions $options = null
+    ): PromiseInterface {
         return $this->putOrMergeEntityAsyncImpl(
             $table,
             $entity,
@@ -1448,16 +1400,14 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string              $rowKey       The entity row key.
      * @param DeleteEntityOptions $options      The optional parameters.
      *
-     * @return void
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd135727.aspx
      */
     public function deleteEntity(
-        $table,
-        $partitionKey,
-        $rowKey,
-        DeleteEntityOptions $options = null
-    ) {
+        string $table,
+        string $partitionKey,
+        string $rowKey,
+        ?DeleteEntityOptions $options = null
+    ): void {
         $this->deleteEntityAsync($table, $partitionKey, $rowKey, $options)->wait();
     }
 
@@ -1469,16 +1419,14 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string              $rowKey       The entity row key.
      * @param DeleteEntityOptions $options      The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd135727.aspx
      */
     public function deleteEntityAsync(
-        $table,
-        $partitionKey,
-        $rowKey,
-        DeleteEntityOptions $options = null
-    ) {
+        string $table,
+        string $partitionKey,
+        string $rowKey,
+        ?DeleteEntityOptions $options = null
+    ): PromiseInterface {
         $context = $this->constructDeleteEntityContext(
             $table,
             $partitionKey,
@@ -1497,16 +1445,14 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string                $rowKey       The entity row key.
      * @param GetEntityOptions|null $options      The optional parameters.
      *
-     * @return GetEntityResult
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179421.aspx
      */
     public function getEntity(
-        $table,
-        $partitionKey,
-        $rowKey,
-        GetEntityOptions $options = null
-    ) {
+        string $table,
+        string $partitionKey,
+        string $rowKey,
+        ?GetEntityOptions $options = null
+    ): GetEntityResult {
         return $this->getEntityAsync(
             $table,
             $partitionKey,
@@ -1523,24 +1469,22 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string                $rowKey       The entity row key.
      * @param GetEntityOptions|null $options      The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179421.aspx
      */
     public function getEntityAsync(
-        $table,
-        $partitionKey,
-        $rowKey,
-        GetEntityOptions $options = null
-    ) {
+        string $table,
+        string $partitionKey,
+        string $rowKey,
+        ?GetEntityOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($table, 'table');
         Validate::isTrue(!is_null($partitionKey), Resources::NULL_TABLE_KEY_MSG);
         Validate::isTrue(!is_null($rowKey), Resources::NULL_TABLE_KEY_MSG);
 
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $queryParams = array();
+        $headers     = [];
+        $queryParams = [];
         $path        = $this->getEntityPath($table, $partitionKey, $rowKey);
 
         if (is_null($options)) {
@@ -1564,7 +1508,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         $context->setMethod($method);
         $context->setPath($path);
         $context->setQueryParameters($queryParams);
-        $context->setStatusCodes(array(Resources::STATUS_OK));
+        $context->setStatusCodes([Resources::STATUS_OK]);
         $context->setServiceOptions($options);
 
         $odataSerializer = $this->odataSerializer;
@@ -1586,12 +1530,11 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param BatchOperations     $batchOperations The operations to apply.
      * @param TableServiceOptions $options         The optional parameters.
      *
-     * @return BatchResult
      */
     public function batch(
         Models\BatchOperations $batchOperations,
-        Models\TableServiceOptions $options = null
-    ) {
+        ?Models\TableServiceOptions $options = null
+    ): BatchResult {
         return $this->batchAsync($batchOperations, $options)->wait();
     }
 
@@ -1601,12 +1544,11 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param BatchOperations     $batchOperations The operations to apply.
      * @param TableServiceOptions $options         The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function batchAsync(
         Models\BatchOperations $batchOperations,
-        Models\TableServiceOptions $options = null
-    ) {
+        ?Models\TableServiceOptions $options = null
+    ): PromiseInterface {
         Validate::notNullOrEmpty($batchOperations, 'batchOperations');
 
         $method      = Resources::HTTP_POST;
@@ -1615,8 +1557,8 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         $mime        = $this->createBatchRequestBody($operations, $contexts);
         $body        = $mime['body'];
         $headers     = $mime['headers'];
-        $postParams  = array();
-        $queryParams = array();
+        $postParams  = [];
+        $queryParams = [];
         $path        = '$batch';
 
         if (is_null($options)) {
@@ -1665,14 +1607,12 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string              $table   The table name.
      * @param TableServiceOptions $options The optional parameters.
      *
-     * @return TableACL
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/get-table-acl
      */
     public function getTableAcl(
-        $table,
-        Models\TableServiceOptions $options = null
-    ) {
+        string $table,
+        ?Models\TableServiceOptions $options = null
+    ): TableACL {
         return $this->getTableAclAsync($table, $options)->wait();
     }
 
@@ -1682,20 +1622,18 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param string              $table   The table name.
      * @param TableServiceOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/get-table-acl
      */
     public function getTableAclAsync(
-        $table,
-        Models\TableServiceOptions $options = null
-    ) {
+        string $table,
+        ?Models\TableServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($table, 'table');
 
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $statusCode  = Resources::STATUS_OK;
         $path        = $table;
 
@@ -1729,7 +1667,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
         );
 
         return $promise->then(function ($response) use ($dataSerializer) {
-            $parsed       = $dataSerializer->unserialize($response->getBody());
+            $parsed = $dataSerializer->unserialize($response->getBody());
             return TableACL::create($parsed);
         }, null);
     }
@@ -1741,15 +1679,13 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param TableACL            $acl     access control list for Table
      * @param TableServiceOptions $options optional parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/set-table-acl
      */
     public function setTableAcl(
-        $table,
+        string $table,
         TableACL $acl,
-        TableServiceOptions $options = null
-    ) {
+        ?TableServiceOptions $options = null
+    ): void {
         $this->setTableAclAsync($table, $acl, $options)->wait();
     }
 
@@ -1760,22 +1696,20 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      * @param TableACL            $acl     access control list for Table
      * @param TableServiceOptions $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/set-table-acl
      */
     public function setTableAclAsync(
-        $table,
+        string $table,
         TableACL $acl,
-        TableServiceOptions $options = null
-    ) {
+        ?TableServiceOptions $options = null
+    ): PromiseInterface {
         Validate::canCastAsString($table, 'table');
         Validate::notNullOrEmpty($acl, 'acl');
 
         $method      = Resources::HTTP_PUT;
-        $headers     = array();
-        $postParams  = array();
-        $queryParams = array();
+        $headers     = [];
+        $postParams  = [];
+        $queryParams = [];
         $body        = $acl->toXml($this->dataSerializer);
         $path        = $table;
 
@@ -1808,4 +1742,5 @@ class TableRestProxy extends ServiceRestProxy implements ITable
             $options
         );
     }
+
 }

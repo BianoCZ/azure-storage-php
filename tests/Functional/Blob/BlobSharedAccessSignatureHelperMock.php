@@ -47,4 +47,5 @@ class BlobSharedAccessSignatureHelperMock extends BlobSharedAccessSignatureHelpe
     {
         return $this->accountKey;
     }
+
 }

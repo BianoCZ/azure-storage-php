@@ -24,22 +24,26 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common;
 
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Common\ServiceException;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Tests\Framework\ReflectionTestBase;
 use MicrosoftAzure\Storage\Common\SharedAccessSignatureHelper;
+use MicrosoftAzure\Storage\Tests\Framework\ReflectionTestBase;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function count;
+use function strpos;
+use function substr;
+use function urlencode;
 
 /**
-* Unit tests for class SharedAccessSignatureHelper
-*
-* @category  Microsoft
-* @package   MicrosoftAzure\Storage\Tests\Unit\Common
-* @author    Azure Storage PHP SDK <dmsh@microsoft.com>
-* @copyright 2017 Microsoft Corporation
-* @license   https://github.com/azure/azure-storage-php/LICENSE
-* @link      https://github.com/azure/azure-storage-php
-*/
+ * Unit tests for class SharedAccessSignatureHelper
+ *
+ * @category  Microsoft
+ * @package   MicrosoftAzure\Storage\Tests\Unit\Common
+ * @author    Azure Storage PHP SDK <dmsh@microsoft.com>
+ * @copyright 2017 Microsoft Corporation
+ * @license   https://github.com/azure/azure-storage-php/LICENSE
+ * @link      https://github.com/azure/azure-storage-php
+ */
 class SharedAccessSignatureHelperTest extends ReflectionTestBase
 {
     public function testConstruct()
@@ -57,20 +61,20 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
         return $sasHelper;
     }
 
-    public function testValidateAndSanitizeSignedService()
+    public function testValidateAndSanitizeSignedService(): void
     {
         // Setup
         $sasHelper = $this->testConstruct();
         $validateAndSanitizeSignedService = self::getMethod('validateAndSanitizeSignedService', $sasHelper);
 
-        $authorizedSignedService = array();
+        $authorizedSignedService = [];
         $authorizedSignedService[] = "BqtF";
         $authorizedSignedService[] = "bQtF";
         $authorizedSignedService[] = "fqTb";
         $authorizedSignedService[] = "ffqq";
         $authorizedSignedService[] = "BbbB";
 
-        $expected = array();
+        $expected = [];
         $expected[] = "bqtf";
         $expected[] = "bqtf";
         $expected[] = "bqtf";
@@ -79,7 +83,7 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
 
         for ($i = 0; $i < count($authorizedSignedService); $i++) {
             // Test
-            $actual = $validateAndSanitizeSignedService->invokeArgs($sasHelper, array($authorizedSignedService[$i]));
+            $actual = $validateAndSanitizeSignedService->invokeArgs($sasHelper, [$authorizedSignedService[$i]]);
 
             // Assert
             $this->assertEquals($expected[$i], $actual);
@@ -90,7 +94,7 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage The string should only be a combination of
      */
-    public function testValidateAndSanitizeSignedServiceThrowsException()
+    public function testValidateAndSanitizeSignedServiceThrowsException(): void
     {
         // Setup
         $sasHelper = $this->testConstruct();
@@ -98,22 +102,22 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
         $unauthorizedSignedService = "BqTfG";
 
         // Test: should throw an InvalidArgumentException
-        $validateAndSanitizeSignedService->invokeArgs($sasHelper, array($unauthorizedSignedService));
+        $validateAndSanitizeSignedService->invokeArgs($sasHelper, [$unauthorizedSignedService]);
     }
 
-    public function testValidateAndSanitizeSignedResourceType()
+    public function testValidateAndSanitizeSignedResourceType(): void
     {
         // Setup
         $sasHelper = $this->testConstruct();
         $validateAndSanitizeSignedResourceType = self::getMethod('validateAndSanitizeSignedResourceType', $sasHelper);
 
-        $authorizedSignedResourceType = array();
+        $authorizedSignedResourceType = [];
         $authorizedSignedResourceType[] = "sCo";
         $authorizedSignedResourceType[] = "Ocs";
         $authorizedSignedResourceType[] = "OOsCc";
         $authorizedSignedResourceType[] = "OOOoo";
 
-        $expected = array();
+        $expected = [];
         $expected[] = "sco";
         $expected[] = "sco";
         $expected[] = "sco";
@@ -123,7 +127,7 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
             // Test
             $actual = $validateAndSanitizeSignedResourceType->invokeArgs(
                 $sasHelper,
-                array($authorizedSignedResourceType[$i])
+                [$authorizedSignedResourceType[$i]]
             );
 
             // Assert
@@ -135,7 +139,7 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage The string should only be a combination of
      */
-    public function testValidateAndSanitizeSignedResourceTypeThrowsException()
+    public function testValidateAndSanitizeSignedResourceTypeThrowsException(): void
     {
         // Setup
         $sasHelper = $this->testConstruct();
@@ -144,26 +148,26 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
         $unauthorizedSignedResourceType = "oscB";
 
         // Test: should throw an InvalidArgumentException
-        $validateAndSanitizeSignedResourceType->invokeArgs($sasHelper, array($unauthorizedSignedResourceType));
+        $validateAndSanitizeSignedResourceType->invokeArgs($sasHelper, [$unauthorizedSignedResourceType]);
     }
 
-    public function testValidateAndSanitizeSignedProtocol()
+    public function testValidateAndSanitizeSignedProtocol(): void
     {
         // Setup
         $sasHelper = $this->testConstruct();
         $validateAndSanitizeSignedProtocol = self::getMethod('validateAndSanitizeSignedProtocol', $sasHelper);
 
-        $authorizedSignedProtocol = array();
+        $authorizedSignedProtocol = [];
         $authorizedSignedProtocol[] = "hTTpS";
         $authorizedSignedProtocol[] = "httpS,hTtp";
 
-        $expected = array();
+        $expected = [];
         $expected[] = "https";
         $expected[] = "https,http";
 
         for ($i = 0; $i < count($authorizedSignedProtocol); $i++) {
             // Test
-            $actual = $validateAndSanitizeSignedProtocol->invokeArgs($sasHelper, array($authorizedSignedProtocol[$i]));
+            $actual = $validateAndSanitizeSignedProtocol->invokeArgs($sasHelper, [$authorizedSignedProtocol[$i]]);
 
             // Assert
             $this->assertEquals($expected[$i], $actual);
@@ -174,7 +178,7 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage is invalid
      */
-    public function testValidateAndSanitizeSignedProtocolThrowsException()
+    public function testValidateAndSanitizeSignedProtocolThrowsException(): void
     {
         // Setup
         $sasHelper = $this->testConstruct();
@@ -185,11 +189,11 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
         // Test: should throw an InvalidArgumentException
         $validateAndSanitizeSignedProtocol->invokeArgs(
             $sasHelper,
-            array($unauthorizedSignedProtocol)
+            [$unauthorizedSignedProtocol]
         );
     }
 
-    public function testGenerateAccountSharedAccessSignatureToken()
+    public function testGenerateAccountSharedAccessSignatureToken(): void
     {
         // Setup
         $accountName = TestResources::ACCOUNT_NAME;
@@ -219,7 +223,7 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
         }
     }
 
-    public function testValidateAndSanitizeSignedPermissions()
+    public function testValidateAndSanitizeSignedPermissions(): void
     {
         // Setup
         $sasHelper = $this->testConstruct();
@@ -230,7 +234,7 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
 
         $pairs = TestResources::getInterestingSignedResourcePermissionsPair();
 
-        $expectedErrorMessage = \substr(
+        $expectedErrorMessage = substr(
             Resources::STRING_NOT_WITH_GIVEN_COMBINATION,
             0,
             strpos(Resources::STRING_NOT_WITH_GIVEN_COMBINATION, '%s')
@@ -242,9 +246,9 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
                 try {
                     $validateAndSanitizeSignedPermissions->invokeArgs(
                         $sasHelper,
-                        array($pair['sp'], $pair['sr'])
+                        [$pair['sp'], $pair['sr']]
                     );
-                } catch (\InvalidArgumentException $e) {
+                } catch (InvalidArgumentException $e) {
                     $message = $e->getMessage();
                 }
                 $this->assertContains(
@@ -254,20 +258,20 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
             } else {
                 $result = $validateAndSanitizeSignedPermissions->invokeArgs(
                     $sasHelper,
-                    array($pair['sp'], $pair['sr'])
+                    [$pair['sp'], $pair['sr']]
                 );
                 $this->assertEquals($pair['expected'], $result);
             }
         }
     }
 
-    public function testGenerateCanonicalResource()
+    public function testGenerateCanonicalResource(): void
     {
         // Setup
         $sasHelper = $this->testConstruct();
         $validateAndSanitizeSignedService = self::getMethod('generateCanonicalResource', $sasHelper);
-        
-        $resourceNames = array();
+
+        $resourceNames = [];
         $resourceNames[] = "filename";
         $resourceNames[] = "/filename";
         $resourceNames[] = "/filename/";
@@ -276,7 +280,7 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
         $resourceNames[] = "/folder/filename/";
         $resourceNames[] = "/folder/eñe20!.pdf/";
 
-        $expected = array();
+        $expected = [];
         $expected[] = "/blob/test/filename";
         $expected[] = "/blob/test/filename";
         $expected[] = "/blob/test/filename/";
@@ -287,10 +291,11 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
 
         for ($i = 0; $i < count($resourceNames); $i++) {
             // Test
-            $actual = $validateAndSanitizeSignedService->invokeArgs($sasHelper, array('test', Resources::RESOURCE_TYPE_BLOB, $resourceNames[$i]));
+            $actual = $validateAndSanitizeSignedService->invokeArgs($sasHelper, ['test', Resources::RESOURCE_TYPE_BLOB, $resourceNames[$i]]);
 
             // Assert
             $this->assertEquals($expected[$i], $actual);
         }
     }
+
 }

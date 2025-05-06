@@ -39,6 +39,7 @@ use MicrosoftAzure\Storage\Queue\Internal\QueueResources as Resources;
  */
 class PeekMessagesResult
 {
+
     private $queueMessages;
 
     /**
@@ -48,12 +49,11 @@ class PeekMessagesResult
      *
      * @internal
      *
-     * @return PeekMessagesResult
      */
-    public static function create($parsedResponse)
+    public static function create(array $parsedResponse): PeekMessagesResult
     {
         $result        = new PeekMessagesResult();
-        $queueMessages = array();
+        $queueMessages = [];
 
         if (!empty($parsedResponse)) {
             $rawMessages = Utilities::getArray(
@@ -75,9 +75,9 @@ class PeekMessagesResult
      *
      * @return QueueMessage[]
      */
-    public function getQueueMessages()
+    public function getQueueMessages(): array
     {
-        $clonedMessages = array();
+        $clonedMessages = [];
 
         foreach ($this->queueMessages as $value) {
             $clonedMessages[] = clone $value;
@@ -93,10 +93,10 @@ class PeekMessagesResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setQueueMessages($queueMessages)
+    protected function setQueueMessages(array $queueMessages): void
     {
         $this->queueMessages = $queueMessages;
     }
+
 }

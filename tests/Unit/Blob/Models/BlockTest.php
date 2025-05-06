@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\Block;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class Block.
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Blob\Models\Block;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BlockTest extends \PHPUnit\Framework\TestCase
+class BlockTest extends TestCase
 {
-    public function testSetBlockId()
+    public function testSetBlockId(): void
     {
         // Setup
         $block = new Block();
@@ -51,7 +52,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $block->getBlockId());
     }
 
-    public function testSetType()
+    public function testSetType(): void
     {
         // Setup
         $block = new Block();
@@ -63,4 +64,5 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $block->getType());
     }
+
 }

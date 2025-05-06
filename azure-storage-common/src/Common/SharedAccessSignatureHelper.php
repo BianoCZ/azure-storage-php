@@ -24,9 +24,25 @@
 
 namespace MicrosoftAzure\Storage\Common;
 
+use Datetime;
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
+use function base64_decode;
+use function base64_encode;
+use function hash_hmac;
+use function implode;
+use function sprintf;
+use function str_replace;
+use function strcmp;
+use function strlen;
+use function strpos;
+use function strtolower;
+use function substr;
+use function urldecode;
+use function urlencode;
+use function utf8_encode;
 
 /**
  * Provides methods to generate Azure Storage Shared Access Signature
@@ -40,7 +56,9 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class SharedAccessSignatureHelper
 {
+
     protected $accountName;
+
     protected $accountKey;
 
     /**
@@ -50,7 +68,7 @@ class SharedAccessSignatureHelper
      * @param string $accountKey the shared key of the storage account
      *
      */
-    public function __construct($accountName, $accountKey)
+    public function __construct(string $accountName, string $accountKey)
     {
         Validate::canCastAsString($accountName, 'accountName');
         Validate::notNullOrEmpty($accountName, 'accountName');
@@ -87,18 +105,17 @@ class SharedAccessSignatureHelper
      * @see Constructing an account SAS at
      *      https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/constructing-an-account-sas
      *
-     * @return string
      */
     public function generateAccountSharedAccessSignatureToken(
-        $signedVersion,
-        $signedPermissions,
-        $signedService,
-        $signedResourceType,
-        $signedExpiry,
-        $signedStart = "",
-        $signedIP = "",
-        $signedProtocol = ""
-    ) {
+        string $signedVersion,
+        string $signedPermissions,
+        string $signedService,
+        string $signedResourceType,
+        Datetime|string $signedExpiry,
+        Datetime|string $signedStart = "",
+        string $signedIP = "",
+        string $signedProtocol = ""
+    ): string {
         // check that version is valid
         Validate::canCastAsString($signedVersion, 'signedVersion');
         Validate::notNullOrEmpty($signedVersion, 'signedVersion');
@@ -114,7 +131,7 @@ class SharedAccessSignatureHelper
         $signedPermissions = $this->validateAndSanitizeSignedPermissions($signedPermissions);
 
         // check that expiracy is valid
-        if ($signedExpiry instanceof \Datetime) {
+        if ($signedExpiry instanceof Datetime) {
             $signedExpiry = Utilities::isoDate($signedExpiry);
         }
         Validate::canCastAsString($signedExpiry, 'signedExpiry');
@@ -122,7 +139,7 @@ class SharedAccessSignatureHelper
         Validate::isDateString($signedExpiry, 'signedExpiry');
 
         // check that signed start is valid
-        if ($signedStart instanceof \Datetime) {
+        if ($signedStart instanceof Datetime) {
             $signedStart = Utilities::isoDate($signedStart);
         }
         Validate::canCastAsString($signedStart, 'signedStart');
@@ -137,7 +154,7 @@ class SharedAccessSignatureHelper
         $signedProtocol = $this->validateAndSanitizeSignedProtocol($signedProtocol);
 
         // construct an array with the parameters to generate the shared access signature at the account level
-        $parameters = array();
+        $parameters = [];
         $parameters[] = $this->accountName;
         $parameters[] = $signedPermissions;
         $parameters[] = $signedService;
@@ -166,8 +183,8 @@ class SharedAccessSignatureHelper
         $sas .= '&srt=' . $signedResourceType;
         $sas .= '&sp=' . $signedPermissions;
         $sas .= '&se=' . $signedExpiry;
-        $sas .= $signedStart === ''? '' : '&st=' . $signedStart;
-        $sas .= $signedIP === ''? '' : '&sip=' . $signedIP;
+        $sas .= $signedStart === '' ? '' : '&st=' . $signedStart;
+        $sas .= $signedIP === '' ? '' : '&sip=' . $signedIP;
         $sas .= '&spr=' . $signedProtocol;
         $sas .= '&sig=' . $sig;
 
@@ -181,9 +198,8 @@ class SharedAccessSignatureHelper
      * @param string $signedService Specifies the signed services accessible
      *                              with the account SAS.
      *
-     * @return string
      */
-    protected function validateAndSanitizeSignedService($signedService)
+    protected function validateAndSanitizeSignedService(string $signedService): string
     {
         // validate signed service is not null or empty
         Validate::canCastAsString($signedService, 'signedService');
@@ -205,9 +221,8 @@ class SharedAccessSignatureHelper
      *                                      that are accessible with the account
      *                                      SAS.
      *
-     * @return string
      */
-    protected function validateAndSanitizeSignedResourceType($signedResourceType)
+    protected function validateAndSanitizeSignedResourceType(string $signedResourceType): string
     {
         // validate signed resource type is not null or empty
         Validate::canCastAsString($signedResourceType, 'signedResourceType');
@@ -228,11 +243,10 @@ class SharedAccessSignatureHelper
      * @param string $signedPermissions Specifies the signed permissions for the
      *                                  account SAS.
      *
-     * @return string
      */
     protected function validateAndSanitizeSignedPermissions(
-        $signedPermissions
-    ) {
+        string $signedPermissions
+    ): string {
         // validate signed permissions are not null or empty
         Validate::canCastAsString($signedPermissions, 'signedPermissions');
         Validate::notNullOrEmpty($signedPermissions, 'signedPermissions');
@@ -251,16 +265,15 @@ class SharedAccessSignatureHelper
      * @param string $signedProtocol Specifies the signed protocol for the
      *                               account SAS.
 
-     * @return string
      */
-    protected function validateAndSanitizeSignedProtocol($signedProtocol)
+    protected function validateAndSanitizeSignedProtocol(string $signedProtocol): string
     {
         Validate::canCastAsString($signedProtocol, 'signedProtocol');
         // sanitize string
         $sanitizedSignedProtocol = strtolower($signedProtocol);
         if (strlen($sanitizedSignedProtocol) > 0) {
             if (strcmp($sanitizedSignedProtocol, "https") != 0 && strcmp($sanitizedSignedProtocol, "https,http") != 0) {
-                throw new \InvalidArgumentException(Resources::SIGNED_PROTOCOL_INVALID_VALIDATION_MSG);
+                throw new InvalidArgumentException(Resources::SIGNED_PROTOCOL_INVALID_VALIDATION_MSG);
             }
         }
 
@@ -272,9 +285,8 @@ class SharedAccessSignatureHelper
      *
      * @param string $input        The input string.
 
-     * @return string
      */
-    protected function validateAndSanitizeStringWithArray($input, array $array)
+    protected function validateAndSanitizeStringWithArray(string $input, array $array): string
     {
         $result = '';
         foreach ($array as $value) {
@@ -300,7 +312,6 @@ class SharedAccessSignatureHelper
         return $result;
     }
 
-
     /**
      * Generate the canonical resource using the given account name, service
      * type and resource.
@@ -309,23 +320,23 @@ class SharedAccessSignatureHelper
      * @param  string $service     The service name of the service.
      * @param  string $resource    The name of the resource.
      *
-     * @return string
      */
     protected static function generateCanonicalResource(
-        $accountName,
-        $service,
-        $resource
-    ) {
-        static $serviceMap = array(
+        string $accountName,
+        string $service,
+        string $resource
+    ): string {
+        static $serviceMap = [
             Resources::RESOURCE_TYPE_BLOB  => 'blob',
             Resources::RESOURCE_TYPE_FILE  => 'file',
             Resources::RESOURCE_TYPE_QUEUE => 'queue',
             Resources::RESOURCE_TYPE_TABLE => 'table',
-        );
+        ];
         $serviceName = $serviceMap[$service];
         if (Utilities::startsWith($resource, '/')) {
             $resource = substr($resource, 1);
         }
         return urldecode(sprintf('/%s/%s/%s', $serviceName, $accountName, $resource));
     }
+
 }

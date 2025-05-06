@@ -46,7 +46,7 @@ interface IAuthScheme
      *
      * @abstract
      *
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function signRequest(Request $request);
+    public function signRequest(Request $request): Request;
+
 }

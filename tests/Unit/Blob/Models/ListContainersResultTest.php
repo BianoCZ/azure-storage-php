@@ -25,8 +25,9 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\ListContainersResult;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ListContainersResult
@@ -38,9 +39,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListContainersResultTest extends \PHPUnit\Framework\TestCase
+class ListContainersResultTest extends TestCase
 {
-    public function testCreateWithEmpty()
+    public function testCreateWithEmpty(): void
     {
         // Setup
         $sample = TestResources::listContainersEmpty();
@@ -52,7 +53,7 @@ class ListContainersResultTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(0, $actual->getContainers());
     }
 
-    public function testCreateWithOneEntry()
+    public function testCreateWithOneEntry(): void
     {
         // Setup
         $sample = TestResources::listContainersOneEntry();
@@ -133,4 +134,5 @@ class ListContainersResultTest extends \PHPUnit\Framework\TestCase
 
         return $actual;
     }
+
 }

@@ -39,6 +39,7 @@ use MicrosoftAzure\Storage\Table\Internal\AcceptOptionTrait;
  */
 class TableServiceCreateOptions extends TableServiceOptions
 {
+
     use AcceptOptionTrait;
 
     private $doesReturnContent;
@@ -46,6 +47,7 @@ class TableServiceCreateOptions extends TableServiceOptions
     public function __construct()
     {
         parent::__construct();
+
         $this->doesReturnContent = false;
     }
 
@@ -54,7 +56,7 @@ class TableServiceCreateOptions extends TableServiceOptions
      *
      * @param bool $doesReturnContent if the reponse returns content.
      */
-    public function setDoesReturnContent($doesReturnContent)
+    public function setDoesReturnContent(bool $doesReturnContent): void
     {
         Validate::isBoolean($doesReturnContent);
         $this->doesReturnContent = $doesReturnContent;
@@ -63,10 +65,10 @@ class TableServiceCreateOptions extends TableServiceOptions
     /**
      * Gets does return content.
      *
-     * @return bool
      */
-    public function getDoesReturnContent()
+    public function getDoesReturnContent(): bool
     {
         return $this->doesReturnContent;
     }
+
 }

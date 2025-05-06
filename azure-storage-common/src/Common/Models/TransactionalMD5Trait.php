@@ -38,15 +38,15 @@ namespace MicrosoftAzure\Storage\Common\Models;
  */
 trait TransactionalMD5Trait
 {
+
     /** @var $useTransactionalMD5 boolean */
     private $useTransactionalMD5;
 
     /**
      * Gets whether using transactional MD5 validation.
      *
-     * @return boolean
      */
-    public function getUseTransactionalMD5()
+    public function getUseTransactionalMD5(): bool
     {
         return $this->useTransactionalMD5;
     }
@@ -54,11 +54,12 @@ trait TransactionalMD5Trait
     /**
      * Sets whether using transactional MD5 validation.
      *
-     * @param boolean $useTransactionalMD5 whether enable transactional
+     * @param bool $useTransactionalMD5 whether enable transactional
      *                                     MD5 validation.
      */
-    public function setUseTransactionalMD5($useTransactionalMD5)
+    public function setUseTransactionalMD5(bool $useTransactionalMD5): void
     {
         $this->useTransactionalMD5 = $useTransactionalMD5;
     }
+
 }

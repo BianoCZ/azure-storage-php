@@ -24,43 +24,64 @@
 
 namespace MicrosoftAzure\Storage\Tests\Functional\Queue;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use DateTime;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Queue\Models\CreateQueueOptions;
 use MicrosoftAzure\Storage\Queue\Models\ListMessagesOptions;
 use MicrosoftAzure\Storage\Queue\Models\ListQueuesOptions;
 use MicrosoftAzure\Storage\Queue\Models\PeekMessagesOptions;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function array_push;
+use function count;
+use function in_array;
+use function mt_rand;
 
 class QueueServiceIntegrationTest extends IntegrationTestBase
 {
+
     private static $testQueuesPrefix = 'sdktest-';
+
     private static $createableQueuesPrefix = 'csdktest-';
+
     private static $testQueueForMessages;
+
     private static $testQueueForMessages2;
+
     private static $testQueueForMessages3;
+
     private static $testQueueForMessages4;
+
     private static $testQueueForMessages5;
+
     private static $testQueueForMessages6;
+
     private static $testQueueForMessages7;
+
     private static $testQueueForMessages8;
+
     private static $creatableQueue1;
+
     private static $creatableQueue2;
+
     private static $creatableQueue3;
+
     private static $creatableQueues;
+
     private static $testQueues;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         // Setup container names array (list of container names used by
         // integration tests)
-        self::$testQueues = array();
+        self::$testQueues = [];
         $rint = mt_rand(0, 1000000);
         for ($i = 0; $i < 10; $i++) {
             self::$testQueues[$i] = self::$testQueuesPrefix . $rint . ($i + 1);
         }
 
-        self::$creatableQueues = array();
+        self::$creatableQueues = [];
         for ($i = 0; $i < 3; $i++) {
             self::$creatableQueues[$i] = self::$createableQueuesPrefix . $rint . ($i + 1);
         }
@@ -83,14 +104,15 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         self::createQueues(self::$testQueuesPrefix, self::$testQueues);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
+
         self::deleteQueues(self::$testQueuesPrefix, self::$testQueues);
         self::deleteQueues(self::$createableQueuesPrefix, self::$creatableQueues);
     }
 
-    private function createQueues($prefix, $list)
+    private function createQueues($prefix, $list): void
     {
         $containers = self::listQueues($prefix);
         foreach ($list as $item) {
@@ -100,7 +122,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         }
     }
 
-    private function deleteQueues($prefix, $list)
+    private function deleteQueues($prefix, $list): void
     {
         $containers = self::listQueues($prefix);
         foreach ($list as $item) {
@@ -112,7 +134,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
 
     private function listQueues($prefix)
     {
-        $result = array();
+        $result = [];
         $opts = new ListQueuesOptions();
         $opts->setPrefix($prefix);
         $list = $this->restProxy->listQueues($opts);
@@ -122,7 +144,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         return $result;
     }
 
-    public function testGetServicePropertiesWorks()
+    public function testGetServicePropertiesWorks(): void
     {
         // Arrange
 
@@ -151,7 +173,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($props->getHourMetrics()->getVersion(), '$props->getHourMetrics()->getVersion');
     }
 
-    public function testSetServicePropertiesWorks()
+    public function testSetServicePropertiesWorks(): void
     {
         // Arrange
 
@@ -186,7 +208,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($props->getHourMetrics()->getVersion(), '$props->getHourMetrics()->getVersion');
     }
 
-    public function testCreateQueueWorks()
+    public function testCreateQueueWorks(): void
     {
         // Arrange
 
@@ -202,7 +224,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertEquals(0, count($result->getMetadata()), 'count($result->getMetadata');
     }
 
-    public function testCreateQueueWithOptionsWorks()
+    public function testCreateQueueWithOptionsWorks(): void
     {
         // Arrange
 
@@ -224,7 +246,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertEquals('blah', $metadata['test'], '$metadata[test]');
     }
 
-    public function testListQueuesWorks()
+    public function testListQueuesWorks(): void
     {
         // Arrange
 
@@ -243,7 +265,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue(count(self::$testQueues) <= count($result->getQueues()), 'counts');
     }
 
-    public function testListQueuesWithOptionsWorks()
+    public function testListQueuesWithOptionsWorks(): void
     {
         // Arrange
 
@@ -297,17 +319,17 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($queue20->getUrl(), '$queue20->getUrl');
     }
 
-    public function testSetQueueMetadataWorks()
+    public function testSetQueueMetadataWorks(): void
     {
         // Arrange
 
         // Act
         $this->restProxy->createQueue(self::$creatableQueue3);
 
-        $metadata = array(
+        $metadata = [
             'foo' => 'bar',
             'test' => 'blah',
-            );
+        ];
         $this->restProxy->setQueueMetadata(self::$creatableQueue3, $metadata);
 
         $result = $this->restProxy->getQueueMetadata(self::$creatableQueue3);
@@ -324,7 +346,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertEquals('blah', $metadata['test'], '$metadata[\'test\']');
     }
 
-    public function testCreateMessageWorks()
+    public function testCreateMessageWorks(): void
     {
         // Arrange
 
@@ -338,10 +360,10 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue(true, 'if get there, it is working');
     }
 
-    public function testListMessagesWorks()
+    public function testListMessagesWorks(): void
     {
         // Arrange
-        $year2010 = new \DateTime;
+        $year2010 = new DateTime();
         $year2010->setDate(2010, 1, 1);
 
         // Act
@@ -373,10 +395,10 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue($year2010 < $entry->getTimeNextVisible(), 'diff');
     }
 
-    public function testListMessagesWithOptionsWorks()
+    public function testListMessagesWithOptionsWorks(): void
     {
         // Arrange
-        $year2010 = new \DateTime;
+        $year2010 = new DateTime();
         $year2010->setDate(2010, 1, 1);
 
         // Act
@@ -412,11 +434,11 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         }
     }
 
-    public function testPeekMessagesWorks()
+    public function testPeekMessagesWorks(): void
     {
         // Arrange
 
-        $year2010 = new \DateTime;
+        $year2010 = new DateTime();
         $year2010->setDate(2010, 1, 1);
 
         // Act
@@ -430,7 +452,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($result, '$result');
         $this->assertEquals(1, count($result->getQueueMessages()), 'count($result->getQueueMessages())');
 
-        $entry = $result ->getQueueMessages();
+        $entry = $result->getQueueMessages();
         $entry = $entry[0];
 
         $this->assertNotNull($entry->getMessageId(), '$entry->getMessageId()');
@@ -444,10 +466,10 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertTrue($year2010 < $entry->getInsertionDate(), '$year2010 < $entry->getInsertionDate()');
     }
 
-    public function testPeekMessagesWithOptionsWorks()
+    public function testPeekMessagesWithOptionsWorks(): void
     {
         // Arrange
-        $year2010 = new \DateTime;
+        $year2010 = new DateTime();
         $year2010->setDate(2010, 1, 1);
 
         // Act
@@ -463,7 +485,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($result, '$result');
         $this->assertEquals(4, count($result->getQueueMessages()), 'count($result->getQueueMessages())');
         for ($i = 0; $i < 4; $i++) {
-            $entry = $result ->getQueueMessages();
+            $entry = $result->getQueueMessages();
             $entry = $entry[$i];
 
             $this->assertNotNull($entry->getMessageId(), '$entry->getMessageId()');
@@ -478,7 +500,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         }
     }
 
-    public function testClearMessagesWorks()
+    public function testClearMessagesWorks(): void
     {
         // Arrange
 
@@ -496,7 +518,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertEquals(0, count($result->getQueueMessages()), 'count($result->getQueueMessages())');
     }
 
-    public function testDeleteMessageWorks()
+    public function testDeleteMessageWorks(): void
     {
         // Arrange
 
@@ -524,10 +546,10 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertEquals(3, count($result2->getQueueMessages()), 'count($result2->getQueueMessages())');
     }
 
-    public function testUpdateMessageWorks()
+    public function testUpdateMessageWorks(): void
     {
         // Arrange
-        $year2010 = new \DateTime;
+        $year2010 = new DateTime();
         $year2010->setDate(2010, 1, 1);
 
         // Act
@@ -576,4 +598,5 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         $this->assertNotNull($entry->getTimeNextVisible(), '$entry->getTimeNextVisible()');
         $this->assertTrue($year2010 < $entry->getTimeNextVisible(), '$year2010 < $entry->getTimeNextVisible()');
     }
+
 }

@@ -24,6 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Table\Internal;
 
+use MicrosoftAzure\Storage\Table\Models\Entity;
+
 /**
  * Defines how to serialize and unserialize table wrapper JSON
  *
@@ -42,52 +44,47 @@ interface IODataReaderWriter
      *
      * @param string $name The name of the table.
      *
-     * @return string
      */
-    public function getTable($name);
+    public function getTable(string $name): string;
 
     /**
      * Parses one table entry.
      *
      * @param string $body The HTTP response body.
      *
-     * @return string
      */
-    public function parseTable($body);
+    public function parseTable(string $body): string;
 
     /**
      * Constructs array of tables from HTTP response body.
      *
      * @param string $body The HTTP response body.
      *
-     * @return array
      */
-    public function parseTableEntries($body);
+    public function parseTableEntries(string $body): array;
 
     /**
      * Constructs JSON representation for entity.
      *
      * @param \MicrosoftAzure\Storage\Table\Models\Entity $entity The entity instance.
      *
-     * @return string
      */
-    public function getEntity(\MicrosoftAzure\Storage\Table\Models\Entity $entity);
+    public function getEntity(Entity $entity): string;
 
     /**
      * Constructs entity from HTTP response body.
      *
      * @param string $body The HTTP response body.
      *
-     * @return \MicrosoftAzure\Storage\Table\Models\Entity
      */
-    public function parseEntity($body);
+    public function parseEntity(string $body): Entity;
 
     /**
      * Constructs array of entities from HTTP response body.
      *
      * @param string $body The HTTP response body.
      *
-     * @return array
      */
-    public function parseEntities($body);
+    public function parseEntities(string $body): array;
+
 }

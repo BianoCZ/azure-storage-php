@@ -24,10 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Models;
 
-use MicrosoftAzure\Storage\Common\Models\Logging;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Models\RetentionPolicy;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Models\Logging;
+use MicrosoftAzure\Storage\Common\Models\RetentionPolicy;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class Logging
@@ -39,9 +40,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class LoggingTest extends \PHPUnit\Framework\TestCase
+class LoggingTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -57,7 +58,7 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(Utilities::toBoolean($sample['Logging']['Write']), $actual->getWrite());
     }
 
-    public function testGetRetentionPolicy()
+    public function testGetRetentionPolicy(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -72,7 +73,7 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetRetentionPolicy()
+    public function testSetRetentionPolicy(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -87,7 +88,7 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetWrite()
+    public function testGetWrite(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -102,7 +103,7 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetWrite()
+    public function testSetWrite(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -117,7 +118,7 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetRead()
+    public function testGetRead(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -132,7 +133,7 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetRead()
+    public function testSetRead(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -147,7 +148,7 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetDelete()
+    public function testGetDelete(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -162,7 +163,7 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetDelete()
+    public function testSetDelete(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -177,7 +178,7 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetVersion()
+    public function testGetVersion(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -192,7 +193,7 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetVersion()
+    public function testSetVersion(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -207,18 +208,18 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
         $logging = Logging::create($sample['Logging']);
-        $expected = array(
+        $expected = [
             'Version'         => $sample['Logging']['Version'],
             'Delete'          => $sample['Logging']['Delete'],
             'Read'            => $sample['Logging']['Read'],
             'Write'           => $sample['Logging']['Write'],
-            'RetentionPolicy' => $logging->getRetentionPolicy()->toArray()
-        );
+            'RetentionPolicy' => $logging->getRetentionPolicy()->toArray(),
+        ];
 
         // Test
         $actual = $logging->toArray();
@@ -226,4 +227,5 @@ class LoggingTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

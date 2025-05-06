@@ -24,10 +24,19 @@
 
 namespace MicrosoftAzure\Storage\Table;
 
+use Datetime;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\SharedAccessSignatureHelper;
 use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
+use function base64_decode;
+use function base64_encode;
+use function hash_hmac;
+use function implode;
+use function sprintf;
+use function strlen;
+use function strtolower;
+use function urlencode;
 
 /**
  * Provides methods to generate Azure Storage Shared Access Signature
@@ -48,7 +57,7 @@ class TableSharedAccessSignatureHelper extends SharedAccessSignatureHelper
      * @param string $accountKey the shared key of the storage account
      *
      */
-    public function __construct($accountName, $accountKey)
+    public function __construct(string $accountName, string $accountKey)
     {
         parent::__construct($accountName, $accountKey);
     }
@@ -72,22 +81,20 @@ class TableSharedAccessSignatureHelper extends SharedAccessSignatureHelper
      *
      * @see Constructing an service SAS at
      * https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
-     * @return string
      */
     public function generateTableServiceSharedAccessSignatureToken(
-        $tableName,
-        $signedPermissions,
-        $signedExpiry,
-        $signedStart = "",
-        $signedIP = "",
-        $signedProtocol = "",
-        $signedIdentifier = "",
-        $startingPartitionKey = "",
-        $startingRowKey = "",
-        $endingPartitionKey = "",
-        $endingRowKey = ""
-    )
-    {
+        string $tableName,
+        string $signedPermissions,
+        Datetime|string $signedExpiry,
+        Datetime|string $signedStart = "",
+        string $signedIP = "",
+        string $signedProtocol = "",
+        string $signedIdentifier = "",
+        string $startingPartitionKey = "",
+        string $startingRowKey = "",
+        string $endingPartitionKey = "",
+        string $endingRowKey = ""
+    ): string {
         // check that table name is valid
         Validate::notNullOrEmpty($tableName, 'tableName');
         Validate::canCastAsString($tableName, 'tableName');
@@ -99,7 +106,7 @@ class TableSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         );
 
         // check that expiry is valid
-        if ($signedExpiry instanceof \Datetime) {
+        if ($signedExpiry instanceof Datetime) {
             $signedExpiry = Utilities::isoDate($signedExpiry);
         }
         Validate::notNullOrEmpty($signedExpiry, 'signedExpiry');
@@ -107,7 +114,7 @@ class TableSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         Validate::isDateString($signedExpiry, 'signedExpiry');
 
         // check that signed start is valid
-        if ($signedStart instanceof \Datetime) {
+        if ($signedStart instanceof Datetime) {
             $signedStart = Utilities::isoDate($signedStart);
         }
         Validate::canCastAsString($signedStart, 'signedStart');
@@ -134,7 +141,7 @@ class TableSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         Validate::canCastAsString($endingRowKey, 'endingRowKey');
 
         // construct an array with the parameters to generate the shared access signature at the account level
-        $parameters = array();
+        $parameters = [];
         $parameters[] = $signedPermissions;
         $parameters[] = $signedStart;
         $parameters[] = $signedExpiry;
@@ -181,4 +188,5 @@ class TableSharedAccessSignatureHelper extends SharedAccessSignatureHelper
 
         return $sas;
     }
+
 }

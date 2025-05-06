@@ -21,12 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Blob\Models\CopyBlobResult;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class SnapshotBlobResult
@@ -38,15 +39,15 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CopyBlobResultTest extends \PHPUnit\Framework\TestCase
+class CopyBlobResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $expectedEtag         = "12345678";
         $expectedLastModified = 'Fri, 16 Oct 2009 21:04:30 GMT';
         $headers = [
             Resources::ETAG => $expectedEtag,
-            Resources::LAST_MODIFIED => $expectedLastModified
+            Resources::LAST_MODIFIED => $expectedLastModified,
         ];
 
         $result = CopyBlobResult::create($headers);
@@ -61,4 +62,5 @@ class CopyBlobResultTest extends \PHPUnit\Framework\TestCase
             $result->getLastModified()
         );
     }
+
 }

@@ -24,9 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal;
 
-use MicrosoftAzure\Storage\Common\Logger;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Logger;
 use MicrosoftAzure\Storage\Tests\Framework\VirtualFileSystem;
+use PHPUnit\Framework\TestCase;
+use function file_get_contents;
 
 /**
  * Unit tests for class Logger
@@ -38,9 +40,9 @@ use MicrosoftAzure\Storage\Tests\Framework\VirtualFileSystem;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class LoggerTest extends \PHPUnit\Framework\TestCase
+class LoggerTest extends TestCase
 {
-    public function testLogWithArray()
+    public function testLogWithArray(): void
     {
         // Setup
         $virtualPath = VirtualFileSystem::newFile(Resources::EMPTY_STRING);
@@ -49,14 +51,14 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
         Logger::setLogFile($virtualPath);
 
         // Test
-        Logger::log(array(), $tip);
+        Logger::log([], $tip);
 
         // Assert
         $actual = file_get_contents($virtualPath);
         $this->assertEquals($expected, $actual);
     }
 
-    public function testLogWithString()
+    public function testLogWithString(): void
     {
         // Setup
         $virtualPath = VirtualFileSystem::newFile(Resources::EMPTY_STRING);
@@ -71,4 +73,5 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
         $actual = file_get_contents($virtualPath);
         $this->assertEquals($expected, $actual);
     }
+
 }

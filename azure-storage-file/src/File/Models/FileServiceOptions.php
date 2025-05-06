@@ -24,9 +24,9 @@
 
 namespace MicrosoftAzure\Storage\File\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\LocationMode;
 use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
-use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
 
 /**
@@ -41,7 +41,7 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class FileServiceOptions extends ServiceOptions
 {
-    public function setLocationMode($locationMode)
+    public function setLocationMode($locationMode): void
     {
         Validate::canCastAsString($locationMode, 'locationMode');
         Validate::isTrue(
@@ -51,4 +51,5 @@ class FileServiceOptions extends ServiceOptions
 
         $this->locationMode = $locationMode;
     }
+
 }

@@ -36,14 +36,14 @@ namespace MicrosoftAzure\Storage\Queue\Models;
  */
 class PeekMessagesOptions extends QueueServiceOptions
 {
+
     private $_numberOfMessages;
 
     /**
      * Gets numberOfMessages field.
      *
-     * @return integer
      */
-    public function getNumberOfMessages()
+    public function getNumberOfMessages(): int
     {
         return $this->_numberOfMessages;
     }
@@ -51,12 +51,12 @@ class PeekMessagesOptions extends QueueServiceOptions
     /**
      * Sets numberOfMessages field.
      *
-     * @param integer $numberOfMessages value to use.
+     * @param int $numberOfMessages value to use.
      *
-     * @return void
      */
-    public function setNumberOfMessages($numberOfMessages)
+    public function setNumberOfMessages(int $numberOfMessages): void
     {
         $this->_numberOfMessages = $numberOfMessages;
     }
+
 }

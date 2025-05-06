@@ -24,10 +24,11 @@
 
 namespace MicrosoftAzure\Storage\File\Models;
 
-use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Models\MarkerContinuationToken;
 use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
+use MicrosoftAzure\Storage\Common\Models\MarkerContinuationToken;
+use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
+use function array_key_exists;
 
 /**
  * Share to hold list directories and files response object.
@@ -41,12 +42,17 @@ use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
  */
 class ListDirectoriesAndFilesResult
 {
+
     use MarkerContinuationTokenTrait;
 
     private $directories;
+
     private $files;
+
     private $maxResults;
+
     private $accountName;
+
     private $marker;
 
     /**
@@ -58,9 +64,8 @@ class ListDirectoriesAndFilesResult
      *
      * @internal
      *
-     * @return ListDirectoriesAndFilesResult
      */
-    public static function create(array $parsedResponse, $location = '')
+    public static function create(array $parsedResponse, string $location = ''): ListDirectoriesAndFilesResult
     {
         $result               = new ListDirectoriesAndFilesResult();
         $serviceEndpoint      = Utilities::tryGetKeysChainValue(
@@ -102,8 +107,8 @@ class ListDirectoriesAndFilesResult
         );
 
         if (empty($entries)) {
-            $result->setDirectories(array());
-            $result->setFiles(array());
+            $result->setDirectories([]);
+            $result->setFiles([]);
         } else {
             $directoriesArray = Utilities::tryGetValue(
                 $entries,
@@ -114,8 +119,8 @@ class ListDirectoriesAndFilesResult
                 Resources::QP_FILE
             );
 
-            $directories = array();
-            $files = array();
+            $directories = [];
+            $files = [];
 
             if ($directoriesArray != null) {
                 if (array_key_exists(Resources::QP_NAME, $directoriesArray)) {
@@ -147,11 +152,10 @@ class ListDirectoriesAndFilesResult
      *
      * @param array $directories list of directories.
      *
-     * @return void
      */
-    protected function setDirectories(array $directories)
+    protected function setDirectories(array $directories): void
     {
-        $this->directories = array();
+        $this->directories = [];
         foreach ($directories as $directory) {
             $this->directories[] = clone $directory;
         }
@@ -162,7 +166,7 @@ class ListDirectoriesAndFilesResult
      *
      * @return Directory[]
      */
-    public function getDirectories()
+    public function getDirectories(): array
     {
         return $this->directories;
     }
@@ -172,11 +176,10 @@ class ListDirectoriesAndFilesResult
      *
      * @param array $files list of files.
      *
-     * @return void
      */
-    protected function setFiles(array $files)
+    protected function setFiles(array $files): void
     {
-        $this->files = array();
+        $this->files = [];
         foreach ($files as $file) {
             $this->files[] = clone $file;
         }
@@ -187,7 +190,7 @@ class ListDirectoriesAndFilesResult
      *
      * @return File[]
      */
-    public function getFiles()
+    public function getFiles(): array
     {
         return $this->files;
     }
@@ -195,9 +198,8 @@ class ListDirectoriesAndFilesResult
     /**
      * Gets max results.
      *
-     * @return string
      */
-    public function getMaxResults()
+    public function getMaxResults(): string
     {
         return $this->maxResults;
     }
@@ -207,9 +209,8 @@ class ListDirectoriesAndFilesResult
      *
      * @param string $maxResults value.
      *
-     * @return void
      */
-    protected function setMaxResults($maxResults)
+    protected function setMaxResults(string $maxResults): void
     {
         $this->maxResults = $maxResults;
     }
@@ -217,9 +218,8 @@ class ListDirectoriesAndFilesResult
     /**
      * Gets marker.
      *
-     * @return string
      */
-    public function getMarker()
+    public function getMarker(): string
     {
         return $this->marker;
     }
@@ -229,9 +229,8 @@ class ListDirectoriesAndFilesResult
      *
      * @param string $marker value.
      *
-     * @return void
      */
-    protected function setMarker($marker)
+    protected function setMarker(string $marker): void
     {
         $this->marker = $marker;
     }
@@ -239,9 +238,8 @@ class ListDirectoriesAndFilesResult
     /**
      * Gets account name.
      *
-     * @return string
      */
-    public function getAccountName()
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -251,10 +249,10 @@ class ListDirectoriesAndFilesResult
      *
      * @param string $accountName value.
      *
-     * @return void
      */
-    protected function setAccountName($accountName)
+    protected function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
+
 }

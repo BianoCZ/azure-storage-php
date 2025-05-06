@@ -36,29 +36,26 @@ namespace MicrosoftAzure\Storage\Table\Models\Filters;
  */
 class QueryStringFilter extends Filter
 {
-    /**
-     * @var string
-     */
-    private $_queryString;
+
+    private string $_queryString;
 
     /**
      * Constructor.
      *
      * @param string $queryString The OData query string.
      */
-    public function __construct($queryString)
+    public function __construct(string $queryString)
     {
         $this->_queryString = $queryString;
     }
 
-
     /**
      * Gets raw string filter
      *
-     * @return string
      */
-    public function getQueryString()
+    public function getQueryString(): string
     {
         return $this->_queryString;
     }
+
 }

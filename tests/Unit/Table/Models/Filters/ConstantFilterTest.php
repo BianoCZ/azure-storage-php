@@ -24,8 +24,9 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models\Filters;
 
-use MicrosoftAzure\Storage\Table\Models\Filters\ConstantFilter;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
+use MicrosoftAzure\Storage\Table\Models\Filters\ConstantFilter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ConstantFilter
@@ -37,9 +38,9 @@ use MicrosoftAzure\Storage\Table\Models\EdmType;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ConstantFilterTest extends \PHPUnit\Framework\TestCase
+class ConstantFilterTest extends TestCase
 {
-    public function testGetValue()
+    public function testGetValue(): void
     {
         // Setup
         $expected = 'x';
@@ -49,7 +50,7 @@ class ConstantFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $filter->getValue());
     }
 
-    public function testGetEdmType()
+    public function testGetEdmType(): void
     {
         // Setup
         $expected = EdmType::BINARY;
@@ -58,4 +59,5 @@ class ConstantFilterTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $filter->getEdmType());
     }
+
 }

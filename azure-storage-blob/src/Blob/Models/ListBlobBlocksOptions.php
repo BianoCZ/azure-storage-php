@@ -38,9 +38,13 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class ListBlobBlocksOptions extends BlobServiceOptions
 {
+
     private $_snapshot;
+
     private $_includeUncommittedBlobs;
+
     private $_includeCommittedBlobs;
+
     private static $_listType;
 
     /**
@@ -49,6 +53,7 @@ class ListBlobBlocksOptions extends BlobServiceOptions
     public function __construct()
     {
         parent::__construct();
+
         self::$_listType[true][true]   = 'all';
         self::$_listType[true][false]  = 'uncommitted';
         self::$_listType[false][true]  = 'committed';
@@ -61,9 +66,8 @@ class ListBlobBlocksOptions extends BlobServiceOptions
     /**
      * Gets blob snapshot.
      *
-     * @return string
      */
-    public function getSnapshot()
+    public function getSnapshot(): string
     {
         return $this->_snapshot;
     }
@@ -73,9 +77,8 @@ class ListBlobBlocksOptions extends BlobServiceOptions
      *
      * @param string $snapshot value.
      *
-     * @return void
      */
-    public function setSnapshot($snapshot)
+    public function setSnapshot(string $snapshot): void
     {
         $this->_snapshot = $snapshot;
     }
@@ -85,9 +88,8 @@ class ListBlobBlocksOptions extends BlobServiceOptions
      *
      * @param bool $includeUncommittedBlobs value.
      *
-     * @return void
      */
-    public function setIncludeUncommittedBlobs($includeUncommittedBlobs)
+    public function setIncludeUncommittedBlobs(bool $includeUncommittedBlobs): void
     {
         Validate::isBoolean($includeUncommittedBlobs);
         $this->_includeUncommittedBlobs = $includeUncommittedBlobs;
@@ -96,9 +98,8 @@ class ListBlobBlocksOptions extends BlobServiceOptions
     /**
      * Indicates if uncommittedBlobs is included or not.
      *
-     * @return boolean
      */
-    public function getIncludeUncommittedBlobs()
+    public function getIncludeUncommittedBlobs(): bool
     {
         return $this->_includeUncommittedBlobs;
     }
@@ -108,9 +109,8 @@ class ListBlobBlocksOptions extends BlobServiceOptions
      *
      * @param bool $includeCommittedBlobs value.
      *
-     * @return void
      */
-    public function setIncludeCommittedBlobs($includeCommittedBlobs)
+    public function setIncludeCommittedBlobs(bool $includeCommittedBlobs): void
     {
         Validate::isBoolean($includeCommittedBlobs);
         $this->_includeCommittedBlobs = $includeCommittedBlobs;
@@ -119,9 +119,8 @@ class ListBlobBlocksOptions extends BlobServiceOptions
     /**
      * Indicates if committedBlobs is included or not.
      *
-     * @return boolean
      */
-    public function getIncludeCommittedBlobs()
+    public function getIncludeCommittedBlobs(): bool
     {
         return $this->_includeCommittedBlobs;
     }
@@ -129,13 +128,13 @@ class ListBlobBlocksOptions extends BlobServiceOptions
     /**
      * Gets block list type.
      *
-     * @return string
      */
-    public function getBlockListType()
+    public function getBlockListType(): string
     {
         $includeUncommitted = $this->_includeUncommittedBlobs;
         $includeCommitted   = $this->_includeCommittedBlobs;
 
         return self::$_listType[$includeUncommitted][$includeCommitted];
     }
+
 }

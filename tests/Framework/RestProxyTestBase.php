@@ -24,9 +24,16 @@
 
 namespace MicrosoftAzure\Storage\Tests\Framework;
 
-use MicrosoftAzure\Storage\Common\Logger;
 use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
-use MicrosoftAzure\Storage\Common\ServicesBuilder;
+use MicrosoftAzure\Storage\Common\Logger;
+use PHPUnit\Framework\TestCase;
+use Throwable;
+use function assert_options;
+use function mt_rand;
+use function sprintf;
+use const ASSERT_ACTIVE;
+use const ASSERT_CALLBACK;
+use const ASSERT_WARNING;
 
 /**
  * Testbase for all REST proxy tests.
@@ -38,9 +45,11 @@ use MicrosoftAzure\Storage\Common\ServicesBuilder;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class RestProxyTestBase extends \PHPUnit\Framework\TestCase
+class RestProxyTestBase extends TestCase
 {
+
     protected $restProxy;
+
     protected $xmlSerializer;
 
     protected function getTestName()
@@ -48,7 +57,7 @@ class RestProxyTestBase extends \PHPUnit\Framework\TestCase
         return sprintf('onesdkphp%04x', mt_rand(0, 65535));
     }
 
-    public static function assertHandler($file, $line, $code)
+    public static function assertHandler($file, $line, $code): void
     {
         echo "Assertion Failed:\n
             File '$file'\n
@@ -68,16 +77,17 @@ class RestProxyTestBase extends \PHPUnit\Framework\TestCase
         assert_options(ASSERT_CALLBACK, 'MicrosoftAzure\Storage\Tests\Framework\RestProxyTestBase::assertHandler');
     }
 
-    public function setProxy($serviceRestProxy)
+    public function setProxy($serviceRestProxy): void
     {
         $this->restProxy = $serviceRestProxy;
     }
 
-    protected function onNotSuccessfulTest(\Exception $e)
+    protected function onNotSuccessfulTest(Throwable $e): void
     {
         parent::onNotSuccessfulTest($e);
 
         $this->tearDown();
         throw $e;
     }
+
 }

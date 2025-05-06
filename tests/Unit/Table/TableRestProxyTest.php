@@ -24,26 +24,24 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Table;
 
-use MicrosoftAzure\Storage\Table\Internal\ITable;
-use MicrosoftAzure\Storage\Table\Internal\JsonODataReaderWriter;
-use MicrosoftAzure\Storage\Table\Internal\MimeReaderWriter;
-use MicrosoftAzure\Storage\Tests\Framework\TableServiceRestProxyTestBase;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Table\TableRestProxy;
+use DateTime;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
-use MicrosoftAzure\Storage\Table\Models\QueryTablesOptions;
-use MicrosoftAzure\Storage\Table\Models\Query;
-use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
-use MicrosoftAzure\Storage\Table\Models\Entity;
-use MicrosoftAzure\Storage\Table\Models\TableACL;
-use MicrosoftAzure\Storage\Table\Models\EdmType;
-use MicrosoftAzure\Storage\Table\Models\QueryEntitiesOptions;
+use MicrosoftAzure\Storage\Table\Internal\ITable;
 use MicrosoftAzure\Storage\Table\Models\BatchOperations;
-use MicrosoftAzure\Storage\Table\Models\AcceptJSONContentType;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Table\Models\EdmType;
+use MicrosoftAzure\Storage\Table\Models\Entity;
+use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
+use MicrosoftAzure\Storage\Table\Models\Query;
+use MicrosoftAzure\Storage\Table\Models\QueryEntitiesOptions;
+use MicrosoftAzure\Storage\Table\Models\QueryTablesOptions;
+use MicrosoftAzure\Storage\Table\Models\TableACL;
+use MicrosoftAzure\Storage\Table\TableRestProxy;
+use MicrosoftAzure\Storage\Tests\Framework\TableServiceRestProxyTestBase;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function count;
+use function mt_rand;
+use function sleep;
+use function sprintf;
 
 /**
  * Unit tests for class TableRestProxy
@@ -57,7 +55,7 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
  */
 class TableRestProxyTest extends TableServiceRestProxyTestBase
 {
-    public function testBuildForTable()
+    public function testBuildForTable(): void
     {
         // Test
         $tableRestProxy = TableRestProxy::createTableService(TestResources::getWindowsAzureStorageServicesConnectionString());
@@ -66,7 +64,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertInstanceOf(ITable::class, $tableRestProxy);
     }
 
-    public function testSetServiceProperties()
+    public function testSetServiceProperties(): void
     {
         $this->skipIfEmulated();
 
@@ -76,14 +74,14 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         // Test
         $this->setServiceProperties($expected);
         //Add 30s interval to wait for setting to take effect.
-        \sleep(30);
+        sleep(30);
         $actual = $this->restProxy->getServiceProperties();
 
         // Assert
         $this->assertEquals($expected->toXml($this->xmlSerializer), $actual->getValue()->toXml($this->xmlSerializer));
     }
 
-    public function testSetServicePropertiesWithEmptyParts()
+    public function testSetServicePropertiesWithEmptyParts(): void
     {
         $this->skipIfEmulated();
 
@@ -95,14 +93,14 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         // Test
         $this->setServiceProperties($expected);
         //Add 30s interval to wait for setting to take effect.
-        \sleep(30);
+        sleep(30);
         $actual = $this->restProxy->getServiceProperties();
 
         // Assert
         $this->assertEquals($expected->toXml($this->xmlSerializer), $actual->getValue()->toXml($this->xmlSerializer));
     }
 
-    public function testCreateTable()
+    public function testCreateTable(): void
     {
         // Setup
         $name = 'createtable';
@@ -115,7 +113,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(1, $result->getTables());
     }
 
-    public function testGetTable()
+    public function testGetTable(): void
     {
         // Setup
         $name = 'gettable';
@@ -128,7 +126,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals($name, $result->getName());
     }
 
-    public function testDeleteTable()
+    public function testDeleteTable(): void
     {
         // Setup
         $name = 'deletetable';
@@ -142,7 +140,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(0, $result->getTables());
     }
 
-    public function testQueryTablesSimple()
+    public function testQueryTablesSimple(): void
     {
         // Setup
         $name1 = 'querytablessimple1';
@@ -160,7 +158,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals($name2, $tables[1]);
     }
 
-    public function testQueryTablesOneTable()
+    public function testQueryTablesOneTable(): void
     {
         // Setup
         $name1 = 'mytable1';
@@ -175,7 +173,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals($name1, $tables[0]);
     }
 
-    public function testQueryTablesEmpty()
+    public function testQueryTablesEmpty(): void
     {
         // Test
         $result = $this->restProxy->queryTables();
@@ -185,7 +183,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(0, $tables);
     }
 
-    public function testQueryTablesWithPrefix()
+    public function testQueryTablesWithPrefix(): void
     {
         $this->skipIfEmulated();
 
@@ -209,7 +207,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals($name3, $tables[1]);
     }
 
-    public function testQueryTablesWithStringOption()
+    public function testQueryTablesWithStringOption(): void
     {
         $this->skipIfEmulated();
 
@@ -232,7 +230,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals($name3, $tables[1]);
     }
 
-    public function testQueryTablesWithFilterOption()
+    public function testQueryTablesWithFilterOption(): void
     {
         $this->skipIfEmulated();
 
@@ -265,7 +263,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals($name3, $tables[1]);
     }
 
-    public function testInsertEntity()
+    public function testInsertEntity(): void
     {
         // Setup
         $name = 'insertentity';
@@ -283,7 +281,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()) + 1, $actual->getProperties());
     }
 
-    public function testQueryEntitiesWithEmpty()
+    public function testQueryEntitiesWithEmpty(): void
     {
         // Setup
         $name = 'queryentitieswithempty';
@@ -297,7 +295,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(0, $entities);
     }
 
-    public function testQueryEntitiesWithOneEntity()
+    public function testQueryEntitiesWithOneEntity(): void
     {
         // Setup
         $name = 'queryentitieswithoneentity';
@@ -318,7 +316,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals(EdmType::STRING, $entities[0]->getProperty("CustomerName")->getEdmType());
     }
 
-    public function testQueryEntitiesQueryStringOption()
+    public function testQueryEntitiesQueryStringOption(): void
     {
         $this->skipIfEmulated();
 
@@ -345,7 +343,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals($pk1, $entities[0]->getPartitionKey());
     }
 
-    public function testQueryEntitiesFilterOption()
+    public function testQueryEntitiesFilterOption(): void
     {
         $this->skipIfEmulated();
 
@@ -373,7 +371,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals($pk1, $entities[0]->getPartitionKey());
     }
 
-    public function testQueryEntitiesWithMultipleEntities()
+    public function testQueryEntitiesWithMultipleEntities(): void
     {
         $this->skipIfEmulated();
 
@@ -408,7 +406,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals($expected, $entities[2]->getProperty($field)->getValue());
     }
 
-    public function testQueryEntitiesWithGetTop()
+    public function testQueryEntitiesWithGetTop(): void
     {
         // Setup
         $name = 'queryentitieswithgettop';
@@ -436,7 +434,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertEquals($pk1, $entities[0]->getPartitionKey());
     }
 
-    public function testUpdateEntity()
+    public function testUpdateEntity(): void
     {
         // Setup
         $name = 'updateentity';
@@ -461,7 +459,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()), $actual->getProperties());
     }
 
-    public function testUpdateEntityWithDeleteProperty()
+    public function testUpdateEntityWithDeleteProperty(): void
     {
         $this->skipIfEmulated();
 
@@ -484,7 +482,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()), $actual->getEntity()->getProperties());
     }
 
-    public function testMergeEntity()
+    public function testMergeEntity(): void
     {
         // Setup
         $name = 'mergeentity';
@@ -509,7 +507,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()), $actual->getProperties());
     }
 
-    public function testInsertOrReplaceEntity()
+    public function testInsertOrReplaceEntity(): void
     {
         $this->skipIfEmulated();
 
@@ -536,7 +534,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()), $actual->getProperties());
     }
 
-    public function testInsertOrMergeEntity()
+    public function testInsertOrMergeEntity(): void
     {
         $this->skipIfEmulated();
 
@@ -563,7 +561,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()), $actual->getProperties());
     }
 
-    public function testDeleteEntity()
+    public function testDeleteEntity(): void
     {
         // Setup
         $name = 'deleteentity';
@@ -582,7 +580,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(0, $entities);
     }
 
-    public function testDeleteEntityWithSpecialChars()
+    public function testDeleteEntityWithSpecialChars(): void
     {
         // Setup
         $name = 'deleteentitywithspecialchars';
@@ -601,7 +599,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(0, $entities);
     }
 
-    public function testGetEntity()
+    public function testGetEntity(): void
     {
         // Setup
         $name = 'getentity';
@@ -622,7 +620,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()) + 1, $actual->getProperties());
     }
 
-    public function testGetEntityVariousType()
+    public function testGetEntityVariousType(): void
     {
         // Setup
         $name = 'getentityvarioustype';
@@ -655,7 +653,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         }
     }
 
-    public function testBatchWithInsert()
+    public function testBatchWithInsert(): void
     {
         // Setup
         $name = 'batchwithinsert';
@@ -678,7 +676,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()) + 1, $actual->getProperties());
     }
 
-    public function testBatchWithDelete()
+    public function testBatchWithDelete(): void
     {
         // Setup
         $name = 'batchwithdelete';
@@ -699,7 +697,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(0, $entities);
     }
 
-    public function testBatchWithUpdate()
+    public function testBatchWithUpdate(): void
     {
         // Setup
         $name = 'batchwithupdate';
@@ -729,7 +727,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()), $actual->getProperties());
     }
 
-    public function testBatchWithMerge()
+    public function testBatchWithMerge(): void
     {
         // Setup
         $name = 'batchwithmerge';
@@ -759,7 +757,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()), $actual->getProperties());
     }
 
-    public function testBatchWithInsertOrReplace()
+    public function testBatchWithInsertOrReplace(): void
     {
         $this->skipIfEmulated();
 
@@ -791,7 +789,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()), $actual->getProperties());
     }
 
-    public function testBatchWithInsertOrMerge()
+    public function testBatchWithInsertOrMerge(): void
     {
         $this->skipIfEmulated();
 
@@ -823,7 +821,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertCount(count($expected->getProperties()), $actual->getProperties());
     }
 
-    public function testBatchWithMultipleOperations()
+    public function testBatchWithMultipleOperations(): void
     {
         // Setup
         $name = 'batchwithwithmultipleoperations';
@@ -858,7 +856,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
      * @expectedException MicrosoftAzure\Storage\Common\Exceptions\ServiceException
      * @expectedExceptionMessage All commands in a batch must operate on same entity group.
      */
-    public function testBatchWithDifferentPKFail()
+    public function testBatchWithDifferentPKFail(): void
     {
         // Setup
         $name = 'batchwithwithdifferentpkfail';
@@ -883,7 +881,7 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $result = $this->restProxy->batch($operations);
     }
 
-    public function testGetSetTableAcl()
+    public function testGetSetTableAcl(): void
     {
         // Setup
         $name = self::getTableNameWithPrefix('testGetSetTableAcl');
@@ -909,18 +907,19 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         );
     }
 
-    public function testGetServiceStats()
+    public function testGetServiceStats(): void
     {
         $result = $this->restProxy->getServiceStats();
 
         // Assert
         $this->assertNotNull($result->getStatus());
         $this->assertNotNull($result->getLastSyncTime());
-        $this->assertTrue($result->getLastSyncTime() instanceof \DateTime);
+        $this->assertTrue($result->getLastSyncTime() instanceof DateTime);
     }
 
     private static function getTableNameWithPrefix($prefix)
     {
         return $prefix . sprintf('%04x', mt_rand(0, 65535));
     }
+
 }

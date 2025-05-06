@@ -21,12 +21,14 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
-use MicrosoftAzure\Storage\Table\Models\QueryEntitiesOptions;
-use MicrosoftAzure\Storage\Table\Models\Query;
-use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
+use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
+use MicrosoftAzure\Storage\Table\Models\Query;
+use MicrosoftAzure\Storage\Table\Models\QueryEntitiesOptions;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class QueryEntitiesOptions
@@ -38,9 +40,9 @@ use MicrosoftAzure\Storage\Table\Models\EdmType;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class QueryEntitiesOptionsTest extends \PHPUnit\Framework\TestCase
+class QueryEntitiesOptionsTest extends TestCase
 {
-    public function testSetQuery()
+    public function testSetQuery(): void
     {
         // Setup
         $options = new QueryEntitiesOptions();
@@ -53,7 +55,7 @@ class QueryEntitiesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getQuery());
     }
 
-    public function testSetNextPartitionKey()
+    public function testSetNextPartitionKey(): void
     {
         // Setup
         $options = new QueryEntitiesOptions();
@@ -66,7 +68,7 @@ class QueryEntitiesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getNextPartitionKey());
     }
 
-    public function testSetNextRowKey()
+    public function testSetNextRowKey(): void
     {
         // Setup
         $options = new QueryEntitiesOptions();
@@ -79,11 +81,11 @@ class QueryEntitiesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getNextRowKey());
     }
 
-    public function testSetSelectFields()
+    public function testSetSelectFields(): void
     {
         // Setup
         $options = new QueryEntitiesOptions();
-        $expected = array('customerId', 'customerName');
+        $expected = ['customerId', 'customerName'];
 
         // Test
         $options->setSelectFields($expected);
@@ -92,7 +94,7 @@ class QueryEntitiesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getSelectFields());
     }
 
-    public function testSetTop()
+    public function testSetTop(): void
     {
         // Setup
         $options = new QueryEntitiesOptions();
@@ -105,7 +107,7 @@ class QueryEntitiesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getTop());
     }
 
-    public function testSetFilter()
+    public function testSetFilter(): void
     {
         // Setup
         $options = new QueryEntitiesOptions();
@@ -118,12 +120,12 @@ class QueryEntitiesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getFilter());
     }
 
-    public function testAddSelectField()
+    public function testAddSelectField(): void
     {
         // Setup
         $options = new QueryEntitiesOptions();
         $field = 'customerId';
-        $expected = array($field);
+        $expected = [$field];
 
         // Test
         $options->addSelectField($field);
@@ -131,4 +133,5 @@ class QueryEntitiesOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $options->getSelectFields());
     }
+
 }

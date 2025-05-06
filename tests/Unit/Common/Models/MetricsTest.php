@@ -24,10 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Models;
 
-use MicrosoftAzure\Storage\Common\Models\Metrics;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use MicrosoftAzure\Storage\Common\Models\Metrics;
 use MicrosoftAzure\Storage\Common\Models\RetentionPolicy;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class Metrics
@@ -39,9 +40,9 @@ use MicrosoftAzure\Storage\Common\Models\RetentionPolicy;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class MetricsTest extends \PHPUnit\Framework\TestCase
+class MetricsTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -56,7 +57,7 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($sample['HourMetrics']['Version'], $actual->getVersion());
     }
 
-    public function testGetRetentionPolicy()
+    public function testGetRetentionPolicy(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -71,7 +72,7 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetRetentionPolicy()
+    public function testSetRetentionPolicy(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -86,7 +87,7 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetVersion()
+    public function testGetVersion(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -101,7 +102,7 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetVersion()
+    public function testSetVersion(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -116,7 +117,7 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetEnabled()
+    public function testGetEnabled(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -131,7 +132,7 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetEnabled()
+    public function testSetEnabled(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -146,7 +147,7 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetIncludeAPIs()
+    public function testGetIncludeAPIs(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -161,7 +162,7 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetIncludeAPIs()
+    public function testSetIncludeAPIs(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -176,17 +177,17 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
         $metrics = Metrics::create($sample['HourMetrics']);
-        $expected = array(
+        $expected = [
             'Version'         => $sample['HourMetrics']['Version'],
             'Enabled'         => $sample['HourMetrics']['Enabled'],
             'IncludeAPIs'     => $sample['HourMetrics']['IncludeAPIs'],
-            'RetentionPolicy' => $metrics->getRetentionPolicy()->toArray()
-        );
+            'RetentionPolicy' => $metrics->getRetentionPolicy()->toArray(),
+        ];
 
         // Test
         $actual = $metrics->toArray();
@@ -195,17 +196,17 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testToArrayWithNotEnabled()
+    public function testToArrayWithNotEnabled(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
         $sample['HourMetrics']['Enabled'] = 'false';
         $metrics = Metrics::create($sample['HourMetrics']);
-        $expected = array(
+        $expected = [
             'Version'         => $sample['HourMetrics']['Version'],
             'Enabled'         => $sample['HourMetrics']['Enabled'],
-            'RetentionPolicy' => $metrics->getRetentionPolicy()->toArray()
-        );
+            'RetentionPolicy' => $metrics->getRetentionPolicy()->toArray(),
+        ];
 
         // Test
         $actual = $metrics->toArray();
@@ -213,4 +214,5 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

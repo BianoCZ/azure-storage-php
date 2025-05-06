@@ -36,14 +36,14 @@ namespace MicrosoftAzure\Storage\Queue\Models;
  */
 class CreateQueueOptions extends QueueServiceOptions
 {
+
     private $_metadata;
 
     /**
      * Gets user defined metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->_metadata;
     }
@@ -54,9 +54,8 @@ class CreateQueueOptions extends QueueServiceOptions
      *
      * @param array $metadata user defined metadata object in array form.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata)
+    public function setMetadata(array $metadata): void
     {
         $this->_metadata = $metadata;
     }
@@ -68,10 +67,10 @@ class CreateQueueOptions extends QueueServiceOptions
      * @param string $key   metadata key element.
      * @param string $value metadata value element.
      *
-     * @return void
      */
-    public function addMetadata($key, $value)
+    public function addMetadata(string $key, string $value): void
     {
         $this->_metadata[$key] = $value;
     }
+
 }

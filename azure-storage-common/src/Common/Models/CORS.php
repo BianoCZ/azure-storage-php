@@ -26,6 +26,10 @@ namespace MicrosoftAzure\Storage\Common\Models;
 
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
+use function array_filter;
+use function explode;
+use function implode;
+use function intval;
 
 /**
  * Provides functionality and data structure for Cross-Origin Resource Sharing
@@ -40,10 +44,15 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class CORS
 {
+
     private $allowedOrigins;
+
     private $allowedMethods;
+
     private $allowedHeaders;
+
     private $exposedHeaders;
+
     private $maxAgeInSeconds;
 
     /**
@@ -70,7 +79,7 @@ class CORS
         array $allowedMethods,
         array $allowedHeaders,
         array $exposedHeaders,
-        $maxAgeInSeconds
+        int $maxAgeInSeconds
     ) {
         $this->setAllowedOrigins($allowedOrigins);
         $this->setAllowedMethods($allowedMethods);
@@ -86,9 +95,8 @@ class CORS
      *
      * @internal
      *
-     * @return CORS
      */
-    public static function create(array $parsedResponse)
+    public static function create(array $parsedResponse): CORS
     {
         Validate::hasKey(
             Resources::XTAG_ALLOWED_ORIGINS,
@@ -149,11 +157,10 @@ class CORS
     /**
      * Converts this object to array with XML tags
      *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        return array(
+        return [
             Resources::XTAG_ALLOWED_ORIGINS    =>
                 implode(',', $this->getAllowedOrigins()),
             Resources::XTAG_ALLOWED_METHODS    =>
@@ -163,8 +170,8 @@ class CORS
             Resources::XTAG_EXPOSED_HEADERS    =>
                 implode(',', $this->getExposedHeaders()),
             Resources::XTAG_MAX_AGE_IN_SECONDS =>
-                $this->getMaxedAgeInSeconds()
-        );
+                $this->getMaxedAgeInSeconds(),
+        ];
     }
 
     /**
@@ -172,7 +179,7 @@ class CORS
      *
      * @param string[] $allowedOrigins the allowed origins to be set.
      */
-    public function setAllowedOrigins(array $allowedOrigins)
+    public function setAllowedOrigins(array $allowedOrigins): void
     {
         $this->allowedOrigins = $allowedOrigins;
     }
@@ -182,7 +189,7 @@ class CORS
      *
      * @return string[]
      */
-    public function getAllowedOrigins()
+    public function getAllowedOrigins(): array
     {
         return $this->allowedOrigins;
     }
@@ -192,7 +199,7 @@ class CORS
      *
      * @param string[] $allowedMethods the allowed methods to be set.
      */
-    public function setAllowedMethods(array $allowedMethods)
+    public function setAllowedMethods(array $allowedMethods): void
     {
         $this->allowedMethods = $allowedMethods;
     }
@@ -202,7 +209,7 @@ class CORS
      *
      * @return string[]
      */
-    public function getAllowedMethods()
+    public function getAllowedMethods(): array
     {
         return $this->allowedMethods;
     }
@@ -212,7 +219,7 @@ class CORS
      *
      * @param string[] $allowedHeaders the allowed headers to be set.
      */
-    public function setAllowedHeaders(array $allowedHeaders)
+    public function setAllowedHeaders(array $allowedHeaders): void
     {
         $this->allowedHeaders = $allowedHeaders;
     }
@@ -222,7 +229,7 @@ class CORS
      *
      * @return string[]
      */
-    public function getAllowedHeaders()
+    public function getAllowedHeaders(): array
     {
         return $this->allowedHeaders;
     }
@@ -232,7 +239,7 @@ class CORS
      *
      * @param string[] $exposedHeaders the exposed headers to be set.
      */
-    public function setExposedHeaders(array $exposedHeaders)
+    public function setExposedHeaders(array $exposedHeaders): void
     {
         $this->exposedHeaders = $exposedHeaders;
     }
@@ -242,7 +249,7 @@ class CORS
      *
      * @return string[]
      */
-    public function getExposedHeaders()
+    public function getExposedHeaders(): array
     {
         return $this->exposedHeaders;
     }
@@ -252,7 +259,7 @@ class CORS
      *
      * @param int $maxAgeInSeconds the max age in seconds to be set.
      */
-    public function setMaxedAgeInSeconds($maxAgeInSeconds)
+    public function setMaxedAgeInSeconds(int $maxAgeInSeconds): void
     {
         $this->maxAgeInSeconds = $maxAgeInSeconds;
     }
@@ -260,10 +267,10 @@ class CORS
     /**
      * Getter for maxAgeInSeconds
      *
-     * @return int
      */
-    public function getMaxedAgeInSeconds()
+    public function getMaxedAgeInSeconds(): int
     {
         return $this->maxAgeInSeconds;
     }
+
 }

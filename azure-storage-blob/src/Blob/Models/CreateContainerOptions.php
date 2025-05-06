@@ -38,15 +38,16 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class CreateContainerOptions extends BlobServiceOptions
 {
+
     private $_publicAccess;
+
     private $_metadata;
 
     /**
      * Gets container public access.
      *
-     * @return string
      */
-    public function getPublicAccess()
+    public function getPublicAccess(): string
     {
         return $this->_publicAccess;
     }
@@ -66,9 +67,8 @@ class CreateContainerOptions extends BlobServiceOptions
      *
      * @param string $publicAccess access modifier for the container
      *
-     * @return void
      */
-    public function setPublicAccess($publicAccess)
+    public function setPublicAccess(string $publicAccess): void
     {
         Validate::canCastAsString($publicAccess, 'publicAccess');
         $this->_publicAccess = $publicAccess;
@@ -77,9 +77,8 @@ class CreateContainerOptions extends BlobServiceOptions
     /**
      * Gets user defined metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->_metadata;
     }
@@ -90,9 +89,8 @@ class CreateContainerOptions extends BlobServiceOptions
      *
      * @param array $metadata user defined metadata object in array form.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata)
+    public function setMetadata(array $metadata): void
     {
         $this->_metadata = $metadata;
     }
@@ -104,10 +102,10 @@ class CreateContainerOptions extends BlobServiceOptions
      * @param string $key   metadata key element.
      * @param string $value metadata value element.
      *
-     * @return void
      */
-    public function addMetadata($key, $value)
+    public function addMetadata(string $key, string $value): void
     {
         $this->_metadata[$key] = $value;
     }
+
 }

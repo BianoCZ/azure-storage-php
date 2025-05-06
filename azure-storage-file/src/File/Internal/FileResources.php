@@ -68,4 +68,5 @@ class FileResources extends Resources
     ];
 
     // @codingStandardsIgnoreEnd
+
 }

@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\Common\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 
@@ -39,7 +40,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class GetServiceStatsResult
 {
+
     private $status;
+
     private $lastSyncTime;
 
     /**
@@ -48,27 +51,32 @@ class GetServiceStatsResult
      * @internal
      * @param array $parsedResponse XML response parsed into array.
      *
-     * @return \MicrosoftAzure\Storage\Common\Models\GetServiceStatsResult
      */
-    public static function create(array $parsedResponse)
+    public static function create(array $parsedResponse): GetServiceStatsResult
     {
         $result = new GetServiceStatsResult();
-        if (Utilities::arrayKeyExistsInsensitive(
-            Resources::XTAG_GEO_REPLICATION,
-            $parsedResponse
-        )) {
+        if (
+            Utilities::arrayKeyExistsInsensitive(
+                Resources::XTAG_GEO_REPLICATION,
+                $parsedResponse
+            )
+        ) {
             $geoReplication = $parsedResponse[Resources::XTAG_GEO_REPLICATION];
-            if (Utilities::arrayKeyExistsInsensitive(
-                Resources::XTAG_STATUS,
-                $geoReplication
-            )) {
+            if (
+                Utilities::arrayKeyExistsInsensitive(
+                    Resources::XTAG_STATUS,
+                    $geoReplication
+                )
+            ) {
                 $result->setStatus($geoReplication[Resources::XTAG_STATUS]);
             }
 
-            if (Utilities::arrayKeyExistsInsensitive(
-                Resources::XTAG_LAST_SYNC_TIME,
-                $geoReplication
-            )) {
+            if (
+                Utilities::arrayKeyExistsInsensitive(
+                    Resources::XTAG_LAST_SYNC_TIME,
+                    $geoReplication
+                )
+            ) {
                 $lastSyncTime = $geoReplication[Resources::XTAG_LAST_SYNC_TIME];
                 $result->setLastSyncTime(Utilities::convertToDateTime($lastSyncTime));
             }
@@ -80,18 +88,17 @@ class GetServiceStatsResult
     /**
      * Gets status of the result.
      *
-     * @return string
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
 
     /**
      * Gets the last sync time.
-     * @return \DateTime
+     *
      */
-    public function getLastSyncTime()
+    public function getLastSyncTime(): DateTime
     {
         return $this->lastSyncTime;
     }
@@ -99,9 +106,8 @@ class GetServiceStatsResult
     /**
      * Sets status of the result.
      *
-     * @return void
      */
-    protected function setStatus($status)
+    protected function setStatus($status): void
     {
         $this->status = $status;
     }
@@ -109,10 +115,10 @@ class GetServiceStatsResult
     /**
      * Sets the last sync time.
      *
-     * @return void
      */
-    protected function setLastSyncTime(\DateTime $lastSyncTime)
+    protected function setLastSyncTime(DateTime $lastSyncTime): void
     {
         $this->lastSyncTime = $lastSyncTime;
     }
+
 }

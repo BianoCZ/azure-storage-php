@@ -39,7 +39,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class PutBlockResult
 {
+
     private $contentMD5;
+
     private $requestServerEncrypted;
 
     /**
@@ -49,9 +51,8 @@ class PutBlockResult
      *
      * @internal
      *
-     * @return PutBlockResult
      */
-    public static function create(array $headers)
+    public static function create(array $headers): PutBlockResult
     {
         $result = new PutBlockResult();
 
@@ -75,9 +76,8 @@ class PutBlockResult
     /**
      * Gets block content MD5.
      *
-     * @return string
      */
-    public function getContentMD5()
+    public function getContentMD5(): string
     {
         return $this->contentMD5;
     }
@@ -87,9 +87,8 @@ class PutBlockResult
      *
      * @param string $contentMD5 conent MD5 as a string.
      *
-     * @return void
      */
-    protected function setContentMD5($contentMD5)
+    protected function setContentMD5(string $contentMD5): void
     {
         $this->contentMD5 = $contentMD5;
     }
@@ -97,9 +96,8 @@ class PutBlockResult
     /**
      * Gets the whether the contents of the request are successfully encrypted.
      *
-     * @return boolean
      */
-    public function getRequestServerEncrypted()
+    public function getRequestServerEncrypted(): bool
     {
         return $this->requestServerEncrypted;
     }
@@ -107,12 +105,11 @@ class PutBlockResult
     /**
      * Sets the request server encryption value.
      *
-     * @param boolean $requestServerEncrypted
      *
-     * @return void
      */
-    public function setRequestServerEncrypted($requestServerEncrypted)
+    public function setRequestServerEncrypted(bool $requestServerEncrypted): void
     {
         $this->requestServerEncrypted = $requestServerEncrypted;
     }
+
 }

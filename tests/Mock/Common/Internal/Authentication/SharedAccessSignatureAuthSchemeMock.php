@@ -46,4 +46,5 @@ class SharedAccessSignatureAuthSchemeMock extends SharedAccessSignatureAuthSchem
     {
         return $this->sasToken;
     }
+
 }

@@ -38,6 +38,7 @@ use MicrosoftAzure\Storage\Common\Internal\MetadataTrait;
  */
 class GetBlobPropertiesResult
 {
+
     use MetadataTrait;
 
     private $_properties;
@@ -45,9 +46,8 @@ class GetBlobPropertiesResult
     /**
      * Gets blob properties.
      *
-     * @return BlobProperties
      */
-    public function getProperties()
+    public function getProperties(): BlobProperties
     {
         return $this->_properties;
     }
@@ -57,9 +57,8 @@ class GetBlobPropertiesResult
      *
      * @param BlobProperties $properties value.
      *
-     * @return void
      */
-    protected function setProperties($properties)
+    protected function setProperties(BlobProperties $properties): void
     {
         $this->_properties = $properties;
     }
@@ -71,9 +70,8 @@ class GetBlobPropertiesResult
      *
      * @internal
      *
-     * @return GetBlobPropertiesResult
      */
-    public static function create(array $headers)
+    public static function create(array $headers): GetBlobPropertiesResult
     {
         $result = static::createMetadataResult($headers);
 
@@ -81,4 +79,5 @@ class GetBlobPropertiesResult
 
         return $result;
     }
+
 }

@@ -36,14 +36,14 @@ namespace MicrosoftAzure\Storage\File\Models;
  */
 class PutFileRangeOptions extends FileServiceOptions
 {
+
     private $contentMD5;
 
     /**
      * Gets contentMD5.
      *
-     * @return string
      */
-    public function getContentMD5()
+    public function getContentMD5(): string
     {
         return $this->contentMD5;
     }
@@ -53,10 +53,10 @@ class PutFileRangeOptions extends FileServiceOptions
      *
      * @param string $contentMD5 value.
      *
-     * @return void
      */
-    public function setContentMD5($contentMD5)
+    public function setContentMD5(string $contentMD5): void
     {
         $this->contentMD5 = $contentMD5;
     }
+
 }

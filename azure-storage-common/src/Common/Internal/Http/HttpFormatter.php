@@ -23,6 +23,10 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal\Http;
 
+use function count;
+use function is_array;
+use function strtolower;
+
 /**
  * Helper class to format the http headers
  *
@@ -41,11 +45,10 @@ class HttpFormatter
      *
      * @param array $headers headers for format
      *
-     * @return array
      */
-    public static function formatHeaders(array $headers)
+    public static function formatHeaders(array $headers): array
     {
-        $result = array();
+        $result = [];
         foreach ($headers as $key => $value) {
             if (is_array($value) && count($value) == 1) {
                 $result[strtolower($key)] = $value[0];
@@ -56,4 +59,5 @@ class HttpFormatter
 
         return $result;
     }
+
 }

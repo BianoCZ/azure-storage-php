@@ -24,9 +24,9 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
-use MicrosoftAzure\Storage\Common\Internal\WindowsAzureUtilities;
 
 /**
  * Represents a set of access conditions to be used for operations against the
@@ -41,7 +41,9 @@ use MicrosoftAzure\Storage\Common\Internal\WindowsAzureUtilities;
  */
 class AccessCondition
 {
+
     private $_header = Resources::EMPTY_STRING;
+
     private $_value;
 
     /**
@@ -52,7 +54,7 @@ class AccessCondition
      *
      * @internal
      */
-    protected function __construct($headerType, $value)
+    protected function __construct(string $headerType, string $value)
     {
         $this->setHeader($headerType);
         $this->setValue($value);
@@ -61,9 +63,8 @@ class AccessCondition
     /**
      * Specifies that no access condition is set.
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition
      */
-    public static function none()
+    public static function none(): AccessCondition
     {
         return new AccessCondition(Resources::EMPTY_STRING, null);
     }
@@ -83,9 +84,8 @@ class AccessCondition
      *
      * @param string $etag a string that represents the ETag value to check.
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition
      */
-    public static function ifMatch($etag)
+    public static function ifMatch(string $etag): AccessCondition
     {
         return new AccessCondition(Resources::IF_MATCH, $etag);
     }
@@ -106,9 +106,8 @@ class AccessCondition
      * @param \DateTime $lastModified date that represents the last-modified
      * time to check for the resource.
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition
      */
-    public static function ifModifiedSince(\DateTime $lastModified)
+    public static function ifModifiedSince(DateTime $lastModified): AccessCondition
     {
         Validate::isDate($lastModified);
         return new AccessCondition(
@@ -132,9 +131,8 @@ class AccessCondition
      *
      * @param string $etag string that represents the ETag value to check.
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition
      */
-    public static function ifNoneMatch($etag)
+    public static function ifNoneMatch(string $etag): AccessCondition
     {
         return new AccessCondition(Resources::IF_NONE_MATCH, $etag);
     }
@@ -155,9 +153,8 @@ class AccessCondition
      * @param \DateTime $lastModified date that represents the last-modified
      * time to check for the resource.
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition
      */
-    public static function ifNotModifiedSince(\DateTime $lastModified)
+    public static function ifNotModifiedSince(DateTime $lastModified): AccessCondition
     {
         Validate::isDate($lastModified);
         return new AccessCondition(
@@ -181,9 +178,8 @@ class AccessCondition
      *
      * @param int $appendPosition int that represents the append position
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition
      */
-    public static function appendPosition($appendPosition)
+    public static function appendPosition(int $appendPosition): AccessCondition
     {
         return new AccessCondition(Resources::MAX_APPEND_POSITION, $appendPosition);
     }
@@ -205,9 +201,8 @@ class AccessCondition
      *
      * @param int $maxBlobSize int that represents the max blob size
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition
      */
-    public static function maxBlobSize($maxBlobSize)
+    public static function maxBlobSize(int $maxBlobSize): AccessCondition
     {
         return new AccessCondition(Resources::MAX_BLOB_SIZE, $maxBlobSize);
     }
@@ -227,9 +222,8 @@ class AccessCondition
      *
      * @param int $sequenceNumber int that represents the sequence number value to check.
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition
      */
-    public static function ifSequenceNumberLessThan($sequenceNumber)
+    public static function ifSequenceNumberLessThan(int $sequenceNumber): AccessCondition
     {
         return new AccessCondition(Resources::SEQUENCE_NUMBER_LESS_THAN, $sequenceNumber);
     }
@@ -249,9 +243,8 @@ class AccessCondition
      *
      * @param int $sequenceNumber int that represents the sequence number value to check.
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition
      */
-    public static function ifSequenceNumberEqual($sequenceNumber)
+    public static function ifSequenceNumberEqual(int $sequenceNumber): AccessCondition
     {
         return new AccessCondition(Resources::SEQUENCE_NUMBER_EQUAL, $sequenceNumber);
     }
@@ -271,9 +264,8 @@ class AccessCondition
      *
      * @param int $sequenceNumber int that represents the sequence number value to check.
      *
-     * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition
      */
-    public static function ifSequenceNumberLessThanOrEqual($sequenceNumber)
+    public static function ifSequenceNumberLessThanOrEqual(int $sequenceNumber): AccessCondition
     {
         return new AccessCondition(Resources::SEQUENCE_NUMBER_LESS_THAN_OR_EQUAL, $sequenceNumber);
     }
@@ -283,11 +275,10 @@ class AccessCondition
      *
      * @param string $headerType can be one of Resources
      *
-     * @return void
      */
-    public function setHeader($headerType)
+    public function setHeader(string $headerType): void
     {
-        $valid = AccessCondition::isValid($headerType);
+        $valid = self::isValid($headerType);
         Validate::isTrue($valid, Resources::INVALID_HT_MSG);
 
         $this->_header = $headerType;
@@ -296,9 +287,8 @@ class AccessCondition
     /**
      * Gets header type
      *
-     * @return string
      */
-    public function getHeader()
+    public function getHeader(): string
     {
         return $this->_header;
     }
@@ -308,9 +298,8 @@ class AccessCondition
      *
      * @param string $value the value to use
      *
-     * @return void
      */
-    public function setValue($value)
+    public function setValue(string $value): void
     {
         $this->_value = $value;
     }
@@ -318,9 +307,8 @@ class AccessCondition
     /**
      * Gets the header value
      *
-     * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->_value;
     }
@@ -332,11 +320,10 @@ class AccessCondition
      *
      * @internal
      *
-     * @return boolean
      */
-    public static function isValid($headerType)
+    public static function isValid(string $headerType): bool
     {
-        if ($headerType == Resources::EMPTY_STRING
+        return $headerType == Resources::EMPTY_STRING
             || $headerType == Resources::IF_UNMODIFIED_SINCE
             || $headerType == Resources::IF_MATCH
             || $headerType == Resources::IF_MODIFIED_SINCE
@@ -345,11 +332,7 @@ class AccessCondition
             || $headerType == Resources::MAX_APPEND_POSITION
             || $headerType == Resources::SEQUENCE_NUMBER_LESS_THAN_OR_EQUAL
             || $headerType == Resources::SEQUENCE_NUMBER_LESS_THAN
-            || $headerType == Resources::SEQUENCE_NUMBER_EQUAL
-        ) {
-            return true;
-        } else {
-            return false;
-        }
+            || $headerType == Resources::SEQUENCE_NUMBER_EQUAL;
     }
+
 }

@@ -38,7 +38,9 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  */
 class SignedIdentifier
 {
+
     private $id;
+
     private $accessPolicy;
 
     /**
@@ -47,7 +49,7 @@ class SignedIdentifier
      * @param string            $id           The id of this signed identifier.
      * @param AccessPolicy|null $accessPolicy The access policy.
      */
-    public function __construct($id = '', AccessPolicy $accessPolicy = null)
+    public function __construct(string $id = '', ?AccessPolicy $accessPolicy = null)
     {
         $this->setId($id);
         $this->setAccessPolicy($accessPolicy);
@@ -56,9 +58,8 @@ class SignedIdentifier
     /**
      * Gets id.
      *
-     * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -68,9 +69,8 @@ class SignedIdentifier
      *
      * @param string $id value.
      *
-     * @return void
      */
-    public function setId($id)
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
@@ -78,9 +78,8 @@ class SignedIdentifier
     /**
      * Gets accessPolicy.
      *
-     * @return AccessPolicy
      */
-    public function getAccessPolicy()
+    public function getAccessPolicy(): AccessPolicy
     {
         return $this->accessPolicy;
     }
@@ -90,9 +89,8 @@ class SignedIdentifier
      *
      * @param AccessPolicy|null $accessPolicy value.
      *
-     * @return void
      */
-    public function setAccessPolicy(AccessPolicy $accessPolicy = null)
+    public function setAccessPolicy(?AccessPolicy $accessPolicy = null): void
     {
         $this->accessPolicy = $accessPolicy;
     }
@@ -102,12 +100,11 @@ class SignedIdentifier
      *
      * @internal
      *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        $array = array();
-        $accessPolicyArray = array();
+        $array = [];
+        $accessPolicyArray = [];
         $accessPolicyArray[Resources::XTAG_SIGNED_ID] = $this->getId();
         $accessPolicyArray[Resources::XTAG_ACCESS_POLICY] =
             $this->getAccessPolicy()->toArray();
@@ -115,4 +112,5 @@ class SignedIdentifier
 
         return $array;
     }
+
 }

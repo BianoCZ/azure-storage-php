@@ -28,6 +28,9 @@ use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
 use MicrosoftAzure\Storage\Common\Models\MarkerContinuationToken;
+use function array_key_exists;
+use function intval;
+use function is_array;
 
 /**
  * Hold result of calliing listBlobs wrapper.
@@ -41,14 +44,21 @@ use MicrosoftAzure\Storage\Common\Models\MarkerContinuationToken;
  */
 class ListBlobsResult
 {
+
     use MarkerContinuationTokenTrait;
 
     private $blobPrefixes;
+
     private $blobs;
+
     private $delimiter;
+
     private $prefix;
+
     private $marker;
+
     private $maxResults;
+
     private $containerName;
 
     /**
@@ -60,9 +70,8 @@ class ListBlobsResult
      *
      * @internal
      *
-     * @return ListBlobsResult
      */
-    public static function create(array $parsed, $location = '')
+    public static function create(array $parsed, string $location = ''): ListBlobsResult
     {
         $result                 = new ListBlobsResult();
         $serviceEndpoint        = Utilities::tryGetKeysChainValue(
@@ -104,12 +113,13 @@ class ListBlobsResult
             $parsed,
             Resources::QP_DELIMITER
         ));
-        $blobs           = array();
-        $blobPrefixes    = array();
-        $rawBlobs        = array();
-        $rawBlobPrefixes = array();
+        $blobs           = [];
+        $blobPrefixes    = [];
+        $rawBlobs        = [];
+        $rawBlobPrefixes = [];
 
-        if (is_array($parsed['Blobs'])
+        if (
+            is_array($parsed['Blobs'])
             && array_key_exists('Blob', $parsed['Blobs'])
         ) {
             $rawBlobs = Utilities::getArray($parsed['Blobs']['Blob']);
@@ -126,13 +136,14 @@ class ListBlobsResult
                 )
             );
             $blob->setMetadata(
-                Utilities::tryGetValue($value, Resources::QP_METADATA, array())
+                Utilities::tryGetValue($value, Resources::QP_METADATA, [])
             );
 
             $blobs[] = $blob;
         }
 
-        if (is_array($parsed['Blobs'])
+        if (
+            is_array($parsed['Blobs'])
             && array_key_exists('BlobPrefix', $parsed['Blobs'])
         ) {
             $rawBlobPrefixes = Utilities::getArray($parsed['Blobs']['BlobPrefix']);
@@ -156,7 +167,7 @@ class ListBlobsResult
      *
      * @return Blob[]
      */
-    public function getBlobs()
+    public function getBlobs(): array
     {
         return $this->blobs;
     }
@@ -166,11 +177,10 @@ class ListBlobsResult
      *
      * @param Blob[] $blobs list of blobs
      *
-     * @return void
      */
-    protected function setBlobs(array $blobs)
+    protected function setBlobs(array $blobs): void
     {
-        $this->blobs = array();
+        $this->blobs = [];
         foreach ($blobs as $blob) {
             $this->blobs[] = clone $blob;
         }
@@ -179,9 +189,8 @@ class ListBlobsResult
     /**
      * Gets blobPrefixes.
      *
-     * @return array
      */
-    public function getBlobPrefixes()
+    public function getBlobPrefixes(): array
     {
         return $this->blobPrefixes;
     }
@@ -191,11 +200,10 @@ class ListBlobsResult
      *
      * @param array $blobPrefixes list of blobPrefixes
      *
-     * @return void
      */
-    protected function setBlobPrefixes(array $blobPrefixes)
+    protected function setBlobPrefixes(array $blobPrefixes): void
     {
-        $this->blobPrefixes = array();
+        $this->blobPrefixes = [];
         foreach ($blobPrefixes as $blob) {
             $this->blobPrefixes[] = clone $blob;
         }
@@ -204,9 +212,8 @@ class ListBlobsResult
     /**
      * Gets prefix.
      *
-     * @return string
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->prefix;
     }
@@ -216,9 +223,8 @@ class ListBlobsResult
      *
      * @param string $prefix value.
      *
-     * @return void
      */
-    protected function setPrefix($prefix)
+    protected function setPrefix(string $prefix): void
     {
         $this->prefix = $prefix;
     }
@@ -226,9 +232,8 @@ class ListBlobsResult
     /**
      * Gets prefix.
      *
-     * @return string
      */
-    public function getDelimiter()
+    public function getDelimiter(): string
     {
         return $this->delimiter;
     }
@@ -238,9 +243,8 @@ class ListBlobsResult
      *
      * @param string $delimiter value.
      *
-     * @return void
      */
-    protected function setDelimiter($delimiter)
+    protected function setDelimiter(string $delimiter): void
     {
         $this->delimiter = $delimiter;
     }
@@ -248,9 +252,8 @@ class ListBlobsResult
     /**
      * Gets marker.
      *
-     * @return string
      */
-    public function getMarker()
+    public function getMarker(): string
     {
         return $this->marker;
     }
@@ -260,9 +263,8 @@ class ListBlobsResult
      *
      * @param string $marker value.
      *
-     * @return void
      */
-    protected function setMarker($marker)
+    protected function setMarker(string $marker): void
     {
         $this->marker = $marker;
     }
@@ -270,9 +272,8 @@ class ListBlobsResult
     /**
      * Gets max results.
      *
-     * @return integer
      */
-    public function getMaxResults()
+    public function getMaxResults(): int
     {
         return $this->maxResults;
     }
@@ -280,11 +281,10 @@ class ListBlobsResult
     /**
      * Sets max results.
      *
-     * @param integer $maxResults value.
+     * @param int $maxResults value.
      *
-     * @return void
      */
-    protected function setMaxResults($maxResults)
+    protected function setMaxResults(int $maxResults): void
     {
         $this->maxResults = $maxResults;
     }
@@ -292,9 +292,8 @@ class ListBlobsResult
     /**
      * Gets container name.
      *
-     * @return string
      */
-    public function getContainerName()
+    public function getContainerName(): string
     {
         return $this->containerName;
     }
@@ -304,10 +303,10 @@ class ListBlobsResult
      *
      * @param string $containerName value.
      *
-     * @return void
      */
-    protected function setContainerName($containerName)
+    protected function setContainerName(string $containerName): void
     {
         $this->containerName = $containerName;
     }
+
 }

@@ -24,9 +24,9 @@
 
 namespace MicrosoftAzure\Storage\Common\Middlewares;
 
+use GuzzleHttp\Promise\RejectedPromise;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Promise\RejectedPromise;
 
 /**
  * This class provides the base structure of middleware that can be used for
@@ -54,7 +54,7 @@ class MiddlewareBase implements IMiddleware
      *
      * @return callable  The function that accepts the next handler to invoke.
      */
-    public function __invoke(callable $handler)
+    public function __invoke(callable $handler): callable
     {
         $reflection = $this;
         return function ($request, $options) use ($handler, $reflection) {
@@ -73,7 +73,7 @@ class MiddlewareBase implements IMiddleware
      *
      * @return RequestInterface          the request after altered.
      */
-    protected function onRequest(RequestInterface $request)
+    protected function onRequest(RequestInterface $request): RequestInterface
     {
         //do nothing
         return $request;
@@ -86,9 +86,8 @@ class MiddlewareBase implements IMiddleware
      * @param  RequestInterface $request the request sent.
      * @param  array            $options the options that the request sent with.
      *
-     * @return callable
      */
-    protected function onFulfilled(RequestInterface $request, array $options)
+    protected function onFulfilled(RequestInterface $request, array $options): callable
     {
         return function (ResponseInterface $response) {
             //do nothing
@@ -103,13 +102,13 @@ class MiddlewareBase implements IMiddleware
      * @param  RequestInterface $request the request sent.
      * @param  array            $options the options that the request sent with.
      *
-     * @return callable
      */
-    protected function onRejected(RequestInterface $request, array $options)
+    protected function onRejected(RequestInterface $request, array $options): callable
     {
         return function ($reason) {
             //do nothing
             return new RejectedPromise($reason);
         };
     }
+
 }

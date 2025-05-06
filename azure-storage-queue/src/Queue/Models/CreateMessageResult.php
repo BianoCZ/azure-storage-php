@@ -24,7 +24,6 @@
 
 namespace MicrosoftAzure\Storage\Queue\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Queue\Internal\QueueResources as Resources;
 
 /**
@@ -39,6 +38,7 @@ use MicrosoftAzure\Storage\Queue\Internal\QueueResources as Resources;
  */
 class CreateMessageResult
 {
+
     private $queueMessage;
 
     /**
@@ -48,13 +48,13 @@ class CreateMessageResult
      *
      * @internal
      *
-     * @return CreateMessageResult
      */
-    public static function create($parsedResponse)
+    public static function create(array $parsedResponse): CreateMessageResult
     {
         $result = new CreateMessageResult();
 
-        if (!empty($parsedResponse) &&
+        if (
+            !empty($parsedResponse) &&
             !empty($parsedResponse[Resources::QP_QUEUE_MESSAGE])
         ) {
             $result->setQueueMessage(
@@ -70,9 +70,8 @@ class CreateMessageResult
     /**
      * Gets queueMessage field.
      *
-     * @return QueueMessage
      */
-    public function getQueueMessage()
+    public function getQueueMessage(): QueueMessage
     {
         return $this->queueMessage;
     }
@@ -84,10 +83,10 @@ class CreateMessageResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setQueueMessage($queueMessage)
+    protected function setQueueMessage(QueueMessage $queueMessage): void
     {
         $this->queueMessage = $queueMessage;
     }
+
 }

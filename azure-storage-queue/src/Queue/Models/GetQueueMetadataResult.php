@@ -24,6 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Queue\Models;
 
+use function is_null;
+
 /**
  * Holds result from calling GetQueueMetadata wrapper
  *
@@ -36,29 +38,30 @@ namespace MicrosoftAzure\Storage\Queue\Models;
  */
 class GetQueueMetadataResult
 {
+
     private $_approximateMessageCount;
+
     private $_metadata;
 
     /**
      * Constructor
      *
-     * @param integer $approximateMessageCount Approximate number of queue messages.
+     * @param int $approximateMessageCount Approximate number of queue messages.
      * @param array   $metadata                user defined metadata.
      *
      * @internal
      */
-    public function __construct($approximateMessageCount, array $metadata)
+    public function __construct(int $approximateMessageCount, array $metadata)
     {
         $this->setApproximateMessageCount($approximateMessageCount);
-        $this->setMetadata(is_null($metadata) ? array() : $metadata);
+        $this->setMetadata(is_null($metadata) ? [] : $metadata);
     }
 
     /**
      * Gets approximate message count.
      *
-     * @return integer
      */
-    public function getApproximateMessageCount()
+    public function getApproximateMessageCount(): int
     {
         return $this->_approximateMessageCount;
     }
@@ -66,13 +69,12 @@ class GetQueueMetadataResult
     /**
      * Sets approximate message count.
      *
-     * @param integer $approximateMessageCount value to use.
+     * @param int $approximateMessageCount value to use.
      *
      * @internal
      *
-     * @return void
      */
-    protected function setApproximateMessageCount($approximateMessageCount)
+    protected function setApproximateMessageCount(int $approximateMessageCount): void
     {
         $this->_approximateMessageCount = $approximateMessageCount;
     }
@@ -80,9 +82,8 @@ class GetQueueMetadataResult
     /**
      * Sets metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->_metadata;
     }
@@ -94,10 +95,10 @@ class GetQueueMetadataResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setMetadata(array $metadata)
+    protected function setMetadata(array $metadata): void
     {
         $this->_metadata = $metadata;
     }
+
 }

@@ -71,4 +71,5 @@ class SharedKeyAuthSchemeMock extends SharedKeyAuthScheme
     {
         return parent::computeCanonicalizedResourceForTable($url, $queryParams);
     }
+
 }

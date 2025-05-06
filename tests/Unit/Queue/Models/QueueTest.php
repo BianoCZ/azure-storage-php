@@ -26,6 +26,7 @@ namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
 use MicrosoftAzure\Storage\Queue\Models\Queue;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class Queue
@@ -37,9 +38,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class QueueTest extends \PHPUnit\Framework\TestCase
+class QueueTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         // Setup
         $expectedName = TestResources::QUEUE1_NAME;
@@ -53,7 +54,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedUrl, $queue->getUrl());
     }
 
-    public function testSetName()
+    public function testSetName(): void
     {
         // Setup
         $queue = new Queue('myqueue', 'myurl');
@@ -66,7 +67,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $queue->getName());
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         // Setup
         $queue = new Queue('myqueue', 'myurl');
@@ -80,7 +81,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetUrl()
+    public function testSetUrl(): void
     {
         // Setup
         $queue = new Queue('myqueue', 'myurl');
@@ -93,7 +94,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $queue->getUrl());
     }
 
-    public function testGetUrl()
+    public function testGetUrl(): void
     {
         // Setup
         $queue = new Queue('myqueue', 'myurl');
@@ -107,11 +108,11 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetMetadata()
+    public function testSetMetadata(): void
     {
         // Setup
         $queue = new Queue('myqueue', 'myurl');
-        $expected = array('key1' => 'value1', 'key2' => 'value2');
+        $expected = ['key1' => 'value1', 'key2' => 'value2'];
 
         // Test
         $queue->setMetadata($expected);
@@ -120,11 +121,11 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $queue->getMetadata());
     }
 
-    public function testGetMetadata()
+    public function testGetMetadata(): void
     {
         // Setup
         $queue = new Queue('myqueue', 'myurl');
-        $expected = array('key1' => 'value1', 'key2' => 'value2');
+        $expected = ['key1' => 'value1', 'key2' => 'value2'];
         $queue->setMetadata($expected);
 
         // Test
@@ -133,4 +134,5 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

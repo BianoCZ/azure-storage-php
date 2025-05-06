@@ -24,13 +24,16 @@
 
 namespace MicrosoftAzure\Storage\Common\Middlewares;
 
-use MicrosoftAzure\Storage\Common\LocationMode;
+use GuzzleHttp\Promise\RejectedPromise;
+use GuzzleHttp\Psr7\Uri;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\LocationMode;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Psr7\Uri;
-use GuzzleHttp\Promise\RejectedPromise;
+use function array_key_exists;
+use function call_user_func;
+use function substr;
 
 /**
  * This class provides the functionality of a middleware that handles all the
@@ -45,7 +48,9 @@ use GuzzleHttp\Promise\RejectedPromise;
  */
 class RetryMiddleware extends MiddlewareBase
 {
+
     private $intervalCalculator;
+
     private $decider;
 
     public function __construct(
@@ -63,23 +68,24 @@ class RetryMiddleware extends MiddlewareBase
      * @param  RequestInterface $request the request sent.
      * @param  array            $options the options that the request sent with.
      *
-     * @return callable
      */
-    protected function onFulfilled(RequestInterface $request, array $options)
+    protected function onFulfilled(RequestInterface $request, array $options): callable
     {
         return function (ResponseInterface $response) use ($request, $options) {
             $isSecondary = Utilities::requestSentToSecondary($request, $options);
             if (!isset($options['retries'])) {
                 $options['retries'] = 0;
             }
-            if (call_user_func(
-                $this->decider,
-                $options['retries'],
-                $request,
-                $response,
-                null,
-                $isSecondary
-            )) {
+            if (
+                call_user_func(
+                    $this->decider,
+                    $options['retries'],
+                    $request,
+                    $response,
+                    null,
+                    $isSecondary
+                )
+            ) {
                 return $this->retry($request, $options, $response);
             }
             //Add the header that indicates the endpoint to be used if
@@ -106,9 +112,8 @@ class RetryMiddleware extends MiddlewareBase
      * @param  RequestInterface $request the request sent.
      * @param  array            $options the options that the request sent with.
      *
-     * @return callable
      */
-    protected function onRejected(RequestInterface $request, array $options)
+    protected function onRejected(RequestInterface $request, array $options): callable
     {
         return function ($reason) use ($request, $options) {
             $isSecondary = Utilities::requestSentToSecondary($request, $options);
@@ -116,14 +121,16 @@ class RetryMiddleware extends MiddlewareBase
                 $options['retries'] = 0;
             }
 
-            if (call_user_func(
-                $this->decider,
-                $options['retries'],
-                $request,
-                null,
-                $reason,
-                $isSecondary
-            )) {
+            if (
+                call_user_func(
+                    $this->decider,
+                    $options['retries'],
+                    $request,
+                    null,
+                    $reason,
+                    $isSecondary
+                )
+            ) {
                 return $this->retry($request, $options);
             }
             return new RejectedPromise($reason);
@@ -137,13 +144,12 @@ class RetryMiddleware extends MiddlewareBase
      * @param  array             $options  the options that the request sent with.
      * @param  ResponseInterface $response the response of the request
      *
-     * @return callable
      */
     private function retry(
         RequestInterface $request,
         array $options,
-        ResponseInterface $response = null
-    ) {
+        ?ResponseInterface $response = null
+    ): callable {
         $options['delay'] = call_user_func(
             $this->intervalCalculator,
             ++$options['retries']
@@ -154,8 +160,10 @@ class RetryMiddleware extends MiddlewareBase
             $locationMode = $options[Resources::ROS_LOCATION_MODE];
             //If have RA-GRS enabled for the request, switch between
             //primary and secondary.
-            if ($locationMode == LocationMode::PRIMARY_THEN_SECONDARY ||
-                $locationMode == LocationMode::SECONDARY_THEN_PRIMARY) {
+            if (
+                $locationMode == LocationMode::PRIMARY_THEN_SECONDARY ||
+                $locationMode == LocationMode::SECONDARY_THEN_PRIMARY
+            ) {
                 $primaryUri = $options[Resources::ROS_PRIMARY_URI];
                 $secondaryUri = $options[Resources::ROS_SECONDARY_URI];
 
@@ -167,15 +175,16 @@ class RetryMiddleware extends MiddlewareBase
                 }
 
                 //substitute the uri.
-                if ((string)$request->getUri() == (string)$primaryUri) {
+                if ((string) $request->getUri() == (string) $primaryUri) {
                     $request = $request->withUri($secondaryUri);
-                } elseif ((string)$request->getUri() == (string)$secondaryUri) {
+                } elseif ((string) $request->getUri() == (string) $secondaryUri) {
                     $request = $request->withUri($primaryUri);
                 }
             }
         }
         $handler = $options[Resources::ROS_HANDLER];
 
-        return \call_user_func($handler, $request, $options);
+        return call_user_func($handler, $request, $options);
     }
+
 }

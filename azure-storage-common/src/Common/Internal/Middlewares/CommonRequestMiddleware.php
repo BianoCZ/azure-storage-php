@@ -24,10 +24,16 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal\Middlewares;
 
-use MicrosoftAzure\Storage\Common\Middlewares\MiddlewareBase;
 use MicrosoftAzure\Storage\Common\Internal\Authentication\IAuthScheme;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Middlewares\MiddlewareBase;
 use Psr\Http\Message\RequestInterface;
+use function array_key_exists;
+use function gmdate;
+use function php_uname;
+use function time;
+use function uniqid;
+use const PHP_VERSION;
 
 /**
  * CommonRequestMiddleware is the middleware used to add the necessary headers
@@ -44,9 +50,13 @@ use Psr\Http\Message\RequestInterface;
  */
 class CommonRequestMiddleware extends MiddlewareBase
 {
+
     private $authenticationScheme;
+
     private $headers;
+
     private $msVersion;
+
     private $userAgent;
 
     /**
@@ -60,10 +70,10 @@ class CommonRequestMiddleware extends MiddlewareBase
      * @param array       $headers              The headers to be added.
      */
     public function __construct(
-        IAuthScheme $authenticationScheme = null,
-        $storageAPIVersion,
-        $serviceSDKVersion,
-        array $headers = array()
+        ?IAuthScheme $authenticationScheme = null,
+        string $storageAPIVersion,
+        string $serviceSDKVersion,
+        array $headers = []
     ) {
         $this->authenticationScheme = $authenticationScheme;
         $this->msVersion            = $storageAPIVersion;
@@ -77,9 +87,8 @@ class CommonRequestMiddleware extends MiddlewareBase
      *
      * @param  RequestInterface $request un-signed request.
      *
-     * @return RequestInterface
      */
-    protected function onRequest(RequestInterface $request)
+    protected function onRequest(RequestInterface $request): RequestInterface
     {
         $result = $request;
 
@@ -107,7 +116,7 @@ class CommonRequestMiddleware extends MiddlewareBase
 
         //Adding client request-ID if not specified by the user.
         if (!$result->hasHeader(Resources::X_MS_CLIENT_REQUEST_ID)) {
-            $result = $result->withHeader(Resources::X_MS_CLIENT_REQUEST_ID, \uniqid());
+            $result = $result->withHeader(Resources::X_MS_CLIENT_REQUEST_ID, uniqid());
         }
         //Sign the request if authentication scheme is not null.
         $request = $this->authenticationScheme == null ?
@@ -120,13 +129,13 @@ class CommonRequestMiddleware extends MiddlewareBase
      *
      * @param $serviceSDKVersion
      *
-     * @return string
      */
-    private static function getUserAgent($serviceSDKVersion)
+    private static function getUserAgent($serviceSDKVersion): string
     {
         // e.g. User-Agent: Azure-Storage/1.0.1-1.1.1 (PHP 5.5.32)/WINNT
         return 'Azure-Storage/' . $serviceSDKVersion . '-' .
             Resources::COMMON_SDK_VERSION .
             ' (PHP ' . PHP_VERSION . ')' . '/' . php_uname("s");
     }
+
 }

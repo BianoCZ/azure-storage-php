@@ -24,8 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\ACLBase;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
+use MicrosoftAzure\Storage\Common\Internal\ACLBase;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
 
 /**
@@ -40,6 +40,7 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class ContainerACL extends ACLBase
 {
+
     private $publicAccess;
 
     /**
@@ -60,9 +61,8 @@ class ContainerACL extends ACLBase
      *
      * @internal
      *
-     * @return ContainerACL
      */
-    public static function create($publicAccess, array $parsed = null)
+    public static function create(string $publicAccess, ?array $parsed = null): ContainerACL
     {
         Validate::isTrue(
             PublicAccessType::isValid($publicAccess),
@@ -78,9 +78,8 @@ class ContainerACL extends ACLBase
     /**
      * Gets container publicAccess.
      *
-     * @return string
      */
-    public function getPublicAccess()
+    public function getPublicAccess(): string
     {
         return $this->publicAccess;
     }
@@ -90,9 +89,8 @@ class ContainerACL extends ACLBase
      *
      * @param string $publicAccess value.
      *
-     * @return void
      */
-    public function setPublicAccess($publicAccess)
+    public function setPublicAccess(string $publicAccess): void
     {
         Validate::isTrue(
             PublicAccessType::isValid($publicAccess),
@@ -111,9 +109,8 @@ class ContainerACL extends ACLBase
      * @param  string $publicAccess The public access that determines the
      *                              resource type.
      *
-     * @return string
      */
-    private static function getResourceTypeByPublicAccess($publicAccess)
+    private static function getResourceTypeByPublicAccess(string $publicAccess): string
     {
         $result = '';
 
@@ -141,9 +138,8 @@ class ContainerACL extends ACLBase
      *
      * @internal
      *
-     * @return void
      */
-    protected static function validateResourceType($resourceType)
+    protected static function validateResourceType(string $resourceType): void
     {
         Validate::isTrue(
             $resourceType == Resources::RESOURCE_TYPE_BLOB ||
@@ -155,10 +151,10 @@ class ContainerACL extends ACLBase
     /**
      * Create a ContainerAccessPolicy object.
      *
-     * @return ContainerAccessPolicy
      */
-    protected static function createAccessPolicy()
+    protected static function createAccessPolicy(): ContainerAccessPolicy
     {
         return new ContainerAccessPolicy();
     }
+
 }

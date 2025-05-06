@@ -39,23 +39,30 @@ use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
  */
 class ListBlobsOptions extends BlobServiceOptions
 {
+
     use MarkerContinuationTokenTrait;
 
     private $_prefix;
+
     private $_delimiter;
+
     private $_maxResults;
+
     private $_includeMetadata;
+
     private $_includeSnapshots;
+
     private $_includeUncommittedBlobs;
+
     private $_includeCopy;
+
     private $_includeDeleted;
 
     /**
      * Gets prefix.
      *
-     * @return string
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->_prefix;
     }
@@ -65,9 +72,8 @@ class ListBlobsOptions extends BlobServiceOptions
      *
      * @param string $prefix value.
      *
-     * @return void
      */
-    public function setPrefix($prefix)
+    public function setPrefix(string $prefix): void
     {
         Validate::canCastAsString($prefix, 'prefix');
         $this->_prefix = $prefix;
@@ -76,9 +82,8 @@ class ListBlobsOptions extends BlobServiceOptions
     /**
      * Gets delimiter.
      *
-     * @return string
      */
-    public function getDelimiter()
+    public function getDelimiter(): string
     {
         return $this->_delimiter;
     }
@@ -88,9 +93,8 @@ class ListBlobsOptions extends BlobServiceOptions
      *
      * @param string $delimiter value.
      *
-     * @return void
      */
-    public function setDelimiter($delimiter)
+    public function setDelimiter(string $delimiter): void
     {
         Validate::canCastAsString($delimiter, 'delimiter');
         $this->_delimiter = $delimiter;
@@ -99,9 +103,8 @@ class ListBlobsOptions extends BlobServiceOptions
     /**
      * Gets max results.
      *
-     * @return integer
      */
-    public function getMaxResults()
+    public function getMaxResults(): int
     {
         return $this->_maxResults;
     }
@@ -109,11 +112,10 @@ class ListBlobsOptions extends BlobServiceOptions
     /**
      * Sets max results.
      *
-     * @param integer $maxResults value.
+     * @param int $maxResults value.
      *
-     * @return void
      */
-    public function setMaxResults($maxResults)
+    public function setMaxResults(int $maxResults): void
     {
         Validate::isInteger($maxResults, 'maxResults');
         $this->_maxResults = $maxResults;
@@ -122,9 +124,8 @@ class ListBlobsOptions extends BlobServiceOptions
     /**
      * Indicates if metadata is included or not.
      *
-     * @return boolean
      */
-    public function getIncludeMetadata()
+    public function getIncludeMetadata(): bool
     {
         return $this->_includeMetadata;
     }
@@ -134,9 +135,8 @@ class ListBlobsOptions extends BlobServiceOptions
      *
      * @param bool $includeMetadata value.
      *
-     * @return void
      */
-    public function setIncludeMetadata($includeMetadata)
+    public function setIncludeMetadata(bool $includeMetadata): void
     {
         Validate::isBoolean($includeMetadata);
         $this->_includeMetadata = $includeMetadata;
@@ -145,9 +145,8 @@ class ListBlobsOptions extends BlobServiceOptions
     /**
      * Indicates if snapshots is included or not.
      *
-     * @return boolean
      */
-    public function getIncludeSnapshots()
+    public function getIncludeSnapshots(): bool
     {
         return $this->_includeSnapshots;
     }
@@ -157,9 +156,8 @@ class ListBlobsOptions extends BlobServiceOptions
      *
      * @param bool $includeSnapshots value.
      *
-     * @return void
      */
-    public function setIncludeSnapshots($includeSnapshots)
+    public function setIncludeSnapshots(bool $includeSnapshots): void
     {
         Validate::isBoolean($includeSnapshots);
         $this->_includeSnapshots = $includeSnapshots;
@@ -168,9 +166,8 @@ class ListBlobsOptions extends BlobServiceOptions
     /**
      * Indicates if uncommittedBlobs is included or not.
      *
-     * @return boolean
      */
-    public function getIncludeUncommittedBlobs()
+    public function getIncludeUncommittedBlobs(): bool
     {
         return $this->_includeUncommittedBlobs;
     }
@@ -180,9 +177,8 @@ class ListBlobsOptions extends BlobServiceOptions
      *
      * @param bool $includeUncommittedBlobs value.
      *
-     * @return void
      */
-    public function setIncludeUncommittedBlobs($includeUncommittedBlobs)
+    public function setIncludeUncommittedBlobs(bool $includeUncommittedBlobs): void
     {
         Validate::isBoolean($includeUncommittedBlobs);
         $this->_includeUncommittedBlobs = $includeUncommittedBlobs;
@@ -191,9 +187,8 @@ class ListBlobsOptions extends BlobServiceOptions
     /**
      * Indicates if copy is included or not.
      *
-     * @return boolean
      */
-    public function getIncludeCopy()
+    public function getIncludeCopy(): bool
     {
         return $this->_includeCopy;
     }
@@ -203,9 +198,8 @@ class ListBlobsOptions extends BlobServiceOptions
      *
      * @param bool $includeCopy value.
      *
-     * @return void
      */
-    public function setIncludeCopy($includeCopy)
+    public function setIncludeCopy(bool $includeCopy): void
     {
         Validate::isBoolean($includeCopy);
         $this->_includeCopy = $includeCopy;
@@ -214,9 +208,8 @@ class ListBlobsOptions extends BlobServiceOptions
     /**
      * Indicates if deleted is included or not.
      *
-     * @return boolean
      */
-    public function getIncludeDeleted()
+    public function getIncludeDeleted(): bool
     {
         return $this->_includeDeleted;
     }
@@ -226,11 +219,11 @@ class ListBlobsOptions extends BlobServiceOptions
      *
      * @param bool $includeDeleted value.
      *
-     * @return void
      */
-    public function setIncludeDeleted($includeDeleted)
+    public function setIncludeDeleted(bool $includeDeleted): void
     {
         Validate::isBoolean($includeDeleted);
         $this->_includeDeleted = $includeDeleted;
     }
+
 }

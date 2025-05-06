@@ -21,11 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Blob\Models\SetBlobMetadataResult;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class SetBlobMetadataResult
@@ -37,9 +39,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class SetBlobMetadataResultTest extends \PHPUnit\Framework\TestCase
+class SetBlobMetadataResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::ListBlobsOneEntry()['Blobs']['Blob']['Properties'];
@@ -53,4 +55,5 @@ class SetBlobMetadataResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($sample['Etag'], $result->getETag());
         $this->assertEquals(Utilities::toBoolean($sample['x-ms-request-server-encrypted']), $result->getRequestServerEncrypted());
     }
+
 }

@@ -38,21 +38,28 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class CreateFileOptions extends FileServiceOptions
 {
+
     private $contentType;
+
     private $contentEncoding;
+
     private $contentLanguage;
+
     private $contentMD5;
+
     private $cacheControl;
+
     private $contentDisposition;
+
     private $metadata;
+
     private $contentLength;
 
     /**
      * Gets File contentType.
      *
-     * @return string
      */
-    public function getContentType()
+    public function getContentType(): string
     {
         return $this->contentType;
     }
@@ -62,9 +69,8 @@ class CreateFileOptions extends FileServiceOptions
      *
      * @param string $contentType value.
      *
-     * @return void
      */
-    public function setContentType($contentType)
+    public function setContentType(string $contentType): void
     {
         $this->contentType = $contentType;
     }
@@ -72,9 +78,8 @@ class CreateFileOptions extends FileServiceOptions
     /**
      * Gets contentEncoding.
      *
-     * @return string
      */
-    public function getContentEncoding()
+    public function getContentEncoding(): string
     {
         return $this->contentEncoding;
     }
@@ -84,9 +89,8 @@ class CreateFileOptions extends FileServiceOptions
      *
      * @param string $contentEncoding value.
      *
-     * @return void
      */
-    public function setContentEncoding($contentEncoding)
+    public function setContentEncoding(string $contentEncoding): void
     {
         $this->contentEncoding = $contentEncoding;
     }
@@ -94,9 +98,8 @@ class CreateFileOptions extends FileServiceOptions
     /**
      * Gets contentLanguage.
      *
-     * @return string
      */
-    public function getContentLanguage()
+    public function getContentLanguage(): string
     {
         return $this->contentLanguage;
     }
@@ -106,9 +109,8 @@ class CreateFileOptions extends FileServiceOptions
      *
      * @param string $contentLanguage value.
      *
-     * @return void
      */
-    public function setContentLanguage($contentLanguage)
+    public function setContentLanguage(string $contentLanguage): void
     {
         $this->contentLanguage = $contentLanguage;
     }
@@ -116,9 +118,8 @@ class CreateFileOptions extends FileServiceOptions
     /**
      * Gets contentMD5.
      *
-     * @return string
      */
-    public function getContentMD5()
+    public function getContentMD5(): string
     {
         return $this->contentMD5;
     }
@@ -128,9 +129,8 @@ class CreateFileOptions extends FileServiceOptions
      *
      * @param string $contentMD5 value.
      *
-     * @return void
      */
-    public function setContentMD5($contentMD5)
+    public function setContentMD5(string $contentMD5): void
     {
         $this->contentMD5 = $contentMD5;
     }
@@ -138,9 +138,8 @@ class CreateFileOptions extends FileServiceOptions
     /**
      * Gets cacheControl.
      *
-     * @return string
      */
-    public function getCacheControl()
+    public function getCacheControl(): string
     {
         return $this->cacheControl;
     }
@@ -150,9 +149,8 @@ class CreateFileOptions extends FileServiceOptions
      *
      * @param string $cacheControl value to use.
      *
-     * @return void
      */
-    public function setCacheControl($cacheControl)
+    public function setCacheControl(string $cacheControl): void
     {
         $this->cacheControl = $cacheControl;
     }
@@ -160,9 +158,8 @@ class CreateFileOptions extends FileServiceOptions
     /**
      * Gets content disposition.
      *
-     * @return string
      */
-    public function getContentDisposition()
+    public function getContentDisposition(): string
     {
         return $this->contentDisposition;
     }
@@ -172,9 +169,8 @@ class CreateFileOptions extends FileServiceOptions
      *
      * @param string $contentDisposition value to use.
      *
-     * @return void
      */
-    public function setContentDisposition($contentDisposition)
+    public function setContentDisposition(string $contentDisposition): void
     {
         $this->contentDisposition = $contentDisposition;
     }
@@ -182,9 +178,8 @@ class CreateFileOptions extends FileServiceOptions
     /**
      * Gets File metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
@@ -194,9 +189,8 @@ class CreateFileOptions extends FileServiceOptions
      *
      * @param array $metadata value.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata)
+    public function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;
     }
@@ -204,9 +198,8 @@ class CreateFileOptions extends FileServiceOptions
     /**
      * Gets File contentLength.
      *
-     * @return int
      */
-    public function getContentLength()
+    public function getContentLength(): int
     {
         return $this->contentLength;
     }
@@ -216,11 +209,11 @@ class CreateFileOptions extends FileServiceOptions
      *
      * @param int $contentLength value.
      *
-     * @return void
      */
-    public function setContentLength($contentLength)
+    public function setContentLength(int $contentLength): void
     {
         Validate::isInteger($contentLength, 'contentLength');
         $this->contentLength = $contentLength;
     }
+
 }

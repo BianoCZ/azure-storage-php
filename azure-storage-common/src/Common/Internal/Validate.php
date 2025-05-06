@@ -25,7 +25,29 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal;
 
+use DateTime;
+use DateTimeInterface;
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Common\Exceptions\InvalidArgumentTypeException;
+use RuntimeException;
+use Throwable;
+use UnexpectedValueException;
+use function array_key_exists;
+use function defined;
+use function filter_var;
+use function gettype;
+use function is_a;
+use function is_array;
+use function is_null;
+use function is_numeric;
+use function is_object;
+use function method_exists;
+use function preg_match;
+use function sprintf;
+use function trim;
+use const FILTER_FLAG_HOSTNAME;
+use const FILTER_VALIDATE_DOMAIN;
+use const FILTER_VALIDATE_URL;
 
 /**
  * Validates against a condition and throws an exception in case of failure.
@@ -47,12 +69,11 @@ class Validate
      *
      * @throws InvalidArgumentTypeException.
      *
-     * @return void
      */
-    public static function isArray($var, $name)
+    public static function isArray(mixed $var, string $name): void
     {
         if (!is_array($var)) {
-            throw new InvalidArgumentTypeException(gettype(array()), $name);
+            throw new InvalidArgumentTypeException(gettype([]), $name);
         }
     }
 
@@ -64,13 +85,12 @@ class Validate
      *
      * @throws InvalidArgumentTypeException
      *
-     * @return void
      */
-    public static function canCastAsString($var, $name)
+    public static function canCastAsString(mixed $var, string $name): void
     {
         try {
-            (string)$var;
-        } catch (\Exception $e) {
+            (string) $var;
+        } catch (Throwable) {
             throw new InvalidArgumentTypeException(gettype(''), $name);
         }
     }
@@ -82,11 +102,10 @@ class Validate
      *
      * @throws InvalidArgumentTypeException
      *
-     * @return void
      */
-    public static function isBoolean($var)
+    public static function isBoolean(mixed $var): void
     {
-        (bool)$var;
+        (bool) $var;
     }
 
     /**
@@ -97,12 +116,11 @@ class Validate
      *
      * @throws \InvalidArgumentException
      *
-     * @return void
      */
-    public static function notNullOrEmpty($var, $name)
+    public static function notNullOrEmpty(mixed $var, string $name): void
     {
         if (is_null($var) || (empty($var) && $var != '0')) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(Resources::NULL_OR_EMPTY_MSG, $name)
             );
         }
@@ -116,9 +134,8 @@ class Validate
      *
      * @throws \InvalidArgumentException
      *
-     * @return void
      */
-    public static function isDouble($var, $name)
+    public static function isDouble(mixed $var, string $name): void
     {
         if (!is_numeric($var)) {
             throw new InvalidArgumentTypeException('double', $name);
@@ -133,13 +150,12 @@ class Validate
      *
      * @throws InvalidArgumentTypeException
      *
-     * @return void
      */
-    public static function isInteger($var, $name)
+    public static function isInteger(mixed $var, string $name): void
     {
         try {
-            (int)$var;
-        } catch (\Exception $e) {
+            (int) $var;
+        } catch (Throwable) {
             throw new InvalidArgumentTypeException(gettype(123), $name);
         }
     }
@@ -149,17 +165,16 @@ class Validate
      *
      * @param string $var value.
      *
-     * @return boolean
      */
-    public static function isNullOrEmptyString($var)
+    public static function isNullOrEmptyString(string $var): bool
     {
         try {
-            (string)$var;
-        } catch (\Exception $e) {
+            (string) $var;
+        } catch (Throwable) {
             return false;
         }
 
-        return (!isset($var) || trim($var)==='');
+        return !isset($var) || trim($var) === '';
     }
 
     /**
@@ -170,12 +185,11 @@ class Validate
      *
      * @throws \Exception
      *
-     * @return void
      */
-    public static function isTrue($isSatisfied, $failureMessage)
+    public static function isTrue(bool $isSatisfied, string $failureMessage): void
     {
         if (!$isSatisfied) {
-            throw new \InvalidArgumentException($failureMessage);
+            throw new InvalidArgumentException($failureMessage);
         }
     }
 
@@ -186,11 +200,10 @@ class Validate
      *
      * @throws InvalidArgumentTypeException
      *
-     * @return void
      */
-    public static function isDate($date)
+    public static function isDate(mixed $date): void
     {
-        if (gettype($date) != 'object' || !($date instanceof \DateTimeInterface)) {
+        if (gettype($date) != 'object' || !($date instanceof DateTimeInterface)) {
             throw new InvalidArgumentTypeException('DateTimeInterface');
         }
     }
@@ -203,12 +216,11 @@ class Validate
      *
      * @throws \InvalidArgumentException
      *
-     * @return void
      */
-    public static function notNull($var, $name)
+    public static function notNull(mixed $var, string $name): void
     {
         if (is_null($var)) {
-            throw new \InvalidArgumentException(sprintf(Resources::NULL_MSG, $name));
+            throw new InvalidArgumentException(sprintf(Resources::NULL_MSG, $name));
         }
     }
 
@@ -224,9 +236,9 @@ class Validate
      *
      * @return void
      */
-    public static function isInstanceOf($objectInstance, $classInstance, $name)
+    public static function isInstanceOf(mixed $objectInstance, mixed $classInstance, string $name)
     {
-        Validate::notNull($classInstance, 'classInstance');
+        self::notNull($classInstance, 'classInstance');
         if (is_null($objectInstance)) {
             return true;
         }
@@ -236,24 +248,23 @@ class Validate
 
         if ($objectType === $classType) {
             return true;
-        } else {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    Resources::INSTANCE_TYPE_VALIDATION_MSG,
-                    $name,
-                    $objectType,
-                    $classType
-                )
-            );
         }
+
+        throw new InvalidArgumentException(
+            sprintf(
+                Resources::INSTANCE_TYPE_VALIDATION_MSG,
+                $name,
+                $objectType,
+                $classType
+            )
+        );
     }
 
     /**
      * Creates an anonymous function that checks if the given hostname is valid or not.
      *
-     * @return callable
      */
-    public static function getIsValidHostname()
+    public static function getIsValidHostname(): callable
     {
         return function ($hostname) {
             return Validate::isValidHostname($hostname);
@@ -267,9 +278,8 @@ class Validate
      *
      * @throws \InvalidArgumentException
      *
-     * @return boolean
      */
-    public static function isValidHostname($hostname)
+    public static function isValidHostname(string $hostname): bool
     {
         if (defined('FILTER_VALIDATE_DOMAIN')) {
             $isValid = filter_var($hostname, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME);
@@ -280,19 +290,18 @@ class Validate
 
         if ($isValid) {
             return true;
-        } else {
-            throw new \RuntimeException(
-                sprintf(Resources::INVALID_CONFIG_HOSTNAME, $hostname)
-            );
         }
+
+        throw new RuntimeException(
+            sprintf(Resources::INVALID_CONFIG_HOSTNAME, $hostname)
+        );
     }
 
     /**
      * Creates a anonymous function that check if the given uri is valid or not.
      *
-     * @return callable
      */
-    public static function getIsValidUri()
+    public static function getIsValidUri(): callable
     {
         return function ($uri) {
             return Validate::isValidUri($uri);
@@ -306,19 +315,18 @@ class Validate
      *
      * @throws \InvalidArgumentException
      *
-     * @return boolean
      */
-    public static function isValidUri($uri)
+    public static function isValidUri(string $uri): bool
     {
         $isValid = filter_var($uri, FILTER_VALIDATE_URL);
 
         if ($isValid) {
             return true;
-        } else {
-            throw new \RuntimeException(
-                sprintf(Resources::INVALID_CONFIG_URI, $uri)
-            );
         }
+
+        throw new RuntimeException(
+            sprintf(Resources::INVALID_CONFIG_URI, $uri)
+        );
     }
 
     /**
@@ -329,9 +337,8 @@ class Validate
      *
      * @throws InvalidArgumentTypeException.
      *
-     * @return boolean
      */
-    public static function isObject($var, $name)
+    public static function isObject(mixed $var, string $name): bool
     {
         if (!is_object($var)) {
             throw new InvalidArgumentTypeException('object', $name);
@@ -349,28 +356,27 @@ class Validate
      *
      * @throws \InvalidArgumentException
      *
-     * @return boolean
      */
-    public static function isA($objectInstance, $class, $name)
+    public static function isA(mixed $objectInstance, string $class, string $name): bool
     {
-        Validate::canCastAsString($class, 'class');
-        Validate::notNull($objectInstance, 'objectInstance');
-        Validate::isObject($objectInstance, 'objectInstance');
+        self::canCastAsString($class, 'class');
+        self::notNull($objectInstance, 'objectInstance');
+        self::isObject($objectInstance, 'objectInstance');
 
-        $objectType = get_class($objectInstance);
+        $objectType = $objectInstance::class;
 
         if (is_a($objectInstance, $class)) {
             return true;
-        } else {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    Resources::INSTANCE_TYPE_VALIDATION_MSG,
-                    $name,
-                    $objectType,
-                    $class
-                )
-            );
         }
+
+        throw new InvalidArgumentException(
+            sprintf(
+                Resources::INSTANCE_TYPE_VALIDATION_MSG,
+                $name,
+                $objectType,
+                $class
+            )
+        );
     }
 
     /**
@@ -381,25 +387,24 @@ class Validate
      * @param string $method         Method name
      * @param string $name           The parameter name
      *
-     * @return boolean
      */
-    public static function methodExists($objectInstance, $method, $name)
+    public static function methodExists(object $objectInstance, string $method, string $name): bool
     {
-        Validate::canCastAsString($method, 'method');
-        Validate::notNull($objectInstance, 'objectInstance');
-        Validate::isObject($objectInstance, 'objectInstance');
+        self::canCastAsString($method, 'method');
+        self::notNull($objectInstance, 'objectInstance');
+        self::isObject($objectInstance, 'objectInstance');
 
         if (method_exists($objectInstance, $method)) {
             return true;
-        } else {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    Resources::ERROR_METHOD_NOT_FOUND,
-                    $method,
-                    $name
-                )
-            );
         }
+
+        throw new InvalidArgumentException(
+            sprintf(
+                Resources::ERROR_METHOD_NOT_FOUND,
+                $method,
+                $name
+            )
+        );
     }
 
     /**
@@ -410,17 +415,16 @@ class Validate
      *
      * @throws \InvalidArgumentException
      *
-     * @return boolean
      */
-    public static function isDateString($value, $name)
+    public static function isDateString(string $value, string $name): bool
     {
-        Validate::canCastAsString($value, 'value');
+        self::canCastAsString($value, 'value');
 
         try {
-            new \DateTime($value);
+            new DateTime($value);
             return true;
-        } catch (\Exception $e) {
-            throw new \InvalidArgumentException(
+        } catch (Throwable) {
+            throw new InvalidArgumentException(
                 sprintf(
                     Resources::ERROR_INVALID_DATE_STRING,
                     $name,
@@ -440,14 +444,13 @@ class Validate
      * @throws \UnexpectedValueException
      * @throws \InvalidArgumentException
      *
-     * @return  boolean
      */
-    public static function hasKey($key, $name, array $array)
+    public static function hasKey(string $key, string $name, array $array): bool
     {
-        Validate::isArray($array, $name);
+        self::isArray($array, $name);
 
         if (!array_key_exists($key, $array)) {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 sprintf(
                     Resources::INVALID_VALUE_MSG,
                     $name,
@@ -458,4 +461,5 @@ class Validate
 
         return true;
     }
+
 }

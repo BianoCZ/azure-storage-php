@@ -24,9 +24,10 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\File\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\File\Models\ListSharesResult;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ListSharesResult
@@ -38,9 +39,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListSharesResultTest extends \PHPUnit\Framework\TestCase
+class ListSharesResultTest extends TestCase
 {
-    public function testCreateWithEmpty()
+    public function testCreateWithEmpty(): void
     {
         // Setup
         $sample = TestResources::getInterestingListShareResultArray();
@@ -52,7 +53,7 @@ class ListSharesResultTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(0, $actual->getShares());
     }
 
-    public function testCreateWithOneEntry()
+    public function testCreateWithOneEntry(): void
     {
         // Setup
         $sample = TestResources::getInterestingListShareResultArray(1);
@@ -79,7 +80,7 @@ class ListSharesResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($sample['NextMarker'], $actual->getNextMarker());
     }
 
-    public function testCreateWithMultipleEntries()
+    public function testCreateWithMultipleEntries(): void
     {
         // Setup
         $sample = TestResources::getInterestingListShareResultArray(5);
@@ -102,4 +103,5 @@ class ListSharesResultTest extends \PHPUnit\Framework\TestCase
             );
         }
     }
+
 }

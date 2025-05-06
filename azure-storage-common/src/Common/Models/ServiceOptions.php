@@ -24,11 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Common\Models;
 
-use MicrosoftAzure\Storage\Common\LocationMode;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
-use MicrosoftAzure\Storage\Common\Middlewares\MiddlewareStack;
+use MicrosoftAzure\Storage\Common\LocationMode;
 use MicrosoftAzure\Storage\Common\Middlewares\IMiddleware;
+use MicrosoftAzure\Storage\Common\Middlewares\MiddlewareStack;
+use function is_callable;
 
 /**
  * This class provides the base structure of service options, granting user to
@@ -43,44 +44,52 @@ use MicrosoftAzure\Storage\Common\Middlewares\IMiddleware;
  */
 class ServiceOptions
 {
+
     /**
      * The middlewares to be applied using the operation.
+     *
      * @internal
      */
     protected $middlewares;
 
     /**
      * The middleware stack used for the operation.
+     *
      * @internal
      */
     protected $middlewareStack;
 
     /**
      * The number of concurrency when performing concurrent requests.
+     *
      * @internal
      */
     protected $numberOfConcurrency;
 
     /**
      * If streamming is used for the operation.
+     *
      * @internal
      */
     protected $isStreaming;
 
     /**
      * The location mode of the operation.
+     *
      * @internal
      */
     protected $locationMode;
 
     /**
      * If to decode the content of the response body.
+     *
      * @internal
      */
     protected $decodeContent;
 
     /**
      * The timeout of the operation
+     *
      * @internal
      */
     protected $timeout;
@@ -88,14 +97,14 @@ class ServiceOptions
     /**
      * Initialize the properties to default value.
      */
-    public function __construct(ServiceOptions $options = null)
+    public function __construct(?ServiceOptions $options = null)
     {
         if ($options == null) {
             $this->setNumberOfConcurrency(Resources::NUMBER_OF_CONCURRENCY);
             $this->setLocationMode(LocationMode::PRIMARY_ONLY);
             $this->setIsStreaming(false);
             $this->setDecodeContent(false);
-            $this->middlewares = array();
+            $this->middlewares = [];
             $this->middlewareStack = null;
         } else {
             $this->setNumberOfConcurrency($options->getNumberOfConcurrency());
@@ -109,11 +118,11 @@ class ServiceOptions
 
     /**
      * Push a middleware into the middlewares.
+     *
      * @param  callable|IMiddleware $middleware middleware to be pushed.
      *
-     * @return void
      */
-    public function pushMiddleware($middleware)
+    public function pushMiddleware(callable|IMiddleware $middleware): void
     {
         self::validateIsMiddleware($middleware);
         $this->middlewares[] = $middleware;
@@ -122,9 +131,8 @@ class ServiceOptions
     /**
      * Gets the middlewares.
      *
-     * @return array
      */
-    public function getMiddlewares()
+    public function getMiddlewares(): array
     {
         return $this->middlewares;
     }
@@ -134,9 +142,8 @@ class ServiceOptions
      *
      * @param array $middlewares value.
      *
-     * @return void
      */
-    public function setMiddlewares(array $middlewares)
+    public function setMiddlewares(array $middlewares): void
     {
         foreach ($middlewares as $middleware) {
             self::validateIsMiddleware($middleware);
@@ -147,9 +154,8 @@ class ServiceOptions
     /**
      * Gets the middleware stack
      *
-     * @return MiddlewareStack
      */
-    public function getMiddlewareStack()
+    public function getMiddlewareStack(): MiddlewareStack
     {
         return $this->middlewareStack;
     }
@@ -159,9 +165,8 @@ class ServiceOptions
      *
      * @param MiddlewareStack $middlewareStack value.
      *
-     * @return void
      */
-    public function setMiddlewareStack(MiddlewareStack $middlewareStack)
+    public function setMiddlewareStack(MiddlewareStack $middlewareStack): void
     {
         $this->middlewareStack = $middlewareStack;
     }
@@ -169,9 +174,8 @@ class ServiceOptions
     /**
      * Gets the number of concurrency value
      *
-     * @return int
      */
-    public function getNumberOfConcurrency()
+    public function getNumberOfConcurrency(): int
     {
         return $this->numberOfConcurrency;
     }
@@ -181,9 +185,8 @@ class ServiceOptions
      *
      * @param int $numberOfConcurrency value.
      *
-     * @return void
      */
-    public function setNumberOfConcurrency($numberOfConcurrency)
+    public function setNumberOfConcurrency(int $numberOfConcurrency): void
     {
         $this->numberOfConcurrency = $numberOfConcurrency;
     }
@@ -191,9 +194,8 @@ class ServiceOptions
     /**
      * Gets the isStreaming value
      *
-     * @return bool
      */
-    public function getIsStreaming()
+    public function getIsStreaming(): bool
     {
         return $this->isStreaming;
     }
@@ -203,9 +205,8 @@ class ServiceOptions
      *
      * @param bool $isStreaming value.
      *
-     * @return void
      */
-    public function setIsStreaming($isStreaming)
+    public function setIsStreaming(bool $isStreaming): void
     {
         $this->isStreaming = $isStreaming;
     }
@@ -213,9 +214,8 @@ class ServiceOptions
     /**
      * Gets the locationMode value
      *
-     * @return string
      */
-    public function getLocationMode()
+    public function getLocationMode(): string
     {
         return $this->locationMode;
     }
@@ -225,9 +225,8 @@ class ServiceOptions
      *
      * @param string $locationMode value.
      *
-     * @return void
      */
-    public function setLocationMode($locationMode)
+    public function setLocationMode(string $locationMode): void
     {
         $this->locationMode = $locationMode;
     }
@@ -235,9 +234,8 @@ class ServiceOptions
     /**
      * Gets the decodeContent value
      *
-     * @return bool
      */
-    public function getDecodeContent()
+    public function getDecodeContent(): bool
     {
         return $this->decodeContent;
     }
@@ -247,9 +245,8 @@ class ServiceOptions
      *
      * @param bool $decodeContent value.
      *
-     * @return void
      */
-    public function setDecodeContent($decodeContent)
+    public function setDecodeContent(bool $decodeContent): void
     {
         $this->decodeContent = $decodeContent;
     }
@@ -257,9 +254,8 @@ class ServiceOptions
     /**
      * Gets the timeout value
      *
-     * @return string
      */
-    public function getTimeout()
+    public function getTimeout(): string
     {
         return $this->timeout;
     }
@@ -269,9 +265,8 @@ class ServiceOptions
      *
      * @param string $timeout value.
      *
-     * @return void
      */
-    public function setTimeout($timeout)
+    public function setTimeout(string $timeout): void
     {
         $this->timeout = $timeout;
     }
@@ -281,13 +276,10 @@ class ServiceOptions
      *
      * @param  array  $options The options to be merged for the request options.
      *
-     * @return array
      */
-    public function generateRequestOptions(array $options)
+    public function generateRequestOptions(array $options): array
     {
-        $result = array();
-
-        return $result;
+        return [];
     }
 
     /**
@@ -295,9 +287,8 @@ class ServiceOptions
      *
      * @param  void $middleware the middleware to be validated.
      *
-     * @return void
      */
-    private static function validateIsMiddleware($middleware)
+    private static function validateIsMiddleware(void $middleware): void
     {
         if (!(is_callable($middleware) || $middleware instanceof IMiddleware)) {
             Validate::isTrue(
@@ -306,4 +297,5 @@ class ServiceOptions
             );
         }
     }
+
 }

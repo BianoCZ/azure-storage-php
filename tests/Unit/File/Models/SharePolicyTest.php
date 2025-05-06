@@ -49,4 +49,5 @@ class ShareAccessPolicyTest extends AccessPolicyTest
     {
         return FileResources::RESOURCE_TYPE_SHARE;
     }
+
 }

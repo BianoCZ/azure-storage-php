@@ -21,11 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
+use MicrosoftAzure\Storage\Blob\Models\PutBlockResult;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Blob\Models\PutBlockResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class PutBlockResult
@@ -37,9 +39,9 @@ use MicrosoftAzure\Storage\Blob\Models\PutBlockResult;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class PutBlockResultTest extends \PHPUnit\Framework\TestCase
+class PutBlockResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::listBlobsOneEntry();
@@ -52,4 +54,5 @@ class PutBlockResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected['Content-MD5'], $actual->getContentMD5());
         $this->assertEquals(Utilities::toBoolean($expected['x-ms-request-server-encrypted']), $actual->getRequestServerEncrypted());
     }
+
 }

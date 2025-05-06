@@ -25,8 +25,9 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
 use MicrosoftAzure\Storage\Table\Models\BatchOperation;
-use MicrosoftAzure\Storage\Table\Models\BatchOperationType;
 use MicrosoftAzure\Storage\Table\Models\BatchOperationParameterName;
+use MicrosoftAzure\Storage\Table\Models\BatchOperationType;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class BatchOperation
@@ -38,9 +39,9 @@ use MicrosoftAzure\Storage\Table\Models\BatchOperationParameterName;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BatchOperationTest extends \PHPUnit\Framework\TestCase
+class BatchOperationTest extends TestCase
 {
-    public function testSetType()
+    public function testSetType(): void
     {
         // Setup
         $batchOperation = new BatchOperation();
@@ -53,7 +54,7 @@ class BatchOperationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $batchOperation->getType());
     }
 
-    public function testAddParameter()
+    public function testAddParameter(): void
     {
         // Setup
         $batchOperation = new BatchOperation();
@@ -66,4 +67,5 @@ class BatchOperationTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $batchOperation->getParameter($name));
     }
+
 }

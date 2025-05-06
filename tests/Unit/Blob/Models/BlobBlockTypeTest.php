@@ -21,9 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\BlobBlockType;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class BlobBlockType
@@ -35,12 +37,13 @@ use MicrosoftAzure\Storage\Blob\Models\BlobBlockType;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BlobBlockTypeTest extends \PHPUnit\Framework\TestCase
+class BlobBlockTypeTest extends TestCase
 {
-    public function testBlobBlockType()
+    public function testBlobBlockType(): void
     {
         $this->assertEquals(BlobBlockType::COMMITTED_TYPE, 'Committed');
         $this->assertEquals(BlobBlockType::UNCOMMITTED_TYPE, 'Uncommitted');
         $this->assertEquals(BlobBlockType::LATEST_TYPE, 'Latest');
     }
+
 }

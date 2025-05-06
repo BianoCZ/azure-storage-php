@@ -36,15 +36,16 @@ namespace MicrosoftAzure\Storage\Queue\Models;
  */
 class ListMessagesOptions extends QueueServiceOptions
 {
+
     private $_numberOfMessages;
+
     private $_visibilityTimeoutInSeconds;
 
     /**
      * Gets visibilityTimeoutInSeconds field.
      *
-     * @return integer
      */
-    public function getVisibilityTimeoutInSeconds()
+    public function getVisibilityTimeoutInSeconds(): int
     {
         return $this->_visibilityTimeoutInSeconds;
     }
@@ -52,11 +53,10 @@ class ListMessagesOptions extends QueueServiceOptions
     /**
      * Sets visibilityTimeoutInSeconds field.
      *
-     * @param integer $visibilityTimeoutInSeconds value to use.
+     * @param int $visibilityTimeoutInSeconds value to use.
      *
-     * @return void
      */
-    public function setVisibilityTimeoutInSeconds($visibilityTimeoutInSeconds)
+    public function setVisibilityTimeoutInSeconds(int $visibilityTimeoutInSeconds): void
     {
         $this->_visibilityTimeoutInSeconds = $visibilityTimeoutInSeconds;
     }
@@ -64,9 +64,8 @@ class ListMessagesOptions extends QueueServiceOptions
     /**
      * Gets numberOfMessages field.
      *
-     * @return integer
      */
-    public function getNumberOfMessages()
+    public function getNumberOfMessages(): int
     {
         return $this->_numberOfMessages;
     }
@@ -74,12 +73,12 @@ class ListMessagesOptions extends QueueServiceOptions
     /**
      * Sets numberOfMessages field.
      *
-     * @param integer $numberOfMessages value to use.
+     * @param int $numberOfMessages value to use.
      *
-     * @return void
      */
-    public function setNumberOfMessages($numberOfMessages)
+    public function setNumberOfMessages(int $numberOfMessages): void
     {
         $this->_numberOfMessages = $numberOfMessages;
     }
+
 }

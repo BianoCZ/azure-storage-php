@@ -36,14 +36,14 @@ namespace MicrosoftAzure\Storage\File\Models;
  */
 class CreateDirectoryOptions extends FileServiceOptions
 {
+
     private $metadata;
 
     /**
      * Gets user defined metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
@@ -54,9 +54,8 @@ class CreateDirectoryOptions extends FileServiceOptions
      *
      * @param array $metadata user defined metadata object in array form.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata)
+    public function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;
     }
@@ -68,10 +67,10 @@ class CreateDirectoryOptions extends FileServiceOptions
      * @param string $key   metadata key element.
      * @param string $value metadata value element.
      *
-     * @return void
      */
-    public function addMetadata($key, $value)
+    public function addMetadata(string $key, string $value): void
     {
         $this->metadata[$key] = $value;
     }
+
 }

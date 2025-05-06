@@ -24,15 +24,15 @@
 
 namespace MicrosoftAzure\Storage\Tests\Functional\Blob;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Models\AccessCondition;
+use MicrosoftAzure\Storage\Blob\Models\AppendBlockOptions;
+use MicrosoftAzure\Storage\Blob\Models\BlobServiceOptions;
 use MicrosoftAzure\Storage\Blob\Models\ContainerACL;
 use MicrosoftAzure\Storage\Blob\Models\CopyBlobOptions;
-use MicrosoftAzure\Storage\Blob\Models\BlobServiceOptions;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlobOptions;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlobSnapshotOptions;
 use MicrosoftAzure\Storage\Blob\Models\CreateContainerOptions;
-use MicrosoftAzure\Storage\Blob\Models\AppendBlockOptions;
 use MicrosoftAzure\Storage\Blob\Models\DeleteBlobOptions;
 use MicrosoftAzure\Storage\Blob\Models\GetBlobOptions;
 use MicrosoftAzure\Storage\Blob\Models\GetBlobPropertiesOptions;
@@ -42,35 +42,54 @@ use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
 use MicrosoftAzure\Storage\Blob\Models\SetBlobPropertiesOptions;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Models\Range;
-use MicrosoftAzure\Storage\Common\Models\RangeDiff;
+use MicrosoftAzure\Storage\Common\Models\CORS;
 use MicrosoftAzure\Storage\Common\Models\Logging;
 use MicrosoftAzure\Storage\Common\Models\Metrics;
-use MicrosoftAzure\Storage\Common\Models\CORS;
+use MicrosoftAzure\Storage\Common\Models\Range;
+use MicrosoftAzure\Storage\Common\Models\RangeDiff;
 use MicrosoftAzure\Storage\Common\Models\RetentionPolicy;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function abs;
+use function array_push;
+use function base64_encode;
+use function chr;
+use function is_null;
+use function mt_rand;
+use function str_pad;
+use function str_replace;
+use const STR_PAD_LEFT;
 
 class BlobServiceFunctionalTestData
 {
+
     public static $testUniqueId;
+
     public static $tempBlobCounter = 1;
+
     public static $nonExistContainerPrefix;
+
     public static $nonExistBlobPrefix;
+
     public static $testContainerNames;
+
     public static $testBlobNames;
+
     private static $blockIdCount;
+
     private static $accountName;
+
     private static $badETag = '0x123456789ABCDEF';
 
-    public static function setupData($accountName)
+    public static function setupData($accountName): void
     {
         $rint = mt_rand(0, 1000000);
         self::$accountName = $accountName;
         self::$testUniqueId = 'qa-' . $rint . '-';
-        self::$nonExistContainerPrefix = 'qa-' . ($rint . 1) . '-';
-        self::$nonExistBlobPrefix = 'qa-' . ($rint . 2) . '-';
-        self::$testContainerNames = array( self::$testUniqueId . 'a1', self::$testUniqueId . 'a2', self::$testUniqueId . 'b1' );
-        self::$testBlobNames = array( 'b' . self::$testUniqueId . 'a1', 'b' . self::$testUniqueId . 'a2', 'b' . self::$testUniqueId . 'b1' );
+        self::$nonExistContainerPrefix = 'qa-' . $rint . 1 . '-';
+        self::$nonExistBlobPrefix = 'qa-' . $rint . 2 . '-';
+        self::$testContainerNames = [self::$testUniqueId . 'a1', self::$testUniqueId . 'a2', self::$testUniqueId . 'b1'];
+        self::$testBlobNames = ['b' . self::$testUniqueId . 'a1', 'b' . self::$testUniqueId . 'a2', 'b' . self::$testUniqueId . 'b1'];
         self::$blockIdCount = 0;
     }
 
@@ -125,7 +144,7 @@ class BlobServiceFunctionalTestData
 
     public static function getInterestingTimeoutValues()
     {
-        $ret = array();
+        $ret = [];
         array_push($ret, null);
         array_push($ret, -1);
         array_push($ret, 0);
@@ -143,41 +162,47 @@ class BlobServiceFunctionalTestData
                 + 60 * ($diff->h
                 + 24 * ($diff->d
                 + 30 * ($diff->m
-                + 12 * ($diff->y)))));
+                + 12 * $diff->y))));
         return abs($sec);
     }
 
     public static function passTemporalAccessCondition($ac)
     {
-        if (is_null($ac) ||  empty($ac)) {
+        if (is_null($ac) || empty($ac)) {
             return true;
         }
 
-        $now = new \DateTime();
+        $now = new DateTime();
 
         if ($ac[0]->getHeader() == Resources::IF_UNMODIFIED_SINCE) {
             return $ac[0]->getValue() > $now;
-        } elseif ($ac[0]->getHeader() == Resources::IF_MODIFIED_SINCE) {
-            return $ac[0]->getValue() < $now;
-        } else {
-            return true;
         }
+
+        if ($ac[0]->getHeader() == Resources::IF_MODIFIED_SINCE) {
+            return $ac[0]->getValue() < $now;
+        }
+
+        return true;
     }
 
     public static function passETagAccessCondition($ac)
     {
         if (is_null($ac) || empty($ac)) {
             return true;
-        } elseif ($ac[0]->getHeader() == Resources::IF_MATCH) {
-            return self::$badETag != $ac[0]->getValue();
-        } elseif ($ac[0]->getHeader() == Resources::IF_NONE_MATCH) {
-            return self::$badETag == $ac[0]->getValue();
-        } else {
-            return true;
         }
+
+        if ($ac[0]->getHeader() == Resources::IF_MATCH) {
+            return self::$badETag != $ac[0]->getValue();
+        }
+
+        if ($ac[0]->getHeader() == Resources::IF_NONE_MATCH) {
+            return self::$badETag == $ac[0]->getValue();
+        }
+
+        return true;
     }
 
-    public static function fixETagAccessCondition($ac, $etag)
+    public static function fixETagAccessCondition($ac, $etag): void
     {
         if (!is_null($ac) && !empty($ac)) {
             if ($ac[0]->getHeader() == Resources::IF_MATCH || $ac[0]->getHeader() == Resources::IF_NONE_MATCH) {
@@ -190,10 +215,10 @@ class BlobServiceFunctionalTestData
 
     private static function getTemporalAccessConditions()
     {
-        $ret = array();
+        $ret = [];
 
-        $past = new \DateTime("01/01/2010");
-        $future = new \DateTime("01/01/2020");
+        $past = new DateTime("01/01/2010");
+        $future = new DateTime("01/01/2020");
 
         array_push($ret, AccessCondition::ifModifiedSince($past));
         array_push($ret, AccessCondition::ifNotModifiedSince($past));
@@ -246,7 +271,7 @@ class BlobServiceFunctionalTestData
 
     public static function getInterestingServiceProperties()
     {
-        $ret = array();
+        $ret = [];
 
         {
             // This is the default that comes from the server.
@@ -278,7 +303,7 @@ class BlobServiceFunctionalTestData
             $sp = new ServiceProperties();
             $sp->setLogging($l);
             $sp->setHourMetrics($m);
-            $sp->setCorses(array($c));
+            $sp->setCorses([$c]);
 
             array_push($ret, $sp);
         }
@@ -312,7 +337,7 @@ class BlobServiceFunctionalTestData
             $sp = new ServiceProperties();
             $sp->setLogging($l);
             $sp->setHourMetrics($m);
-            $sp->setCorses(array($c0, $c1));
+            $sp->setCorses([$c0, $c1]);
 
             array_push($ret, $sp);
         }
@@ -346,7 +371,7 @@ class BlobServiceFunctionalTestData
             $sp = new ServiceProperties();
             $sp->setLogging($l);
             $sp->setHourMetrics($m);
-            $sp->setCorses(array($c0, $c1));
+            $sp->setCorses([$c0, $c1]);
 
             array_push($ret, $sp);
         }
@@ -356,8 +381,7 @@ class BlobServiceFunctionalTestData
 
     public static function getInterestingListContainersOptions()
     {
-        $ret = array();
-
+        $ret = [];
 
         $options = new ListContainersOptions();
         array_push($ret, $options);
@@ -425,15 +449,15 @@ class BlobServiceFunctionalTestData
 
     public static function getInterestingMetadata()
     {
-        $ret = array();
+        $ret = [];
 
-        $metadata = array();
+        $metadata = [];
         array_push($ret, $metadata);
 
         array_push($ret, self::getNiceMetadata());
 
         // Some metadata that HTTP will not like.
-        $metadata = array('<>000' => '::::value');
+        $metadata = ['<>000' => '::::value'];
         array_push($ret, $metadata);
 
         return $ret;
@@ -441,15 +465,16 @@ class BlobServiceFunctionalTestData
 
     public static function getNiceMetadata()
     {
-        return array(
+        return [
             'key' => 'value',
             'foo' => 'bar',
-            'baz' => 'boo');
+            'baz' => 'boo',
+        ];
     }
 
     public static function getInterestingCreateBlobOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new CreateBlobOptions();
         array_push($ret, $options);
@@ -463,16 +488,17 @@ class BlobServiceFunctionalTestData
         array_push($ret, $options);
 
         $options = new CreateBlobOptions();
-        $metadata = array(
+        $metadata = [
             'foo' => 'bar',
             'foo2' => 'bar2',
-            'foo3' => 'bar3');
+            'foo3' => 'bar3',
+        ];
         $options->setMetadata($metadata);
         $options->setTimeout(10);
         array_push($ret, $options);
 
         $options = new CreateBlobOptions();
-        $metadata = array('foo' => 'bar');
+        $metadata = ['foo' => 'bar'];
         $options->setMetadata($metadata);
         $options->setTimeout(-10);
         array_push($ret, $options);
@@ -482,7 +508,7 @@ class BlobServiceFunctionalTestData
 
     public static function getInterestingListBlobsOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new ListBlobsOptions();
         array_push($ret, $options);
@@ -533,7 +559,7 @@ class BlobServiceFunctionalTestData
 
     public static function getInterestingCreateContainerOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new CreateContainerOptions();
         array_push($ret, $options);
@@ -555,10 +581,10 @@ class BlobServiceFunctionalTestData
         array_push($ret, $options);
 
         $options = new CreateContainerOptions();
-        $metadata = array(
+        $metadata = [
             'foo' => 'bar',
             'boo' => 'baz',
-        );
+        ];
         $options->setMetadata($metadata);
         array_push($ret, $options);
 
@@ -567,10 +593,10 @@ class BlobServiceFunctionalTestData
 
     public static function getInterestingDeleteContainerOptions()
     {
-        $ret = array();
+        $ret = [];
 
-        $past = new \DateTime("01/01/2010");
-        $future = new \DateTime("01/01/2020");
+        $past = new DateTime("01/01/2010");
+        $future = new DateTime("01/01/2020");
 
         $options = new BlobServiceOptions();
         array_push($ret, $options);
@@ -604,7 +630,7 @@ class BlobServiceFunctionalTestData
 
     public static function getSetContainerMetadataOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new BlobServiceOptions();
         array_push($ret, $options);
@@ -630,7 +656,7 @@ class BlobServiceFunctionalTestData
 
     public static function getSetBlobMetadataOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new BlobServiceOptions();
         array_push($ret, $options);
@@ -659,7 +685,7 @@ class BlobServiceFunctionalTestData
 
     public static function getGetBlobPropertiesOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new GetBlobPropertiesOptions();
         array_push($ret, $options);
@@ -684,7 +710,7 @@ class BlobServiceFunctionalTestData
 
     public static function getSetBlobPropertiesOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new SetBlobPropertiesOptions();
         array_push($ret, $options);
@@ -745,10 +771,10 @@ class BlobServiceFunctionalTestData
 
     public static function getInterestingACL()
     {
-        $ret = array();
+        $ret = [];
 
-        $past = new \DateTime("01/01/2010");
-        $future = new \DateTime("01/01/2020");
+        $past = new DateTime("01/01/2010");
+        $future = new DateTime("01/01/2020");
 
         $acl = new ContainerACL();
         array_push($ret, $acl);
@@ -774,7 +800,7 @@ class BlobServiceFunctionalTestData
 
     public static function getGetBlobOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new GetBlobOptions();
         array_push($ret, $options);
@@ -829,7 +855,7 @@ class BlobServiceFunctionalTestData
 
     public static function getDeleteBlobOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new DeleteBlobOptions();
         array_push($ret, $options);
@@ -865,7 +891,7 @@ class BlobServiceFunctionalTestData
 
     public static function getCreateBlobSnapshotOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new CreateBlobSnapshotOptions();
         array_push($ret, $options);
@@ -893,7 +919,7 @@ class BlobServiceFunctionalTestData
 
     public static function getCopyBlobOptions()
     {
-        $ret = array();
+        $ret = [];
 
         $options = new CopyBlobOptions();
         array_push($ret, $options);
@@ -919,10 +945,11 @@ class BlobServiceFunctionalTestData
         }
 
         $options = new CopyBlobOptions();
-        $metadata = array(
+        $metadata = [
             'Xkey' => 'Avalue',
             'Yfoo' => 'Bbar',
-            'Zbaz' => 'Cboo');
+            'Zbaz' => 'Cboo',
+        ];
         $options->setMetadata($metadata);
         array_push($ret, $options);
 
@@ -935,7 +962,7 @@ class BlobServiceFunctionalTestData
 
     public static function getCreateBlockBlobAttributes()
     {
-        $ret = array();
+        $ret = [];
         $ret[] = ['size' => Resources::MB_IN_BYTES_4];
         $ret[] = ['size' => Resources::MB_IN_BYTES_32];
         $ret[] = ['size' => Resources::MB_IN_BYTES_32 + Resources::MB_IN_BYTES_1];
@@ -943,15 +970,15 @@ class BlobServiceFunctionalTestData
         $ret[] = ['size' => Resources::MB_IN_BYTES_256];
         $ret[] = [
             'threshold' => Resources::MB_IN_BYTES_4,
-            'size' => Resources::MB_IN_BYTES_4 * 2
+            'size' => Resources::MB_IN_BYTES_4 * 2,
         ];
         $ret[] = [
             'threshold' => Resources::MB_IN_BYTES_64,
-            'size' => Resources::MB_IN_BYTES_64
+            'size' => Resources::MB_IN_BYTES_64,
         ];
         $ret[] = [
             'threshold' => Resources::MB_IN_BYTES_64,
-            'size' => Resources::MB_IN_BYTES_64 + Resources::MB_IN_BYTES_1
+            'size' => Resources::MB_IN_BYTES_64 + Resources::MB_IN_BYTES_1,
         ];
 
         return $ret;
@@ -959,55 +986,55 @@ class BlobServiceFunctionalTestData
 
     public static function getRangesArray()
     {
-        $ret = array();
+        $ret = [];
 
         $ret[] = [
             'putRange' => new Range(0, 511),
             'clearRange' => null,
             'listRange' => null,
-            'resultListRange' => [new Range(0, 511)]
+            'resultListRange' => [new Range(0, 511)],
         ];
 
         $ret[] = [
             'putRange' => new Range(1024, 1535),
             'clearRange' => null,
             'listRange' => null,
-            'resultListRange' => [new Range(0, 511), new Range(1024, 1535)]
+            'resultListRange' => [new Range(0, 511), new Range(1024, 1535)],
         ];
 
         $ret[] = [
             'putRange' => new Range(512, 1023),
             'clearRange' => null,
             'listRange' => null,
-            'resultListRange' => [new Range(0, 1535)]
+            'resultListRange' => [new Range(0, 1535)],
         ];
 
         $ret[] = [
             'putRange' => null,
             'clearRange' => new Range(1024, 1535),
             'listRange' => null,
-            'resultListRange' => [new Range(0, 1023)]
+            'resultListRange' => [new Range(0, 1023)],
         ];
 
         $ret[] = [
             'putRange' => null,
             'clearRange' => null,
             'listRange' => new Range(0, 511),
-            'resultListRange' => [new Range(0, 511)]
+            'resultListRange' => [new Range(0, 511)],
         ];
 
         $ret[] = [
             'putRange' => new Range(1024, 2047),
             'clearRange' => new Range(512, 1023),
             'listRange' => null,
-            'resultListRange' => [new Range(0, 511), new Range(1024, 2047)]
+            'resultListRange' => [new Range(0, 511), new Range(1024, 2047)],
         ];
 
         $ret[] = [
             'putRange' => null,
             'clearRange' => new Range(0, 2047),
             'listRange' => null,
-            'resultListRange' => array()
+            'resultListRange' => [],
         ];
 
         return $ret;
@@ -1015,34 +1042,34 @@ class BlobServiceFunctionalTestData
 
     public static function getRangesDiffArray()
     {
-        $ret = array();
+        $ret = [];
 
         $ret[] = [
             'putRange' => null,
             'clearRange' => null,
             'listRange' => null,
-            'resultListRange' => []
+            'resultListRange' => [],
         ];
 
         $ret[] = [
             'putRange' => new Range(0, 511),
             'clearRange' => null,
             'listRange' => null,
-            'resultListRange' => [new RangeDiff(0, 511)]
+            'resultListRange' => [new RangeDiff(0, 511)],
         ];
 
         $ret[] = [
             'putRange' => new Range(1024, 1535),
             'clearRange' => null,
             'listRange' => null,
-            'resultListRange' => [new RangeDiff(1024, 1535)]
+            'resultListRange' => [new RangeDiff(1024, 1535)],
         ];
 
         $ret[] = [
             'putRange' => null,
             'clearRange' => new Range(1024, 1535),
             'listRange' => null,
-            'resultListRange' => [new RangeDiff(1024, 1535, true)]
+            'resultListRange' => [new RangeDiff(1024, 1535, true)],
         ];
 
         $ret[] = [
@@ -1051,15 +1078,15 @@ class BlobServiceFunctionalTestData
             'listRange' => null,
             'resultListRange' => [
                 new RangeDiff(512, 1023),
-                new RangeDiff(0, 511, true)
-            ]
+                new RangeDiff(0, 511, true),
+            ],
         ];
 
         $ret[] = [
             'putRange' => new Range(0, 2047),
             'clearRange' => null,
             'listRange' => new Range(0, 511),
-            'resultListRange' => [new RangeDiff(0, 511)]
+            'resultListRange' => [new RangeDiff(0, 511)],
         ];
 
         $ret[] = [
@@ -1068,24 +1095,23 @@ class BlobServiceFunctionalTestData
             'listRange' => new Range(512, 1535),
             'resultListRange' => [
                 new RangeDiff(1024, 1535),
-                new RangeDiff(512, 1023, true)
-            ]
+                new RangeDiff(512, 1023, true),
+            ],
         ];
 
         $ret[] = [
             'putRange' => null,
             'clearRange' => new Range(0, 2047),
             'listRange' => null,
-            'resultListRange' => [new RangeDiff(0, 2047, true)]
+            'resultListRange' => [new RangeDiff(0, 2047, true)],
         ];
 
         return $ret;
     }
 
-
     public static function getAppendBlockSetup()
     {
-        $ret = array();
+        $ret = [];
 
         $size = Resources::MB_IN_BYTES_4;
         $options = new AppendBlockOptions();
@@ -1117,4 +1143,5 @@ class BlobServiceFunctionalTestData
 
         return $ret;
     }
+
 }

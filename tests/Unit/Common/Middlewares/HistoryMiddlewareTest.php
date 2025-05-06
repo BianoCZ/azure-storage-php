@@ -24,11 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Middlewares;
 
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use MicrosoftAzure\Storage\Common\Middlewares\HistoryMiddleware;
 use MicrosoftAzure\Storage\Tests\Framework\ReflectionTestBase;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
+use function count;
 
 /**
  * Unit tests for class HistoryMiddleware
@@ -42,29 +43,29 @@ use GuzzleHttp\Psr7\Request;
  */
 class HistoryMiddlewareTest extends ReflectionTestBase
 {
-    public function testOnFulfilled()
+    public function testOnFulfilled(): void
     {
         $middleware = new HistoryMiddleware();
         $onFulfilled = self::getMethod('onFulfilled', $middleware);
         $request = new Request('GET', 'http://www.bing.com');
-        $callable = $onFulfilled->invokeArgs($middleware, array($request, array()));
+        $callable = $onFulfilled->invokeArgs($middleware, [$request, []]);
         $response = new Response();
         $newResponse = $callable($response);
         $entry = $middleware->getHistory()[0];
         $this->assertTrue(
             $response === $entry['response'] &&
             $request  === $entry['request'] &&
-            array()   === $entry['options'],
+            $entry['options']   === [],
             'History does not match the request, response and/or options'
         );
     }
 
-    public function testOnRejected()
+    public function testOnRejected(): void
     {
         $middleware = new HistoryMiddleware();
         $onRejected = self::getMethod('onRejected', $middleware);
         $request = new Request('GET', 'http://www.bing.com');
-        $callable = $onRejected->invokeArgs($middleware, array($request, array()));
+        $callable = $onRejected->invokeArgs($middleware, [$request, []]);
         $reason = new RequestException('test message', $request);
         $promise = $callable($reason);
         $entry = $middleware->getHistory()[0];
@@ -77,23 +78,23 @@ class HistoryMiddlewareTest extends ReflectionTestBase
         $this->assertTrue(
             $newReason === $entry['reason'] &&
             $request   === $entry['request'] &&
-            array()    === $entry['options'],
+            $entry['options']    === [],
             'History does not match the request, reason and/or options'
         );
     }
 
-    public function testAddGetClearHistory()
+    public function testAddGetClearHistory(): void
     {
         $middleware = new HistoryMiddleware();
         $request = new Request('GET', 'http://www.bing.com');
         $response = new Response();
-        $options = array();
+        $options = [];
         $reason = new RequestException('test message', $request);
 
         $middleware->addHistory([
             'request'  => $request,
             'response' => $response,
-            'options'  => $options
+            'options'  => $options,
         ]);
 
         $this->assertTrue(count($middleware->getHistory()) == 1, 'Wrong array size');
@@ -101,7 +102,7 @@ class HistoryMiddlewareTest extends ReflectionTestBase
         $middleware->addHistory([
             'request' => $request,
             'reason'  => $reason,
-            'options' => $options
+            'options' => $options,
         ]);
 
         $this->assertTrue(count($middleware->getHistory()) == 2, 'Wrong array size');
@@ -110,4 +111,5 @@ class HistoryMiddlewareTest extends ReflectionTestBase
 
         $this->assertTrue(count($middleware->getHistory()) == 0, 'Wrong array size');
     }
+
 }

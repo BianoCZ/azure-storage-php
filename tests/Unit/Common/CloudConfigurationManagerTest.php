@@ -26,6 +26,9 @@ namespace MicrosoftAzure\Storage\Tests\Unit\Common;
 
 use MicrosoftAzure\Storage\Common\CloudConfigurationManager;
 use MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource;
+use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
+use function putenv;
 
 /**
  * Unit tests for class CloudConfigurationManager
@@ -37,23 +40,25 @@ use MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CloudConfigurationManagerTest extends \PHPUnit\Framework\TestCase
+class CloudConfigurationManagerTest extends TestCase
 {
+
     private $_key = 'my_connection_string';
+
     private $_value = 'connection string value';
 
-    public function setUp()
+    public function setUp(): void
     {
-        $isInitialized = new \ReflectionProperty('MicrosoftAzure\Storage\Common\CloudConfigurationManager', '_isInitialized');
+        $isInitialized = new ReflectionProperty('MicrosoftAzure\Storage\Common\CloudConfigurationManager', '_isInitialized');
         $isInitialized->setAccessible(true);
         $isInitialized->setValue(false);
 
-        $sources = new \ReflectionProperty('MicrosoftAzure\Storage\Common\CloudConfigurationManager', '_sources');
+        $sources = new ReflectionProperty('MicrosoftAzure\Storage\Common\CloudConfigurationManager', '_sources');
         $sources->setAccessible(true);
-        $sources->setValue(array());
+        $sources->setValue([]);
     }
 
-    public function testGetConnectionStringFromEnvironmentVariable()
+    public function testGetConnectionStringFromEnvironmentVariable(): void
     {
         // Setup
         putenv("$this->_key=$this->_value");
@@ -68,7 +73,7 @@ class CloudConfigurationManagerTest extends \PHPUnit\Framework\TestCase
         putenv($this->_key);
     }
 
-    public function testGetConnectionStringDoesNotExist()
+    public function testGetConnectionStringDoesNotExist(): void
     {
         // Test
         $actual = CloudConfigurationManager::getConnectionString('does not exist');
@@ -77,7 +82,7 @@ class CloudConfigurationManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($actual);
     }
 
-    public function testRegisterSource()
+    public function testRegisterSource(): void
     {
         // Setup
         $expectedKey = $this->_key;
@@ -98,7 +103,7 @@ class CloudConfigurationManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $actual);
     }
 
-    public function testRegisterSourceWithPrepend()
+    public function testRegisterSourceWithPrepend(): void
     {
         // Setup
         $expectedKey = $this->_key;
@@ -124,7 +129,7 @@ class CloudConfigurationManagerTest extends \PHPUnit\Framework\TestCase
         putenv($this->_key);
     }
 
-    public function testUnRegisterSource()
+    public function testUnRegisterSource(): void
     {
         // Setup
         $expectedKey = $this->_key;
@@ -148,7 +153,7 @@ class CloudConfigurationManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($callback);
     }
 
-    public function testRegisterSourceWithDefaultSource()
+    public function testRegisterSourceWithDefaultSource(): void
     {
         // Setup
         $expectedKey = $this->_key;
@@ -167,7 +172,7 @@ class CloudConfigurationManagerTest extends \PHPUnit\Framework\TestCase
         putenv($expectedKey);
     }
 
-    public function testUnRegisterSourceWithDefaultSource()
+    public function testUnRegisterSourceWithDefaultSource(): void
     {
         // Setup
         $expectedKey = $this->_key;
@@ -190,4 +195,5 @@ class CloudConfigurationManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $actual);
         $this->assertNotNull($callback);
     }
+
 }

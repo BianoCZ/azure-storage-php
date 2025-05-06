@@ -42,13 +42,10 @@ class FileAccessPolicy extends AccessPolicy
     /**
      * Get the valid permissions for the given resource.
      *
-     * @return array
      */
-    public static function getResourceValidPermissions()
+    public static function getResourceValidPermissions(): array
     {
-        return FileResources::ACCESS_PERMISSIONS[
-            FileResources::RESOURCE_TYPE_FILE
-        ];
+        return FileResources::ACCESS_PERMISSIONS[FileResources::RESOURCE_TYPE_FILE];
     }
 
     /**
@@ -58,4 +55,5 @@ class FileAccessPolicy extends AccessPolicy
     {
         parent::__construct(FileResources::RESOURCE_TYPE_FILE);
     }
+
 }

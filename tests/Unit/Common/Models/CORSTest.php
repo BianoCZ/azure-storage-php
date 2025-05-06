@@ -26,8 +26,7 @@ namespace MicrosoftAzure\Storage\Tests\Unit\Common\Models;
 
 use MicrosoftAzure\Storage\Common\Models\CORS;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class CORS
@@ -39,9 +38,9 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CORSTest extends \PHPUnit\Framework\TestCase
+class CORSTest extends TestCase
 {
-    public function testCreateAndToArray()
+    public function testCreateAndToArray(): void
     {
         $parsedResponse = TestResources::getCORSSingle();
 
@@ -51,17 +50,17 @@ class CORSTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-               * @expectedException \UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage does not exist in the given array
      */
-    public function testCreateNegative()
+    public function testCreateNegative(): void
     {
-        $parsedResponse = array();
+        $parsedResponse = [];
 
         $cors = CORS::create($parsedResponse);
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $parsedResponse = TestResources::getCORSSingle();
 
@@ -75,4 +74,5 @@ class CORSTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($parsedResponse, $cors->toArray());
     }
+
 }

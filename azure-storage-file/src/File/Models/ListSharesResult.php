@@ -25,8 +25,8 @@
 namespace MicrosoftAzure\Storage\File\Models;
 
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Models\MarkerContinuationToken;
 use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
+use MicrosoftAzure\Storage\Common\Models\MarkerContinuationToken;
 use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
 
 /**
@@ -41,12 +41,17 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class ListSharesResult
 {
+
     use MarkerContinuationTokenTrait;
 
     private $shares;
+
     private $prefix;
+
     private $marker;
+
     private $maxResults;
+
     private $accountName;
 
     /**
@@ -58,9 +63,8 @@ class ListSharesResult
      *
      * @internal
      *
-     * @return ListSharesResult
      */
-    public static function create(array $parsedResponse, $location = '')
+    public static function create(array $parsedResponse, string $location = ''): ListSharesResult
     {
         $result               = new ListSharesResult();
         $serviceEndpoint      = Utilities::tryGetKeysChainValue(
@@ -98,8 +102,8 @@ class ListSharesResult
             $parsedResponse,
             Resources::QP_MAX_RESULTS
         ));
-        $shares = array();
-        $shareArrays = array();
+        $shares = [];
+        $shareArrays = [];
 
         if (!empty($parsedResponse[Resources::QP_SHARES])) {
             $array = $parsedResponse[Resources::QP_SHARES][Resources::QP_SHARE];
@@ -119,11 +123,10 @@ class ListSharesResult
      *
      * @param array $shares list of shares.
      *
-     * @return void
      */
-    protected function setShares(array $shares)
+    protected function setShares(array $shares): void
     {
-        $this->shares = array();
+        $this->shares = [];
         foreach ($shares as $share) {
             $this->shares[] = clone $share;
         }
@@ -134,7 +137,7 @@ class ListSharesResult
      *
      * @return Share[]
      */
-    public function getShares()
+    public function getShares(): array
     {
         return $this->shares;
     }
@@ -142,9 +145,8 @@ class ListSharesResult
     /**
      * Gets prefix.
      *
-     * @return string
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->prefix;
     }
@@ -154,9 +156,8 @@ class ListSharesResult
      *
      * @param string $prefix value.
      *
-     * @return void
      */
-    protected function setPrefix($prefix)
+    protected function setPrefix(string $prefix): void
     {
         $this->prefix = $prefix;
     }
@@ -164,9 +165,8 @@ class ListSharesResult
     /**
      * Gets marker.
      *
-     * @return string
      */
-    public function getMarker()
+    public function getMarker(): string
     {
         return $this->marker;
     }
@@ -176,9 +176,8 @@ class ListSharesResult
      *
      * @param string $marker value.
      *
-     * @return void
      */
-    protected function setMarker($marker)
+    protected function setMarker(string $marker): void
     {
         $this->marker = $marker;
     }
@@ -186,9 +185,8 @@ class ListSharesResult
     /**
      * Gets max results.
      *
-     * @return string
      */
-    public function getMaxResults()
+    public function getMaxResults(): string
     {
         return $this->maxResults;
     }
@@ -198,9 +196,8 @@ class ListSharesResult
      *
      * @param string $maxResults value.
      *
-     * @return void
      */
-    protected function setMaxResults($maxResults)
+    protected function setMaxResults(string $maxResults): void
     {
         $this->maxResults = $maxResults;
     }
@@ -208,9 +205,8 @@ class ListSharesResult
     /**
      * Gets account name.
      *
-     * @return string
      */
-    public function getAccountName()
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -220,10 +216,10 @@ class ListSharesResult
      *
      * @param string $accountName value.
      *
-     * @return void
      */
-    protected function setAccountName($accountName)
+    protected function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
+
 }

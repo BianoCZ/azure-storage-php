@@ -36,7 +36,9 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class Block
 {
+
     private $_blockId;
+
     private $_type;
 
     /**
@@ -45,7 +47,7 @@ class Block
      * @param string $blockId The ID of this block.
      * @param string $type    The type of the block.
      */
-    public function __construct($blockId = '', $type = '')
+    public function __construct(string $blockId = '', string $type = '')
     {
         $this->_blockId = $blockId;
         $this->_type = $type;
@@ -56,9 +58,8 @@ class Block
      *
      * @param string $blockId The id of the block.
      *
-     * @return void
      */
-    public function setBlockId($blockId)
+    public function setBlockId(string $blockId): void
     {
         $this->_blockId = $blockId;
     }
@@ -66,9 +67,8 @@ class Block
     /**
      * Gets the blockId.
      *
-     * @return string
      */
-    public function getBlockId()
+    public function getBlockId(): string
     {
         return $this->_blockId;
     }
@@ -78,9 +78,8 @@ class Block
      *
      * @param string $type The type of the block.
      *
-     * @return void
      */
-    public function setType($type)
+    public function setType(string $type): void
     {
         $this->_type = $type;
     }
@@ -88,10 +87,10 @@ class Block
     /**
      * Gets the type.
      *
-     * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->_type;
     }
+
 }

@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
 use MicrosoftAzure\Storage\Queue\Models\PeekMessagesOptions;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class PeekMessagesOptions
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Queue\Models\PeekMessagesOptions;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class PeekMessagesOptionsTest extends \PHPUnit\Framework\TestCase
+class PeekMessagesOptionsTest extends TestCase
 {
-    public function testGetNumberOfMessages()
+    public function testGetNumberOfMessages(): void
     {
         // Setup
         $peekMessagesOptions = new PeekMessagesOptions();
@@ -52,7 +53,7 @@ class PeekMessagesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetNumberOfMessages()
+    public function testSetNumberOfMessages(): void
     {
         // Setup
         $peekMessagesOptions = new PeekMessagesOptions();
@@ -65,4 +66,5 @@ class PeekMessagesOptionsTest extends \PHPUnit\Framework\TestCase
         $actual = $peekMessagesOptions->getNumberOfMessages();
         $this->assertEquals($expected, $actual);
     }
+
 }

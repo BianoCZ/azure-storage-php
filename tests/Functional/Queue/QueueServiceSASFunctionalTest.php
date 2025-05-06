@@ -25,9 +25,11 @@
 namespace MicrosoftAzure\Storage\Tests\Functional\Queue;
 
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Queue\Models\ListMessagesOptions;
 use MicrosoftAzure\Storage\Tests\Framework\SASFunctionalTestBase;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Queue\Models\ListMessagesOptions;
+use function sleep;
+use function uniqid;
 
 /**
  * Tests for service SAS proxy tests.
@@ -41,7 +43,7 @@ use MicrosoftAzure\Storage\Queue\Models\ListMessagesOptions;
  */
 class QueueServiceSASFunctionalTest extends SASFunctionalTestBase
 {
-    public function testQueueServiceSAS()
+    public function testQueueServiceSAS(): void
     {
         $helper = new QueueSharedAccessSignatureHelperMock(
             $this->serviceSettings->getName(),
@@ -51,8 +53,8 @@ class QueueServiceSASFunctionalTest extends SASFunctionalTestBase
         //setup the proxies for creating queues
         $this->setUpWithConnectionString($this->connectionString);
 
-        $queueProxies = array();
-        $queues = array();
+        $queueProxies = [];
+        $queues = [];
         $queues[] = TestResources::getInterestingName('qu');
         $this->safeCreateQueue($queues[0]);
         $queues[] = TestResources::getInterestingName('qu');
@@ -81,13 +83,13 @@ class QueueServiceSASFunctionalTest extends SASFunctionalTestBase
             $queue = $queues[$i];
             $entity = TestResources::getTestEntity('123', '456');
             //test raup.
-            $messageText = \uniqid();
+            $messageText = uniqid();
             $proxy->createMessage($queue, $messageText);
             $options = new ListMessagesOptions();
             $options->setNumberOfMessages(1);
             $actual = $proxy->listMessages($queue, $options)->getQueueMessages()[0];
             $this->assertEquals($messageText, $actual->getMessageText());
-            $messageText = \uniqid();
+            $messageText = uniqid();
             $proxy->updateMessage(
                 $queue,
                 $actual->getMessageId(),
@@ -96,28 +98,28 @@ class QueueServiceSASFunctionalTest extends SASFunctionalTestBase
                 1
             );
             //wait until visibility timeout has run out.
-            \sleep(2);
+            sleep(2);
             $result = $proxy->peekMessages($queue);
             $actualMessage = $result->getQueueMessages()[0];
             $this->assertEquals($messageText, $actualMessage->getMessageText());
         }
         //Validate that a cross access with wrong proxy/queue pair
         //would not be successfull
-        for ($i= 0; $i < 2; ++$i) {
+        for ($i = 0; $i < 2; ++$i) {
             $proxy = $queueProxies[$i];
             $queue = $queues[1 - $i];
             //a
-            $messageText = \uniqid();
+            $messageText = uniqid();
             $this->validateServiceExceptionErrorMessage(
                 'Server failed to authenticate the request.',
-                function () use ($proxy, $queue, $messageText) {
+                function () use ($proxy, $queue, $messageText): void {
                     $proxy->createMessage($queue, $messageText);
                 }
             );
             //r
             $this->validateServiceExceptionErrorMessage(
                 'Server failed to authenticate the request.',
-                function () use ($proxy, $queue) {
+                function () use ($proxy, $queue): void {
                     $proxy->peekMessages($queue);
                 }
             );
@@ -140,4 +142,5 @@ class QueueServiceSASFunctionalTest extends SASFunctionalTestBase
 
         return $this->createProxyWithSAS($sas, $accountName, Resources::RESOURCE_TYPE_QUEUE);
     }
+
 }

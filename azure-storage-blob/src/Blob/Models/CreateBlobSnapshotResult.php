@@ -24,8 +24,10 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use function array_change_key_case;
 
 /**
  * The result of creating Blob snapshot.
@@ -39,8 +41,11 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class CreateBlobSnapshotResult
 {
+
     private $_snapshot;
+
     private $_etag;
+
     private $_lastModified;
 
     /**
@@ -51,9 +56,8 @@ class CreateBlobSnapshotResult
      *
      * @internal
      *
-     * @return CreateBlobSnapshotResult
      */
-    public static function create(array $headers)
+    public static function create(array $headers): CreateBlobSnapshotResult
     {
         $result                 = new CreateBlobSnapshotResult();
         $headerWithLowerCaseKey = array_change_key_case($headers);
@@ -74,9 +78,8 @@ class CreateBlobSnapshotResult
     /**
      * Gets snapshot.
      *
-     * @return string
      */
-    public function getSnapshot()
+    public function getSnapshot(): string
     {
         return $this->_snapshot;
     }
@@ -86,9 +89,8 @@ class CreateBlobSnapshotResult
      *
      * @param string $snapshot value.
      *
-     * @return void
      */
-    protected function setSnapshot($snapshot)
+    protected function setSnapshot(string $snapshot): void
     {
         $this->_snapshot = $snapshot;
     }
@@ -96,9 +98,8 @@ class CreateBlobSnapshotResult
     /**
      * Gets ETag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->_etag;
     }
@@ -108,9 +109,8 @@ class CreateBlobSnapshotResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         $this->_etag = $etag;
     }
@@ -118,9 +118,8 @@ class CreateBlobSnapshotResult
     /**
      * Gets blob lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->_lastModified;
     }
@@ -130,10 +129,10 @@ class CreateBlobSnapshotResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified($lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         $this->_lastModified = $lastModified;
     }
+
 }

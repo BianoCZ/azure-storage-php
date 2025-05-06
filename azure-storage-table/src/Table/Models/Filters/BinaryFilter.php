@@ -36,8 +36,11 @@ namespace MicrosoftAzure\Storage\Table\Models\Filters;
  */
 class BinaryFilter extends Filter
 {
+
     private $_operator;
+
     private $_left;
+
     private $_right;
 
     /**
@@ -47,7 +50,7 @@ class BinaryFilter extends Filter
      * @param string $operator The operator.
      * @param Filter $right    The right operand.
      */
-    public function __construct($left, $operator, $right)
+    public function __construct(Filter $left, string $operator, Filter $right)
     {
         $this->_left     = $left;
         $this->_operator = $operator;
@@ -57,9 +60,8 @@ class BinaryFilter extends Filter
     /**
      * Gets operator
      *
-     * @return string
      */
-    public function getOperator()
+    public function getOperator(): string
     {
         return $this->_operator;
     }
@@ -67,9 +69,8 @@ class BinaryFilter extends Filter
     /**
      * Gets left
      *
-     * @return Filter
      */
-    public function getLeft()
+    public function getLeft(): Filter
     {
         return $this->_left;
     }
@@ -77,10 +78,10 @@ class BinaryFilter extends Filter
     /**
      * Gets right
      *
-     * @return Filter
      */
-    public function getRight()
+    public function getRight(): Filter
     {
         return $this->_right;
     }
+
 }

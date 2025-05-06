@@ -24,9 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Models\RetentionPolicy;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use PHPUnit\Framework\TestCase;
+use function intval;
 
 /**
  * Unit tests for class RetentionPolicy
@@ -38,9 +40,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class RetentionPolicyTest extends \PHPUnit\Framework\TestCase
+class RetentionPolicyTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -55,7 +57,7 @@ class RetentionPolicyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedDays, $actual->getDays());
     }
 
-    public function testGetEnabled()
+    public function testGetEnabled(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -70,7 +72,7 @@ class RetentionPolicyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetEnabled()
+    public function testSetEnabled(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -85,7 +87,7 @@ class RetentionPolicyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetDays()
+    public function testGetDays(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -100,7 +102,7 @@ class RetentionPolicyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetDays()
+    public function testSetDays(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -115,15 +117,15 @@ class RetentionPolicyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
         $retentionPolicy = RetentionPolicy::create($sample['Logging']['RetentionPolicy']);
-        $expected = array(
+        $expected = [
             'Enabled' => $sample['Logging']['RetentionPolicy']['Enabled'],
-            'Days'    => $sample['Logging']['RetentionPolicy']['Days']
-        );
+            'Days'    => $sample['Logging']['RetentionPolicy']['Days'],
+        ];
 
         // Test
         $actual = $retentionPolicy->toArray();
@@ -132,12 +134,12 @@ class RetentionPolicyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testToArrayWithoutDays()
+    public function testToArrayWithoutDays(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
         $retentionPolicy = RetentionPolicy::create($sample['Logging']['RetentionPolicy']);
-        $expected = array('Enabled' => $sample['Logging']['RetentionPolicy']['Enabled']);
+        $expected = ['Enabled' => $sample['Logging']['RetentionPolicy']['Enabled']];
         $retentionPolicy->setDays(null);
 
         // Test
@@ -146,4 +148,5 @@ class RetentionPolicyTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

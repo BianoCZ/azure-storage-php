@@ -24,12 +24,14 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal\Middlewares;
 
-use MicrosoftAzure\Storage\Common\Internal\Middlewares\CommonRequestMiddleware;
+use GuzzleHttp\Psr7\Request;
 use MicrosoftAzure\Storage\Common\Internal\Authentication\SharedKeyAuthScheme;
+use MicrosoftAzure\Storage\Common\Internal\Middlewares\CommonRequestMiddleware;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Tests\Framework\ReflectionTestBase;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Request;
+use function array_intersect;
+use function strtotime;
+use function time;
 
 /**
  * Unit tests for class CommonRequestMiddleware
@@ -43,7 +45,7 @@ use GuzzleHttp\Psr7\Request;
  */
 class CommonRequestMiddlewareTest extends ReflectionTestBase
 {
-    public function testOnRequest()
+    public function testOnRequest(): void
     {
         // Setup
         $beginTime = time();
@@ -54,9 +56,9 @@ class CommonRequestMiddlewareTest extends ReflectionTestBase
         $onRequest = self::getMethod('onRequest', $middleware);
         $request = new Request('GET', 'http://www.bing.com');
         // Apply middleware
-        $newRequest = $onRequest->invokeArgs($middleware, array($request));
+        $newRequest = $onRequest->invokeArgs($middleware, [$request]);
         // Prepare expected
-        $savedHeaders = array();
+        $savedHeaders = [];
         foreach ($newRequest->getHeaders() as $key => $value) {
             $savedHeaders[$key] = $value[0];
         }
@@ -82,10 +84,11 @@ class CommonRequestMiddlewareTest extends ReflectionTestBase
 
     private static function getTestHeaderArray()
     {
-        return array(
+        return [
             'testKey1' => 'testValue1',
             'testKey2' => 'testValue2',
             'testKey3' => 'testValue3',
-        );
+        ];
     }
+
 }

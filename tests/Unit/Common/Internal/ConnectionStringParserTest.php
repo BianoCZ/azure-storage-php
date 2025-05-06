@@ -25,6 +25,9 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal;
 
 use MicrosoftAzure\Storage\Common\Internal\ConnectionStringParser;
+use PHPUnit\Framework\TestCase;
+use function func_get_args;
+use function func_num_args;
 
 /**
  * Unit tests for class ConnectionStringParser
@@ -36,14 +39,14 @@ use MicrosoftAzure\Storage\Common\Internal\ConnectionStringParser;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ConnectionStringParserTest extends \PHPUnit\Framework\TestCase
+class ConnectionStringParserTest extends TestCase
 {
-    private function _parseTest($connectionString)
+    private function _parseTest($connectionString): void
     {
         // Setup
         $arguments = func_get_args();
         $count = func_num_args();
-        $expected = array();
+        $expected = [];
         for ($i = 1; $i < $count; $i += 2) {
             $expected[$arguments[$i]] = $arguments[$i + 1];
         }
@@ -55,7 +58,7 @@ class ConnectionStringParserTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    private function _parseTestFail($value)
+    private function _parseTestFail($value): void
     {
         // Setup
         $this->setExpectedException('\RuntimeException');
@@ -64,7 +67,7 @@ class ConnectionStringParserTest extends \PHPUnit\Framework\TestCase
         ConnectionStringParser::parseConnectionString('connectionString', $value);
     }
 
-    public function testKeyNames()
+    public function testKeyNames(): void
     {
         $this->_parseTest("a=b", "a", "b");
         $this->_parseTest(" a =b; c = d", "a", "b", "c", "d");
@@ -83,14 +86,14 @@ class ConnectionStringParserTest extends \PHPUnit\Framework\TestCase
         $this->_parseTest("a\"=b", "a\"", "b");
     }
 
-    public function testAssignments()
+    public function testAssignments(): void
     {
         $this->_parseTest("a=b", "a", "b");
         $this->_parseTest("a = b", "a", "b");
         $this->_parseTest("a==b", "a", "=b");
     }
 
-    public function testValues()
+    public function testValues(): void
     {
         $this->_parseTest("a=b", "a", "b");
         $this->_parseTest("a= b ", "a", "b");
@@ -116,7 +119,7 @@ class ConnectionStringParserTest extends \PHPUnit\Framework\TestCase
         $this->_parseTest("a=b\"", "a", "b\"");
     }
 
-    public function testSeparators()
+    public function testSeparators(): void
     {
         $this->_parseTest("a=b;", "a", "b");
         $this->_parseTest("a=b", "a", "b");
@@ -125,7 +128,7 @@ class ConnectionStringParserTest extends \PHPUnit\Framework\TestCase
         $this->_parseTest("a=b ; c=d", "a", "b", "c", "d");
     }
 
-    public function testInvalidInputFail()
+    public function testInvalidInputFail(): void
     {
         $this->_parseTestFail(";");           // Separator without an assignment;
         $this->_parseTestFail("=b");          // Missing key name;
@@ -146,4 +149,5 @@ class ConnectionStringParserTest extends \PHPUnit\Framework\TestCase
         $this->_parseTestFail("'a'b=c");      // Extra character after single-quoted key;
         $this->_parseTestFail("\"a\"b=c");    // Extra character after double-quoted key;
     }
+
 }

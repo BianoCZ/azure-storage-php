@@ -25,9 +25,12 @@
 namespace MicrosoftAzure\Storage\Tests\Functional\Blob;
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
+use PHPUnit\Framework\TestCase;
+use function sprintf;
+use function stream_get_contents;
 
 /**
  * Tests for account SAS proxy tests.
@@ -39,34 +42,40 @@ use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class AnonymousAccessFunctionalTest extends \PHPUnit\Framework\TestCase
+class AnonymousAccessFunctionalTest extends TestCase
 {
+
     private $containerName;
+
     private static $blobRestProxy;
+
     private static $accountName;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
+
         $connectionString = TestResources::getWindowsAzureStorageServicesConnectionString();
         self::$blobRestProxy = BlobRestProxy::createBlobService($connectionString);
         self::$accountName = self::$blobRestProxy->getAccountName();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         $this->containerName = TestResources::getInterestingName('con');
         self::$blobRestProxy->createContainer($this->containerName);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         self::$blobRestProxy->deleteContainer($this->containerName);
+
         parent::tearDown();
     }
 
-    public function testPublicAccessContainerAndBlob()
+    public function testPublicAccessContainerAndBlob(): void
     {
         $acl = self::$blobRestProxy->getContainerAcl($this->containerName)->getContainerAcl();
         $acl->setPublicAccess(PublicAccessType::CONTAINER_AND_BLOBS);
@@ -100,7 +109,7 @@ class AnonymousAccessFunctionalTest extends \PHPUnit\Framework\TestCase
      * @expectedException MicrosoftAzure\Storage\Common\Exceptions\ServiceException
      * @expectedExceptionMessage 404
      */
-    public function testPublicAccessBlobOnly()
+    public function testPublicAccessBlobOnly(): void
     {
         $acl = self::$blobRestProxy->getContainerAcl($this->containerName)->getContainerAcl();
         $acl->setPublicAccess(PublicAccessType::BLOBS_ONLY);
@@ -135,4 +144,5 @@ class AnonymousAccessFunctionalTest extends \PHPUnit\Framework\TestCase
         //The following line will generate ServiceException with 404.
         $result = $proxy->listBlobs($this->containerName);
     }
+
 }

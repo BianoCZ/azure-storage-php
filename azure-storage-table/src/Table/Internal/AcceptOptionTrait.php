@@ -38,6 +38,7 @@ use MicrosoftAzure\Storage\Table\Models\AcceptJSONContentType;
  */
 trait AcceptOptionTrait
 {
+
     private $accept = AcceptJSONContentType::MINIMAL_METADATA;
 
     /**
@@ -48,7 +49,7 @@ trait AcceptOptionTrait
      *
      * @param string $accept The accept content type to be set.
      */
-    public function setAccept($accept)
+    public function setAccept(string $accept): void
     {
         AcceptJSONContentType::validateAcceptContentType($accept);
         $this->accept = $accept;
@@ -57,10 +58,10 @@ trait AcceptOptionTrait
     /**
      * Gets accept content type.
      *
-     * @return string
      */
-    public function getAccept()
+    public function getAccept(): string
     {
         return $this->accept;
     }
+
 }

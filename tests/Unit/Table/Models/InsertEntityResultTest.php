@@ -21,13 +21,15 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
-use MicrosoftAzure\Storage\Table\Models\InsertEntityResult;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Table\Internal\JsonODataReaderWriter;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Table\Internal\JsonODataReaderWriter;
+use MicrosoftAzure\Storage\Table\Models\InsertEntityResult;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class InsertEntityResult
@@ -39,10 +41,10 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class InsertEntityResultTest extends \PHPUnit\Framework\TestCase
+class InsertEntityResultTest extends TestCase
 {
 
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sampleBody     = TestResources::getInsertEntitySampleBody();
@@ -64,4 +66,5 @@ class InsertEntityResultTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expectedEntity, $result->getEntity());
     }
+
 }

@@ -49,4 +49,5 @@ class TableAccessPolicyTest extends AccessPolicyTest
     {
         return TableResources::RESOURCE_TYPE_TABLE;
     }
+
 }

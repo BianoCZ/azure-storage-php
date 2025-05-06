@@ -21,12 +21,15 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
+use MicrosoftAzure\Storage\Blob\Models\ListPageBlobRangesResult;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Models\Range;
-use MicrosoftAzure\Storage\Blob\Models\ListPageBlobRangesResult;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use function intval;
 
 /**
  * Unit tests for class ListPageBlobRangesResultTest
@@ -38,20 +41,20 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListPageBlobRangesResultTest extends \PHPUnit\Framework\TestCase
+class ListPageBlobRangesResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $headers   = TestResources::listPageRangeHeaders();
         $bodyArray = TestResources::listPageRangeBodyInArray();
         // Prepare expected page range
-        $rawPageRanges = array();
+        $rawPageRanges = [];
         if (!empty($bodyArray['PageRange'])) {
             $rawPageRanges = Utilities::getArray($bodyArray['PageRange']);
         }
 
-        $pageRanges = array();
+        $pageRanges = [];
         foreach ($rawPageRanges as $value) {
             $pageRanges[] = new Range(
                 intval($value['Start']),
@@ -70,4 +73,5 @@ class ListPageBlobRangesResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($headers['Etag'], $result->getETag());
         $this->assertEquals($headers['x-ms-blob-content-length'], $result->getContentLength());
     }
+
 }

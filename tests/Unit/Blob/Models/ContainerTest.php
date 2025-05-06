@@ -25,9 +25,10 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\Container;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
 use MicrosoftAzure\Storage\Blob\Models\ContainerProperties;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class Container
@@ -39,9 +40,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ContainerTest extends \PHPUnit\Framework\TestCase
+class ContainerTest extends TestCase
 {
-    public function testSetName()
+    public function testSetName(): void
     {
         // Setup
         $container = new Container();
@@ -54,7 +55,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $container->getName());
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         // Setup
         $container = new Container();
@@ -68,7 +69,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetUrl()
+    public function testSetUrl(): void
     {
         // Setup
         $container = new Container();
@@ -81,7 +82,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $container->getUrl());
     }
 
-    public function testGetUrl()
+    public function testGetUrl(): void
     {
         // Setup
         $container = new Container();
@@ -95,11 +96,11 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetMetadata()
+    public function testSetMetadata(): void
     {
         // Setup
         $container = new Container();
-        $expected = array('key1' => 'value1', 'key2' => 'value2');
+        $expected = ['key1' => 'value1', 'key2' => 'value2'];
 
         // Test
         $container->setMetadata($expected);
@@ -108,11 +109,11 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $container->getMetadata());
     }
 
-    public function testGetMetadata()
+    public function testGetMetadata(): void
     {
         // Setup
         $container = new Container();
-        $expected = array('key1' => 'value1', 'key2' => 'value2');
+        $expected = ['key1' => 'value1', 'key2' => 'value2'];
         $container->setMetadata($expected);
 
         // Test
@@ -122,7 +123,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetProperties()
+    public function testSetProperties(): void
     {
         // Setup
         $date = Utilities::rfc1123ToDateTime('Wed, 12 Aug 2009 20:39:39 GMT');
@@ -138,7 +139,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $container->getProperties());
     }
 
-    public function testGetProperties()
+    public function testGetProperties(): void
     {
         // Setup
         $date = Utilities::rfc1123ToDateTime('Wed, 12 Aug 2009 20:39:39 GMT');
@@ -154,4 +155,5 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

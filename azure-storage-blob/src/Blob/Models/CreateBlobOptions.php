@@ -38,22 +38,30 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class CreateBlobOptions extends BlobServiceOptions
 {
+
     private $_contentType;
+
     private $_contentEncoding;
+
     private $_contentLanguage;
+
     private $_contentMD5;
+
     private $_cacheControl;
+
     private $_contentDisposition;
+
     private $_metadata;
+
     private $_sequenceNumber;
+
     private $_numberOfConcurrency;
 
     /**
      * Gets blob contentType.
      *
-     * @return string
      */
-    public function getContentType()
+    public function getContentType(): string
     {
         return $this->_contentType;
     }
@@ -63,9 +71,8 @@ class CreateBlobOptions extends BlobServiceOptions
      *
      * @param string $contentType value.
      *
-     * @return void
      */
-    public function setContentType($contentType)
+    public function setContentType(string $contentType): void
     {
         $this->_contentType = $contentType;
     }
@@ -73,9 +80,8 @@ class CreateBlobOptions extends BlobServiceOptions
     /**
      * Gets contentEncoding.
      *
-     * @return string
      */
-    public function getContentEncoding()
+    public function getContentEncoding(): string
     {
         return $this->_contentEncoding;
     }
@@ -85,9 +91,8 @@ class CreateBlobOptions extends BlobServiceOptions
      *
      * @param string $contentEncoding value.
      *
-     * @return void
      */
-    public function setContentEncoding($contentEncoding)
+    public function setContentEncoding(string $contentEncoding): void
     {
         $this->_contentEncoding = $contentEncoding;
     }
@@ -95,9 +100,8 @@ class CreateBlobOptions extends BlobServiceOptions
     /**
      * Gets contentLanguage.
      *
-     * @return string
      */
-    public function getContentLanguage()
+    public function getContentLanguage(): string
     {
         return $this->_contentLanguage;
     }
@@ -107,9 +111,8 @@ class CreateBlobOptions extends BlobServiceOptions
      *
      * @param string $contentLanguage value.
      *
-     * @return void
      */
-    public function setContentLanguage($contentLanguage)
+    public function setContentLanguage(string $contentLanguage): void
     {
         $this->_contentLanguage = $contentLanguage;
     }
@@ -117,9 +120,8 @@ class CreateBlobOptions extends BlobServiceOptions
     /**
      * Gets contentMD5.
      *
-     * @return string
      */
-    public function getContentMD5()
+    public function getContentMD5(): string
     {
         return $this->_contentMD5;
     }
@@ -129,9 +131,8 @@ class CreateBlobOptions extends BlobServiceOptions
      *
      * @param string $contentMD5 value.
      *
-     * @return void
      */
-    public function setContentMD5($contentMD5)
+    public function setContentMD5(string $contentMD5): void
     {
         $this->_contentMD5 = $contentMD5;
     }
@@ -139,9 +140,8 @@ class CreateBlobOptions extends BlobServiceOptions
     /**
      * Gets cacheControl.
      *
-     * @return string
      */
-    public function getCacheControl()
+    public function getCacheControl(): string
     {
         return $this->_cacheControl;
     }
@@ -151,9 +151,8 @@ class CreateBlobOptions extends BlobServiceOptions
      *
      * @param string $cacheControl value to use.
      *
-     * @return void
      */
-    public function setCacheControl($cacheControl)
+    public function setCacheControl(string $cacheControl): void
     {
         $this->_cacheControl = $cacheControl;
     }
@@ -161,9 +160,8 @@ class CreateBlobOptions extends BlobServiceOptions
     /**
      * Gets content disposition.
      *
-     * @return string
      */
-    public function getContentDisposition()
+    public function getContentDisposition(): string
     {
         return $this->_contentDisposition;
     }
@@ -173,9 +171,8 @@ class CreateBlobOptions extends BlobServiceOptions
      *
      * @param string $contentDisposition value to use.
      *
-     * @return void
      */
-    public function setContentDisposition($contentDisposition)
+    public function setContentDisposition(string $contentDisposition): void
     {
         $this->_contentDisposition = $contentDisposition;
     }
@@ -183,9 +180,8 @@ class CreateBlobOptions extends BlobServiceOptions
     /**
      * Gets blob metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->_metadata;
     }
@@ -195,9 +191,8 @@ class CreateBlobOptions extends BlobServiceOptions
      *
      * @param array $metadata value.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata)
+    public function setMetadata(array $metadata): void
     {
         $this->_metadata = $metadata;
     }
@@ -205,9 +200,8 @@ class CreateBlobOptions extends BlobServiceOptions
     /**
      * Gets blob sequenceNumber.
      *
-     * @return int
      */
-    public function getSequenceNumber()
+    public function getSequenceNumber(): int
     {
         return $this->_sequenceNumber;
     }
@@ -217,9 +211,8 @@ class CreateBlobOptions extends BlobServiceOptions
      *
      * @param int $sequenceNumber value.
      *
-     * @return void
      */
-    public function setSequenceNumber($sequenceNumber)
+    public function setSequenceNumber(int $sequenceNumber): void
     {
         Validate::isInteger($sequenceNumber, 'sequenceNumber');
         $this->_sequenceNumber = $sequenceNumber;
@@ -228,9 +221,8 @@ class CreateBlobOptions extends BlobServiceOptions
     /**
      * Gets number of concurrency for sending a blob.
      *
-     * @return int
      */
-    public function getNumberOfConcurrency()
+    public function getNumberOfConcurrency(): int
     {
         return $this->_numberOfConcurrency;
     }
@@ -240,8 +232,9 @@ class CreateBlobOptions extends BlobServiceOptions
      *
      * @param int $numberOfConcurrency the number of concurrent requests.
      */
-    public function setNumberOfConcurrency($numberOfConcurrency)
+    public function setNumberOfConcurrency(int $numberOfConcurrency): void
     {
         $this->_numberOfConcurrency = $numberOfConcurrency;
     }
+
 }

@@ -24,8 +24,9 @@
 
 namespace MicrosoftAzure\Storage\Queue\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
+use DateTime;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Queue\Internal\QueueResources as Resources;
 
 /**
@@ -40,7 +41,9 @@ use MicrosoftAzure\Storage\Queue\Internal\QueueResources as Resources;
  */
 class UpdateMessageResult
 {
+
     private $_popReceipt;
+
     private $_timeNextVisible;
 
     /**
@@ -50,9 +53,8 @@ class UpdateMessageResult
      *
      * @internal
      *
-     * @return UpdateMessageResult
      */
-    public static function create(array $headers)
+    public static function create(array $headers): UpdateMessageResult
     {
         $result = new UpdateMessageResult();
         $result->setPopReceipt(Utilities::tryGetValueInsensitive(
@@ -72,9 +74,8 @@ class UpdateMessageResult
     /**
      * Gets timeNextVisible field.
      *
-     * @return \DateTime
      */
-    public function getTimeNextVisible()
+    public function getTimeNextVisible(): DateTime
     {
         return $this->_timeNextVisible;
     }
@@ -87,9 +88,8 @@ class UpdateMessageResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setTimeNextVisible(\DateTime $timeNextVisible)
+    protected function setTimeNextVisible(DateTime $timeNextVisible): void
     {
         Validate::isDate($timeNextVisible);
 
@@ -99,9 +99,8 @@ class UpdateMessageResult
     /**
      * Gets popReceipt field.
      *
-     * @return string
      */
-    public function getPopReceipt()
+    public function getPopReceipt(): string
     {
         return $this->_popReceipt;
     }
@@ -113,11 +112,11 @@ class UpdateMessageResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setPopReceipt($popReceipt)
+    protected function setPopReceipt(string $popReceipt): void
     {
         Validate::canCastAsString($popReceipt, 'popReceipt');
         $this->_popReceipt = $popReceipt;
     }
+
 }

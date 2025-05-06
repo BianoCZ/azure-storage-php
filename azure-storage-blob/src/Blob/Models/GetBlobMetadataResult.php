@@ -38,6 +38,7 @@ use MicrosoftAzure\Storage\Common\Internal\MetadataTrait;
  */
 class GetBlobMetadataResult
 {
+
     use MetadataTrait;
 
     /**
@@ -45,10 +46,10 @@ class GetBlobMetadataResult
      *
      * @param  array $parsed Parsed headers
      *
-     * @return GetBlobMetadataResult
      */
-    public static function create(array $parsed)
+    public static function create(array $parsed): GetBlobMetadataResult
     {
         return static::createMetadataResult($parsed);
     }
+
 }

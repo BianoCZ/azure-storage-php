@@ -38,6 +38,7 @@ use MicrosoftAzure\Storage\Common\Internal\MetadataTrait;
  */
 class GetDirectoryMetadataResult
 {
+
     use MetadataTrait;
 
     /**
@@ -45,10 +46,10 @@ class GetDirectoryMetadataResult
      *
      * @param  array $parsed Parsed headers
      *
-     * @return GetDirectoryMetadataResult
      */
-    public static function create(array $parsed)
+    public static function create(array $parsed): GetDirectoryMetadataResult
     {
         return static::createMetadataResult($parsed);
     }
+
 }

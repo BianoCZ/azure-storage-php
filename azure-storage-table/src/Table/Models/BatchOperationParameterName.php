@@ -36,11 +36,11 @@ namespace MicrosoftAzure\Storage\Table\Models;
  */
 class BatchOperationParameterName
 {
-    const BP_TABLE         = 'table';
-    const BP_ENTITY        = 'entity';
-    const BP_PARTITION_KEY = 'PartitionKey';
-    const BP_ROW_KEY       = 'RowKey';
-    const BP_ETAG          = 'etag';
+    public const string BP_TABLE         = 'table';
+    public const string BP_ENTITY        = 'entity';
+    public const string BP_PARTITION_KEY = 'PartitionKey';
+    public const string BP_ROW_KEY       = 'RowKey';
+    public const string BP_ETAG          = 'etag';
 
     /**
      * Validates if $paramName is already defined.
@@ -49,9 +49,8 @@ class BatchOperationParameterName
      *
      * @internal
      *
-     * @return boolean
      */
-    public static function isValid($paramName)
+    public static function isValid(string $paramName): bool
     {
         switch ($paramName) {
             case self::BP_TABLE:
@@ -60,8 +59,10 @@ class BatchOperationParameterName
             case self::BP_ROW_KEY:
             case self::BP_ETAG:
                 return true;
+
             default:
                 return false;
         }
     }
+
 }

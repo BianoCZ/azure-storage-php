@@ -36,20 +36,26 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class CommitBlobBlocksOptions extends BlobServiceOptions
 {
+
     private $_contentType;
+
     private $_contentEncoding;
+
     private $_contentLanguage;
+
     private $_contentMD5;
+
     private $_cacheControl;
+
     private $_contentDisposition;
+
     private $_metadata;
 
     /**
      * Gets ContentType.
      *
-     * @return string
      */
-    public function getContentType()
+    public function getContentType(): string
     {
         return $this->_contentType;
     }
@@ -59,9 +65,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
      *
      * @param string $contentType value.
      *
-     * @return void
      */
-    public function setContentType($contentType)
+    public function setContentType(string $contentType): void
     {
         $this->_contentType = $contentType;
     }
@@ -69,9 +74,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
     /**
      * Gets ContentEncoding.
      *
-     * @return string
      */
-    public function getContentEncoding()
+    public function getContentEncoding(): string
     {
         return $this->_contentEncoding;
     }
@@ -81,9 +85,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
      *
      * @param string $contentEncoding value.
      *
-     * @return void
      */
-    public function setContentEncoding($contentEncoding)
+    public function setContentEncoding(string $contentEncoding): void
     {
         $this->_contentEncoding = $contentEncoding;
     }
@@ -91,9 +94,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
     /**
      * Gets ContentLanguage.
      *
-     * @return string
      */
-    public function getContentLanguage()
+    public function getContentLanguage(): string
     {
         return $this->_contentLanguage;
     }
@@ -103,9 +105,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
      *
      * @param string $contentLanguage value.
      *
-     * @return void
      */
-    public function setContentLanguage($contentLanguage)
+    public function setContentLanguage(string $contentLanguage): void
     {
         $this->_contentLanguage = $contentLanguage;
     }
@@ -113,9 +114,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
     /**
      * Gets ContentMD5.
      *
-     * @return string
      */
-    public function getContentMD5()
+    public function getContentMD5(): string
     {
         return $this->_contentMD5;
     }
@@ -125,9 +125,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
      *
      * @param string $contentMD5 value.
      *
-     * @return void
      */
-    public function setContentMD5($contentMD5)
+    public function setContentMD5(string $contentMD5): void
     {
         $this->_contentMD5 = $contentMD5;
     }
@@ -135,9 +134,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
     /**
      * Gets cache control.
      *
-     * @return string
      */
-    public function getCacheControl()
+    public function getCacheControl(): string
     {
         return $this->_cacheControl;
     }
@@ -147,9 +145,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
      *
      * @param string $cacheControl value to use.
      *
-     * @return void
      */
-    public function setCacheControl($cacheControl)
+    public function setCacheControl(string $cacheControl): void
     {
         $this->_cacheControl = $cacheControl;
     }
@@ -157,9 +154,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
     /**
      * Gets content disposition.
      *
-     * @return string
      */
-    public function getContentDisposition()
+    public function getContentDisposition(): string
     {
         return $this->_contentDisposition;
     }
@@ -169,9 +165,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
      *
      * @param string $contentDisposition value to use.
      *
-     * @return void
      */
-    public function setContentDisposition($contentDisposition)
+    public function setContentDisposition(string $contentDisposition): void
     {
         $this->_contentDisposition = $contentDisposition;
     }
@@ -179,9 +174,8 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
     /**
      * Gets blob metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->_metadata;
     }
@@ -191,22 +185,21 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
      *
      * @param array $metadata value.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata = null)
+    public function setMetadata(?array $metadata = null): void
     {
         $this->_metadata = $metadata;
     }
 
     /**
      * Create a instance using the given options
+     *
      * @param  mixed $options Input options
      *
      * @internal
      *
-     * @return self
      */
-    public static function create($options)
+    public static function create(mixed $options): self
     {
         $result = new CommitBlobBlocksOptions();
         $result->setContentType($options->getContentType());
@@ -221,4 +214,5 @@ class CommitBlobBlocksOptions extends BlobServiceOptions
 
         return $result;
     }
+
 }

@@ -36,15 +36,16 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class CreateBlobBlockOptions extends BlobServiceOptions
 {
+
     private $_contentMD5;
+
     private $_numberOfConcurrency;
 
     /**
      * Gets blob contentMD5.
      *
-     * @return string
      */
-    public function getContentMD5()
+    public function getContentMD5(): string
     {
         return $this->_contentMD5;
     }
@@ -54,9 +55,8 @@ class CreateBlobBlockOptions extends BlobServiceOptions
      *
      * @param string $contentMD5 value.
      *
-     * @return void
      */
-    public function setContentMD5($contentMD5)
+    public function setContentMD5(string $contentMD5): void
     {
         $this->_contentMD5 = $contentMD5;
     }
@@ -64,9 +64,8 @@ class CreateBlobBlockOptions extends BlobServiceOptions
     /**
      * Gets number of concurrency for sending a blob.
      *
-     * @return int
      */
-    public function getNumberOfConcurrency()
+    public function getNumberOfConcurrency(): int
     {
         return $this->_numberOfConcurrency;
     }
@@ -76,7 +75,7 @@ class CreateBlobBlockOptions extends BlobServiceOptions
      *
      * @param int $numberOfConcurrency the number of concurrent requests.
      */
-    public function setNumberOfConcurrency($numberOfConcurrency)
+    public function setNumberOfConcurrency(int $numberOfConcurrency): void
     {
         $this->_numberOfConcurrency = $numberOfConcurrency;
     }
@@ -84,11 +83,8 @@ class CreateBlobBlockOptions extends BlobServiceOptions
     /**
      * Construct a CreateBlobBlockOptions object from a createBlobOptions.
      *
-     * @param  CreateBlobOptions $createBlobOptions
-     *
-     * @return CreateBlobBlockOptions
      */
-    public static function create(CreateBlobOptions $createBlobOptions)
+    public static function create(CreateBlobOptions $createBlobOptions): CreateBlobBlockOptions
     {
         $result = new CreateBlobBlockOptions();
         $result->setTimeout($createBlobOptions->getTimeout());
@@ -98,4 +94,5 @@ class CreateBlobBlockOptions extends BlobServiceOptions
         );
         return $result;
     }
+
 }

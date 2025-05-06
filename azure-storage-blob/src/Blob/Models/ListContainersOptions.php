@@ -24,8 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
-use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
+use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
 
 /**
  * Options for listBlobs API.
@@ -39,19 +39,21 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class ListContainersOptions extends BlobServiceOptions
 {
+
     use MarkerContinuationTokenTrait;
 
     private $_prefix;
+
     private $_maxResults;
+
     private $_includeMetadata;
 
     /**
      * Gets prefix - filters the results to return only containers whose name
      * begins with the specified prefix.
      *
-     * @return string
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->_prefix;
     }
@@ -62,9 +64,8 @@ class ListContainersOptions extends BlobServiceOptions
      *
      * @param string $prefix value.
      *
-     * @return void
      */
-    public function setPrefix($prefix)
+    public function setPrefix(string $prefix): void
     {
         Validate::canCastAsString($prefix, 'prefix');
         $this->_prefix = $prefix;
@@ -77,9 +78,8 @@ class ListContainersOptions extends BlobServiceOptions
      * If the parameter is set to a value less than or equal to zero,
      * the server will return status code 400 (Bad Request).
      *
-     * @return string
      */
-    public function getMaxResults()
+    public function getMaxResults(): string
     {
         return $this->_maxResults;
     }
@@ -93,9 +93,8 @@ class ListContainersOptions extends BlobServiceOptions
      *
      * @param string $maxResults value.
      *
-     * @return void
      */
-    public function setMaxResults($maxResults)
+    public function setMaxResults(string $maxResults): void
     {
         Validate::canCastAsString($maxResults, 'maxResults');
         $this->_maxResults = $maxResults;
@@ -104,9 +103,8 @@ class ListContainersOptions extends BlobServiceOptions
     /**
      * Indicates if metadata is included or not.
      *
-     * @return string
      */
-    public function getIncludeMetadata()
+    public function getIncludeMetadata(): string
     {
         return $this->_includeMetadata;
     }
@@ -116,11 +114,11 @@ class ListContainersOptions extends BlobServiceOptions
      *
      * @param bool $includeMetadata value.
      *
-     * @return void
      */
-    public function setIncludeMetadata($includeMetadata)
+    public function setIncludeMetadata(bool $includeMetadata): void
     {
         Validate::isBoolean($includeMetadata);
         $this->_includeMetadata = $includeMetadata;
     }
+
 }

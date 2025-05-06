@@ -26,6 +26,7 @@ namespace MicrosoftAzure\Storage\Table\Models;
 
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
+use function array_change_key_case;
 
 /**
  * Holds results of calling queryEntities API
@@ -39,6 +40,7 @@ use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
  */
 class QueryEntitiesResult
 {
+
     use TableContinuationTokenTrait;
 
     private $_entities;
@@ -51,9 +53,8 @@ class QueryEntitiesResult
      *
      * @internal
      *
-     * @return QueryEntitiesResult
      */
-    public static function create(array $headers, array $entities)
+    public static function create(array $headers, array $entities): QueryEntitiesResult
     {
         $result  = new QueryEntitiesResult();
         $headers = array_change_key_case($headers);
@@ -87,9 +88,8 @@ class QueryEntitiesResult
     /**
      * Gets entities.
      *
-     * @return array
      */
-    public function getEntities()
+    public function getEntities(): array
     {
         return $this->_entities;
     }
@@ -99,10 +99,10 @@ class QueryEntitiesResult
      *
      * @param array $entities The entities array.
      *
-     * @return void
      */
-    protected function setEntities(array $entities)
+    protected function setEntities(array $entities): void
     {
         $this->_entities = $entities;
     }
+
 }

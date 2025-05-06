@@ -25,6 +25,8 @@
 namespace MicrosoftAzure\Storage\Blob\Models;
 
 use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
+use function is_array;
+use function is_null;
 
 /**
  * Blob service options.
@@ -38,15 +40,16 @@ use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
  */
 class BlobServiceOptions extends ServiceOptions
 {
+
     private $_leaseId;
+
     private $_accessConditions;
 
     /**
      * Gets lease Id for the blob
      *
-     * @return string
      */
-    public function getLeaseId()
+    public function getLeaseId(): string
     {
         return $this->_leaseId;
     }
@@ -56,9 +59,8 @@ class BlobServiceOptions extends ServiceOptions
      *
      * @param string $leaseId the blob lease id.
      *
-     * @return void
      */
-    public function setLeaseId($leaseId)
+    public function setLeaseId(string $leaseId): void
     {
         $this->_leaseId = $leaseId;
     }
@@ -68,7 +70,7 @@ class BlobServiceOptions extends ServiceOptions
      *
      * @return \MicrosoftAzure\Storage\Blob\Models\AccessCondition[]
      */
-    public function getAccessConditions()
+    public function getAccessConditions(): array
     {
         return $this->_accessConditions;
     }
@@ -78,15 +80,17 @@ class BlobServiceOptions extends ServiceOptions
      *
      * @param mixed $accessConditions value to use.
      *
-     * @return void
      */
-    public function setAccessConditions($accessConditions)
+    public function setAccessConditions(mixed $accessConditions): void
     {
-        if (!is_null($accessConditions) &&
-            is_array($accessConditions)) {
+        if (
+            !is_null($accessConditions) &&
+            is_array($accessConditions)
+        ) {
             $this->_accessConditions = $accessConditions;
         } else {
             $this->_accessConditions = [$accessConditions];
         }
     }
+
 }

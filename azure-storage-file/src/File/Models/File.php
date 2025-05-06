@@ -26,6 +26,7 @@ namespace MicrosoftAzure\Storage\File\Models;
 
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
+use function intval;
 
 /**
  * Represents windows azure file object
@@ -39,15 +40,16 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class File
 {
+
     private $name;
+
     private $length;
 
     /**
      * Gets file name.
      *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -57,9 +59,8 @@ class File
      *
      * @param string $name value.
      *
-     * @return void
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -67,9 +68,8 @@ class File
     /**
      * Gets file length.
      *
-     * @return int
      */
-    public function getLength()
+    public function getLength(): int
     {
         return $this->length;
     }
@@ -79,9 +79,8 @@ class File
      *
      * @param int $length value.
      *
-     * @return void
      */
-    public function setLength($length)
+    public function setLength(int $length): void
     {
         $this->length = $length;
     }
@@ -91,16 +90,16 @@ class File
      *
      * @param  array $parsed The parsed array that contains the object information.
      *
-     * @return File
      */
-    public static function create(array $parsed)
+    public static function create(array $parsed): File
     {
         $result = new File();
         $name = Utilities::tryGetValue($parsed, Resources::QP_NAME);
         $result->setName($name);
         $properties = Utilities::tryGetValue($parsed, Resources::QP_PROPERTIES);
-        $length = \intval(Utilities::tryGetValue($properties, Resources::QP_CONTENT_LENGTH));
+        $length = intval(Utilities::tryGetValue($properties, Resources::QP_CONTENT_LENGTH));
         $result->setLength($length);
         return $result;
     }
+
 }

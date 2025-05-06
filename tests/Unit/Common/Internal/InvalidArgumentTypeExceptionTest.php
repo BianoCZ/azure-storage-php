@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal;
 
 use MicrosoftAzure\Storage\Common\Exceptions\InvalidArgumentTypeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class InvalidArgumentTypeException
@@ -36,12 +37,13 @@ use MicrosoftAzure\Storage\Common\Exceptions\InvalidArgumentTypeException;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class InvalidArgumentTypeExceptionTest extends \PHPUnit\Framework\TestCase
+class InvalidArgumentTypeExceptionTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $e = new InvalidArgumentTypeException('string');
 
         $this->assertTrue(isset($e));
     }
+
 }

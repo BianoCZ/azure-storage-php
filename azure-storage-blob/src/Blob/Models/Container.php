@@ -36,17 +36,20 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class Container
 {
+
     private $_name;
+
     private $_url;
+
     private $_metadata;
+
     private $_properties;
 
     /**
      * Gets container name.
      *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->_name;
     }
@@ -56,9 +59,8 @@ class Container
      *
      * @param string $name value.
      *
-     * @return void
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->_name = $name;
     }
@@ -66,9 +68,8 @@ class Container
     /**
      * Gets container url.
      *
-     * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->_url;
     }
@@ -78,9 +79,8 @@ class Container
      *
      * @param string $url value.
      *
-     * @return void
      */
-    public function setUrl($url)
+    public function setUrl(string $url): void
     {
         $this->_url = $url;
     }
@@ -88,9 +88,8 @@ class Container
     /**
      * Gets container metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->_metadata;
     }
@@ -100,9 +99,8 @@ class Container
      *
      * @param array $metadata value.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata = null)
+    public function setMetadata(?array $metadata = null): void
     {
         $this->_metadata = $metadata;
     }
@@ -110,9 +108,8 @@ class Container
     /**
      * Gets container properties
      *
-     * @return ContainerProperties
      */
-    public function getProperties()
+    public function getProperties(): ContainerProperties
     {
         return $this->_properties;
     }
@@ -122,10 +119,10 @@ class Container
      *
      * @param ContainerProperties $properties container properties
      *
-     * @return void
      */
-    public function setProperties(ContainerProperties $properties)
+    public function setProperties(ContainerProperties $properties): void
     {
         $this->_properties = $properties;
     }
+
 }

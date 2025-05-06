@@ -24,13 +24,30 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal;
 
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Tests\Framework\VirtualFileSystem;
-use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
 use GuzzleHttp\Psr7;
+use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use function fclose;
+use function fopen;
+use function fwrite;
+use function getcwd;
+use function is_resource;
+use function openssl_random_pseudo_bytes;
+use function pack;
+use function rewind;
+use function stream_get_contents;
+use function strlen;
+use function strtolower;
+use function uniqid;
+use function unlink;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Unit tests for class Utilities
@@ -42,14 +59,14 @@ use GuzzleHttp\Psr7;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class UtilitiesTest extends \PHPUnit\Framework\TestCase
+class UtilitiesTest extends TestCase
 {
-    public function testTryGetValue()
+    public function testTryGetValue(): void
     {
         // Setup
         $key = 0;
         $expected = 10;
-        $data = array(10, 20, 30);
+        $data = [10, 20, 30];
 
         // Test
         $actual = Utilities::tryGetValue($data, $key);
@@ -57,12 +74,12 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testTryGetValueUsingDefault()
+    public function testTryGetValueUsingDefault(): void
     {
         // Setup
         $key = 10;
         $expected = 6;
-        $data = array(10, 20, 30);
+        $data = [10, 20, 30];
 
         // Test
         $actual = Utilities::tryGetValue($data, $key, $expected);
@@ -70,11 +87,11 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testTryGetValueWithNull()
+    public function testTryGetValueWithNull(): void
     {
         // Setup
         $key = 10;
-        $data = array(10, 20, 30);
+        $data = [10, 20, 30];
 
         // Test
         $actual = Utilities::tryGetValue($data, $key);
@@ -82,13 +99,13 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($actual);
     }
 
-    public function testTryGetKeysChainValue()
+    public function testTryGetKeysChainValue(): void
     {
         // Setup
-        $array = array();
-        $array['a1'] = array();
+        $array = [];
+        $array['a1'] = [];
         $array['a2'] = 'value1';
-        $array['a1']['b1'] = array();
+        $array['a1']['b1'] = [];
         $array['a1']['b2'] = 'value2';
         $array['a1']['b1']['c1'] = 'value3';
 
@@ -105,7 +122,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(null, Utilities::tryGetKeysChainValue($array, 'a1', 'b1', 'c2'));
     }
 
-    public function testStartsWith()
+    public function testStartsWith(): void
     {
         // Setup
         $string = 'myname';
@@ -117,7 +134,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($actual);
     }
 
-    public function testStartsWithDoesNotStartWithPrefix()
+    public function testStartsWithDoesNotStartWithPrefix(): void
     {
         // Setup
         $string = 'amyname';
@@ -129,10 +146,10 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($actual);
     }
 
-    public function testGetArray()
+    public function testGetArray(): void
     {
         // Setup
-        $expected = array(array(1, 2, 3, 4),  array(5, 6, 7, 8));
+        $expected = [[1, 2, 3, 4], [5, 6, 7, 8]];
 
         // Test
         $actual = Utilities::getArray($expected);
@@ -140,11 +157,11 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetArrayWithFlatValue()
+    public function testGetArrayWithFlatValue(): void
     {
         // Setup
-        $flat = array(1, 2, 3, 4, 5, 6, 7, 8);
-        $expected = array(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $flat = [1, 2, 3, 4, 5, 6, 7, 8];
+        $expected = [[1, 2, 3, 4, 5, 6, 7, 8]];
 
         // Test
         $actual = Utilities::getArray($flat);
@@ -152,11 +169,11 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetArrayWithMixtureValue()
+    public function testGetArrayWithMixtureValue(): void
     {
         // Setup
-        $flat = array(array(10, 2), 1, 2, 3, 4, 5, 6, 7, 8);
-        $expected = array(array(array(10, 2), 1, 2, 3, 4, 5, 6, 7, 8));
+        $flat = [[10, 2], 1, 2, 3, 4, 5, 6, 7, 8];
+        $expected = [[[10, 2], 1, 2, 3, 4, 5, 6, 7, 8]];
 
         // Test
         $actual = Utilities::getArray($flat);
@@ -164,11 +181,11 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetArrayWithEmptyValue()
+    public function testGetArrayWithEmptyValue(): void
     {
         // Setup
-        $empty = array();
-        $expected = array();
+        $empty = [];
+        $expected = [];
 
         // Test
         $actual = Utilities::getArray($empty);
@@ -176,7 +193,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testUnserialize()
+    public function testUnserialize(): void
     {
         // Setup
         $propertiesSample = TestResources::getServicePropertiesSample();
@@ -190,7 +207,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($propertiesSample, $actual);
     }
 
-    public function testSerialize()
+    public function testSerialize(): void
     {
         // Setup
         $propertiesSample = TestResources::getServicePropertiesSample();
@@ -225,18 +242,18 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSerializeAttribute()
+    public function testSerializeAttribute(): void
     {
         // Setup
         $expected = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
             '<Object field1="value1" field2="value2"/>';
 
-        $object = array(
-            '@attributes' => array(
+        $object = [
+            '@attributes' => [
                 'field1' => 'value1',
-                'field2' => 'value2'
-            )
-        );
+                'field2' => 'value2',
+            ],
+        ];
 
         // Test
         $actual = Utilities::serialize($object, 'Object');
@@ -244,7 +261,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testAllZero()
+    public function testAllZero(): void
     {
         $this->assertFalse(Utilities::allZero('hello'));
 
@@ -257,7 +274,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(Utilities::allZero(''));
     }
 
-    public function testToBoolean()
+    public function testToBoolean(): void
     {
         $this->assertInternalType('bool', Utilities::toBoolean('true'));
         $this->assertEquals(true, Utilities::toBoolean('true'));
@@ -278,7 +295,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(null, Utilities::toBoolean(null, true));
     }
 
-    public function testBooleanToString()
+    public function testBooleanToString(): void
     {
         // Setup
         $expected = 'true';
@@ -291,25 +308,25 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testIsoDate()
+    public function testIsoDate(): void
     {
         // Test
-        $date = Utilities::isoDate(new \DateTimeImmutable('2016-02-03', new \DateTimeZone('America/Chicago')));
+        $date = Utilities::isoDate(new DateTimeImmutable('2016-02-03', new DateTimeZone('America/Chicago')));
 
         // Assert
         $this->assertSame('2016-02-03T06:00:00Z', $date);
     }
 
-    public function testConvertToEdmDateTime()
+    public function testConvertToEdmDateTime(): void
     {
         // Test
-        $actual = Utilities::convertToEdmDateTime(new \DateTime());
+        $actual = Utilities::convertToEdmDateTime(new DateTime());
 
         // Assert
         $this->assertNotNull($actual);
     }
 
-    public function testConvertToDateTime()
+    public function testConvertToDateTime(): void
     {
         // Setup
         $date = '2008-10-01T15:26:13Z';
@@ -321,10 +338,10 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('\DateTime', $actual);
     }
 
-    public function testConvertToDateTimeWithDate()
+    public function testConvertToDateTimeWithDate(): void
     {
         // Setup
-        $date = new \DateTime();
+        $date = new DateTime();
 
         // Test
         $actual = Utilities::convertToDateTime($date);
@@ -333,7 +350,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($date, $actual);
     }
 
-    public function testStringToStream()
+    public function testStringToStream(): void
     {
         $data = 'This is string';
         $expected = fopen('data://text/plain,' . $data, 'r');
@@ -345,7 +362,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(stream_get_contents($expected), stream_get_contents($actual));
     }
 
-    public function testWindowsAzureDateToDateTime()
+    public function testWindowsAzureDateToDateTime(): void
     {
         // Setup
         $expected = 'Fri, 16 Oct 2009 21:04:30 GMT';
@@ -357,7 +374,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual->format('D, d M Y H:i:s T'));
     }
 
-    public function testTryAddUrlSchemeWithScheme()
+    public function testTryAddUrlSchemeWithScheme(): void
     {
         // Setup
         $url = 'http://microsoft.com';
@@ -369,7 +386,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($url, $actual);
     }
 
-    public function testTryAddUrlSchemeWithoutScheme()
+    public function testTryAddUrlSchemeWithoutScheme(): void
     {
         // Setup
         $url = 'microsoft.com';
@@ -382,7 +399,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testTryGetSecondaryEndpointFromPrimaryEndpoint()
+    public function testTryGetSecondaryEndpointFromPrimaryEndpoint(): void
     {
         $this->assertEquals(
             'http://account-secondary.blob.core.windows.net',
@@ -427,7 +444,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testStartsWithIgnoreCase()
+    public function testStartsWithIgnoreCase(): void
     {
         // Setup
         $string = 'MYString';
@@ -440,11 +457,11 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($actual);
     }
 
-    public function testInArrayInsensitive()
+    public function testInArrayInsensitive(): void
     {
         // Setup
         $value = 'CaseInsensitiVe';
-        $array = array('caSeinSenSitivE');
+        $array = ['caSeinSenSitivE'];
 
         // Test
         $actual = Utilities::inArrayInsensitive($value, $array);
@@ -453,11 +470,11 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($actual);
     }
 
-    public function testArrayKeyExistsInsensitive()
+    public function testArrayKeyExistsInsensitive(): void
     {
         // Setup
         $key = 'CaseInsensitiVe';
-        $array = array('caSeinSenSitivE' => '123');
+        $array = ['caSeinSenSitivE' => '123'];
 
         // Test
         $actual = Utilities::arrayKeyExistsInsensitive($key, $array);
@@ -466,12 +483,12 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($actual);
     }
 
-    public function testTryGetValueInsensitive()
+    public function testTryGetValueInsensitive(): void
     {
         // Setup
         $key = 'KEy';
         $value = 1;
-        $array = array($key => $value);
+        $array = [$key => $value];
 
         // Test
         $actual = Utilities::tryGetValueInsensitive('keY', $array);
@@ -480,7 +497,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $actual);
     }
 
-    public function testGetGuid()
+    public function testGetGuid(): void
     {
         // Test
         $actual1 = Utilities::getGuid();
@@ -494,7 +511,7 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEquals($actual1, $actual2);
     }
 
-    public function testEndsWith()
+    public function testEndsWith(): void
     {
         // Setup
         $haystack = 'tesT';
@@ -508,9 +525,8 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGenerateCryptoKey()
+    public function testGenerateCryptoKey(): void
     {
-
         // Setup
         $length = 32;
 
@@ -521,9 +537,8 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($length, strlen($result));
     }
 
-    public function testBase256ToDecF()
+    public function testBase256ToDecF(): void
     {
-
         // Setup
         $data = pack('C*', 255, 255, 255, 255);
         $expected = 4294967295;
@@ -535,9 +550,8 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testBase256ToDec0()
+    public function testBase256ToDec0(): void
     {
-
         // Setup
         $data = pack('C*', 0, 0, 0, 0);
         $expected = 0;
@@ -549,10 +563,8 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-
-    public function testBase256ToDec()
+    public function testBase256ToDec(): void
     {
-
         // Setup
         $data = pack('C*', 34, 78, 27, 55);
         $expected = 575544119;
@@ -564,9 +576,8 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testBase256ToDecBig()
+    public function testBase256ToDecBig(): void
     {
-
         // Setup
         $data = pack('C*', 81, 35, 29, 39, 236, 104, 105, 144); //51 23 1D 27 EC 68 69 90
         $expected = '5846548798564231568';
@@ -578,12 +589,12 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testIsStreamLargerThanSizeOrNotSeekable()
+    public function testIsStreamLargerThanSizeOrNotSeekable(): void
     {
         //prepare a file
         $cwd = getcwd();
         $uuid = uniqid('test-file-', true);
-        $path = $cwd.DIRECTORY_SEPARATOR.$uuid.'.txt';
+        $path = $cwd . DIRECTORY_SEPARATOR . $uuid . '.txt';
         $resource = fopen($path, 'w+');
         $count = 64 / 4;
         for ($index = 0; $index < $count; ++$index) {
@@ -623,11 +634,11 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         unlink($path);
     }
 
-    public function testGetMetadataArray()
+    public function testGetMetadataArray(): void
     {
         // Setup
-        $expected = array('key1' => 'value1', 'myname' => 'azure', 'mycompany' => 'microsoft_');
-        $metadataHeaders = array();
+        $expected = ['key1' => 'value1', 'myname' => 'azure', 'mycompany' => 'microsoft_'];
+        $metadataHeaders = [];
         foreach ($expected as $key => $value) {
             $metadataHeaders[Resources::X_MS_META_HEADER_PREFIX . strtolower($key)] = $value;
         }
@@ -639,14 +650,18 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetMetadataArrayWithMsHeaders()
+    public function testGetMetadataArrayWithMsHeaders(): void
     {
         // Setup
         $key = 'name';
         $validMetadataKey = Resources::X_MS_META_HEADER_PREFIX . $key;
         $value = 'correct';
-        $metadataHeaders = array('x-ms-key1' => 'value1', 'myname' => 'x-ms-date',
-                          $validMetadataKey => $value, 'mycompany' => 'microsoft_');
+        $metadataHeaders = [
+            'x-ms-key1' => 'value1',
+            'myname' => 'x-ms-date',
+            $validMetadataKey => $value,
+            'mycompany' => 'microsoft_',
+        ];
 
         // Test
         $actual = Utilities::getMetadataArray($metadataHeaders);
@@ -655,4 +670,5 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $actual);
         $this->assertEquals($value, $actual[$key]);
     }
+
 }

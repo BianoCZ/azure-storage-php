@@ -26,6 +26,7 @@ namespace MicrosoftAzure\Storage\Table\Models;
 
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
+use function array_change_key_case;
 
 /**
  * QueryTablesResult
@@ -39,6 +40,7 @@ use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
  */
 class QueryTablesResult
 {
+
     use TableContinuationTokenTrait;
 
     private $_tables;
@@ -51,9 +53,8 @@ class QueryTablesResult
      *
      * @internal
      *
-     * @return QueryTablesResult
      */
-    public static function create(array $headers, array $entries)
+    public static function create(array $headers, array $entries): QueryTablesResult
     {
         $result  = new QueryTablesResult();
         $headers = array_change_key_case($headers);
@@ -82,9 +83,8 @@ class QueryTablesResult
     /**
      * Gets tables
      *
-     * @return array
      */
-    public function getTables()
+    public function getTables(): array
     {
         return $this->_tables;
     }
@@ -94,10 +94,10 @@ class QueryTablesResult
      *
      * @param array $tables value
      *
-     * @return void
      */
-    protected function setTables(array $tables)
+    protected function setTables(array $tables): void
     {
         $this->_tables = $tables;
     }
+
 }

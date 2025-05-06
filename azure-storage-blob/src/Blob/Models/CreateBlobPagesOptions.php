@@ -36,14 +36,14 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class CreateBlobPagesOptions extends BlobServiceOptions
 {
+
     private $_contentMD5;
 
     /**
      * Gets blob contentMD5.
      *
-     * @return string
      */
-    public function getContentMD5()
+    public function getContentMD5(): string
     {
         return $this->_contentMD5;
     }
@@ -53,10 +53,10 @@ class CreateBlobPagesOptions extends BlobServiceOptions
      *
      * @param string $contentMD5 value.
      *
-     * @return void
      */
-    public function setContentMD5($contentMD5)
+    public function setContentMD5(string $contentMD5): void
     {
         $this->_contentMD5 = $contentMD5;
     }
+
 }

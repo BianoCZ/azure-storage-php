@@ -26,6 +26,9 @@ namespace MicrosoftAzure\Storage\Tests\Functional\Common;
 
 use MicrosoftAzure\Storage\Tests\Framework\SASFunctionalTestBase;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function count;
+use function sprintf;
+use function stream_get_contents;
 
 /**
  * Tests for account SAS proxy tests.
@@ -39,7 +42,7 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  */
 class AccountSASFunctionalTest extends SASFunctionalTestBase
 {
-    public function testAccountSASPositive()
+    public function testAccountSASPositive(): void
     {
         $helper = new SharedAccessSignatureHelperMock(
             $this->serviceSettings->getName(),
@@ -146,7 +149,7 @@ class AccountSASFunctionalTest extends SASFunctionalTestBase
         );
     }
 
-    public function testAccountSASSSNegative()
+    public function testAccountSASSSNegative(): void
     {
         $helper = new SharedAccessSignatureHelperMock(
             $this->serviceSettings->getName(),
@@ -167,7 +170,7 @@ class AccountSASFunctionalTest extends SASFunctionalTestBase
         //Validate cannot access blob service
         $this->validateServiceExceptionErrorMessage(
             'not authorized to perform this operation',
-            function () use ($reflection) {
+            function () use ($reflection): void {
                 $reflection->blobRestProxy->listContainers();
             },
             'Error: access not blocked for blob service.'
@@ -190,7 +193,7 @@ class AccountSASFunctionalTest extends SASFunctionalTestBase
         //Validate cannot access queue service
         $this->validateServiceExceptionErrorMessage(
             'not authorized to perform this operation',
-            function () use ($reflection) {
+            function () use ($reflection): void {
                 $reflection->queueRestProxy->listQueues();
             },
             'Error: access not blocked for queue service.'
@@ -213,7 +216,7 @@ class AccountSASFunctionalTest extends SASFunctionalTestBase
         //Validate cannot access table service
         $this->validateServiceExceptionErrorMessage(
             'not authorized to perform this operation',
-            function () use ($reflection) {
+            function () use ($reflection): void {
                 $reflection->tableRestProxy->queryTables();
             },
             'Error: access not blocked for table service.'
@@ -236,7 +239,7 @@ class AccountSASFunctionalTest extends SASFunctionalTestBase
         //Validate cannot access file service
         $this->validateServiceExceptionErrorMessage(
             'not authorized to perform this operation',
-            function () use ($reflection) {
+            function () use ($reflection): void {
                 $reflection->fileRestProxy->listShares();
             },
             'Error: access not blocked for file service.'
@@ -247,7 +250,7 @@ class AccountSASFunctionalTest extends SASFunctionalTestBase
         $this->tableRestProxy->queryTables();
     }
 
-    public function testAccountSASSPNegative()
+    public function testAccountSASSPNegative(): void
     {
         $helper = new SharedAccessSignatureHelperMock(
             $this->serviceSettings->getName(),
@@ -266,14 +269,14 @@ class AccountSASFunctionalTest extends SASFunctionalTestBase
         );
         $this->validateServiceExceptionErrorMessage(
             'not authorized to perform this operation',
-            function () use ($reflection) {
+            function () use ($reflection): void {
                 $reflection->queueRestProxy->listQueues();
             },
             'Error: access not blocked for list queue operation.'
         );
         $this->validateServiceExceptionErrorMessage(
             'not authorized to perform this operation',
-            function () use ($reflection) {
+            function () use ($reflection): void {
                 $reflection->queueRestProxy->createQueue('exceptionqueue');
             },
             'Error: access not blocked for create queue operation.'
@@ -294,21 +297,21 @@ class AccountSASFunctionalTest extends SASFunctionalTestBase
         $this->blobRestProxy->createBlockBlob($container, $blob, 'test message');
         $this->validateServiceExceptionErrorMessage(
             'not authorized to perform this operation',
-            function () use ($reflection, $container, $blob) {
+            function () use ($reflection, $container, $blob): void {
                 $reflection->blobRestProxy->getBlob($container, $blob);
             },
             'Error: access not blocked for get blob operation.'
         );
         $this->validateServiceExceptionErrorMessage(
             'not authorized to perform this operation',
-            function () use ($reflection, $container, $blob) {
+            function () use ($reflection, $container, $blob): void {
                 $reflection->blobRestProxy->deleteBlob($container, $blob);
             },
             'Error: access not blocked for delete blob operation.'
         );
     }
 
-    private function initializeProxiesWithAccountSASfromArray($helper, $testCase)
+    private function initializeProxiesWithAccountSASfromArray($helper, $testCase): void
     {
         $sas = $helper->generateAccountSharedAccessSignatureToken(
             $testCase['signedVersion'],
@@ -325,4 +328,5 @@ class AccountSASFunctionalTest extends SASFunctionalTestBase
 
         $this->initializeProxiesWithSASandAccountName($sas, $accountName);
     }
+
 }

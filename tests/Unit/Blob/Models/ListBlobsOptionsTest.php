@@ -21,10 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ListBlobsOptions
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
+class ListBlobsOptionsTest extends TestCase
 {
-    public function testSetPrefix()
+    public function testSetPrefix(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -51,7 +52,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getPrefix());
     }
 
-    public function testGetPrefix()
+    public function testGetPrefix(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -65,7 +66,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetDelimiter()
+    public function testSetDelimiter(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -78,7 +79,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getDelimiter());
     }
 
-    public function testGetDelimiter()
+    public function testGetDelimiter(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -92,7 +93,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetMarker()
+    public function testSetMarker(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -105,7 +106,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getNextMarker());
     }
 
-    public function testSetMaxResults()
+    public function testSetMaxResults(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -118,7 +119,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getMaxResults());
     }
 
-    public function testGetMaxResults()
+    public function testGetMaxResults(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -132,7 +133,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetIncludeMetadata()
+    public function testSetIncludeMetadata(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -145,7 +146,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getIncludeMetadata());
     }
 
-    public function testGetIncludeMetadata()
+    public function testGetIncludeMetadata(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -159,7 +160,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetIncludeSnapshots()
+    public function testSetIncludeSnapshots(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -172,7 +173,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getIncludeSnapshots());
     }
 
-    public function testGetIncludeSnapshots()
+    public function testGetIncludeSnapshots(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -186,7 +187,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetIncludeUncommittedBlobs()
+    public function testSetIncludeUncommittedBlobs(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -199,7 +200,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getIncludeUncommittedBlobs());
     }
 
-    public function testGetIncludeUncommittedBlobs()
+    public function testGetIncludeUncommittedBlobs(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -213,7 +214,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetIncludeDeleted()
+    public function testSetIncludeDeleted(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -226,7 +227,7 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getIncludeDeleted());
     }
 
-    public function testGetIncludeDeleted()
+    public function testGetIncludeDeleted(): void
     {
         // Setup
         $options = new ListBlobsOptions();
@@ -239,4 +240,5 @@ class ListBlobsOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

@@ -21,11 +21,14 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\ListBlobBlocksResult;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Unit tests for class ListBlobBlocksResult
@@ -37,17 +40,17 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListBlobBlocksResultTest extends \PHPUnit\Framework\TestCase
+class ListBlobBlocksResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sampleHeaders = TestResources::listBlocksMultipleEntriesHeaders();
         $sampleBody    = TestResources::listBlocksMultipleEntriesBody();
         $expectedDate = Utilities::rfc1123ToDateTime($sampleHeaders['Last-Modified']);
         $getEntry = self::getMethod('getEntries');
-        $uncommittedBlocks = $getEntry->invokeArgs(null, array($sampleBody, 'UncommittedBlocks'));
-        $committedBlocks = $getEntry->invokeArgs(null, array($sampleBody, 'CommittedBlocks'));
+        $uncommittedBlocks = $getEntry->invokeArgs(null, [$sampleBody, 'UncommittedBlocks']);
+        $committedBlocks = $getEntry->invokeArgs(null, [$sampleBody, 'CommittedBlocks']);
 
         // Test
         $actual = ListBlobBlocksResult::create(
@@ -66,9 +69,10 @@ class ListBlobBlocksResultTest extends \PHPUnit\Framework\TestCase
 
     protected static function getMethod($name)
     {
-        $class = new \ReflectionClass(new ListBlobBlocksResult());
+        $class = new ReflectionClass(new ListBlobBlocksResult());
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
     }
+
 }

@@ -29,6 +29,22 @@ use GuzzleHttp\Psr7\Request;
 use MicrosoftAzure\Storage\Common\Internal\Http\HttpFormatter;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use function array_change_key_case;
+use function array_key_exists;
+use function base64_decode;
+use function base64_encode;
+use function count;
+use function hash_hmac;
+use function implode;
+use function is_null;
+use function ksort;
+use function ltrim;
+use function parse_url;
+use function rtrim;
+use function str_replace;
+use function strtolower;
+use function strtoupper;
+use const PHP_URL_PATH;
 
 /**
  * Provides shared key authentication scheme for blob and queue. For more info
@@ -44,6 +60,7 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class SharedKeyAuthScheme implements IAuthScheme
 {
+
     /**
      * The account name
      */
@@ -67,12 +84,12 @@ class SharedKeyAuthScheme implements IAuthScheme
      *
      * @return SharedKeyAuthScheme
      */
-    public function __construct($accountName, $accountKey)
+    public function __construct(string $accountName, string $accountKey)
     {
         $this->accountKey  = $accountKey;
         $this->accountName = $accountName;
 
-        $this->includedHeaders   = array();
+        $this->includedHeaders   = [];
         $this->includedHeaders[] = Resources::CONTENT_ENCODING;
         $this->includedHeaders[] = Resources::CONTENT_LANGUAGE;
         $this->includedHeaders[] = Resources::CONTENT_LENGTH;
@@ -97,14 +114,13 @@ class SharedKeyAuthScheme implements IAuthScheme
      * @see Blob and Queue Services (Shared Key Authentication) at
      *      http://msdn.microsoft.com/en-us/library/windowsazure/dd179428.aspx
      *
-     * @return string
      */
     protected function computeSignature(
         array $headers,
-        $url,
+        string $url,
         array $queryParams,
-        $httpMethod
-    ) {
+        string $httpMethod
+    ): string {
         $canonicalizedHeaders = $this->computeCanonicalizedHeaders($headers);
 
         $canonicalizedResource = $this->computeCanonicalizedResource(
@@ -112,7 +128,7 @@ class SharedKeyAuthScheme implements IAuthScheme
             $queryParams
         );
 
-        $stringToSign   = array();
+        $stringToSign   = [];
         $stringToSign[] = strtoupper($httpMethod);
 
         foreach ($this->includedHeaders as $header) {
@@ -140,14 +156,13 @@ class SharedKeyAuthScheme implements IAuthScheme
      * @see Specifying the Authorization Header section at
      *      http://msdn.microsoft.com/en-us/library/windowsazure/dd179428.aspx
      *
-     * @return string
      */
     public function getAuthorizationHeader(
         array $headers,
-        $url,
+        string $url,
         array $queryParams,
-        $httpMethod
-    ) {
+        string $httpMethod
+    ): string {
         $signature = $this->computeSignature(
             $headers,
             $url,
@@ -168,12 +183,11 @@ class SharedKeyAuthScheme implements IAuthScheme
      * @see Constructing the Canonicalized Headers String section at
      *      http://msdn.microsoft.com/en-us/library/windowsazure/dd179428.aspx
      *
-     * @return array
      */
-    protected function computeCanonicalizedHeaders($headers)
+    protected function computeCanonicalizedHeaders(array $headers): array
     {
-        $canonicalizedHeaders = array();
-        $normalizedHeaders    = array();
+        $canonicalizedHeaders = [];
+        $normalizedHeaders    = [];
         $validPrefix          =  Resources::X_MS_HEADER_PREFIX;
 
         if (is_null($normalizedHeaders)) {
@@ -220,9 +234,8 @@ class SharedKeyAuthScheme implements IAuthScheme
      * @see Constructing the Canonicalized Resource String section at
      *      http://msdn.microsoft.com/en-us/library/windowsazure/dd179428.aspx
      *
-     * @return string
      */
-    protected function computeCanonicalizedResourceForTable($url, $queryParams)
+    protected function computeCanonicalizedResourceForTable(string $url, array $queryParams): string
     {
         $queryParams = array_change_key_case($queryParams);
 
@@ -253,9 +266,8 @@ class SharedKeyAuthScheme implements IAuthScheme
      * @see Constructing the Canonicalized Resource String section at
      *      http://msdn.microsoft.com/en-us/library/windowsazure/dd179428.aspx
      *
-     * @return string
      */
-    protected function computeCanonicalizedResource($url, $queryParams)
+    protected function computeCanonicalizedResource(string $url, array $queryParams): string
     {
         $queryParams = array_change_key_case($queryParams);
 
@@ -297,9 +309,8 @@ class SharedKeyAuthScheme implements IAuthScheme
      *
      * @abstract
      *
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function signRequest(Request $request)
+    public function signRequest(Request $request): Request
     {
         $requestHeaders = HttpFormatter::formatHeaders($request->getHeaders());
 
@@ -314,4 +325,5 @@ class SharedKeyAuthScheme implements IAuthScheme
 
         return $request->withHeader(Resources::AUTHENTICATION, $signedKey);
     }
+
 }

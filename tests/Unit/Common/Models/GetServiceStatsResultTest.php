@@ -24,10 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Models;
 
-use MicrosoftAzure\Storage\Common\Models\GetServiceStatsResult;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Models\GetServiceStatsResult;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class GetServiceStatsResult
@@ -39,9 +40,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetServiceStatsResultTest extends \PHPUnit\Framework\TestCase
+class GetServiceStatsResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $sample = TestResources::getServiceStatsSample();
         $geo = $sample[Resources::XTAG_GEO_REPLICATION];
@@ -54,4 +55,5 @@ class GetServiceStatsResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedSyncTime, $result->getLastSyncTime());
         $this->assertEquals($expectedStatus, $result->getStatus());
     }
+
 }

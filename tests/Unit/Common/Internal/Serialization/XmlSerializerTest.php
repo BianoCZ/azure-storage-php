@@ -24,10 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal\Serialization;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
-use MicrosoftAzure\Storage\Common\Exceptions\InvalidArgumentTypeException;
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use function get_class;
 
 /**
  * Unit tests for class XmlSerializer
@@ -39,9 +41,9 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class XmlSerializerTest extends \PHPUnit\Framework\TestCase
+class XmlSerializerTest extends TestCase
 {
-    public function testUnserialize()
+    public function testUnserialize(): void
     {
         // Setup
         $xmlSerializer = new XmlSerializer();
@@ -55,7 +57,7 @@ class XmlSerializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($propertiesSample, $actual);
     }
 
-    public function testSerialize()
+    public function testSerialize(): void
     {
         // Setup
         $xmlSerializer = new XmlSerializer();
@@ -63,7 +65,7 @@ class XmlSerializerTest extends \PHPUnit\Framework\TestCase
         $properties = ServiceProperties::create($propertiesSample);
         $expected = $properties->toXml($xmlSerializer);
         $array = $properties->toArray();
-        $serializerProperties = array(XmlSerializer::ROOT_NAME => "StorageServiceProperties");
+        $serializerProperties = [XmlSerializer::ROOT_NAME => "StorageServiceProperties"];
 
         // Test
         $actual = $xmlSerializer->serialize($array, $serializerProperties);
@@ -71,20 +73,20 @@ class XmlSerializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSerializeAttribute()
+    public function testSerializeAttribute(): void
     {
         // Setup
         $xmlSerializer = new XmlSerializer();
         $expected = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
             '<Object field1="value1" field2="value2"/>' . "\n";
 
-        $object = array(
-            '@attributes' => array(
+        $object = [
+            '@attributes' => [
                 'field1' => 'value1',
-                'field2' => 'value2'
-            )
-        );
-        $serializerProperties = array(XmlSerializer::ROOT_NAME => 'Object');
+                'field2' => 'value2',
+            ],
+        ];
+        $serializerProperties = [XmlSerializer::ROOT_NAME => 'Object'];
 
         // Test
         $actual = $xmlSerializer->serialize($object, $serializerProperties);
@@ -92,7 +94,7 @@ class XmlSerializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testObjectSerializeSucceess()
+    public function testObjectSerializeSucceess(): void
     {
         // Setup
         $expected = "<DummyClass/>\n";
@@ -108,7 +110,7 @@ class XmlSerializerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testObjectSerializeSucceessWithAttributes()
+    public function testObjectSerializeSucceessWithAttributes(): void
     {
         // Setup
         $expected = "<DummyClass testAttribute=\"testAttributeValue\"/>\n";
@@ -125,12 +127,13 @@ class XmlSerializerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testObjectSerializeInvalidObject()
+    public function testObjectSerializeInvalidObject(): void
     {
         // Setup
-        $this->setExpectedException(get_class(new \InvalidArgumentException()));
+        $this->setExpectedException(get_class(new InvalidArgumentException()));
         // Test
         $actual = XmlSerializer::objectSerialize(null, null);
         // Assert
     }
+
 }

@@ -25,7 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
 use MicrosoftAzure\Storage\Queue\Models\ListQueuesOptions;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ListQueuesOptions
@@ -37,9 +37,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListQueuesOptionsTest extends \PHPUnit\Framework\TestCase
+class ListQueuesOptionsTest extends TestCase
 {
-    public function testSetPrefix()
+    public function testSetPrefix(): void
     {
         // Setup
         $options = new ListQueuesOptions();
@@ -52,7 +52,7 @@ class ListQueuesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getPrefix());
     }
 
-    public function testGetPrefix()
+    public function testGetPrefix(): void
     {
         // Setup
         $options = new ListQueuesOptions();
@@ -66,7 +66,7 @@ class ListQueuesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetMarker()
+    public function testSetMarker(): void
     {
         // Setup
         $options = new ListQueuesOptions();
@@ -79,7 +79,7 @@ class ListQueuesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getNextMarker());
     }
 
-    public function testSetMaxResults()
+    public function testSetMaxResults(): void
     {
         // Setup
         $options = new ListQueuesOptions();
@@ -92,7 +92,7 @@ class ListQueuesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getMaxResults());
     }
 
-    public function testGetMaxResults()
+    public function testGetMaxResults(): void
     {
         // Setup
         $options = new ListQueuesOptions();
@@ -106,7 +106,7 @@ class ListQueuesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetIncludeMetadata()
+    public function testSetIncludeMetadata(): void
     {
         // Setup
         $options = new ListQueuesOptions();
@@ -119,7 +119,7 @@ class ListQueuesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getIncludeMetadata());
     }
 
-    public function testGetIncludeMetadata()
+    public function testGetIncludeMetadata(): void
     {
         // Setup
         $options = new ListQueuesOptions();
@@ -132,4 +132,5 @@ class ListQueuesOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

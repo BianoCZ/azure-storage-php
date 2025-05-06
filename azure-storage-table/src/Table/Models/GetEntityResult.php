@@ -38,14 +38,14 @@ use MicrosoftAzure\Storage\Table\Internal\IODataReaderWriter;
  */
 class GetEntityResult
 {
+
     private $_entity;
 
     /**
      * Gets table entity.
      *
-     * @return Entity
      */
-    public function getEntity()
+    public function getEntity(): Entity
     {
         return $this->_entity;
     }
@@ -55,9 +55,8 @@ class GetEntityResult
      *
      * @param Entity $entity The table entity instance.
      *
-     * @return void
      */
-    protected function setEntity($entity)
+    protected function setEntity(Entity $entity): void
     {
         $this->_entity = $entity;
     }
@@ -70,13 +69,13 @@ class GetEntityResult
      *
      * @internal
      *
-     * @return GetEntityResult
      */
-    public static function create($body, IODataReaderWriter $serializer)
+    public static function create(string $body, IODataReaderWriter $serializer): GetEntityResult
     {
         $result = new GetEntityResult();
         $result->setEntity($serializer->parseEntity($body));
 
         return $result;
     }
+
 }

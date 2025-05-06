@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
 use MicrosoftAzure\Storage\Queue\Models\ListMessagesOptions;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ListMessagesOptions
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Queue\Models\ListMessagesOptions;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListMessagesOptionsTest extends \PHPUnit\Framework\TestCase
+class ListMessagesOptionsTest extends TestCase
 {
-    public function testGetVisibilityTimeoutInSeconds()
+    public function testGetVisibilityTimeoutInSeconds(): void
     {
         // Setup
         $listMessagesOptions = new ListMessagesOptions();
@@ -52,7 +53,7 @@ class ListMessagesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetVisibilityTimeoutInSeconds()
+    public function testSetVisibilityTimeoutInSeconds(): void
     {
         // Setup
         $listMessagesOptions = new ListMessagesOptions();
@@ -66,7 +67,7 @@ class ListMessagesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetNumberOfMessages()
+    public function testGetNumberOfMessages(): void
     {
         // Setup
         $listMessagesOptions = new ListMessagesOptions();
@@ -80,7 +81,7 @@ class ListMessagesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetNumberOfMessages()
+    public function testSetNumberOfMessages(): void
     {
         // Setup
         $listMessagesOptions = new ListMessagesOptions();
@@ -93,4 +94,5 @@ class ListMessagesOptionsTest extends \PHPUnit\Framework\TestCase
         $actual = $listMessagesOptions->getNumberOfMessages();
         $this->assertEquals($expected, $actual);
     }
+
 }

@@ -24,7 +24,9 @@
 
 namespace MicrosoftAzure\Storage\Common\Exceptions;
 
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use function sprintf;
 
 /**
  * Exception thrown if an argument type does not match with the expected type.
@@ -36,7 +38,7 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class InvalidArgumentTypeException extends \InvalidArgumentException
+class InvalidArgumentTypeException extends InvalidArgumentException
 {
     /**
      * Constructor.
@@ -46,10 +48,11 @@ class InvalidArgumentTypeException extends \InvalidArgumentException
      *
      * @return InvalidArgumentTypeException
      */
-    public function __construct($validType, $name = null)
+    public function __construct(string $validType, ?string $name = null)
     {
         parent::__construct(
             sprintf(Resources::INVALID_PARAM_MSG, $name, $validType)
         );
     }
+
 }

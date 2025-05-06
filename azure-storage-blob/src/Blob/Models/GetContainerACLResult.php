@@ -24,6 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
+use DateTime;
+
 /**
  * Holds container ACL
  *
@@ -36,7 +38,9 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class GetContainerACLResult
 {
+
     private $containerACL;
+
     private $lastModified;
 
     private $etag;
@@ -52,14 +56,13 @@ class GetContainerACLResult
      *
      * @internal
      *
-     * @return self
      */
     public static function create(
-        $publicAccess,
-        $etag,
-        \DateTime $lastModified,
-        array $parsed = null
-    ) {
+        string $publicAccess,
+        string $etag,
+        DateTime $lastModified,
+        ?array $parsed = null
+    ): self {
         $result = new GetContainerAclResult();
         $result->setETag($etag);
         $result->setLastModified($lastModified);
@@ -72,9 +75,8 @@ class GetContainerACLResult
     /**
      * Gets container ACL
      *
-     * @return ContainerACL
      */
-    public function getContainerAcl()
+    public function getContainerAcl(): ContainerACL
     {
         return $this->containerACL;
     }
@@ -84,9 +86,8 @@ class GetContainerACLResult
      *
      * @param ContainerACL $containerACL value.
      *
-     * @return void
      */
-    protected function setContainerAcl(ContainerACL $containerACL)
+    protected function setContainerAcl(ContainerACL $containerACL): void
     {
         $this->containerACL = $containerACL;
     }
@@ -106,9 +107,8 @@ class GetContainerACLResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         $this->lastModified = $lastModified;
     }
@@ -116,9 +116,8 @@ class GetContainerACLResult
     /**
      * Gets container etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->etag;
     }
@@ -128,10 +127,10 @@ class GetContainerACLResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         $this->etag = $etag;
     }
+
 }

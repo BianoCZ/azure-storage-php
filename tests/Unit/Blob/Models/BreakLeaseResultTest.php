@@ -21,9 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\BreakLeaseResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class BreakLeaseResult
@@ -35,13 +37,13 @@ use MicrosoftAzure\Storage\Blob\Models\BreakLeaseResult;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BreakLeaseResultTest extends \PHPUnit\Framework\TestCase
+class BreakLeaseResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $expected = '10';
-        $headers = array('x-ms-lease-time' => $expected);
+        $headers = ['x-ms-lease-time' => $expected];
 
         // Test
         $result = BreakLeaseResult::create($headers);
@@ -49,4 +51,5 @@ class BreakLeaseResultTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $result->getLeaseTime());
     }
+
 }

@@ -38,5 +38,7 @@ use MicrosoftAzure\Storage\Table\Internal\AcceptOptionTrait;
  */
 class GetEntityOptions extends TableServiceOptions
 {
+
     use AcceptOptionTrait;
+
 }

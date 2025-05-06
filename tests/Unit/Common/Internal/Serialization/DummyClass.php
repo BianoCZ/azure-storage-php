@@ -24,10 +24,6 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal\Serialization;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
-use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
-
 /**
  * Dummy class for Xml Serializer.
  *
@@ -40,14 +36,15 @@ use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
  */
 class DummyClass
 {
+
     private $_attributes;
 
     public function __construct()
     {
-        $this->_attributes = array();
+        $this->_attributes = [];
     }
 
-    public function addAttribute($attributeKey, $attributeValue)
+    public function addAttribute($attributeKey, $attributeValue): void
     {
         $this->_attributes[$attributeKey] = $attributeValue;
     }
@@ -56,4 +53,5 @@ class DummyClass
     {
         return $this->_attributes;
     }
+
 }

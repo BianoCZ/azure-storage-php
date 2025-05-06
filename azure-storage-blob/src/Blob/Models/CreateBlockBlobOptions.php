@@ -38,5 +38,7 @@ use MicrosoftAzure\Storage\Common\Models\TransactionalMD5Trait;
  */
 class CreateBlockBlobOptions extends CreateBlobOptions
 {
+
     use TransactionalMD5Trait;
+
 }

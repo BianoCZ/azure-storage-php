@@ -42,13 +42,10 @@ class BlobAccessPolicy extends AccessPolicy
     /**
      * Get the valid permissions for the given resource.
      *
-     * @return array
      */
-    public static function getResourceValidPermissions()
+    public static function getResourceValidPermissions(): array
     {
-        return BlobResources::ACCESS_PERMISSIONS[
-            BlobResources::RESOURCE_TYPE_BLOB
-        ];
+        return BlobResources::ACCESS_PERMISSIONS[BlobResources::RESOURCE_TYPE_BLOB];
     }
 
     /**
@@ -58,4 +55,5 @@ class BlobAccessPolicy extends AccessPolicy
     {
         parent::__construct(BlobResources::RESOURCE_TYPE_BLOB);
     }
+
 }

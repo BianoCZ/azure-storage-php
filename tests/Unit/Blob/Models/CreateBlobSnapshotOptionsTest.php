@@ -21,11 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlobSnapshotOptions;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class CreateBlobSnapshotOptions
@@ -37,12 +37,12 @@ use MicrosoftAzure\Storage\Blob\Models\CreateBlobSnapshotOptions;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CreateBlobSnapshotOptionsTest extends \PHPUnit\Framework\TestCase
+class CreateBlobSnapshotOptionsTest extends TestCase
 {
-    public function testSetMetadata()
+    public function testSetMetadata(): void
     {
         $createBlobSnapshotOptions = new CreateBlobSnapshotOptions();
-        $expected = array('key1' => 'value1', 'key2' => 'value2');
+        $expected = ['key1' => 'value1', 'key2' => 'value2'];
         $createBlobSnapshotOptions->setMetadata($expected);
 
         $this->assertEquals(
@@ -51,8 +51,7 @@ class CreateBlobSnapshotOptionsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
-    public function testSetLeaseId()
+    public function testSetLeaseId(): void
     {
         $createBlobSnapshotOptions = new CreateBlobSnapshotOptions();
         $expected = "123456789";
@@ -63,4 +62,5 @@ class CreateBlobSnapshotOptionsTest extends \PHPUnit\Framework\TestCase
             $createBlobSnapshotOptions->getLeaseId()
         );
     }
+
 }

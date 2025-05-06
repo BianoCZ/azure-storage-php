@@ -37,15 +37,15 @@ namespace MicrosoftAzure\Storage\Table\Models;
  */
 trait TableContinuationTokenTrait
 {
-    /** @var TableContinuationToken $continuationToken */
-    private $continuationToken;
+
+    private TableContinuationToken $continuationToken;
 
     /**
      * Setter for continuationToken
      *
      * @param TableContinuationToken $continuationToken the continuation token to be set.
      */
-    public function setContinuationToken($continuationToken)
+    public function setContinuationToken(TableContinuationToken $continuationToken): void
     {
         $this->continuationToken = $continuationToken;
     }
@@ -53,9 +53,8 @@ trait TableContinuationTokenTrait
     /**
      * Getter for continuationToken
      *
-     * @return TableContinuationToken
      */
-    public function getContinuationToken()
+    public function getContinuationToken(): TableContinuationToken
     {
         return $this->continuationToken;
     }
@@ -63,9 +62,8 @@ trait TableContinuationTokenTrait
     /**
      * Gets for location for previous request.
      *
-     * @return string|null
      */
-    public function getLocation()
+    public function getLocation(): ?string
     {
         if ($this->continuationToken == null) {
             return null;
@@ -77,19 +75,20 @@ trait TableContinuationTokenTrait
     {
         if ($this->continuationToken == null) {
             return parent::getLocationMode();
-        } elseif ($this->continuationToken->getLocation() == '') {
-            return parent::getLocationMode();
-        } else {
-            return $this->getLocation();
         }
+
+        if ($this->continuationToken->getLocation() == '') {
+            return parent::getLocationMode();
+        }
+
+        return $this->getLocation();
     }
 
     /**
      * Gets nextTableName
      *
-     * @return string|null
      */
-    public function getNextTableName()
+    public function getNextTableName(): ?string
     {
         if ($this->continuationToken == null) {
             return null;
@@ -100,9 +99,8 @@ trait TableContinuationTokenTrait
     /**
      * Gets entity next partition key.
      *
-     * @return string|null
      */
-    public function getNextPartitionKey()
+    public function getNextPartitionKey(): ?string
     {
         if ($this->continuationToken == null) {
             return null;
@@ -113,9 +111,8 @@ trait TableContinuationTokenTrait
     /**
      * Gets entity next row key.
      *
-     * @return string|null
      */
-    public function getNextRowKey()
+    public function getNextRowKey(): ?string
     {
         if ($this->continuationToken == null) {
             return null;
@@ -128,9 +125,8 @@ trait TableContinuationTokenTrait
      *
      * @param string $nextRowKey The entity next row key value.
      *
-     * @return void
      */
-    public function setNextRowKey($nextRowKey)
+    public function setNextRowKey(string $nextRowKey): void
     {
         if ($this->continuationToken == null) {
             $this->setContinuationToken(new TableContinuationToken());
@@ -143,9 +139,8 @@ trait TableContinuationTokenTrait
      *
      * @param string $nextPartitionKey The entity next partition key value.
      *
-     * @return void
      */
-    public function setNextPartitionKey($nextPartitionKey)
+    public function setNextPartitionKey(string $nextPartitionKey): void
     {
         if ($this->continuationToken == null) {
             $this->setContinuationToken(new TableContinuationToken());
@@ -158,13 +153,13 @@ trait TableContinuationTokenTrait
      *
      * @param string $nextTableName value
      *
-     * @return void
      */
-    public function setNextTableName($nextTableName)
+    public function setNextTableName(string $nextTableName): void
     {
         if ($this->continuationToken == null) {
             $this->setContinuationToken(new TableContinuationToken());
         }
         $this->continuationToken->setNextTableName($nextTableName);
     }
+
 }

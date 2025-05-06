@@ -24,9 +24,14 @@
 
 namespace MicrosoftAzure\Storage\Common\Models;
 
+use DateTime;
+use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
+use function implode;
+use function sprintf;
+use function str_replace;
+use function strpos;
 
 /**
  * Holds access policy elements
@@ -40,32 +45,35 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  */
 abstract class AccessPolicy
 {
+
     private $start;
+
     private $expiry;
+
     private $permission;
+
     private $resourceType;
 
     /**
      * Get the valid permissions for the given resource.
      *
-     * @return array
      */
-    abstract protected static function getResourceValidPermissions();
+    abstract protected static function getResourceValidPermissions(): array;
 
     /**
      * Constructor
      *
      * @param string $resourceType the resource type of this access policy.
      */
-    public function __construct($resourceType)
+    public function __construct(string $resourceType)
     {
         Validate::canCastAsString($resourceType, 'resourceType');
         Validate::isTrue(
-            $resourceType == Resources::RESOURCE_TYPE_BLOB      ||
+            $resourceType == Resources::RESOURCE_TYPE_BLOB ||
             $resourceType == Resources::RESOURCE_TYPE_CONTAINER ||
-            $resourceType == Resources::RESOURCE_TYPE_QUEUE     ||
-            $resourceType == Resources::RESOURCE_TYPE_TABLE     ||
-            $resourceType == Resources::RESOURCE_TYPE_FILE      ||
+            $resourceType == Resources::RESOURCE_TYPE_QUEUE ||
+            $resourceType == Resources::RESOURCE_TYPE_TABLE ||
+            $resourceType == Resources::RESOURCE_TYPE_FILE ||
             $resourceType == Resources::RESOURCE_TYPE_SHARE,
             Resources::ERROR_RESOURCE_TYPE_NOT_SUPPORTED
         );
@@ -88,9 +96,8 @@ abstract class AccessPolicy
      *
      * @param \DateTime $start value.
      *
-     * @return void
      */
-    public function setStart(\DateTime $start = null)
+    public function setStart(?DateTime $start = null): void
     {
         if ($start != null) {
             Validate::isDate($start);
@@ -113,9 +120,8 @@ abstract class AccessPolicy
      *
      * @param \DateTime $expiry value.
      *
-     * @return void
      */
-    public function setExpiry($expiry)
+    public function setExpiry(DateTime $expiry): void
     {
         Validate::isDate($expiry);
         $this->expiry = $expiry;
@@ -138,9 +144,8 @@ abstract class AccessPolicy
      *
      * @throws \InvalidArgumentException
      *
-     * @return void
      */
-    public function setPermission($permission)
+    public function setPermission(string $permission): void
     {
         $this->permission = $this->validatePermission($permission);
     }
@@ -162,9 +167,8 @@ abstract class AccessPolicy
      *
      * @throws \InvalidArgumentException
      *
-     * @return string
      */
-    private function validatePermission($permission)
+    private function validatePermission(string $permission): string
     {
         $validPermissions = static::getResourceValidPermissions();
         $result = '';
@@ -199,11 +203,10 @@ abstract class AccessPolicy
      *
      * @internal
      *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        $array = array();
+        $array = [];
 
         if ($this->getStart() != null) {
             $array[Resources::XTAG_SIGNED_START] =
@@ -215,4 +218,5 @@ abstract class AccessPolicy
 
         return $array;
     }
+
 }

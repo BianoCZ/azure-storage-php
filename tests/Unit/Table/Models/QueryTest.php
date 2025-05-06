@@ -24,9 +24,10 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
-use MicrosoftAzure\Storage\Table\Models\Query;
-use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
+use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
+use MicrosoftAzure\Storage\Table\Models\Query;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class Query
@@ -38,13 +39,13 @@ use MicrosoftAzure\Storage\Table\Models\EdmType;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class QueryTest extends \PHPUnit\Framework\TestCase
+class QueryTest extends TestCase
 {
-    public function testSetSelectFields()
+    public function testSetSelectFields(): void
     {
         // Setup
         $query = new Query();
-        $expected = array('customerId', 'customerName');
+        $expected = ['customerId', 'customerName'];
 
         // Test
         $query->setSelectFields($expected);
@@ -53,7 +54,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $query->getSelectFields());
     }
 
-    public function testSetTop()
+    public function testSetTop(): void
     {
         // Setup
         $query = new Query();
@@ -66,7 +67,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $query->getTop());
     }
 
-    public function testSetFilter()
+    public function testSetFilter(): void
     {
         // Setup
         $query = new Query();
@@ -79,12 +80,12 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $query->getFilter());
     }
 
-    public function testAddSelectField()
+    public function testAddSelectField(): void
     {
         // Setup
         $query = new Query();
         $field = 'customerId';
-        $expected = array($field);
+        $expected = [$field];
 
         // Test
         $query->addSelectField($field);
@@ -92,4 +93,5 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $query->getSelectFields());
     }
+
 }

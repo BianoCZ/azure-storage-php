@@ -26,8 +26,9 @@ namespace MicrosoftAzure\Storage\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Models\MarkerContinuationToken;
 use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
+use MicrosoftAzure\Storage\Common\Models\MarkerContinuationToken;
+use function array_key_exists;
 
 /**
  * Container to hold list container response object.
@@ -41,12 +42,17 @@ use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
  */
 class ListContainersResult
 {
+
     use MarkerContinuationTokenTrait;
 
     private $containers;
+
     private $prefix;
+
     private $marker;
+
     private $maxResults;
+
     private $accountName;
 
     /**
@@ -58,9 +64,8 @@ class ListContainersResult
      *
      * @internal
      *
-     * @return ListContainersResult
      */
-    public static function create(array $parsedResponse, $location = '')
+    public static function create(array $parsedResponse, string $location = ''): ListContainersResult
     {
         $result               = new ListContainersResult();
         $serviceEndpoint      = Utilities::tryGetKeysChainValue(
@@ -96,8 +101,8 @@ class ListContainersResult
             $parsedResponse,
             Resources::QP_MAX_RESULTS
         ));
-        $containers   = array();
-        $rawContainer = array();
+        $containers   = [];
+        $rawContainer = [];
 
         if (!empty($parsedResponse['Containers'])) {
             $containersArray = $parsedResponse['Containers']['Container'];
@@ -109,7 +114,7 @@ class ListContainersResult
             $container->setName($value['Name']);
             $container->setUrl($serviceEndpoint . $value['Name']);
             $container->setMetadata(
-                Utilities::tryGetValue($value, Resources::QP_METADATA, array())
+                Utilities::tryGetValue($value, Resources::QP_METADATA, [])
             );
             $properties = new ContainerProperties();
             $date       = $value['Properties']['Last-Modified'];
@@ -141,11 +146,10 @@ class ListContainersResult
      *
      * @param array $containers list of containers.
      *
-     * @return void
      */
-    protected function setContainers(array $containers)
+    protected function setContainers(array $containers): void
     {
-        $this->containers = array();
+        $this->containers = [];
         foreach ($containers as $container) {
             $this->containers[] = clone $container;
         }
@@ -156,7 +160,7 @@ class ListContainersResult
      *
      * @return Container[]
      */
-    public function getContainers()
+    public function getContainers(): array
     {
         return $this->containers;
     }
@@ -164,9 +168,8 @@ class ListContainersResult
     /**
      * Gets prefix.
      *
-     * @return string
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->prefix;
     }
@@ -176,9 +179,8 @@ class ListContainersResult
      *
      * @param string $prefix value.
      *
-     * @return void
      */
-    protected function setPrefix($prefix)
+    protected function setPrefix(string $prefix): void
     {
         $this->prefix = $prefix;
     }
@@ -186,9 +188,8 @@ class ListContainersResult
     /**
      * Gets marker.
      *
-     * @return string
      */
-    public function getMarker()
+    public function getMarker(): string
     {
         return $this->marker;
     }
@@ -198,9 +199,8 @@ class ListContainersResult
      *
      * @param string $marker value.
      *
-     * @return void
      */
-    protected function setMarker($marker)
+    protected function setMarker(string $marker): void
     {
         $this->marker = $marker;
     }
@@ -208,9 +208,8 @@ class ListContainersResult
     /**
      * Gets max results.
      *
-     * @return string
      */
-    public function getMaxResults()
+    public function getMaxResults(): string
     {
         return $this->maxResults;
     }
@@ -220,9 +219,8 @@ class ListContainersResult
      *
      * @param string $maxResults value.
      *
-     * @return void
      */
-    protected function setMaxResults($maxResults)
+    protected function setMaxResults(string $maxResults): void
     {
         $this->maxResults = $maxResults;
     }
@@ -230,9 +228,8 @@ class ListContainersResult
     /**
      * Gets account name.
      *
-     * @return string
      */
-    public function getAccountName()
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -242,10 +239,10 @@ class ListContainersResult
      *
      * @param string $accountName value.
      *
-     * @return void
      */
-    protected function setAccountName($accountName)
+    protected function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
+
 }

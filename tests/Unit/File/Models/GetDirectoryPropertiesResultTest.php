@@ -24,10 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\File\Models;
 
-use MicrosoftAzure\Storage\File\Models\GetDirectoryPropertiesResult;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\File\Models\GetDirectoryPropertiesResult;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class GetDirectoryPropertiesResult
@@ -39,9 +40,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetDirectoryPropertiesResultTest extends \PHPUnit\Framework\TestCase
+class GetDirectoryPropertiesResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $sample = TestResources::getInterestingPropertiesArray();
 
@@ -58,4 +59,5 @@ class GetDirectoryPropertiesResultTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($value, $actualMeta[$key]);
         }
     }
+
 }

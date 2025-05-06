@@ -49,4 +49,5 @@ class QueueAccessPolicyTest extends AccessPolicyTest
     {
         return QueueResources::RESOURCE_TYPE_QUEUE;
     }
+
 }

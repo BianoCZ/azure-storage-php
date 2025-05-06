@@ -21,10 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\ListBlobsResult;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use function intval;
 
 /**
  * Unit tests for class ListBlobsResult
@@ -36,9 +39,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListBlobsResultTest extends \PHPUnit\Framework\TestCase
+class ListBlobsResultTest extends TestCase
 {
-    public function testCreateWithEmpty()
+    public function testCreateWithEmpty(): void
     {
         // Setup
         $sample = TestResources::listBlobsEmpty();
@@ -52,7 +55,7 @@ class ListBlobsResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, $actual->getMaxResults());
     }
 
-    public function testCreateWithOneEntry()
+    public function testCreateWithOneEntry(): void
     {
         // Setup
         $sample = TestResources::listBlobsOneEntry();
@@ -90,7 +93,7 @@ class ListBlobsResultTest extends \PHPUnit\Framework\TestCase
         return $actual;
     }
 
-    public function testCreateWithIsSecondary()
+    public function testCreateWithIsSecondary(): void
     {
         // Setup
         $sample = TestResources::listBlobsOneEntry();
@@ -109,4 +112,5 @@ class ListBlobsResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($sample['Prefix'], $actual->getPrefix());
         $this->assertEquals('SecondaryOnly', $actual->getLocation());
     }
+
 }

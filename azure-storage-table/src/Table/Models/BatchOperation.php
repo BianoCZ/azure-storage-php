@@ -24,8 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Table\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
 
 /**
@@ -40,7 +40,9 @@ use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
  */
 class BatchOperation
 {
+
     private $_type;
+
     private $_params;
 
     /**
@@ -48,9 +50,8 @@ class BatchOperation
      *
      * @param string $type The operation type. Must be valid type.
      *
-     * @return void
      */
-    public function setType($type)
+    public function setType(string $type): void
     {
         Validate::isTrue(
             BatchOperationType::isValid($type),
@@ -63,9 +64,8 @@ class BatchOperation
     /**
      * Gets operation type.
      *
-     * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->_type;
     }
@@ -76,9 +76,8 @@ class BatchOperation
      * @param string $name  The param name. Must be valid name.
      * @param mixed  $value The param value.
      *
-     * @return void
      */
-    public function addParameter($name, $value)
+    public function addParameter(string $name, mixed $value): void
     {
         Validate::isTrue(
             BatchOperationParameterName::isValid($name),
@@ -92,10 +91,10 @@ class BatchOperation
      *
      * @param string $name The parameter name.
      *
-     * @return mixed
      */
-    public function getParameter($name)
+    public function getParameter(string $name): mixed
     {
         return Utilities::tryGetValue($this->_params, $name);
     }
+
 }

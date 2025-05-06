@@ -38,15 +38,16 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class DeleteBlobOptions extends BlobServiceOptions
 {
+
     private $_snapshot;
+
     private $_deleteSnaphotsOnly;
 
     /**
      * Gets blob snapshot.
      *
-     * @return string
      */
-    public function getSnapshot()
+    public function getSnapshot(): string
     {
         return $this->_snapshot;
     }
@@ -56,9 +57,8 @@ class DeleteBlobOptions extends BlobServiceOptions
      *
      * @param string $snapshot value.
      *
-     * @return void
      */
-    public function setSnapshot($snapshot)
+    public function setSnapshot(string $snapshot): void
     {
         $this->_snapshot = $snapshot;
     }
@@ -66,9 +66,8 @@ class DeleteBlobOptions extends BlobServiceOptions
     /**
      * Gets blob deleteSnaphotsOnly.
      *
-     * @return boolean
      */
-    public function getDeleteSnaphotsOnly()
+    public function getDeleteSnaphotsOnly(): bool
     {
         return $this->_deleteSnaphotsOnly;
     }
@@ -78,11 +77,11 @@ class DeleteBlobOptions extends BlobServiceOptions
      *
      * @param string $deleteSnaphotsOnly value.
      *
-     * @return boolean
      */
-    public function setDeleteSnaphotsOnly($deleteSnaphotsOnly)
+    public function setDeleteSnaphotsOnly(string $deleteSnaphotsOnly): bool
     {
         Validate::isBoolean($deleteSnaphotsOnly);
         $this->_deleteSnaphotsOnly = $deleteSnaphotsOnly;
     }
+
 }

@@ -24,8 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\MetadataTrait;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
+use MicrosoftAzure\Storage\Common\Internal\MetadataTrait;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
 
@@ -41,19 +41,22 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class GetContainerPropertiesResult
 {
+
     use MetadataTrait;
 
     private $leaseStatus;
+
     private $leaseState;
+
     private $leaseDuration;
+
     private $publicAccess;
 
     /**
      * Gets blob leaseStatus.
      *
-     * @return string
      */
-    public function getLeaseStatus()
+    public function getLeaseStatus(): string
     {
         return $this->leaseStatus;
     }
@@ -63,9 +66,8 @@ class GetContainerPropertiesResult
      *
      * @param string $leaseStatus value.
      *
-     * @return void
      */
-    public function setLeaseStatus($leaseStatus)
+    public function setLeaseStatus(string $leaseStatus): void
     {
         $this->leaseStatus = $leaseStatus;
     }
@@ -73,9 +75,8 @@ class GetContainerPropertiesResult
     /**
      * Gets blob lease state.
      *
-     * @return string
      */
-    public function getLeaseState()
+    public function getLeaseState(): string
     {
         return $this->leaseState;
     }
@@ -85,9 +86,8 @@ class GetContainerPropertiesResult
      *
      * @param string $leaseState value.
      *
-     * @return void
      */
-    public function setLeaseState($leaseState)
+    public function setLeaseState(string $leaseState): void
     {
         $this->leaseState = $leaseState;
     }
@@ -95,9 +95,8 @@ class GetContainerPropertiesResult
     /**
      * Gets blob lease duration.
      *
-     * @return string
      */
-    public function getLeaseDuration()
+    public function getLeaseDuration(): string
     {
         return $this->leaseDuration;
     }
@@ -107,9 +106,8 @@ class GetContainerPropertiesResult
      *
      * @param string $leaseDuration value.
      *
-     * @return void
      */
-    public function setLeaseDuration($leaseDuration)
+    public function setLeaseDuration(string $leaseDuration): void
     {
         $this->leaseDuration = $leaseDuration;
     }
@@ -117,9 +115,8 @@ class GetContainerPropertiesResult
     /**
      * Gets container publicAccess.
      *
-     * @return string
      */
-    public function getPublicAccess()
+    public function getPublicAccess(): string
     {
         return $this->publicAccess;
     }
@@ -129,9 +126,8 @@ class GetContainerPropertiesResult
      *
      * @param string $publicAccess value.
      *
-     * @return void
      */
-    public function setPublicAccess($publicAccess)
+    public function setPublicAccess(string $publicAccess): void
     {
         Validate::isTrue(
             PublicAccessType::isValid($publicAccess),
@@ -147,11 +143,10 @@ class GetContainerPropertiesResult
      *
      * @internal
      *
-     * @return GetContainerPropertiesResult
      */
-    public static function create(array $responseHeaders)
+    public static function create(array $responseHeaders): GetContainerPropertiesResult
     {
-        $result   = static::createMetadataResult($responseHeaders);
+        $result = static::createMetadataResult($responseHeaders);
 
         $result->setLeaseStatus(Utilities::tryGetValueInsensitive(
             Resources::X_MS_LEASE_STATUS,
@@ -172,4 +167,5 @@ class GetContainerPropertiesResult
 
         return $result;
     }
+
 }

@@ -21,9 +21,11 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Models\BlobType;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class BlobType
@@ -35,11 +37,12 @@ use MicrosoftAzure\Storage\Blob\Models\BlobType;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BlobTypeTest extends \PHPUnit\Framework\TestCase
+class BlobTypeTest extends TestCase
 {
-    public function testBlobType()
+    public function testBlobType(): void
     {
         $this->assertEquals(BlobType::BLOCK_BLOB, 'BlockBlob');
         $this->assertEquals(BlobType::PAGE_BLOB, 'PageBlob');
     }
+
 }

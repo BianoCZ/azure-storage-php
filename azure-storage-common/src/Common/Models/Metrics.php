@@ -38,9 +38,13 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class Metrics
 {
+
     private $_version;
+
     private $_enabled;
+
     private $_includeAPIs;
+
     private $_retentionPolicy;
 
     /**
@@ -49,9 +53,8 @@ class Metrics
      * @internal
      * @param array $parsedResponse XML response parsed into array.
      *
-     * @return Metrics
      */
-    public static function create(array $parsedResponse)
+    public static function create(array $parsedResponse): Metrics
     {
         $result = new Metrics();
         $result->setVersion($parsedResponse['Version']);
@@ -71,10 +74,9 @@ class Metrics
     /**
      * Gets retention policy
      *
-     * @return RetentionPolicy
      *
      */
-    public function getRetentionPolicy()
+    public function getRetentionPolicy(): RetentionPolicy
     {
         return $this->_retentionPolicy;
     }
@@ -84,9 +86,8 @@ class Metrics
      *
      * @param RetentionPolicy $policy object to use
      *
-     * @return void
      */
-    public function setRetentionPolicy(RetentionPolicy $policy)
+    public function setRetentionPolicy(RetentionPolicy $policy): void
     {
         $this->_retentionPolicy = $policy;
     }
@@ -94,9 +95,8 @@ class Metrics
     /**
      * Gets include APIs.
      *
-     * @return bool
      */
-    public function getIncludeAPIs()
+    public function getIncludeAPIs(): bool
     {
         return $this->_includeAPIs;
     }
@@ -106,9 +106,8 @@ class Metrics
      *
      * @param bool $includeAPIs value to use.
      *
-     * @return void
      */
-    public function setIncludeAPIs($includeAPIs)
+    public function setIncludeAPIs(bool $includeAPIs): void
     {
         $this->_includeAPIs = $includeAPIs;
     }
@@ -116,9 +115,8 @@ class Metrics
     /**
      * Gets enabled.
      *
-     * @return bool
      */
-    public function getEnabled()
+    public function getEnabled(): bool
     {
         return $this->_enabled;
     }
@@ -128,9 +126,8 @@ class Metrics
      *
      * @param bool $enabled value to use.
      *
-     * @return void
      */
-    public function setEnabled($enabled)
+    public function setEnabled(bool $enabled): void
     {
         $this->_enabled = $enabled;
     }
@@ -138,9 +135,8 @@ class Metrics
     /**
      * Gets version
      *
-     * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->_version;
     }
@@ -150,9 +146,8 @@ class Metrics
      *
      * @param string $version new value.
      *
-     * @return void
      */
-    public function setVersion($version)
+    public function setVersion(string $version): void
     {
         $this->_version = $version;
     }
@@ -161,14 +156,13 @@ class Metrics
      * Converts this object to array with XML tags
      *
      * @internal
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        $array = array(
+        $array = [
             'Version' => $this->_version,
-            'Enabled' => Utilities::booleanToString($this->_enabled)
-        );
+            'Enabled' => Utilities::booleanToString($this->_enabled),
+        ];
         if ($this->_enabled) {
             $array['IncludeAPIs'] = Utilities::booleanToString($this->_includeAPIs);
         }
@@ -178,4 +172,5 @@ class Metrics
 
         return $array;
     }
+
 }

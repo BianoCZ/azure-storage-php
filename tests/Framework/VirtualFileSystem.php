@@ -27,6 +27,7 @@ namespace MicrosoftAzure\Storage\Tests\Framework;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamWrapper;
+use function is_null;
 
 /**
  * Represents virtual file system for testing purpose.
@@ -52,8 +53,7 @@ class VirtualFileSystem
         $file->setContent($contents);
 
         vfsStreamWrapper::getRoot()->addChild($file);
-        $virtualPath = vfsStream::url($root . '/' . $fileName);
-
-        return $virtualPath;
+        return vfsStream::url($root . '/' . $fileName);
     }
+
 }

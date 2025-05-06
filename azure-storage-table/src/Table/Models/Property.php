@@ -36,16 +36,18 @@ namespace MicrosoftAzure\Storage\Table\Models;
  */
 class Property
 {
+
     private $edmType;
+
     private $value;
+
     private $rawValue;
 
     /**
      * Gets the type of the property.
      *
-     * @return string
      */
-    public function getEdmType()
+    public function getEdmType(): string
     {
         return $this->edmType;
     }
@@ -55,9 +57,8 @@ class Property
      *
      * @param string $edmType The property type.
      *
-     * @return void
      */
-    public function setEdmType($edmType)
+    public function setEdmType(string $edmType): void
     {
         EdmType::isValid($edmType);
         $this->edmType = $edmType;
@@ -66,9 +67,8 @@ class Property
     /**
      * Gets the value of the property.
      *
-     * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }
@@ -78,9 +78,8 @@ class Property
      *
      * @param mixed $value The value of property.
      *
-     * @return void
      */
-    public function setValue($value)
+    public function setValue(mixed $value): void
     {
         $this->value = $value;
     }
@@ -88,9 +87,8 @@ class Property
     /**
      * Gets the raw value of the property.
      *
-     * @return string
      */
-    public function getRawValue()
+    public function getRawValue(): string
     {
         return $this->rawValue;
     }
@@ -100,10 +98,10 @@ class Property
      *
      * @param mixed $rawValue The raw value of property.
      *
-     * @return void
      */
-    public function setRawValue($rawValue)
+    public function setRawValue(mixed $rawValue): void
     {
         $this->rawValue = $rawValue;
     }
+
 }

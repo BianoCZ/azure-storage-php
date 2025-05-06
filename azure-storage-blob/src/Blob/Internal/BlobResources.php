@@ -107,4 +107,5 @@ class BlobResources extends Resources
     ];
 
     // @codingStandardsIgnoreEnd
+
 }

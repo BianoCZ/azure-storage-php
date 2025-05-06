@@ -25,11 +25,13 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use MicrosoftAzure\Storage\Common\LocationMode;
-use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
-use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
 use MicrosoftAzure\Storage\Common\Models\GetServicePropertiesResult;
 use MicrosoftAzure\Storage\Common\Models\GetServiceStatsResult;
+use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
+use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
+use function is_null;
 
 /**
  * Trait implementing common REST API for all the services, including the
@@ -51,13 +53,11 @@ trait ServiceRestTrait
      *
      * @param ServiceOptions $options The optional parameters.
      *
-     * @return \MicrosoftAzure\Storage\Common\Models\GetServicePropertiesResult
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452239.aspx
      */
     public function getServiceProperties(
-        ServiceOptions $options = null
-    ) {
+        ?ServiceOptions $options = null
+    ): GetServicePropertiesResult {
         return $this->getServicePropertiesAsync($options)->wait();
     }
 
@@ -66,17 +66,15 @@ trait ServiceRestTrait
      *
      * @param ServiceOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452239.aspx
      */
     public function getServicePropertiesAsync(
-        ServiceOptions $options = null
-    ) {
+        ?ServiceOptions $options = null
+    ): PromiseInterface {
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $queryParams = array();
-        $postParams  = array();
+        $headers     = [];
+        $queryParams = [];
+        $postParams  = [];
         $path        = Resources::EMPTY_STRING;
 
         if (is_null($options)) {
@@ -120,14 +118,12 @@ trait ServiceRestTrait
      * @param ServiceProperties $serviceProperties The service properties.
      * @param ServiceOptions    $options           The optional parameters.
      *
-     * @return void
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452235.aspx
      */
     public function setServiceProperties(
         ServiceProperties $serviceProperties,
-        ServiceOptions $options = null
-    ) {
+        ?ServiceOptions $options = null
+    ): void {
         $this->setServicePropertiesAsync($serviceProperties, $options)->wait();
     }
 
@@ -140,23 +136,21 @@ trait ServiceRestTrait
      * @param ServiceProperties $serviceProperties The service properties.
      * @param ServiceOptions    $options           The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/hh452235.aspx
      */
     public function setServicePropertiesAsync(
         ServiceProperties $serviceProperties,
-        ServiceOptions $options = null
-    ) {
+        ?ServiceOptions $options = null
+    ): PromiseInterface {
         Validate::isTrue(
             $serviceProperties instanceof ServiceProperties,
             Resources::INVALID_SVC_PROP_MSG
         );
 
         $method      = Resources::HTTP_PUT;
-        $headers     = array();
-        $queryParams = array();
-        $postParams  = array();
+        $headers     = [];
+        $queryParams = [];
+        $postParams  = [];
         $path        = Resources::EMPTY_STRING;
         $body        = $serviceProperties->toXml($this->dataSerializer);
 
@@ -200,9 +194,8 @@ trait ServiceRestTrait
      *
      * @param  ServiceOptions|null $options The options this operation sends with.
      *
-     * @return GetServiceStatsResult
      */
-    public function getServiceStats(ServiceOptions $options = null)
+    public function getServiceStats(?ServiceOptions $options = null): GetServiceStatsResult
     {
         return $this->getServiceStatsAsync($options)->wait();
     }
@@ -213,14 +206,13 @@ trait ServiceRestTrait
      *
      * @param  ServiceOptions|null $options The options this operation sends with.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getServiceStatsAsync(ServiceOptions $options = null)
+    public function getServiceStatsAsync(?ServiceOptions $options = null): PromiseInterface
     {
         $method      = Resources::HTTP_GET;
-        $headers     = array();
-        $queryParams = array();
-        $postParams  = array();
+        $headers     = [];
+        $queryParams = [];
+        $postParams  = [];
         $path        = Resources::EMPTY_STRING;
 
         if (is_null($options)) {
@@ -256,4 +248,5 @@ trait ServiceRestTrait
             return GetServiceStatsResult::create($parsed);
         }, null);
     }
+
 }

@@ -21,11 +21,12 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Framework;
 
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use function strpos;
 
 /**
  * TestBase class for Storage Services test classes.
@@ -39,15 +40,18 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
  */
 class ServiceRestProxyTestBase extends RestProxyTestBase
 {
+
     protected $propertiesChanged;
+
     protected $defaultProperties;
+
     protected $connectionString;
 
-    const NOT_SUPPORTED                     = 'The storage emulator doesn\'t support this API';
-    const TAKE_TOO_LONG                     = 'This test takes long time, skip.';
-    const SKIPPED_AFTER_SEVERAL_ATTEMPTS    = 'Test skipped after several fails.';
+    public const string NOT_SUPPORTED                     = 'The storage emulator doesn\'t support this API';
+    public const string TAKE_TOO_LONG                     = 'This test takes long time, skip.';
+    public const string SKIPPED_AFTER_SEVERAL_ATTEMPTS    = 'Test skipped after several fails.';
 
-    protected function skipIfEmulated()
+    protected function skipIfEmulated(): void
     {
         if ($this->isEmulated()) {
             $this->markTestSkipped(self::NOT_SUPPORTED);
@@ -56,25 +60,27 @@ class ServiceRestProxyTestBase extends RestProxyTestBase
 
     protected function isEmulated()
     {
-        return (strpos($this->connectionString, Resources::USE_DEVELOPMENT_STORAGE_NAME) !== false);
+        return strpos($this->connectionString, Resources::USE_DEVELOPMENT_STORAGE_NAME) !== false;
     }
 
     public function __construct()
     {
         parent::__construct();
+
         $this->connectionString = TestResources::getWindowsAzureStorageServicesConnectionString();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         $this->_createDefaultProperties();
     }
 
-    private function _createDefaultProperties()
+    private function _createDefaultProperties(): void
     {
         $this->propertiesChanged = false;
-        $propertiesArray = array();
+        $propertiesArray = [];
         $propertiesArray['HourMetrics']['Version'] = '1.0';
         $propertiesArray['HourMetrics']['Enabled'] = 'false';
         $propertiesArray['HourMetrics']['IncludeAPIs'] = 'false';
@@ -82,13 +88,13 @@ class ServiceRestProxyTestBase extends RestProxyTestBase
         $this->defaultProperties = ServiceProperties::create($propertiesArray);
     }
 
-    public function setServiceProperties($properties, $options = null)
+    public function setServiceProperties($properties, $options = null): void
     {
         $this->restProxy->setServiceProperties($properties, $options);
         $this->propertiesChanged = true;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -96,4 +102,5 @@ class ServiceRestProxyTestBase extends RestProxyTestBase
             $this->restProxy->setServiceProperties($this->defaultProperties);
         }
     }
+
 }

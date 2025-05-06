@@ -46,4 +46,5 @@ class TableSharedKeyLiteAuthSchemeMock extends TableSharedKeyLiteAuthScheme
     {
         return parent::computeSignature($headers, $url, $queryParams, $httpMethod);
     }
+
 }

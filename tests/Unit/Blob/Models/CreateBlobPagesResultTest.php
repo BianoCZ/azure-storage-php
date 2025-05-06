@@ -21,11 +21,14 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlobPagesResult;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use function intval;
 
 /**
  * Unit tests for class CreateBlobPagesResult
@@ -37,9 +40,9 @@ use MicrosoftAzure\Storage\Blob\Models\CreateBlobPagesResult;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CreateBlobPagesResultTest extends \PHPUnit\Framework\TestCase
+class CreateBlobPagesResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::listBlobsOneEntry();
@@ -56,4 +59,5 @@ class CreateBlobPagesResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(intval($expected['x-ms-blob-sequence-number']), $actual->getSequenceNumber());
         $this->assertEquals(Utilities::toBoolean($expected['x-ms-request-server-encrypted']), $actual->getRequestServerEncrypted());
     }
+
 }

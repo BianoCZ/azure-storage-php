@@ -24,14 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Functional\Blob;
 
-use Exception;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
-use MicrosoftAzure\Storage\Blob\Models\CopyBlobOptions;
-use MicrosoftAzure\Storage\Blob\Models\CreatePageBlobOptions;
-use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
 use MicrosoftAzure\Storage\Blob\Models\SetBlobTierOptions;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use Throwable;
 
 /**
  * Tests for a blob storage account, such as block blob tier.
@@ -43,20 +40,22 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BlobStorageAccountFunctionalTest extends \PHPUnit\Framework\TestCase
+class BlobStorageAccountFunctionalTest extends TestCase
 {
-    /** @var BlobRestProxy $blobRestProxy */
-    private static $blobRestProxy;
+
+    private static BlobRestProxy $blobRestProxy;
+
     private static $accountName;
+
     private $containerName;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         try {
             $connectionString = TestResources::getWindowsAzureStorageServicesBlobAccountConnectionString();
-        } catch (Exception $e) {
+        } catch (Throwable) {
             $this->markTestSkipped('Environment string AZURE_STORAGE_CONNECTION_STRING_BLOB_ACCOUNT is not provided.\
                                     Skip blob account required test cases.');
         }
@@ -67,15 +66,16 @@ class BlobStorageAccountFunctionalTest extends \PHPUnit\Framework\TestCase
         self::$blobRestProxy->createContainer($this->containerName);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (self::$blobRestProxy) {
             self::$blobRestProxy->deleteContainer($this->containerName);
         }
+
         parent::tearDown();
     }
 
-    public function testSetBlobTier()
+    public function testSetBlobTier(): void
     {
         $blob = TestResources::getInterestingName('b');
         self::$blobRestProxy->createblockblob($this->containerName, $blob, "");
@@ -150,4 +150,5 @@ class BlobStorageAccountFunctionalTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('rehydrate-pending-to-hot', $blobs->getBlobs()[0]->getProperties()->getArchiveStatus());
         $this->assertNotNull($blobs->getBlobs()[0]->getProperties()->getAccessTierChangeTime());
     }
+
 }

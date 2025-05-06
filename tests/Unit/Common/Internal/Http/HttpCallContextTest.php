@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal\Http;
 
 use MicrosoftAzure\Storage\Common\Internal\Http\HttpCallContext;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class HttpCallContext
@@ -36,7 +37,7 @@ use MicrosoftAzure\Storage\Common\Internal\Http\HttpCallContext;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class HttpCallContextTest extends \PHPUnit\Framework\TestCase
+class HttpCallContextTest extends TestCase
 {
     public function testConstruct()
     {
@@ -59,7 +60,7 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testSetMethod($context)
+    public function testSetMethod($context): void
     {
         // Setup
         $expected = 'Method';
@@ -74,7 +75,7 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testSetBody($context)
+    public function testSetBody($context): void
     {
         // Setup
         $expected = 'Body';
@@ -89,7 +90,7 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testSetPath($context)
+    public function testSetPath($context): void
     {
         // Setup
         $expected = 'Path';
@@ -104,7 +105,7 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testSetUri($context)
+    public function testSetUri($context): void
     {
         // Setup
         $expected = 'http://www.microsoft.com';
@@ -119,10 +120,10 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testSetHeaders($context)
+    public function testSetHeaders($context): void
     {
         // Setup
-        $expected = array('value1', 'value2', 'value3');
+        $expected = ['value1', 'value2', 'value3'];
 
         // Test
         $context->setHeaders($expected);
@@ -134,10 +135,10 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testSetQueryParameters($context)
+    public function testSetQueryParameters($context): void
     {
         // Setup
-        $expected = array('value1', 'value2', 'value3');
+        $expected = ['value1', 'value2', 'value3'];
 
         // Test
         $context->setQueryParameters($expected);
@@ -149,10 +150,10 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testSetStatusCodes($context)
+    public function testSetStatusCodes($context): void
     {
         // Setup
-        $expected = array(1, 2, 3);
+        $expected = [1, 2, 3];
 
         // Test
         $context->setStatusCodes($expected);
@@ -164,7 +165,7 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testAddHeader($context)
+    public function testAddHeader($context): void
     {
         // Setup
         $expected = 'value';
@@ -180,7 +181,7 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testRemoveHeader($context)
+    public function testRemoveHeader($context): void
     {
         // Setup
         $value = 'value';
@@ -197,10 +198,10 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testConstruct
      */
-    public function testToString($context)
+    public function testToString($context): void
     {
         // Setup
-        $headers = array('h1' => 'v1', 'h2' => 'v2');
+        $headers = ['h1' => 'v1', 'h2' => 'v2'];
         $method = 'GET';
         $uri = 'http://microsoft.com';
         $path = 'windowsazure/services';
@@ -218,4 +219,5 @@ class HttpCallContextTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

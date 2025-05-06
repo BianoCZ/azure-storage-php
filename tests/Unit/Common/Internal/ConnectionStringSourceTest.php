@@ -25,6 +25,11 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal;
 
 use MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource;
+use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
+use function array_keys;
+use function count;
+use function putenv;
 
 /**
  * Unit tests for class ConnectionStringSource
@@ -36,16 +41,16 @@ use MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ConnectionStringSourceTest extends \PHPUnit\Framework\TestCase
+class ConnectionStringSourceTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
-        $property = new \ReflectionProperty('MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource', '_isInitialized');
+        $property = new ReflectionProperty('MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource', '_isInitialized');
         $property->setAccessible(true);
         $property->setValue(null);
     }
 
-    public function testEnvironmentSource()
+    public function testEnvironmentSource(): void
     {
         // Setup
         $key = 'key';
@@ -62,10 +67,10 @@ class ConnectionStringSourceTest extends \PHPUnit\Framework\TestCase
         putenv($key);
     }
 
-    public function testGetDefaultSources()
+    public function testGetDefaultSources(): void
     {
         // Setup
-        $expectedKeys = array(ConnectionStringSource::ENVIRONMENT_SOURCE);
+        $expectedKeys = [ConnectionStringSource::ENVIRONMENT_SOURCE];
 
         // Test
         $actual = ConnectionStringSource::getDefaultSources();
@@ -77,4 +82,5 @@ class ConnectionStringSourceTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($expectedKeys[$index], $keys[$index]);
         }
     }
+
 }

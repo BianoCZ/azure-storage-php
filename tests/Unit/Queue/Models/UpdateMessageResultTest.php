@@ -24,11 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Queue\Internal\QueueResources;
 use MicrosoftAzure\Storage\Queue\Models\UpdateMessageResult;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class UpdateMessageResult
@@ -40,12 +40,9 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class UpdateMessageResultTest extends \PHPUnit\Framework\TestCase
+class UpdateMessageResultTest extends TestCase
 {
-    /**
-     *
-     */
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::getUpdateMessageResultSampleHeaders();
@@ -63,4 +60,5 @@ class UpdateMessageResultTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals($expectedDate, $result->getTimeNextVisible());
     }
+
 }

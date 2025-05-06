@@ -24,10 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\File\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\File\Models\ShareProperties;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ShareProperties
@@ -39,9 +40,9 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class SharePropertiesTest extends \PHPUnit\Framework\TestCase
+class SharePropertiesTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $responseArray = TestResources::getInterestingSharePropertiesArray();
         $shareProperties = ShareProperties::create($responseArray);
@@ -53,4 +54,5 @@ class SharePropertiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedEtag, $shareProperties->getETag());
         $this->assertEquals($expectedQuota, $shareProperties->getQuota());
     }
+
 }

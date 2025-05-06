@@ -39,15 +39,16 @@ use MicrosoftAzure\Storage\Common\Models\Range;
  */
 class GetFileOptions extends FileServiceOptions
 {
+
     private $range = null;
+
     private $rangeGetContentMD5 = false;
 
     /**
      * Gets File range.
      *
-     * @return Range
      */
-    public function getRange()
+    public function getRange(): Range
     {
         return $this->range;
     }
@@ -57,9 +58,8 @@ class GetFileOptions extends FileServiceOptions
      *
      * @param Range $range value.
      *
-     * @return void
      */
-    public function setRange(Range $range)
+    public function setRange(Range $range): void
     {
         $this->range = $range;
     }
@@ -67,9 +67,8 @@ class GetFileOptions extends FileServiceOptions
     /**
      * Gets File rangeGetContentMD5.
      *
-     * @return bool
      */
-    public function getRangeGetContentMD5()
+    public function getRangeGetContentMD5(): bool
     {
         return $this->rangeGetContentMD5;
     }
@@ -79,20 +78,20 @@ class GetFileOptions extends FileServiceOptions
      *
      * @param bool $rangeGetContentMD5 value.
      *
-     * @return void
      */
-    public function setRangeGetContentMD5($rangeGetContentMD5)
+    public function setRangeGetContentMD5(bool $rangeGetContentMD5): void
     {
         Validate::isBoolean($rangeGetContentMD5);
-        $this->rangeGetContentMD5 = (bool)$rangeGetContentMD5;
+        $this->rangeGetContentMD5 = (bool) $rangeGetContentMD5;
     }
 
     public function getRangeString()
     {
         if ($this->range != null) {
             return $this->range->getRangeString();
-        } else {
-            return null;
         }
+
+        return null;
     }
+
 }

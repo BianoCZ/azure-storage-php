@@ -36,17 +36,22 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class Blob
 {
+
     private $_name;
+
     private $_url;
+
     private $_snapshot;
+
     private $_metadata;
+
     private $_properties;
+
     /**
      * Gets blob name.
      *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->_name;
     }
@@ -56,9 +61,8 @@ class Blob
      *
      * @param string $name value.
      *
-     * @return void
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->_name = $name;
     }
@@ -66,9 +70,8 @@ class Blob
     /**
      * Gets blob snapshot.
      *
-     * @return string
      */
-    public function getSnapshot()
+    public function getSnapshot(): string
     {
         return $this->_snapshot;
     }
@@ -78,9 +81,8 @@ class Blob
      *
      * @param string $snapshot value.
      *
-     * @return void
      */
-    public function setSnapshot($snapshot)
+    public function setSnapshot(string $snapshot): void
     {
         $this->_snapshot = $snapshot;
     }
@@ -88,9 +90,8 @@ class Blob
     /**
      * Gets blob url.
      *
-     * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->_url;
     }
@@ -100,9 +101,8 @@ class Blob
      *
      * @param string $url value.
      *
-     * @return void
      */
-    public function setUrl($url)
+    public function setUrl(string $url): void
     {
         $this->_url = $url;
     }
@@ -110,9 +110,8 @@ class Blob
     /**
      * Gets blob metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->_metadata;
     }
@@ -122,9 +121,8 @@ class Blob
      *
      * @param array $metadata value.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata = null)
+    public function setMetadata(?array $metadata = null): void
     {
         $this->_metadata = $metadata;
     }
@@ -132,9 +130,8 @@ class Blob
     /**
      * Gets blob properties.
      *
-     * @return BlobProperties
      */
-    public function getProperties()
+    public function getProperties(): BlobProperties
     {
         return $this->_properties;
     }
@@ -144,10 +141,10 @@ class Blob
      *
      * @param BlobProperties $properties value.
      *
-     * @return void
      */
-    public function setProperties($properties)
+    public function setProperties(BlobProperties $properties): void
     {
         $this->_properties = $properties;
     }
+
 }

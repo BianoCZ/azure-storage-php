@@ -42,12 +42,10 @@ class Filter
      * @param Filter $left  The left filter
      * @param Filter $right The right filter
      *
-     * @return \MicrosoftAzure\Storage\Table\Models\Filters\BinaryFilter
      */
-    public static function applyAnd(Filter $left, Filter $right)
+    public static function applyAnd(Filter $left, Filter $right): BinaryFilter
     {
-        $filter = new BinaryFilter($left, 'and', $right);
-        return $filter;
+        return new BinaryFilter($left, 'and', $right);
     }
 
     /**
@@ -55,12 +53,10 @@ class Filter
      *
      * @param Filter $operand The operand
      *
-     * @return \MicrosoftAzure\Storage\Table\Models\Filters\UnaryFilter
      */
-    public static function applyNot(Filter $operand)
+    public static function applyNot(Filter $operand): UnaryFilter
     {
-        $filter = new UnaryFilter('not', $operand);
-        return $filter;
+        return new UnaryFilter('not', $operand);
     }
 
     /**
@@ -69,12 +65,10 @@ class Filter
      * @param Filter $left  The left operand
      * @param Filter $right The right operand
      *
-     * @return BinaryFilter
      */
-    public static function applyOr(Filter $left, Filter $right)
+    public static function applyOr(Filter $left, Filter $right): BinaryFilter
     {
-        $filter = new BinaryFilter($left, 'or', $right);
-        return $filter;
+        return new BinaryFilter($left, 'or', $right);
     }
 
     /**
@@ -83,12 +77,10 @@ class Filter
      * @param Filter $left  The left operand
      * @param Filter $right The right operand
      *
-     * @return BinaryFilter
      */
-    public static function applyEq(Filter $left, Filter $right)
+    public static function applyEq(Filter $left, Filter $right): BinaryFilter
     {
-        $filter = new BinaryFilter($left, 'eq', $right);
-        return $filter;
+        return new BinaryFilter($left, 'eq', $right);
     }
 
     /**
@@ -97,12 +89,10 @@ class Filter
      * @param Filter $left  The left operand
      * @param Filter $right The right operand
      *
-     * @return BinaryFilter
      */
-    public static function applyNe(Filter $left, Filter $right)
+    public static function applyNe(Filter $left, Filter $right): BinaryFilter
     {
-        $filter = new BinaryFilter($left, 'ne', $right);
-        return $filter;
+        return new BinaryFilter($left, 'ne', $right);
     }
 
     /**
@@ -111,12 +101,10 @@ class Filter
      * @param Filter $left  The left operand
      * @param Filter $right The right operand
      *
-     * @return BinaryFilter
      */
-    public static function applyGe(Filter $left, Filter $right)
+    public static function applyGe(Filter $left, Filter $right): BinaryFilter
     {
-        $filter = new BinaryFilter($left, 'ge', $right);
-        return $filter;
+        return new BinaryFilter($left, 'ge', $right);
     }
 
     /**
@@ -125,12 +113,10 @@ class Filter
      * @param Filter $left  The left operand
      * @param Filter $right The right operand
      *
-     * @return BinaryFilter
      */
-    public static function applyGt(Filter $left, Filter $right)
+    public static function applyGt(Filter $left, Filter $right): BinaryFilter
     {
-        $filter = new BinaryFilter($left, 'gt', $right);
-        return $filter;
+        return new BinaryFilter($left, 'gt', $right);
     }
 
     /**
@@ -139,12 +125,10 @@ class Filter
      * @param Filter $left  The left operand
      * @param Filter $right The right operand
      *
-     * @return BinaryFilter
      */
-    public static function applyLt(Filter $left, Filter $right)
+    public static function applyLt(Filter $left, Filter $right): BinaryFilter
     {
-        $filter = new BinaryFilter($left, 'lt', $right);
-        return $filter;
+        return new BinaryFilter($left, 'lt', $right);
     }
 
     /**
@@ -153,12 +137,10 @@ class Filter
      * @param Filter $left  The left operand
      * @param Filter $right The right operand
      *
-     * @return BinaryFilter
      */
-    public static function applyLe(Filter $left, Filter $right)
+    public static function applyLe(Filter $left, Filter $right): BinaryFilter
     {
-        $filter = new BinaryFilter($left, 'le', $right);
-        return $filter;
+        return new BinaryFilter($left, 'le', $right);
     }
 
     /**
@@ -167,12 +149,10 @@ class Filter
      * @param mixed  $value   The filter value
      * @param string $edmType The value EDM type.
      *
-     * @return \MicrosoftAzure\Storage\Table\Models\Filters\ConstantFilter
      */
-    public static function applyConstant($value, $edmType = null)
+    public static function applyConstant(mixed $value, ?string $edmType = null): ConstantFilter
     {
-        $filter = new ConstantFilter($edmType, $value);
-        return $filter;
+        return new ConstantFilter($edmType, $value);
     }
 
     /**
@@ -180,12 +160,10 @@ class Filter
      *
      * @param string $value The filter value
      *
-     * @return \MicrosoftAzure\Storage\Table\Models\Filters\PropertyNameFilter
      */
-    public static function applyPropertyName($value)
+    public static function applyPropertyName(string $value): PropertyNameFilter
     {
-        $filter = new PropertyNameFilter($value);
-        return $filter;
+        return new PropertyNameFilter($value);
     }
 
     /**
@@ -193,11 +171,10 @@ class Filter
      *
      * @param string $value The raw string filter expression
      *
-     * @return \MicrosoftAzure\Storage\Table\Models\Filters\QueryStringFilter
      */
-    public static function applyQueryString($value)
+    public static function applyQueryString(string $value): QueryStringFilter
     {
-        $filter = new QueryStringFilter($value);
-        return $filter;
+        return new QueryStringFilter($value);
     }
+
 }

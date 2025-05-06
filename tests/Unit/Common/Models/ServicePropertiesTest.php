@@ -24,13 +24,15 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Models;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Models\GetServicePropertiesResult;
 use MicrosoftAzure\Storage\Common\Models\Logging;
 use MicrosoftAzure\Storage\Common\Models\Metrics;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
-use MicrosoftAzure\Storage\Common\Models\GetServicePropertiesResult;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use function count;
 
 /**
  * Unit tests for class ServiceProperties
@@ -42,9 +44,9 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ServicePropertiesTest extends \PHPUnit\Framework\TestCase
+class ServicePropertiesTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -59,7 +61,7 @@ class ServicePropertiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($metrics, $result->getHourMetrics());
     }
 
-    public function testSetLogging()
+    public function testSetLogging(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -73,7 +75,7 @@ class ServicePropertiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($logging, $result->getLogging());
     }
 
-    public function testGetLogging()
+    public function testGetLogging(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -88,7 +90,7 @@ class ServicePropertiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($logging, $actual);
     }
 
-    public function testSetHourMetrics()
+    public function testSetHourMetrics(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -102,7 +104,7 @@ class ServicePropertiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($metrics, $result->getHourMetrics());
     }
 
-    public function testGetHourMetrics()
+    public function testGetHourMetrics(): void
     {
         // Setup
         $sample = TestResources::getServicePropertiesSample();
@@ -117,11 +119,11 @@ class ServicePropertiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($metrics, $actual);
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         // Setup
         $properties = ServiceProperties::create(TestResources::getServicePropertiesSample());
-        $corsesArray = array();
+        $corsesArray = [];
         if (count($properties->getCorses()) == 1) {
             $corsesArray = ['CorsRule' => $properties->getCorses()[0]->toArray()];
         } else {
@@ -130,12 +132,12 @@ class ServicePropertiesTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $expected = array(
+        $expected = [
             'Logging' => $properties->getLogging()->toArray(),
             'HourMetrics' => $properties->getHourMetrics()->toArray(),
             'MinuteMetrics' => $properties->getMinuteMetrics()->toArray(),
-            'Cors' => !empty($corsesArray) ? $corsesArray : null
-        );
+            'Cors' => !empty($corsesArray) ? $corsesArray : null,
+        ];
 
         // Test
         $actual = $properties->toArray();
@@ -144,7 +146,7 @@ class ServicePropertiesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testToXml()
+    public function testToXml(): void
     {
         // Setup
         $properties = ServiceProperties::create(TestResources::getServicePropertiesSample());
@@ -158,4 +160,5 @@ class ServicePropertiesTest extends \PHPUnit\Framework\TestCase
         $actualProperties = GetServicePropertiesResult::create($actualParsed);
         $this->assertEquals($actualProperties->getValue(), $properties);
     }
+
 }

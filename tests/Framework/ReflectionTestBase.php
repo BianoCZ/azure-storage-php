@@ -21,21 +21,25 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Framework;
 
-class ReflectionTestBase extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+class ReflectionTestBase extends TestCase
 {
     protected static function getMethod($name, $object)
     {
-        $class = new \ReflectionClass($object);
+        $class = new ReflectionClass($object);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
     }
 
-    protected static function setProperty($name, $object, $value)
+    protected static function setProperty($name, $object, $value): void
     {
-        $reflection = new \ReflectionClass($object);
+        $reflection = new ReflectionClass($object);
         $reflection_property = $reflection->getProperty($name);
         $reflection_property->setAccessible(true);
         $reflection_property->setValue($object, $value);
@@ -43,9 +47,10 @@ class ReflectionTestBase extends \PHPUnit\Framework\TestCase
 
     protected static function getProperty($name, $object)
     {
-        $reflection = new \ReflectionClass($object);
+        $reflection = new ReflectionClass($object);
         $reflection_property = $reflection->getProperty($name);
         $reflection_property->setAccessible(true);
         return $reflection_property;
     }
+
 }

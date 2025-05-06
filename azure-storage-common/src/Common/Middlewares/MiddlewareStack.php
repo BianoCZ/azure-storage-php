@@ -24,6 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Common\Middlewares;
 
+use function array_unshift;
+
 /**
  * This class provides the stack that handles the logic of applying each
  * middlewares to the request or the response.
@@ -37,16 +39,16 @@ namespace MicrosoftAzure\Storage\Common\Middlewares;
  */
 class MiddlewareStack
 {
-    private $middlewares = array();
+
+    private $middlewares = [];
 
     /**
      * Push the given middleware into the middleware stack.
      *
      * @param  IMiddleware|callable $middleware The middleware to be pushed.
      *
-     * @return void
      */
-    public function push($middleware)
+    public function push(IMiddleware|callable $middleware): void
     {
         array_unshift($this->middlewares, $middleware);
     }
@@ -56,9 +58,8 @@ class MiddlewareStack
      *
      * @param  callable $handler the handler to which the middleware applies.
      *
-     * @return callable
      */
-    public function apply(callable $handler)
+    public function apply(callable $handler): callable
     {
         $result = $handler;
         foreach ($this->middlewares as $middleware) {
@@ -67,4 +68,5 @@ class MiddlewareStack
 
         return $result;
     }
+
 }

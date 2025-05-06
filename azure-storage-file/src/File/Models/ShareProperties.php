@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\File\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
 
@@ -39,8 +40,11 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class ShareProperties
 {
+
     private $lastModified;
+
     private $etag;
+
     private $quota;
 
     /**
@@ -48,9 +52,8 @@ class ShareProperties
      *
      * @param  array  $parsedResponse The response array.
      *
-     * @return ShareProperties
      */
-    public static function create(array $parsedResponse)
+    public static function create(array $parsedResponse): ShareProperties
     {
         $result = new ShareProperties();
         $date   = $parsedResponse[Resources::QP_LAST_MODIFIED];
@@ -64,9 +67,8 @@ class ShareProperties
     /**
      * Gets share lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }
@@ -76,9 +78,8 @@ class ShareProperties
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    public function setLastModified(\DateTime $lastModified)
+    public function setLastModified(DateTime $lastModified): void
     {
         $this->lastModified = $lastModified;
     }
@@ -86,9 +87,8 @@ class ShareProperties
     /**
      * Gets share etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->etag;
     }
@@ -98,9 +98,8 @@ class ShareProperties
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    public function setETag($etag)
+    public function setETag(string $etag): void
     {
         $this->etag = $etag;
     }
@@ -108,9 +107,8 @@ class ShareProperties
     /**
      * Gets share quota.
      *
-     * @return string
      */
-    public function getQuota()
+    public function getQuota(): string
     {
         return $this->quota;
     }
@@ -120,10 +118,10 @@ class ShareProperties
      *
      * @param string $quota value.
      *
-     * @return void
      */
-    public function setQuota($quota)
+    public function setQuota(string $quota): void
     {
         $this->quota = $quota;
     }
+
 }

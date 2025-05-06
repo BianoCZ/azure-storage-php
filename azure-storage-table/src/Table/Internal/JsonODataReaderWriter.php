@@ -27,6 +27,14 @@ namespace MicrosoftAzure\Storage\Table\Internal;
 use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
 use MicrosoftAzure\Storage\Table\Models\Entity;
+use function array_key_exists;
+use function in_array;
+use function is_null;
+use function is_string;
+use function json_decode;
+use function json_encode;
+use function strlen;
+use function strpos;
 
 /**
  * Serializes and unserializes results from table wrapper calls
@@ -46,11 +54,10 @@ class JsonODataReaderWriter implements IODataReaderWriter
      *
      * @param string $name The name of the table.
      *
-     * @return string
      */
-    public function getTable($name)
+    public function getTable(string $name): string
     {
-        return json_encode(array(Resources::JSON_TABLE_NAME => $name));
+        return json_encode([Resources::JSON_TABLE_NAME => $name]);
     }
 
     /**
@@ -58,9 +65,8 @@ class JsonODataReaderWriter implements IODataReaderWriter
      *
      * @param mixed $body The HTTP response body.
      *
-     * @return string
      */
-    public function parseTable($body)
+    public function parseTable(mixed $body): string
     {
         $table = json_decode($body, true);
         return $table[Resources::JSON_TABLE_NAME];
@@ -71,11 +77,10 @@ class JsonODataReaderWriter implements IODataReaderWriter
      *
      * @param string $body The HTTP response body.
      *
-     * @return array
      */
-    public function parseTableEntries($body)
+    public function parseTableEntries(string $body): array
     {
-        $tables     = array();
+        $tables     = [];
         $result     = json_decode($body, true);
 
         $rawEntries = $result[Resources::JSON_VALUE];
@@ -92,12 +97,11 @@ class JsonODataReaderWriter implements IODataReaderWriter
      *
      * @param Entity $entity The entity instance.
      *
-     * @return string
      */
-    public function getEntity(Entity $entity)
+    public function getEntity(Entity $entity): string
     {
         $entityProperties = $entity->getProperties();
-        $properties       = array();
+        $properties       = [];
 
         foreach ($entityProperties as $name => $property) {
             $edmType    = $property->getEdmType();
@@ -128,9 +132,8 @@ class JsonODataReaderWriter implements IODataReaderWriter
      *
      * @param string $body The HTTP response body.
      *
-     * @return Entity
      */
-    public function parseEntity($body)
+    public function parseEntity(string $body): Entity
     {
         $rawEntity = json_decode($body, true);
         return $this->parseOneEntity($rawEntity);
@@ -141,12 +144,11 @@ class JsonODataReaderWriter implements IODataReaderWriter
      *
      * @param string $body The HTTP response body.
      *
-     * @return array
      */
-    public function parseEntities($body)
+    public function parseEntities(string $body): array
     {
         $rawEntities = json_decode($body, true);
-        $entities   = array();
+        $entities   = [];
 
         foreach ($rawEntities[Resources::JSON_VALUE] as $rawEntity) {
             $entities[] = $this->parseOneEntity($rawEntity);
@@ -174,7 +176,7 @@ class JsonODataReaderWriter implements IODataReaderWriter
 
         // Make sure etag is set
         if (array_key_exists(Resources::JSON_ODATA_ETAG, $rawEntity)) {
-            $etag = (string)$rawEntity[Resources::JSON_ODATA_ETAG];
+            $etag = (string) $rawEntity[Resources::JSON_ODATA_ETAG];
         } else {
             $etag = null;
         }
@@ -186,12 +188,14 @@ class JsonODataReaderWriter implements IODataReaderWriter
             }
 
             // Ignore keys end with Resources::JSON_ODATA_TYPE_SUFFIX
-            if (strlen($key) > strlen(Resources::JSON_ODATA_TYPE_SUFFIX) &&
+            if (
+                strlen($key) > strlen(Resources::JSON_ODATA_TYPE_SUFFIX) &&
                 strpos(
                     $key,
                     Resources::JSON_ODATA_TYPE_SUFFIX,
                     strlen($key) - strlen(Resources::JSON_ODATA_TYPE_SUFFIX)
-                ) !== false) {
+                ) !== false
+            ) {
                 continue;
             }
 
@@ -209,11 +213,11 @@ class JsonODataReaderWriter implements IODataReaderWriter
                 $edmType = EdmType::propertyType($value);
             }
             //Store the raw value of the string representation.
-            $rawValue = \is_string($value) ? $value : '';
-            $value      = EdmType::unserializeQueryValue((string)$edmType, $value);
+            $rawValue = is_string($value) ? $value : '';
+            $value      = EdmType::unserializeQueryValue((string) $edmType, $value);
             $entity->addProperty(
-                (string)$key,
-                (string)$edmType,
+                (string) $key,
+                (string) $edmType,
                 $value,
                 $rawValue
             );
@@ -221,4 +225,5 @@ class JsonODataReaderWriter implements IODataReaderWriter
 
         return $entity;
     }
+
 }

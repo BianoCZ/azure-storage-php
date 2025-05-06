@@ -36,7 +36,9 @@ namespace MicrosoftAzure\Storage\Table\Models\Filters;
  */
 class UnaryFilter extends Filter
 {
+
     private $_operator;
+
     private $_operand;
 
     /**
@@ -45,7 +47,7 @@ class UnaryFilter extends Filter
      * @param string $operator The operator.
      * @param Filter $operand  The operand filter.
      */
-    public function __construct($operator, Filter $operand = null)
+    public function __construct(string $operator, ?Filter $operand = null)
     {
         $this->_operand  = $operand;
         $this->_operator = $operator;
@@ -54,9 +56,8 @@ class UnaryFilter extends Filter
     /**
      * Gets operator
      *
-     * @return string
      */
-    public function getOperator()
+    public function getOperator(): string
     {
         return $this->_operator;
     }
@@ -64,10 +65,10 @@ class UnaryFilter extends Filter
     /**
      * Gets operand
      *
-     * @return Filter
      */
-    public function getOperand()
+    public function getOperand(): Filter
     {
         return $this->_operand;
     }
+
 }

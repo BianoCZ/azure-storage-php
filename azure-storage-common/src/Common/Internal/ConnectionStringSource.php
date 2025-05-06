@@ -24,6 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal;
 
+use function getenv;
+
 /**
  * Holder for default connection string sources used in CloudConfigurationManager.
  *
@@ -37,21 +39,22 @@ namespace MicrosoftAzure\Storage\Common\Internal;
  */
 class ConnectionStringSource
 {
+
     private static $_defaultSources;
+
     private static $_isInitialized;
-    const ENVIRONMENT_SOURCE = 'environment_source';
+    public const string ENVIRONMENT_SOURCE = 'environment_source';
 
     /**
      * Initializes the default sources.
      *
-     * @return void
      */
-    private static function _init()
+    private static function _init(): void
     {
         if (!self::$_isInitialized) {
-            self::$_defaultSources = array(
-                self::ENVIRONMENT_SOURCE => array(__CLASS__, 'environmentSource')
-            );
+            self::$_defaultSources = [
+                self::ENVIRONMENT_SOURCE => [self::class, 'environmentSource'],
+            ];
             self::$_isInitialized  = true;
         }
     }
@@ -61,9 +64,8 @@ class ConnectionStringSource
      *
      * @param string $key The connection string name.
      *
-     * @return string
      */
-    public static function environmentSource($key)
+    public static function environmentSource(string $key): string
     {
         Validate::canCastAsString($key, 'key');
 
@@ -73,11 +75,11 @@ class ConnectionStringSource
     /**
      * Gets list of default sources.
      *
-     * @return array
      */
-    public static function getDefaultSources()
+    public static function getDefaultSources(): array
     {
         self::_init();
         return self::$_defaultSources;
     }
+
 }

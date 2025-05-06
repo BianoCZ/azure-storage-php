@@ -27,6 +27,7 @@ namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 use MicrosoftAzure\Storage\Blob\Models\GetContainerPropertiesResult;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class GetContainerPropertiesResult
@@ -38,9 +39,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetContainerPropertiesResultTest extends \PHPUnit\Framework\TestCase
+class GetContainerPropertiesResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::listBlobsOneEntry();
@@ -52,8 +53,9 @@ class GetContainerPropertiesResultTest extends \PHPUnit\Framework\TestCase
         $result = GetContainerPropertiesResult::create($expectedProperties);
 
         // Assert
-        $this->assertEquals(array('' => $expectedProperties['x-ms-meta-']), $result->getMetadata());
+        $this->assertEquals(['' => $expectedProperties['x-ms-meta-']], $result->getMetadata());
         $this->assertEquals($expectedDate, $result->getLastModified());
         $this->assertEquals($expectedProperties['Etag'], $result->getETag());
     }
+
 }

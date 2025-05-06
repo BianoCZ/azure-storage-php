@@ -36,14 +36,14 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class GetBlobMetadataOptions extends BlobServiceOptions
 {
+
     private $_snapshot;
 
     /**
      * Gets blob snapshot.
      *
-     * @return string
      */
-    public function getSnapshot()
+    public function getSnapshot(): string
     {
         return $this->_snapshot;
     }
@@ -53,10 +53,10 @@ class GetBlobMetadataOptions extends BlobServiceOptions
      *
      * @param string $snapshot value.
      *
-     * @return void
      */
-    public function setSnapshot($snapshot)
+    public function setSnapshot(string $snapshot): void
     {
         $this->_snapshot = $snapshot;
     }
+
 }

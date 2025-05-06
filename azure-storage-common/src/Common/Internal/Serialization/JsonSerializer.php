@@ -25,6 +25,11 @@
 namespace MicrosoftAzure\Storage\Common\Internal\Serialization;
 
 use MicrosoftAzure\Storage\Common\Internal\Validate;
+use stdClass;
+use function get_object_vars;
+use function is_array;
+use function json_decode;
+use function json_encode;
 
 /**
  * Perform JSON serialization / deserialization
@@ -45,14 +50,13 @@ class JsonSerializer implements ISerializer
      * @param object $targetObject The target object.
      * @param string $rootName     The name of the root element.
      *
-     * @return string
      */
-    public static function objectSerialize($targetObject, $rootName)
+    public static function objectSerialize(object $targetObject, string $rootName): string
     {
         Validate::notNull($targetObject, 'targetObject');
         Validate::canCastAsString($rootName, 'rootName');
 
-        $contianer = new \stdClass();
+        $contianer = new stdClass();
 
         $contianer->$rootName = $targetObject;
 
@@ -66,9 +70,8 @@ class JsonSerializer implements ISerializer
      * @param array $array      The object to serialize represented in array.
      * @param array $properties The used properties in the serialization process.
      *
-     * @return string
      */
-    public function serialize(array $array = null, array $properties = null)
+    public function serialize(?array $array = null, ?array $properties = null): string
     {
         Validate::isArray($array, 'array');
 
@@ -80,17 +83,17 @@ class JsonSerializer implements ISerializer
      *
      * @param string $serialized The serialized object in string representation.
      *
-     * @return array
      */
-    public function unserialize($serialized)
+    public function unserialize(string $serialized): array
     {
         Validate::canCastAsString($serialized, 'serialized');
 
         $json = json_decode($serialized);
         if ($json && !is_array($json)) {
             return get_object_vars($json);
-        } else {
-            return $json;
         }
+
+        return $json;
     }
+
 }

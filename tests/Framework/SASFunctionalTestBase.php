@@ -25,15 +25,17 @@
 namespace MicrosoftAzure\Storage\Tests\Framework;
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
-use MicrosoftAzure\Storage\Common\SharedAccessSignatureHelper;
 use MicrosoftAzure\Storage\File\FileRestProxy;
 use MicrosoftAzure\Storage\Queue\QueueRestProxy;
 use MicrosoftAzure\Storage\Table\TableRestProxy;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
+use PHPUnit\Framework\TestCase;
+use function array_diff;
+use function call_user_func;
+use function error_log;
 
 /**
  * Test base for SAS functional tests.
@@ -45,18 +47,29 @@ use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
+class SASFunctionalTestBase extends TestCase
 {
+
     protected $connectionString;
+
     protected $xmlSerializer;
+
     protected $serviceSettings;
+
     protected $createdContainer;
+
     protected $createdTable;
+
     protected $createdQueue;
+
     protected $createdShare;
+
     protected $blobRestProxy;
+
     protected $tableRestProxy;
+
     protected $queueRestProxy;
+
     protected $fileRestProxy;
 
     public function __construct()
@@ -69,20 +82,21 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
             );
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->createdContainer = array();
-        $this->createdTable     = array();
-        $this->createdQueue     = array();
-        $this->createdShare     = array();
+
+        $this->createdContainer = [];
+        $this->createdTable     = [];
+        $this->createdQueue     = [];
+        $this->createdShare     = [];
         $this->blobRestProxy    = null;
         $this->tableRestProxy   = null;
         $this->queueRestProxy   = null;
         $this->fileRestProxy    = null;
     }
 
-    protected function setUpWithConnectionString($connectionString)
+    protected function setUpWithConnectionString($connectionString): void
     {
         $this->blobRestProxy  =
             BlobRestProxy::createBlobService($connectionString);
@@ -94,7 +108,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
             FileRestProxy::createFileService($connectionString);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->blobRestProxy  =
             BlobRestProxy::createBlobService($this->connectionString);
@@ -124,38 +138,38 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         $this->fileRestProxy    = null;
     }
 
-    protected function initializeProxiesWithSASandAccountName($sas, $accountName)
+    protected function initializeProxiesWithSASandAccountName($sas, $accountName): void
     {
         $connectionString = Resources::BLOB_ENDPOINT_NAME .
-                             '='.
+                             '=' .
                              'https://' .
                              $accountName .
                              '.' .
                              Resources::BLOB_BASE_DNS_NAME .
                              ';';
         $connectionString .= Resources::QUEUE_ENDPOINT_NAME .
-                             '='.
+                             '=' .
                              'https://' .
                              $accountName .
                              '.' .
                              Resources::QUEUE_BASE_DNS_NAME .
                              ';';
         $connectionString .= Resources::TABLE_ENDPOINT_NAME .
-                             '='.
+                             '=' .
                              'https://' .
                              $accountName .
                              '.' .
                              Resources::TABLE_BASE_DNS_NAME .
                              ';';
         $connectionString .= Resources::FILE_ENDPOINT_NAME .
-                             '='.
+                             '=' .
                              'https://' .
                              $accountName .
                              '.' .
                              Resources::FILE_BASE_DNS_NAME .
                              ';';
         $connectionString .= Resources::SAS_TOKEN_NAME .
-                             '='.
+                             '=' .
                              $sas;
 
         $this->setUpWithConnectionString($connectionString);
@@ -164,13 +178,13 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
     protected function createProxyWithSAS($sas, $accountName, $signedResource)
     {
         $connectionString = Resources::SAS_TOKEN_NAME .
-                             '='.
+                             '=' .
                              $sas;
         switch ($signedResource) {
             case Resources::RESOURCE_TYPE_BLOB:
             case Resources::RESOURCE_TYPE_CONTAINER:
                 $connectionString = Resources::BLOB_ENDPOINT_NAME .
-                                    '='.
+                                    '=' .
                                     'https://' .
                                     $accountName .
                                     '.' .
@@ -178,10 +192,11 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
                                     ';' .
                                     $connectionString;
                 return BlobRestProxy::createBlobService($connectionString);
+
                 break;
             case Resources::RESOURCE_TYPE_QUEUE:
                 $connectionString = Resources::QUEUE_ENDPOINT_NAME .
-                                    '='.
+                                    '=' .
                                     'https://' .
                                     $accountName .
                                     '.' .
@@ -189,10 +204,11 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
                                     ';' .
                                     $connectionString;
                 return QueueRestProxy::createQueueService($connectionString);
+
                 break;
             case Resources::RESOURCE_TYPE_TABLE:
                 $connectionString = Resources::TABLE_ENDPOINT_NAME .
-                                    '='.
+                                    '=' .
                                     'https://' .
                                     $accountName .
                                     '.' .
@@ -200,11 +216,12 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
                                     ';' .
                                     $connectionString;
                 return TableRestProxy::createTableService($connectionString);
+
                 break;
             case Resources::RESOURCE_TYPE_FILE:
             case Resources::RESOURCE_TYPE_SHARE:
                 $connectionString = Resources::FILE_ENDPOINT_NAME .
-                                    '='.
+                                    '=' .
                                     'https://' .
                                     $accountName .
                                     '.' .
@@ -212,6 +229,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
                                     ';' .
                                     $connectionString;
                 return FileRestProxy::createFileService($connectionString);
+
                 break;
             default:
                 $this->assertTrue(false);// Given signed resource not valid.
@@ -219,7 +237,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function safeDeleteContainer($name)
+    protected function safeDeleteContainer($name): void
     {
         try {
             $this->blobRestProxy->deleteContainer($name);
@@ -229,7 +247,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function safeCreateContainer($name)
+    protected function safeCreateContainer($name): void
     {
         try {
             $this->blobRestProxy->createContainer($name);
@@ -239,7 +257,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function safeDeleteQueue($name)
+    protected function safeDeleteQueue($name): void
     {
         try {
             $this->queueRestProxy->deleteQueue($name);
@@ -249,7 +267,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function safeCreateQueue($name)
+    protected function safeCreateQueue($name): void
     {
         try {
             $this->queueRestProxy->createQueue($name);
@@ -259,7 +277,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function safeDeleteTable($name)
+    protected function safeDeleteTable($name): void
     {
         try {
             $this->tableRestProxy->deleteTable($name);
@@ -269,7 +287,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function safeCreateTable($name)
+    protected function safeCreateTable($name): void
     {
         try {
             $this->tableRestProxy->createTable($name);
@@ -279,7 +297,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function safeDeleteShare($name)
+    protected function safeDeleteShare($name): void
     {
         try {
             $this->fileRestProxy->deleteShare($name);
@@ -289,7 +307,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function safeCreateShare($name)
+    protected function safeCreateShare($name): void
     {
         try {
             $this->fileRestProxy->createShare($name);
@@ -303,7 +321,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         $errorMsg,
         callable $callable,
         $failureMessage = ''
-    ) {
+    ): void {
         $message = '';
         try {
             call_user_func($callable);
@@ -312,4 +330,5 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
         }
         $this->assertContains($errorMsg, $message, $failureMessage);
     }
+
 }

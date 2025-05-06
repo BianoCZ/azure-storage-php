@@ -26,7 +26,6 @@ namespace MicrosoftAzure\Storage\Common\Internal\Authentication;
 
 use GuzzleHttp\Psr7\Request;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Common\Internal\Validate;
 
 /**
  * Azure authentication scheme for token credential.
@@ -41,6 +40,7 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class TokenAuthScheme implements IAuthScheme
 {
+
     /**
      * The authentication token
      */
@@ -51,7 +51,7 @@ class TokenAuthScheme implements IAuthScheme
      *
      * @param string $token the token used for AAD authentication.
      */
-    public function __construct(&$token)
+    public function __construct(string &$token)
     {
         $this->tokenRef =& $token;
     }
@@ -63,11 +63,11 @@ class TokenAuthScheme implements IAuthScheme
      *
      * @abstract
      *
-     * @return \GuzzleHttp\Psr7\Request
      */
-    public function signRequest(Request $request)
+    public function signRequest(Request $request): Request
     {
-        $bearerToken = "Bearer ". $this->tokenRef;
+        $bearerToken = "Bearer " . $this->tokenRef;
         return $request->withHeader(Resources::AUTHENTICATION, $bearerToken);
     }
+
 }

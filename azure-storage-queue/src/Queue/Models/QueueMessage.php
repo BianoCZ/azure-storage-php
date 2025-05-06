@@ -24,8 +24,10 @@
 
 namespace MicrosoftAzure\Storage\Queue\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use DateTime;
 use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use function intval;
 
 /**
  * Holds data for single queue message.
@@ -39,13 +41,21 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
  */
 class QueueMessage
 {
+
     private $messageId;
+
     private $insertionDate;
+
     private $expirationDate;
+
     private $popReceipt;
+
     private $timeNextVisible;
+
     private $dequeueCount;
+
     private $_messageText;
+
     private static $xmlRootName = 'QueueMessage';
 
     /**
@@ -56,9 +66,8 @@ class QueueMessage
      *
      * @internal
      *
-     * @return QueueMessage
      */
-    public static function createFromListMessages(array $parsedResponse)
+    public static function createFromListMessages(array $parsedResponse): QueueMessage
     {
         $timeNextVisible = $parsedResponse['TimeNextVisible'];
 
@@ -78,9 +87,8 @@ class QueueMessage
      *
      * @internal
      *
-     * @return QueueMessage
      */
-    public static function createFromPeekMessages(array $parsedResponse)
+    public static function createFromPeekMessages(array $parsedResponse): QueueMessage
     {
         $msg            = new QueueMessage();
         $expirationDate = $parsedResponse['ExpirationTime'];
@@ -108,9 +116,8 @@ class QueueMessage
      *
      * @internal
      *
-     * @return QueueMessage
      */
-    public static function createFromCreateMessage(array $parsedResponse)
+    public static function createFromCreateMessage(array $parsedResponse): QueueMessage
     {
         $msg = new QueueMessage();
 
@@ -136,9 +143,8 @@ class QueueMessage
     /**
      * Gets message text field.
      *
-     * @return string
      */
-    public function getMessageText()
+    public function getMessageText(): string
     {
         return $this->_messageText;
     }
@@ -148,9 +154,8 @@ class QueueMessage
      *
      * @param string $messageText message contents.
      *
-     * @return void
      */
-    public function setMessageText($messageText)
+    public function setMessageText(string $messageText): void
     {
         $this->_messageText = $messageText;
     }
@@ -158,9 +163,8 @@ class QueueMessage
     /**
      * Gets messageId field.
      *
-     * @return string
      */
-    public function getMessageId()
+    public function getMessageId(): string
     {
         return $this->messageId;
     }
@@ -170,9 +174,8 @@ class QueueMessage
      *
      * @param string $messageId message contents.
      *
-     * @return void
      */
-    public function setMessageId($messageId)
+    public function setMessageId(string $messageId): void
     {
         $this->messageId = $messageId;
     }
@@ -180,9 +183,8 @@ class QueueMessage
     /**
      * Gets insertionDate field.
      *
-     * @return \DateTime
      */
-    public function getInsertionDate()
+    public function getInsertionDate(): DateTime
     {
         return $this->insertionDate;
     }
@@ -194,9 +196,8 @@ class QueueMessage
      *
      * @internal
      *
-     * @return void
      */
-    public function setInsertionDate(\DateTime $insertionDate)
+    public function setInsertionDate(DateTime $insertionDate): void
     {
         $this->insertionDate = $insertionDate;
     }
@@ -204,9 +205,8 @@ class QueueMessage
     /**
      * Gets expirationDate field.
      *
-     * @return \DateTime
      */
-    public function getExpirationDate()
+    public function getExpirationDate(): DateTime
     {
         return $this->expirationDate;
     }
@@ -216,9 +216,8 @@ class QueueMessage
      *
      * @param \DateTime $expirationDate the expiration date of the message.
      *
-     * @return void
      */
-    public function setExpirationDate(\DateTime $expirationDate)
+    public function setExpirationDate(DateTime $expirationDate): void
     {
         $this->expirationDate = $expirationDate;
     }
@@ -226,9 +225,8 @@ class QueueMessage
     /**
      * Gets timeNextVisible field.
      *
-     * @return \DateTime
      */
-    public function getTimeNextVisible()
+    public function getTimeNextVisible(): DateTime
     {
         return $this->timeNextVisible;
     }
@@ -238,9 +236,8 @@ class QueueMessage
      *
      * @param \DateTime $timeNextVisible next visibile time for the message.
      *
-     * @return void
      */
-    public function setTimeNextVisible($timeNextVisible)
+    public function setTimeNextVisible(DateTime $timeNextVisible): void
     {
         $this->timeNextVisible = $timeNextVisible;
     }
@@ -248,9 +245,8 @@ class QueueMessage
     /**
      * Gets popReceipt field.
      *
-     * @return string
      */
-    public function getPopReceipt()
+    public function getPopReceipt(): string
     {
         return $this->popReceipt;
     }
@@ -260,9 +256,8 @@ class QueueMessage
      *
      * @param string $popReceipt used when deleting the message.
      *
-     * @return void
      */
-    public function setPopReceipt($popReceipt)
+    public function setPopReceipt(string $popReceipt): void
     {
         $this->popReceipt = $popReceipt;
     }
@@ -270,9 +265,8 @@ class QueueMessage
     /**
      * Gets dequeueCount field.
      *
-     * @return integer
      */
-    public function getDequeueCount()
+    public function getDequeueCount(): int
     {
         return $this->dequeueCount;
     }
@@ -280,13 +274,12 @@ class QueueMessage
     /**
      * Sets dequeueCount field.
      *
-     * @param integer $dequeueCount number of dequeues for that message.
+     * @param int $dequeueCount number of dequeues for that message.
      *
      * @internal
      *
-     * @return void
      */
-    public function setDequeueCount($dequeueCount)
+    public function setDequeueCount(int $dequeueCount): void
     {
         $this->dequeueCount = $dequeueCount;
     }
@@ -298,13 +291,13 @@ class QueueMessage
      *
      * @internal
      *
-     * @return string
      */
-    public function toXml(XmlSerializer $xmlSerializer)
+    public function toXml(XmlSerializer $xmlSerializer): string
     {
-        $array      = array('MessageText' => $this->_messageText);
-        $properties = array(XmlSerializer::ROOT_NAME => self::$xmlRootName);
+        $array      = ['MessageText' => $this->_messageText];
+        $properties = [XmlSerializer::ROOT_NAME => self::$xmlRootName];
 
         return $xmlSerializer->serialize($array, $properties);
     }
+
 }

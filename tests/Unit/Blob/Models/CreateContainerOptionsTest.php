@@ -24,8 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Models\CreateContainerOptions;
 use MicrosoftAzure\Storage\Common\Exceptions\InvalidArgumentTypeException;
+use PHPUnit\Framework\TestCase;
+use function get_class;
 
 /**
  * Unit tests for class CreateContainerOptions
@@ -37,9 +40,9 @@ use MicrosoftAzure\Storage\Common\Exceptions\InvalidArgumentTypeException;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CreateContainerOptionsTest extends \PHPUnit\Framework\TestCase
+class CreateContainerOptionsTest extends TestCase
 {
-    public function testGetPublicAccess()
+    public function testGetPublicAccess(): void
     {
         // Setup
         $properties = new CreateContainerOptions();
@@ -53,7 +56,7 @@ class CreateContainerOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetPublicAccess()
+    public function testSetPublicAccess(): void
     {
         // Setup
         $properties = new CreateContainerOptions();
@@ -67,22 +70,22 @@ class CreateContainerOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetPublicAccessInvalidValueFail()
+    public function testSetPublicAccessInvalidValueFail(): void
     {
         // Setup
         $properties = new CreateContainerOptions();
-        $expected = new \DateTime();
+        $expected = new DateTime();
         $this->setExpectedException(get_class(new InvalidArgumentTypeException('')));
 
         // Test
         $properties->setPublicAccess($expected);
     }
 
-    public function testSetMetadata()
+    public function testSetMetadata(): void
     {
         // Setup
         $container = new CreateContainerOptions();
-        $expected = array('key1' => 'value1', 'key2' => 'value2');
+        $expected = ['key1' => 'value1', 'key2' => 'value2'];
 
         // Test
         $container->setMetadata($expected);
@@ -91,11 +94,11 @@ class CreateContainerOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $container->getMetadata());
     }
 
-    public function testGetMetadata()
+    public function testGetMetadata(): void
     {
         // Setup
         $container = new CreateContainerOptions();
-        $expected = array('key1' => 'value1', 'key2' => 'value2');
+        $expected = ['key1' => 'value1', 'key2' => 'value2'];
         $container->setMetadata($expected);
 
         // Test
@@ -105,13 +108,13 @@ class CreateContainerOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testAddMetadata()
+    public function testAddMetadata(): void
     {
         // Setup
         $container = new CreateContainerOptions();
         $key = 'key1';
         $value = 'value1';
-        $expected = array($key => $value);
+        $expected = [$key => $value];
 
         // Test
         $container->addMetadata($key, $value);
@@ -119,4 +122,5 @@ class CreateContainerOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $container->getMetadata());
     }
+
 }

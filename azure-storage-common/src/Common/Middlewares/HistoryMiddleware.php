@@ -24,12 +24,19 @@
 
 namespace MicrosoftAzure\Storage\Common\Middlewares;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use DateTime;
+use DateTimeZone;
+use GuzzleHttp\Promise\RejectedPromise;
 use MicrosoftAzure\Storage\Common\Internal\Serialization\MessageSerializer;
+use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Promise\RejectedPromise;
+use function array_key_exists;
+use function sprintf;
+use function str_pad;
+use const PHP_EOL;
+use const STR_PAD_BOTH;
 
 /**
  * This class provides the functionality to log the requests/options/responses.
@@ -48,18 +55,20 @@ use GuzzleHttp\Promise\RejectedPromise;
  */
 class HistoryMiddleware extends MiddlewareBase
 {
+
     private $history;
+
     private $path;
+
     private $count;
 
-    const TITLE_LENGTH = 120;
+    public const int TITLE_LENGTH = 120;
 
     /**
      * Gets the saved paried history.
      *
-     * @return array
      */
-    public function getHistory()
+    public function getHistory(): array
     {
         return $this->history;
     }
@@ -73,9 +82,9 @@ class HistoryMiddleware extends MiddlewareBase
      *                     path.
      *
      */
-    public function __construct($path = '')
+    public function __construct(string $path = '')
     {
-        $this->history = array();
+        $this->history = [];
         $this->path = $path;
         $this->count = 0;
     }
@@ -85,7 +94,7 @@ class HistoryMiddleware extends MiddlewareBase
      *
      * @param array $entry the entry to be added.
      */
-    public function addHistory(array $entry)
+    public function addHistory(array $entry): void
     {
         if ($this->path !== '') {
             $this->appendNewEntryToPath($entry);
@@ -105,11 +114,10 @@ class HistoryMiddleware extends MiddlewareBase
     /**
      * Clear the history
      *
-     * @return void
      */
-    public function clearHistory()
+    public function clearHistory(): void
     {
-        $this->history = array();
+        $this->history = [];
         $this->count = 0;
     }
 
@@ -120,9 +128,8 @@ class HistoryMiddleware extends MiddlewareBase
      * @param  RequestInterface $request the request sent.
      * @param  array            $options the options that the request sent with.
      *
-     * @return callable
      */
-    protected function onFulfilled(RequestInterface $request, array $options)
+    protected function onFulfilled(RequestInterface $request, array $options): callable
     {
         $reflection = $this;
         return function (ResponseInterface $response) use (
@@ -133,7 +140,7 @@ class HistoryMiddleware extends MiddlewareBase
             $reflection->addHistory([
                 'request'  => $request,
                 'response' => $response,
-                'options'  => $options
+                'options'  => $options,
             ]);
             return $response;
         };
@@ -146,9 +153,8 @@ class HistoryMiddleware extends MiddlewareBase
      * @param  RequestInterface $request the request sent.
      * @param  array            $options the options that the request sent with.
      *
-     * @return callable
      */
-    protected function onRejected(RequestInterface $request, array $options)
+    protected function onRejected(RequestInterface $request, array $options): callable
     {
         $reflection = $this;
         return function ($reason) use (
@@ -159,7 +165,7 @@ class HistoryMiddleware extends MiddlewareBase
             $reflection->addHistory([
                 'request' => $request,
                 'reason'  => $reason,
-                'options' => $options
+                'options' => $options,
             ]);
             return new RejectedPromise($reason);
         };
@@ -170,9 +176,8 @@ class HistoryMiddleware extends MiddlewareBase
      *
      * @param array $entry the entry to be added.
      *
-     * @return void
      */
-    private function appendNewEntryToPath(array $entry)
+    private function appendNewEntryToPath(array $entry): void
     {
         $entryNoString = "Entry " . $this->count;
         $delimiter = str_pad(
@@ -184,7 +189,7 @@ class HistoryMiddleware extends MiddlewareBase
         $entryString = $delimiter;
         $entryString .= sprintf(
             "Time: %s\n",
-            (new \DateTime("now", new \DateTimeZone('UTC')))->format('Y-m-d H:i:s')
+            (new DateTime("now", new DateTimeZone('UTC')))->format('Y-m-d H:i:s')
         );
         $entryString .= MessageSerializer::objectSerialize($entry['request']);
         if (array_key_exists('reason', $entry)) {
@@ -197,4 +202,5 @@ class HistoryMiddleware extends MiddlewareBase
 
         Utilities::appendToFile($this->path, $entryString);
     }
+
 }

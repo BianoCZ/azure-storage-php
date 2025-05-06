@@ -26,5 +26,7 @@ namespace MicrosoftAzure\Storage\Tests\Functional\Table\Models;
 
 class FakeTableInfoEntry
 {
+
     public $TableName;
+
 }

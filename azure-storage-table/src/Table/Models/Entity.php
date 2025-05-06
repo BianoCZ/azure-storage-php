@@ -24,9 +24,13 @@
 
 namespace MicrosoftAzure\Storage\Table\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
+use Throwable;
+use function is_null;
+use function sprintf;
 
 /**
  * Represents entity object used in tables
@@ -40,7 +44,9 @@ use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
  */
 class Entity
 {
+
     private $_etag;
+
     private $_properties;
 
     /**
@@ -48,9 +54,8 @@ class Entity
      *
      * @param mixed $properties The properties array.
      *
-     * @return void
      */
-    private function _validateProperties($properties)
+    private function _validateProperties(mixed $properties): void
     {
         Validate::isArray($properties, 'entity properties');
 
@@ -76,9 +81,8 @@ class Entity
      *
      * @param string $name The property name.
      *
-     * @return mixed
      */
-    public function getPropertyValue($name)
+    public function getPropertyValue(string $name): mixed
     {
         $p = Utilities::tryGetValue($this->_properties, $name);
         return is_null($p) ? null : $p->getValue();
@@ -93,9 +97,8 @@ class Entity
      * @param string $name  The property name.
      * @param mixed  $value The property value.
      *
-     * @return mixed
      */
-    public function setPropertyValue($name, $value)
+    public function setPropertyValue(string $name, mixed $value): mixed
     {
         $p = Utilities::tryGetValue($this->_properties, $name);
         if (!is_null($p)) {
@@ -106,9 +109,8 @@ class Entity
     /**
      * Gets entity etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->_etag;
     }
@@ -118,9 +120,8 @@ class Entity
      *
      * @param string $etag The entity ETag value.
      *
-     * @return void
      */
-    public function setETag($etag)
+    public function setETag(string $etag): void
     {
         $this->_etag = $etag;
     }
@@ -128,9 +129,8 @@ class Entity
     /**
      * Gets entity PartitionKey.
      *
-     * @return string
      */
-    public function getPartitionKey()
+    public function getPartitionKey(): string
     {
         return $this->getPropertyValue('PartitionKey');
     }
@@ -140,9 +140,8 @@ class Entity
      *
      * @param string $partitionKey The entity PartitionKey value.
      *
-     * @return void
      */
-    public function setPartitionKey($partitionKey)
+    public function setPartitionKey(string $partitionKey): void
     {
         $this->addProperty('PartitionKey', EdmType::STRING, $partitionKey);
     }
@@ -150,9 +149,8 @@ class Entity
     /**
      * Gets entity RowKey.
      *
-     * @return string
      */
-    public function getRowKey()
+    public function getRowKey(): string
     {
         return $this->getPropertyValue('RowKey');
     }
@@ -162,9 +160,8 @@ class Entity
      *
      * @param string $rowKey The entity RowKey value.
      *
-     * @return void
      */
-    public function setRowKey($rowKey)
+    public function setRowKey(string $rowKey): void
     {
         $this->addProperty('RowKey', EdmType::STRING, $rowKey);
     }
@@ -172,9 +169,8 @@ class Entity
     /**
      * Gets entity Timestamp.
      *
-     * @return \DateTime
      */
-    public function getTimestamp()
+    public function getTimestamp(): DateTime
     {
         return $this->getPropertyValue('Timestamp');
     }
@@ -184,9 +180,8 @@ class Entity
      *
      * @param \DateTime $timestamp The entity Timestamp value.
      *
-     * @return void
      */
-    public function setTimestamp(\DateTime $timestamp)
+    public function setTimestamp(DateTime $timestamp): void
     {
         $this->addProperty('Timestamp', EdmType::DATETIME, $timestamp);
     }
@@ -194,9 +189,8 @@ class Entity
     /**
      * Gets the entity properties array.
      *
-     * @return array
      */
-    public function getProperties()
+    public function getProperties(): array
     {
         return $this->_properties;
     }
@@ -206,9 +200,8 @@ class Entity
      *
      * @param array $properties The entity properties.
      *
-     * @return void
      */
-    public function setProperties(array $properties)
+    public function setProperties(array $properties): void
     {
         $this->_validateProperties($properties);
         $this->_properties = $properties;
@@ -219,9 +212,8 @@ class Entity
      *
      * @param string $name The property name.
      *
-     * @return Property|null
      */
-    public function getProperty($name)
+    public function getProperty(string $name): ?Property
     {
         return Utilities::tryGetValue($this->_properties, $name);
     }
@@ -232,9 +224,8 @@ class Entity
      * @param string   $name     The property name.
      * @param Property $property The property object.
      *
-     * @return void
      */
-    public function setProperty($name, $property)
+    public function setProperty(string $name, Property $property): void
     {
         Validate::isTrue($property instanceof Property, Resources::INVALID_PROP_MSG);
         $this->_properties[$name] = $property;
@@ -248,7 +239,7 @@ class Entity
      * @param mixed  $value    The property value.
      * @param string $rawValue The raw value of the property.
      */
-    public function addProperty($name, $edmType, $value, $rawValue = '')
+    public function addProperty(string $name, string $edmType, mixed $value, string $rawValue = ''): void
     {
         $p = new Property();
         $p->setEdmType($edmType);
@@ -266,24 +257,25 @@ class Entity
      *
      * @internal
      *
-     * @return boolean
      */
-    public function isValid(&$msg = null)
+    public function isValid(?string &$msg = null): bool
     {
         try {
             $this->_validateProperties($this->_properties);
-        } catch (\Exception $exc) {
+        } catch (Throwable $exc) {
             $msg = $exc->getMessage();
             return false;
         }
 
-        if (is_null($this->getPartitionKey())
+        if (
+            is_null($this->getPartitionKey())
             || is_null($this->getRowKey())
         ) {
             $msg = Resources::NULL_TABLE_KEY_MSG;
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
+
 }

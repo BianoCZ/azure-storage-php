@@ -24,9 +24,11 @@
 
 namespace MicrosoftAzure\Storage\File\Models;
 
-use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
+use DateTime;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
+use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
+use function array_change_key_case;
 
 /**
  * Represents file properties
@@ -40,22 +42,39 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class FileProperties
 {
+
     private $lastModified;
+
     private $contentLength;
+
     private $contentType;
+
     private $etag;
+
     private $contentMD5;
+
     private $contentEncoding;
+
     private $contentLanguage;
+
     private $cacheControl;
+
     private $contentDisposition;
+
     private $contentRange;
+
     private $copyCompletionTime;
+
     private $copyStatusDescription;
+
     private $copyID;
+
     private $copyProgress;
+
     private $copySource;
+
     private $copyStatus;
+
     private $rangeContentMD5;
 
     /**
@@ -66,9 +85,8 @@ class FileProperties
      *
      * @internal
      *
-     * @return FileProperties
      */
-    public static function createFromHttpHeaders(array $parsed)
+    public static function createFromHttpHeaders(array $parsed): FileProperties
     {
         $result = new FileProperties();
         $clean  = array_change_key_case($parsed);
@@ -91,7 +109,8 @@ class FileProperties
             Utilities::tryGetValue($parsed, Resources::ETAG)
         );
 
-        if (Utilities::tryGetValue($parsed, Resources::CONTENT_MD5) &&
+        if (
+            Utilities::tryGetValue($parsed, Resources::CONTENT_MD5) &&
             !Utilities::tryGetValue($parsed, Resources::CONTENT_RANGE)
         ) {
             $result->setContentMD5(
@@ -156,9 +175,8 @@ class FileProperties
     /**
      * Gets file lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }
@@ -168,9 +186,8 @@ class FileProperties
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         Validate::isDate($lastModified);
         $this->lastModified = $lastModified;
@@ -179,9 +196,8 @@ class FileProperties
     /**
      * Gets file etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->etag;
     }
@@ -191,9 +207,8 @@ class FileProperties
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         $this->etag = $etag;
     }
@@ -201,9 +216,8 @@ class FileProperties
     /**
      * Gets file contentType.
      *
-     * @return string
      */
-    public function getContentType()
+    public function getContentType(): string
     {
         return $this->contentType;
     }
@@ -213,9 +227,8 @@ class FileProperties
      *
      * @param string $contentType value.
      *
-     * @return void
      */
-    public function setContentType($contentType)
+    public function setContentType(string $contentType): void
     {
         $this->contentType = $contentType;
     }
@@ -223,9 +236,8 @@ class FileProperties
     /**
      * Gets file contentRange.
      *
-     * @return string
      */
-    public function getContentRange()
+    public function getContentRange(): string
     {
         return $this->contentRange;
     }
@@ -235,9 +247,8 @@ class FileProperties
      *
      * @param string $contentRange value.
      *
-     * @return void
      */
-    protected function setContentRange($contentRange)
+    protected function setContentRange(string $contentRange): void
     {
         $this->contentRange = $contentRange;
     }
@@ -245,9 +256,8 @@ class FileProperties
     /**
      * Gets file contentLength.
      *
-     * @return integer
      */
-    public function getContentLength()
+    public function getContentLength(): int
     {
         return $this->contentLength;
     }
@@ -255,33 +265,31 @@ class FileProperties
     /**
      * Sets file contentLength.
      *
-     * @param integer $contentLength value.
+     * @param int $contentLength value.
      *
-     * @return void
      */
-    public function setContentLength($contentLength)
+    public function setContentLength(int $contentLength): void
     {
         Validate::isInteger($contentLength, 'contentLength');
-        $this->contentLength = (int)$contentLength;
+        $this->contentLength = (int) $contentLength;
     }
 
     /**
      * Gets file contentEncoding.
      *
-     * @return string
      */
-    public function getContentEncoding()
+    public function getContentEncoding(): string
     {
         return $this->contentEncoding;
     }
+
     /**
      * Sets file contentEncoding.
      *
      * @param string $contentEncoding value.
      *
-     * @return void
      */
-    public function setContentEncoding($contentEncoding)
+    public function setContentEncoding(string $contentEncoding): void
     {
         $this->contentEncoding = $contentEncoding;
     }
@@ -289,9 +297,8 @@ class FileProperties
     /**
      * Gets file contentLanguage.
      *
-     * @return string
      */
-    public function getContentLanguage()
+    public function getContentLanguage(): string
     {
         return $this->contentLanguage;
     }
@@ -301,9 +308,8 @@ class FileProperties
      *
      * @param string $contentLanguage value.
      *
-     * @return void
      */
-    public function setContentLanguage($contentLanguage)
+    public function setContentLanguage(string $contentLanguage): void
     {
         $this->contentLanguage = $contentLanguage;
     }
@@ -311,9 +317,8 @@ class FileProperties
     /**
      * Gets file contentMD5.
      *
-     * @return string
      */
-    public function getContentMD5()
+    public function getContentMD5(): string
     {
         return $this->contentMD5;
     }
@@ -323,9 +328,8 @@ class FileProperties
      *
      * @param string $contentMD5 value.
      *
-     * @return void
      */
-    public function setContentMD5($contentMD5)
+    public function setContentMD5(string $contentMD5): void
     {
         $this->contentMD5 = $contentMD5;
     }
@@ -333,9 +337,8 @@ class FileProperties
     /**
      * Gets file range contentMD5.
      *
-     * @return string
      */
-    public function getRangeContentMD5()
+    public function getRangeContentMD5(): string
     {
         return $this->rangeContentMD5;
     }
@@ -345,9 +348,8 @@ class FileProperties
      *
      * @param string rangeContentMD5 value.
      *
-     * @return void
      */
-    public function setRangeContentMD5($rangeContentMD5)
+    public function setRangeContentMD5($rangeContentMD5): void
     {
         $this->rangeContentMD5 = $rangeContentMD5;
     }
@@ -355,9 +357,8 @@ class FileProperties
     /**
      * Gets file cacheControl.
      *
-     * @return string
      */
-    public function getCacheControl()
+    public function getCacheControl(): string
     {
         return $this->cacheControl;
     }
@@ -367,9 +368,8 @@ class FileProperties
      *
      * @param string $cacheControl value.
      *
-     * @return void
      */
-    public function setCacheControl($cacheControl)
+    public function setCacheControl(string $cacheControl): void
     {
         $this->cacheControl = $cacheControl;
     }
@@ -377,9 +377,8 @@ class FileProperties
     /**
      * Gets file contentDisposition.
      *
-     * @return string
      */
-    public function getContentDisposition()
+    public function getContentDisposition(): string
     {
         return $this->contentDisposition;
     }
@@ -389,9 +388,8 @@ class FileProperties
      *
      * @param string $contentDisposition value.
      *
-     * @return void
      */
-    public function setContentDisposition($contentDisposition)
+    public function setContentDisposition(string $contentDisposition): void
     {
         $this->contentDisposition = $contentDisposition;
     }
@@ -399,9 +397,8 @@ class FileProperties
     /**
      * Gets file copyCompletionTime.
      *
-     * @return string
      */
-    public function getCopyCompletionTime()
+    public function getCopyCompletionTime(): string
     {
         return $this->copyCompletionTime;
     }
@@ -411,9 +408,8 @@ class FileProperties
      *
      * @param string $copyCompletionTime value.
      *
-     * @return void
      */
-    protected function setCopyCompletionTime($copyCompletionTime)
+    protected function setCopyCompletionTime(string $copyCompletionTime): void
     {
         $this->copyCompletionTime = $copyCompletionTime;
     }
@@ -421,9 +417,8 @@ class FileProperties
     /**
      * Gets file copyStatusDescription.
      *
-     * @return string
      */
-    public function getCopyStatusDescription()
+    public function getCopyStatusDescription(): string
     {
         return $this->copyStatusDescription;
     }
@@ -433,9 +428,8 @@ class FileProperties
      *
      * @param string $copyStatusDescription value.
      *
-     * @return void
      */
-    protected function setCopyStatusDescription($copyStatusDescription)
+    protected function setCopyStatusDescription(string $copyStatusDescription): void
     {
         $this->copyStatusDescription = $copyStatusDescription;
     }
@@ -443,9 +437,8 @@ class FileProperties
     /**
      * Gets file lease state.
      *
-     * @return string
      */
-    public function getCopyID()
+    public function getCopyID(): string
     {
         return $this->copyID;
     }
@@ -455,9 +448,8 @@ class FileProperties
      *
      * @param string $copyID value.
      *
-     * @return void
      */
-    protected function setCopyID($copyID)
+    protected function setCopyID(string $copyID): void
     {
         $this->copyID = $copyID;
     }
@@ -465,9 +457,8 @@ class FileProperties
     /**
      * Gets file lease duration.
      *
-     * @return string
      */
-    public function getCopyProgress()
+    public function getCopyProgress(): string
     {
         return $this->copyProgress;
     }
@@ -477,9 +468,8 @@ class FileProperties
      *
      * @param string $copyProgress value.
      *
-     * @return void
      */
-    protected function setCopyProgress($copyProgress)
+    protected function setCopyProgress(string $copyProgress): void
     {
         $this->copyProgress = $copyProgress;
     }
@@ -487,9 +477,8 @@ class FileProperties
     /**
      * Gets file copySource.
      *
-     * @return int
      */
-    public function getCopySource()
+    public function getCopySource(): int
     {
         return $this->copySource;
     }
@@ -499,9 +488,8 @@ class FileProperties
      *
      * @param int $copySource value.
      *
-     * @return void
      */
-    protected function setCopySource($copySource)
+    protected function setCopySource(int $copySource): void
     {
         Validate::isInteger($copySource, 'copySource');
         $this->copySource = $copySource;
@@ -510,9 +498,8 @@ class FileProperties
     /**
      * Gets copy state of the file.
      *
-     * @return CopyStatus
      */
-    public function getCopyStatus()
+    public function getCopyStatus(): CopyStatus
     {
         return $this->copyStatus;
     }
@@ -522,10 +509,10 @@ class FileProperties
      *
      * @param CopyStatus $copyStatus the copy state of the file.
      *
-     * @return void
      */
-    protected function setCopyStatus($copyStatus)
+    protected function setCopyStatus(CopyStatus $copyStatus): void
     {
         $this->copyStatus = $copyStatus;
     }
+
 }

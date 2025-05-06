@@ -24,16 +24,18 @@
 
 namespace MicrosoftAzure\Storage\Tests\Functional\Queue;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Queue\Models\ListMessagesOptions;
 use MicrosoftAzure\Storage\Queue\Models\PeekMessagesOptions;
 use MicrosoftAzure\Storage\Queue\Models\QueueServiceOptions;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function sprintf;
 
 class QueueServiceFunctionalParameterTest extends FunctionalTestBase
 {
-    public function testGetServicePropertiesNullOptions()
+    public function testGetServicePropertiesNullOptions(): void
     {
         try {
             $this->restProxy->getServiceProperties(null);
@@ -49,7 +51,7 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         }
     }
 
-    public function testSetServicePropertiesNullOptions1()
+    public function testSetServicePropertiesNullOptions1(): void
     {
         $serviceProperties = QueueServiceFunctionalTestData::getDefaultServiceProperties();
         try {
@@ -65,7 +67,7 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         }
     }
 
-    public function testSetServicePropertiesNullOptions2()
+    public function testSetServicePropertiesNullOptions2(): void
     {
         $serviceProperties = QueueServiceFunctionalTestData::getDefaultServiceProperties();
 
@@ -82,72 +84,72 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         }
     }
 
-    public function testListQueuesNullOptions()
+    public function testListQueuesNullOptions(): void
     {
         $this->restProxy->listQueues(null);
         $this->assertTrue(true, 'Should just work');
     }
 
-    public function testCreateQueueNullName()
+    public function testCreateQueueNullName(): void
     {
         try {
             $this->restProxy->createQueue(null);
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testDeleteQueueNullName()
+    public function testDeleteQueueNullName(): void
     {
         try {
             $this->restProxy->deleteQueue(null);
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testSetQueueMetadataNullMetadata()
+    public function testSetQueueMetadataNullMetadata(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $this->restProxy->setQueueMetadata($queue, null);
         $this->assertTrue(true, 'Should just work');
     }
 
-    public function testSetQueueMetadataEmptyMetadata()
+    public function testSetQueueMetadataEmptyMetadata(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
-        $this->restProxy->setQueueMetadata($queue, array());
+        $this->restProxy->setQueueMetadata($queue, []);
         $this->assertTrue(true, 'Should just work');
     }
 
-    public function testSetQueueMetadataNullOptions()
+    public function testSetQueueMetadataNullOptions(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
-        $this->restProxy->setQueueMetadata($queue, array(), null);
+        $this->restProxy->setQueueMetadata($queue, [], null);
         $this->assertTrue(true, 'Should just work');
     }
 
-    public function testCreateMessageQueueNull()
+    public function testCreateMessageQueueNull(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         try {
             $this->restProxy->createMessage(null, null);
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
         $this->restProxy->clearMessages($queue);
     }
 
-    public function testCreateMessageNull()
+    public function testCreateMessageNull(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $this->restProxy->createMessage($queue, null);
@@ -155,7 +157,7 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         $this->assertTrue(true, 'Should just work');
     }
 
-    public function testCreateMessageBothMessageAndOptionsNull()
+    public function testCreateMessageBothMessageAndOptionsNull(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $this->restProxy->createMessage($queue, null, null);
@@ -163,7 +165,7 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         $this->assertTrue(true, 'Should just work');
     }
 
-    public function testCreateMessageMessageNull()
+    public function testCreateMessageMessageNull(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $this->restProxy->createMessage($queue, null, QueueServiceFunctionalTestData::getSimpleCreateMessageOptions());
@@ -171,7 +173,7 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         $this->assertTrue(true, 'Should just work');
     }
 
-    public function testCreateMessageOptionsNull()
+    public function testCreateMessageOptionsNull(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $this->restProxy->createMessage($queue, QueueServiceFunctionalTestData::getSimpleMessageText(), null);
@@ -179,7 +181,7 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         $this->assertTrue(true, 'Should just work');
     }
 
-    public function testUpdateMessageQueueNull()
+    public function testUpdateMessageQueueNull(): void
     {
         $queue = null;
         $messageId = 'abc';
@@ -191,12 +193,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->updateMessage($queue, $messageId, $popReceipt, $messageText, $visibilityTimeoutInSeconds, $options);
             $this->fail('Expect null name to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testUpdateMessageQueueEmpty()
+    public function testUpdateMessageQueueEmpty(): void
     {
         $queue = '';
         $messageId = 'abc';
@@ -208,12 +210,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->updateMessage($queue, $messageId, $popReceipt, $messageText, $visibilityTimeoutInSeconds, $options);
             $this->fail('Expect null name to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testUpdateMessageMessageIdNull()
+    public function testUpdateMessageMessageIdNull(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $messageId = null;
@@ -225,12 +227,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->updateMessage($queue, $messageId, $popReceipt, $messageText, $visibilityTimeoutInSeconds, $options);
             $this->fail('Expect null messageId to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'messageId'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testUpdateMessageMessageIdEmpty()
+    public function testUpdateMessageMessageIdEmpty(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $messageId = '';
@@ -242,12 +244,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->updateMessage($queue, $messageId, $popReceipt, $messageText, $visibilityTimeoutInSeconds, $options);
             $this->fail('Expect null messageId to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'messageId'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testUpdateMessagePopReceiptNull()
+    public function testUpdateMessagePopReceiptNull(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $messageId = 'abc';
@@ -259,12 +261,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->updateMessage($queue, $messageId, $popReceipt, $messageText, $visibilityTimeoutInSeconds, $options);
             $this->fail('Expect null popReceipt to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'popReceipt'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testUpdateMessagePopReceiptEmpty()
+    public function testUpdateMessagePopReceiptEmpty(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $messageId = 'abc';
@@ -276,12 +278,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->updateMessage($queue, $messageId, $popReceipt, $messageText, $visibilityTimeoutInSeconds, $options);
             $this->fail('Expect null popReceipt to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'popReceipt'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testUpdateMessageMessageTextNull()
+    public function testUpdateMessageMessageTextNull(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $messageId = 'abc';
@@ -298,7 +300,7 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         }
     }
 
-    public function testUpdateMessageMessageTextEmpty()
+    public function testUpdateMessageMessageTextEmpty(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $messageId = 'abc';
@@ -315,7 +317,7 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         }
     }
 
-    public function testUpdateMessageOptionsNull()
+    public function testUpdateMessageOptionsNull(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $messageId = 'abc';
@@ -332,7 +334,7 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         }
     }
 
-    public function testUpdateMessageVisibilityTimeout0()
+    public function testUpdateMessageVisibilityTimeout0(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $messageId = 'abc';
@@ -344,14 +346,14 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->updateMessage($queue, $messageId, $popReceipt, $messageText, $visibilityTimeoutInSeconds, $options);
             $this->fail('Expect bogus message id to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             $this->fail('Should not get an InvalidArgumentException exception');
         } catch (ServiceException $e) {
             $this->assertEquals(TestResources::STATUS_BAD_REQUEST, $e->getCode(), 'getCode');
         }
     }
 
-    public function testUpdateMessageVisibilityTimeoutNull()
+    public function testUpdateMessageVisibilityTimeoutNull(): void
     {
         $queue = QueueServiceFunctionalTestData::$testQueueNames[0];
         $messageId = 'abc';
@@ -363,12 +365,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->updateMessage($queue, $messageId, $popReceipt, $messageText, $visibilityTimeoutInSeconds, $options);
             $this->fail('Expect null visibilityTimeoutInSeconds to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_MSG, 'visibilityTimeoutInSeconds'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testDeleteMessageQueueNullNoOptions()
+    public function testDeleteMessageQueueNullNoOptions(): void
     {
         $queue = null;
         $messageId = 'abc';
@@ -377,12 +379,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->deleteMessage($queue, $messageId, $popReceipt);
             $this->fail('Expect null queue to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testDeleteMessageQueueEmptyNoOptions()
+    public function testDeleteMessageQueueEmptyNoOptions(): void
     {
         $queue = '';
         $messageId = 'abc';
@@ -391,12 +393,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->deleteMessage($queue, $messageId, $popReceipt);
             $this->fail('Expect empty queue to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testDeleteMessageQueueNullWithOptions()
+    public function testDeleteMessageQueueNullWithOptions(): void
     {
         $queue = null;
         $messageId = 'abc';
@@ -406,12 +408,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->deleteMessage($queue, $messageId, $popReceipt, $options);
             $this->fail('Expect null queue to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testDeleteMessageMessageIdNull()
+    public function testDeleteMessageMessageIdNull(): void
     {
         $queue = 'abc';
         $messageId = null;
@@ -421,12 +423,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->deleteMessage($queue, $messageId, $popReceipt, $options);
             $this->fail('Expect null messageId to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'messageId'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testDeleteMessageMessageIdEmpty()
+    public function testDeleteMessageMessageIdEmpty(): void
     {
         $queue = 'abc';
         $messageId = '';
@@ -436,12 +438,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->deleteMessage($queue, $messageId, $popReceipt, $options);
             $this->fail('Expect empty messageId to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'messageId'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testDeleteMessagePopReceiptNull()
+    public function testDeleteMessagePopReceiptNull(): void
     {
         $queue = 'abc';
         $messageId = 'abc';
@@ -451,12 +453,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->deleteMessage($queue, $messageId, $popReceipt, $options);
             $this->fail('Expect null popReceipt to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'popReceipt'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testDeleteMessagePopReceiptEmpty()
+    public function testDeleteMessagePopReceiptEmpty(): void
     {
         $queue = 'abc';
         $messageId = 'abc';
@@ -466,12 +468,12 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         try {
             $this->restProxy->deleteMessage($queue, $messageId, $popReceipt, $options);
             $this->fail('Expect empty popReceipt to throw');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'popReceipt'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testDeleteMessageOptionsNull()
+    public function testDeleteMessageOptionsNull(): void
     {
         $queue = 'abc';
         $messageId = 'abc';
@@ -486,31 +488,31 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         }
     }
 
-    public function testListMessagesQueueNullNoOptions()
+    public function testListMessagesQueueNullNoOptions(): void
     {
         try {
             $this->restProxy->listMessages(null);
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testListMessagesQueueNullWithOptions()
+    public function testListMessagesQueueNullWithOptions(): void
     {
         try {
             $this->restProxy->listMessages(null, new ListMessagesOptions());
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testListMessagesOptionsNull()
+    public function testListMessagesOptionsNull(): void
     {
         try {
             $this->restProxy->listMessages('abc', null);
@@ -520,55 +522,55 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         }
     }
 
-    public function testListMessagesAllNull()
+    public function testListMessagesAllNull(): void
     {
         try {
             $this->restProxy->listMessages(null, null);
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testPeekMessagesQueueNullNoOptions()
+    public function testPeekMessagesQueueNullNoOptions(): void
     {
         try {
             $this->restProxy->peekMessages(null);
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testPeekMessagesQueueEmptyNoOptions()
+    public function testPeekMessagesQueueEmptyNoOptions(): void
     {
         try {
             $this->restProxy->peekMessages('');
             $this->fail('Expect empty name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testPeekMessagesQueueNullWithOptions()
+    public function testPeekMessagesQueueNullWithOptions(): void
     {
         try {
             $this->restProxy->peekMessages(null, new PeekMessagesOptions());
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testPeekMessagesOptionsNull()
+    public function testPeekMessagesOptionsNull(): void
     {
         try {
             $this->restProxy->peekMessages('abc', null);
@@ -578,43 +580,43 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         }
     }
 
-    public function testPeekMessagesAllNull()
+    public function testPeekMessagesAllNull(): void
     {
         try {
             $this->restProxy->peekMessages(null, null);
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testClearMessagesQueueNullNoOptions()
+    public function testClearMessagesQueueNullNoOptions(): void
     {
         try {
             $this->restProxy->clearMessages(null);
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testClearMessagesQueueNullWithOptions()
+    public function testClearMessagesQueueNullWithOptions(): void
     {
         try {
             $this->restProxy->clearMessages(null, new QueueServiceOptions());
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
 
-    public function testClearMessagesOptionsNull()
+    public function testClearMessagesOptionsNull(): void
     {
         try {
             $this->restProxy->clearMessages('abc', null);
@@ -624,15 +626,16 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
         }
     }
 
-    public function testClearMessagesAllNull()
+    public function testClearMessagesAllNull(): void
     {
         try {
             $this->restProxy->clearMessages(null, null);
             $this->fail('Expect null name to throw');
-        } catch (ServiceException $e) {
+        } catch (ServiceException) {
             $this->fail('Should not get a service exception');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->assertEquals(sprintf(Resources::NULL_OR_EMPTY_MSG, 'queueName'), $e->getMessage(), 'Expect error message');
         }
     }
+
 }

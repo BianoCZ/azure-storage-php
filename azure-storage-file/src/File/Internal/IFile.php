@@ -24,10 +24,11 @@
 
 namespace MicrosoftAzure\Storage\File\Internal;
 
-use MicrosoftAzure\Storage\File\Models as FileModels;
+use GuzzleHttp\Promise\PromiseInterface;
+use MicrosoftAzure\Storage\Common\Models\Range;
 use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
-use MicrosoftAzure\Storage\Common\Models\Range;
+use MicrosoftAzure\Storage\File\Models as FileModels;
 
 /**
  * This interface has all REST APIs provided by Windows Azure for File service.
@@ -44,41 +45,35 @@ use MicrosoftAzure\Storage\Common\Models\Range;
 interface IFile
 {
     /**
-    * Gets the properties of the service.
-    *
-    * @param ServiceOptions $options optional service options.
-    *
-    * @return GetServicePropertiesResult
-    *
-    * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file-service-properties
-    */
-    public function getServiceProperties(ServiceOptions $options = null);
+     * Gets the properties of the service.
+     *
+     * @param ServiceOptions $options optional service options.
+     *
+     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file-service-properties
+     */
+    public function getServiceProperties(?ServiceOptions $options = null): GetServicePropertiesResult;
 
     /**
      * Creates promise to get the properties of the service.
      *
      * @param ServiceOptions $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file-service-properties
      */
-    public function getServicePropertiesAsync(ServiceOptions $options = null);
+    public function getServicePropertiesAsync(?ServiceOptions $options = null): PromiseInterface;
 
     /**
-    * Sets the properties of the service.
-    *
-    * @param ServiceProperties $serviceProperties new service properties
-    * @param ServiceOptions    $options           optional parameters
-    *
-    * @return void
-    *
-    * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-file-service-properties
-    */
+     * Sets the properties of the service.
+     *
+     * @param ServiceProperties $serviceProperties new service properties
+     * @param ServiceOptions    $options           optional parameters
+     *
+     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-file-service-properties
+     */
     public function setServiceProperties(
         ServiceProperties $serviceProperties,
-        ServiceOptions    $options = null
-    );
+        ?ServiceOptions $options = null
+    ): void;
 
     /**
      * Creates the promise to set the properties of the service.
@@ -89,36 +84,30 @@ interface IFile
      * @param ServiceProperties $serviceProperties new service properties.
      * @param ServiceOptions    $options           optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-file-service-properties
      */
     public function setServicePropertiesAsync(
         ServiceProperties $serviceProperties,
-        ServiceOptions    $options = null
-    );
+        ?ServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Returns a list of the shares under the specified account
      *
      * @param  FileModels\ListSharesOptions|null $options The optional parameters
      *
-     * @return FileModels\ListSharesResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-shares
      */
-    public function listShares(FileModels\ListSharesOptions $options = null);
+    public function listShares(?FileModels\ListSharesOptions $options = null): FileModels\ListSharesResult;
 
     /**
      * Create a promise to return a list of the shares under the specified account
      *
      * @param  FileModels\ListSharesOptions|null $options The optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-shares
      */
-    public function listSharesAsync(FileModels\ListSharesOptions $options = null);
+    public function listSharesAsync(?FileModels\ListSharesOptions $options = null): PromiseInterface;
 
     /**
      * Creates a new share in the given storage account.
@@ -126,14 +115,12 @@ interface IFile
      * @param string                             $share   The share name.
      * @param FileModels\CreateShareOptions|null $options The optional parameters.
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-share
      */
     public function createShare(
-        $share,
-        FileModels\CreateShareOptions $options = null
-    );
+        string $share,
+        ?FileModels\CreateShareOptions $options = null
+    ): void;
 
     /**
      * Creates promise to create a new share in the given storage account.
@@ -141,14 +128,12 @@ interface IFile
      * @param string                             $share   The share name.
      * @param FileModels\CreateShareOptions|null $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-share
      */
     public function createShareAsync(
-        $share,
-        FileModels\CreateShareOptions $options = null
-    );
+        string $share,
+        ?FileModels\CreateShareOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Deletes a share in the given storage account.
@@ -156,14 +141,12 @@ interface IFile
      * @param string                             $share   The share name.
      * @param FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-share
      */
     public function deleteShare(
-        $share,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Create a promise for deleting a share.
@@ -171,14 +154,12 @@ interface IFile
      * @param  string                             $share   name of the share
      * @param  FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-share
      */
     public function deleteShareAsync(
-        $share,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Returns all properties and metadata on the share.
@@ -186,14 +167,12 @@ interface IFile
      * @param string                             $share   name
      * @param FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return FileModels\GetSharePropertiesResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-properties
      */
     public function getShareProperties(
-        $share,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        ?FileModels\FileServiceOptions $options = null
+    ): FileModels\GetSharePropertiesResult;
 
     /**
      * Create promise to return all properties and metadata on the share.
@@ -201,14 +180,12 @@ interface IFile
      * @param string                             $share   name
      * @param FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-properties
      */
     public function getSharePropertiesAsync(
-        $share,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Sets quota of the share.
@@ -217,15 +194,13 @@ interface IFile
      * @param int                                $quota   quota of the share
      * @param FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-share-properties
      */
     public function setShareProperties(
-        $share,
-        $quota,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        int $quota,
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to set quota the share.
@@ -234,15 +209,13 @@ interface IFile
      * @param int                                $quota   quota of the share
      * @param FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-share-properties
      */
     public function setSharePropertiesAsync(
-        $share,
-        $quota,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        int $quota,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Returns only user-defined metadata for the specified share.
@@ -250,30 +223,26 @@ interface IFile
      * @param string                             $share   name
      * @param FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return FileModels\GetSharePropertiesResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-metadata
      */
     public function getShareMetadata(
-        $share,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        ?FileModels\FileServiceOptions $options = null
+    ): FileModels\GetSharePropertiesResult;
 
     /**
-    * Create promise to return only user-defined metadata for the specified
-    * share.
-    *
-    * @param string                             $share   name
-    * @param FileModels\FileServiceOptions|null $options optional parameters
-    *
-    * @return \GuzzleHttp\Promise\PromiseInterface
-    *
-    * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-metadata
-    */
+     * Create promise to return only user-defined metadata for the specified
+     * share.
+     *
+     * @param string                             $share   name
+     * @param FileModels\FileServiceOptions|null $options optional parameters
+     *
+     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-metadata
+     */
     public function getShareMetadataAsync(
-        $share,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Updates metadata of the share.
@@ -282,15 +251,13 @@ interface IFile
      * @param array                              $metadata metadata key/value pair.
      * @param FileModels\FileServiceOptions|null $options optional  parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-share-metadata
      */
     public function setShareMetadata(
-        $share,
+        string $share,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to update metadata headers on the share.
@@ -299,15 +266,13 @@ interface IFile
      * @param array                              $metadata metadata key/value pair.
      * @param FileModels\FileServiceOptions|null $options optional  parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-share-metadata
      */
     public function setShareMetadataAsync(
-        $share,
+        string $share,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Gets the access control list (ACL) for the share.
@@ -315,14 +280,12 @@ interface IFile
      * @param string                             $share   The share name.
      * @param FileModels\FileServiceOptions|null $options The optional parameters.
      *
-     * @return FileModels\GetShareACLResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-acl
      */
     public function getShareAcl(
-        $share,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        ?FileModels\FileServiceOptions $options = null
+    ): FileModels\GetShareACLResult;
 
     /**
      * Creates the promise to get the access control list (ACL) for the share.
@@ -330,14 +293,12 @@ interface IFile
      * @param string                             $share   The share name.
      * @param FileModels\FileServiceOptions|null $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-acl
      */
     public function getShareAclAsync(
-        $share,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Sets the ACL and any share-level access policies for the share.
@@ -347,15 +308,13 @@ interface IFile
      *                                                    for share
      * @param FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-share-acl
      */
     public function setShareAcl(
-        $share,
+        string $share,
         FileModels\ShareACL $acl,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to set the ACL and any share-level access policies
@@ -366,30 +325,26 @@ interface IFile
      * for share
      * @param FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-share-acl
      */
     public function setShareAclAsync(
-        $share,
+        string $share,
         FileModels\ShareACL $acl,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Get the statistics related to the share.
      *
      * @param  string                             $share   The name of the share.
      * @param  FileModels\FileServiceOptions|null $options The request options.
-     *
-     * @return FileModels\GetShareStatsResult
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-stats
      */
     public function getShareStats(
-        $share,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        ?FileModels\FileServiceOptions $options = null
+    ): FileModels\GetShareStatsResult;
 
     /**
      * Get the statistics related to the share.
@@ -397,14 +352,12 @@ interface IFile
      * @param  string                             $share   The name of the share.
      * @param  FileModels\FileServiceOptions|null $options The request options.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-share-stats
      */
     public function getShareStatsAsync(
-        $share,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * List directories and files under specified path.
@@ -415,15 +368,13 @@ interface IFile
      * @param  string                              $path    The path to be listed.
      * @param  FileModels\ListDirectoriesAndFilesOptions|null $options Optional parameters.
      *
-     * @return FileModels\ListDirectoriesAndFilesResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-directories-and-files
      */
     public function listDirectoriesAndFiles(
-        $share,
-        $path = '',
-        FileModels\ListDirectoriesAndFilesOptions $options = null
-    );
+        string $share,
+        string $path = '',
+        ?FileModels\ListDirectoriesAndFilesOptions $options = null
+    ): FileModels\ListDirectoriesAndFilesResult;
 
     /**
      * Creates promise to list directories and files under specified path.
@@ -434,15 +385,13 @@ interface IFile
      * @param  string                              $path    The path to be listed.
      * @param  FileModels\ListDirectoriesAndFilesOptions|null $options Optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-directories-and-files
      */
     public function listDirectoriesAndFilesAsync(
-        $share,
-        $path = '',
-        FileModels\ListDirectoriesAndFilesOptions $options = null
-    );
+        string $share,
+        string $path = '',
+        ?FileModels\ListDirectoriesAndFilesOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Creates a new directory in the given share and path.
@@ -452,15 +401,13 @@ interface IFile
      *                                                          create the directory.
      * @param FileModels\CreateDirectoryOptions|null $options   The optional parameters.
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-directory
      */
     public function createDirectory(
-        $share,
-        $path,
-        FileModels\CreateDirectoryOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\CreateDirectoryOptions $options = null
+    ): void;
 
     /**
      * Creates a promise to create a new directory in the given share and path.
@@ -470,15 +417,13 @@ interface IFile
      *                                                          create the directory.
      * @param FileModels\CreateDirectoryOptions|null $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-directory
      */
     public function createDirectoryAsync(
-        $share,
-        $path,
-        FileModels\CreateDirectoryOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\CreateDirectoryOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Deletes a directory in the given share and path.
@@ -488,15 +433,13 @@ interface IFile
      *                                                      the directory.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-directory
      */
     public function deleteDirectory(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Creates a promise to delete a new directory in the given share and path.
@@ -506,15 +449,13 @@ interface IFile
      *                                                      the directory.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-directory
      */
     public function deleteDirectoryAsync(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Gets a directory's properties from the given share and path.
@@ -523,15 +464,13 @@ interface IFile
      * @param string                            $path      The path of the directory.
      * @param FileModelsFileServiceOptions|null $options   The optional parameters.
      *
-     * @return FileModels\GetDirectoryPropertiesResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-directory-properties
      */
     public function getDirectoryProperties(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): FileModels\GetDirectoryPropertiesResult;
 
     /**
      * Creates promise to get a directory's properties from the given share
@@ -541,15 +480,13 @@ interface IFile
      * @param string                            $path      The path of the directory.
      * @param FileModelsFileServiceOptions|null $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-directory-properties
      */
     public function getDirectoryPropertiesAsync(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Gets a directory's metadata from the given share and path.
@@ -558,15 +495,13 @@ interface IFile
      * @param string                             $path      The path of the directory.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return FileModels\GetDirectoryMetadataResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-directory-metadata
      */
     public function getDirectoryMetadata(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): FileModels\GetDirectoryMetadataResult;
 
     /**
      * Creates promise to get a directory's metadata from the given share
@@ -576,15 +511,13 @@ interface IFile
      * @param string                             $path      The path of the directory.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-directory-metadata
      */
     public function getDirectoryMetadataAsync(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Sets a directory's metadata from the given share and path.
@@ -595,16 +528,14 @@ interface IFile
      * @param array                              $metadata  The metadata to be set.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-directory-metadata
      */
     public function setDirectoryMetadata(
-        $share,
-        $path,
+        string $share,
+        string $path,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to set a directory's metadata from the given share
@@ -616,16 +547,14 @@ interface IFile
      * @param array                              $metadata  The metadata to be set.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-directory-metadata
      */
     public function setDirectoryMetadataAsync(
-        $share,
-        $path,
+        string $share,
+        string $path,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Create a new file.
@@ -635,16 +564,14 @@ interface IFile
      * @param int                               $size    The size of the file.
      * @param FileModels\CreateFileOptions|null $options The optional parameters.
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-file
      */
     public function createFile(
-        $share,
-        $path,
-        $size,
-        FileModels\CreateFileOptions $options = null
-    );
+        string $share,
+        string $path,
+        int $size,
+        ?FileModels\CreateFileOptions $options = null
+    ): void;
 
     /**
      * Creates promise to create a new file.
@@ -654,16 +581,14 @@ interface IFile
      * @param int                               $size    The size of the file.
      * @param FileModels\CreateFileOptions|null $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-file
      */
     public function createFileAsync(
-        $share,
-        $path,
-        $size,
-        FileModels\CreateFileOptions $options = null
-    );
+        string $share,
+        string $path,
+        int $size,
+        ?FileModels\CreateFileOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Deletes a file in the given share and path.
@@ -672,15 +597,13 @@ interface IFile
      * @param string                             $path      The path to delete the file.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-file2
      */
     public function deleteFile(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Creates a promise to delete a new file in the given share and path.
@@ -689,15 +612,13 @@ interface IFile
      * @param string                             $path      The path to delete the file.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-file2
      */
     public function deleteFileAsync(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Reads or downloads a file from the server, including its metadata and
@@ -707,15 +628,13 @@ interface IFile
      * @param string                         $path    path of the file to be get
      * @param FileModels\GetFileOptions|null $options optional parameters
      *
-     * @return FileModels\GetFileResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file
      */
     public function getFile(
-        $share,
-        $path,
-        FileModels\GetFileOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\GetFileOptions $options = null
+    ): FileModels\GetFileResult;
 
     /**
      * Creates promise to read or download a file from the server, including its
@@ -725,15 +644,13 @@ interface IFile
      * @param string                         $path    path of the file to be get
      * @param FileModels\GetFileOptions|null $options optional parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file
      */
     public function getFileAsync(
-        $share,
-        $path,
-        FileModels\GetFileOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\GetFileOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Gets a file's properties from the given share and path.
@@ -742,15 +659,13 @@ interface IFile
      * @param string                             $path      The path to delete the file.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return FileModels\FileProperties
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file-properties
      */
     public function getFileProperties(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): FileModels\FileProperties;
 
     /**
      * Creates promise to get a file's properties from the given share
@@ -760,15 +675,13 @@ interface IFile
      * @param string                             $path      The path to delete the file.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file-properties
      */
     public function getFilePropertiesAsync(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Sets properties on the file.
@@ -778,16 +691,14 @@ interface IFile
      * @param FileModels\FileProperties          $properties file properties.
      * @param FileModels\FileServiceOptions|null $options    optional     parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-file-properties
      */
     public function setFileProperties(
-        $share,
-        $path,
+        string $share,
+        string $path,
         FileModels\FileProperties $properties,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to set properties on the file.
@@ -797,16 +708,14 @@ interface IFile
      * @param FileModels\FileProperties          $properties file properties.
      * @param FileModels\FileServiceOptions|null $options    optional     parameters
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-file-properties
      */
     public function setFilePropertiesAsync(
-        $share,
-        $path,
+        string $share,
+        string $path,
         FileModels\FileProperties $properties,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Gets a file's metadata from the given share and path.
@@ -815,15 +724,13 @@ interface IFile
      * @param string                             $path      The path of the file.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return FileModels\GetFileMetadataResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file-metadata
      */
     public function getFileMetadata(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): FileModels\GetFileMetadataResult;
 
     /**
      * Creates promise to get a file's metadata from the given share
@@ -833,15 +740,13 @@ interface IFile
      * @param string                             $path      The path of the file.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-file-metadata
      */
     public function getFileMetadataAsync(
-        $share,
-        $path,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Sets a file's metadata from the given share and path.
@@ -851,16 +756,14 @@ interface IFile
      * @param array                              $metadata  The metadata to be set.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-file-metadata
      */
     public function setFileMetadata(
-        $share,
-        $path,
+        string $share,
+        string $path,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to set a file's metadata from the given share
@@ -871,16 +774,14 @@ interface IFile
      * @param array                              $metadata  The metadata to be set.
      * @param FileModels\FileServiceOptions|null $options   The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-file-metadata
      */
     public function setFileMetadataAsync(
-        $share,
-        $path,
+        string $share,
+        string $path,
         array $metadata,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Writes range of bytes to a file. Range can be at most 4MB in length.
@@ -892,17 +793,15 @@ interface IFile
      *                                                      be put.
      * @param  FileModels\PutFileRangeOptions|null $options The optional parameters.
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/put-range
      */
     public function putFileRange(
-        $share,
-        $path,
+        string $share,
+        string $path,
         $content,
         Range $range,
-        FileModels\PutFileRangeOptions $options = null
-    );
+        ?FileModels\PutFileRangeOptions $options = null
+    ): void;
 
     /**
      * Creates promise to write range of bytes to a file. Range can be at most
@@ -915,18 +814,16 @@ interface IFile
      *                                                      be put.
      * @param  FileModels\PutFileRangeOptions|null $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/put-range
      *
      */
     public function putFileRangeAsync(
-        $share,
-        $path,
+        string $share,
+        string $path,
         $content,
         Range $range,
-        FileModels\PutFileRangeOptions $options = null
-    );
+        ?FileModels\PutFileRangeOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Creates a file from a provided content.
@@ -938,14 +835,13 @@ interface IFile
      * @param  FileModels\CreateFileFromContentOptions|null
      *                                           $options optional parameters
      *
-     * @return void
      */
     public function createFileFromContent(
-        $share,
-        $path,
+        string $share,
+        string $path,
         $content,
-        FileModels\CreateFileFromContentOptions $options = null
-    );
+        ?FileModels\CreateFileFromContentOptions $options = null
+    ): void;
 
     /**
      * Creates a promise to create a file from a provided content.
@@ -957,14 +853,13 @@ interface IFile
      * @param  FileModels\CreateFileFromContentOptions|null
      *                                           $options optional parameters
      *
-     * @return void
      */
     public function createFileFromContentAsync(
-        $share,
-        $path,
+        string $share,
+        string $path,
         $content,
-        FileModels\CreateFileFromContentOptions $options = null
-    );
+        ?FileModels\CreateFileFromContentOptions $options = null
+    ): void;
 
     /**
      * Clears range of bytes of a file. If the specified range is not 512-byte
@@ -978,16 +873,14 @@ interface IFile
      *                                                     be cleared.
      * @param  FileModels\FileServiceOptions|null $options The optional parameters.
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/put-range
      */
     public function clearFileRange(
-        $share,
-        $path,
+        string $share,
+        string $path,
         Range $range,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to clear range of bytes of a file. If the specified range
@@ -1001,17 +894,15 @@ interface IFile
      *                                                     be cleared.
      * @param  FileModels\FileServiceOptions|null $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/put-range
      *
      */
     public function clearFileRangeAsync(
-        $share,
-        $path,
+        string $share,
+        string $path,
         Range $range,
-        FileModels\FileServiceOptions $options = null
-    );
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Lists range of bytes of a file.
@@ -1022,16 +913,14 @@ interface IFile
      *                                                     be listed.
      * @param  FileModels\FileServiceOptions|null $options The optional parameters.
      *
-     * @return FileModels\ListFileRangesResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-ranges
      */
     public function listFileRange(
-        $share,
-        $path,
-        Range $range = null,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?Range $range = null,
+        ?FileModels\FileServiceOptions $options = null
+    ): FileModels\ListFileRangesResult;
 
     /**
      * Creates promise to list range of bytes of a file.
@@ -1042,17 +931,15 @@ interface IFile
      *                                                     be listed.
      * @param  FileModels\FileServiceOptions|null $options The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-ranges
      *
      */
     public function listFileRangeAsync(
-        $share,
-        $path,
-        Range $range = null,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        ?Range $range = null,
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Informs server to copy file from $sourcePath to $path.
@@ -1077,17 +964,15 @@ interface IFile
      *                                                        be copied.
      * @param  FileModels\FileServiceOptions|null $options    The optional parameters.
      *
-     * @return FileModels\CopyFileResult
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/copy-file
      */
     public function copyFile(
-        $share,
-        $path,
-        $sourcePath,
-        array $metadata = array(),
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        string $sourcePath,
+        array $metadata = [],
+        ?FileModels\FileServiceOptions $options = null
+    ): FileModels\CopyFileResult;
 
     /**
      * Creates promise to inform server to copy file from $sourcePath to $path.
@@ -1113,18 +998,16 @@ interface IFile
      *                                                        be copied.
      * @param  FileModels\FileServiceOptions|null $options    The optional parameters.
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/copy-file
      *
      */
     public function copyFileAsync(
-        $share,
-        $path,
-        $sourcePath,
-        array $metadata = array(),
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        string $sourcePath,
+        array $metadata = [],
+        ?FileModels\FileServiceOptions $options = null
+    ): PromiseInterface;
 
     /**
      * Abort a file copy operation
@@ -1134,16 +1017,14 @@ interface IFile
      * @param string                             $copyID  copy operation identifier.
      * @param FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/abort-copy-file
      */
     public function abortCopy(
-        $share,
-        $path,
-        $copyID,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        string $copyID,
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
 
     /**
      * Creates promise to abort a file copy operation
@@ -1153,14 +1034,13 @@ interface IFile
      * @param string                             $copyID  copy operation identifier.
      * @param FileModels\FileServiceOptions|null $options optional parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/abort-copy-file
      */
     public function abortCopyAsync(
-        $share,
-        $path,
-        $copyID,
-        FileModels\FileServiceOptions $options = null
-    );
+        string $share,
+        string $path,
+        string $copyID,
+        ?FileModels\FileServiceOptions $options = null
+    ): void;
+
 }

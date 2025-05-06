@@ -24,10 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\File\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\File\Internal\FileResources;
 use MicrosoftAzure\Storage\File\Models\Directory;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
+use PHPUnit\Framework\TestCase;
+use function count;
 
 /**
  * Unit tests for class Directory
@@ -39,9 +41,9 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class DirectoryTest extends \PHPUnit\Framework\TestCase
+class DirectoryTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $listArray =
@@ -49,7 +51,7 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
         $samples = $listArray[Resources::QP_ENTRIES][FileResources::QP_DIRECTORY];
 
         // Test
-        $actuals = array();
+        $actuals = [];
         $actuals[] = Directory::create($samples[0]);
         $actuals[] = Directory::create($samples[1]);
         $actuals[] = Directory::create($samples[2]);
@@ -64,4 +66,5 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($sample[Resources::QP_NAME], $actual->getName());
         }
     }
+
 }

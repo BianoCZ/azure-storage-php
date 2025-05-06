@@ -21,11 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
+use MicrosoftAzure\Storage\Blob\Models\GetBlobMetadataResult;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Blob\Models\GetBlobMetadataResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class GetBlobMetadataResult
@@ -37,9 +39,9 @@ use MicrosoftAzure\Storage\Blob\Models\GetBlobMetadataResult;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetBlobMetadataResultTest extends \PHPUnit\Framework\TestCase
+class GetBlobMetadataResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::listBlobsOneEntry();
@@ -63,4 +65,5 @@ class GetBlobMetadataResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test2', $metadata['test2']);
         $this->assertEquals('test3', $metadata['test3']);
     }
+
 }

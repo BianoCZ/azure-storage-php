@@ -39,6 +39,7 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class MarkerContinuationToken extends ContinuationToken
 {
+
     private $nextMarker;
 
     public function __construct(
@@ -46,6 +47,7 @@ class MarkerContinuationToken extends ContinuationToken
         $location = ''
     ) {
         parent::__construct($location);
+
         $this->setNextMarker($nextMarker);
     }
 
@@ -54,7 +56,7 @@ class MarkerContinuationToken extends ContinuationToken
      *
      * @param string $nextMarker the next marker to be set.
      */
-    public function setNextMarker($nextMarker)
+    public function setNextMarker(string $nextMarker): void
     {
         Validate::canCastAsString($nextMarker, 'nextMarker');
         $this->nextMarker = $nextMarker;
@@ -63,10 +65,10 @@ class MarkerContinuationToken extends ContinuationToken
     /**
      * Getter for nextMarker
      *
-     * @return string
      */
-    public function getNextMarker()
+    public function getNextMarker(): string
     {
         return $this->nextMarker;
     }
+
 }

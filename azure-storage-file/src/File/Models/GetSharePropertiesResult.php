@@ -27,6 +27,7 @@ namespace MicrosoftAzure\Storage\File\Models;
 use MicrosoftAzure\Storage\Common\Internal\MetadataTrait;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
+use function intval;
 
 /**
  * Holds result of getShareProperties and getShareMetadata
@@ -40,6 +41,7 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class GetSharePropertiesResult
 {
+
     use MetadataTrait;
 
     private $quota;
@@ -47,9 +49,8 @@ class GetSharePropertiesResult
     /**
      * Gets file quota.
      *
-     * @return int
      */
-    public function getQuota()
+    public function getQuota(): int
     {
         return $this->quota;
     }
@@ -59,9 +60,8 @@ class GetSharePropertiesResult
      *
      * @param int $quota value.
      *
-     * @return void
      */
-    protected function setQuota($quota)
+    protected function setQuota(int $quota): void
     {
         $this->quota = $quota;
     }
@@ -73,17 +73,17 @@ class GetSharePropertiesResult
      *
      * @internal
      *
-     * @return GetSharePropertiesResult
      */
-    public static function create(array $responseHeaders)
+    public static function create(array $responseHeaders): GetSharePropertiesResult
     {
-        $result   = static::createMetadataResult($responseHeaders);
+        $result = static::createMetadataResult($responseHeaders);
 
-        $result->setQuota(\intval(Utilities::tryGetValueInsensitive(
+        $result->setQuota(intval(Utilities::tryGetValueInsensitive(
             Resources::X_MS_SHARE_QUOTA,
             $responseHeaders
         )));
 
         return $result;
     }
+
 }

@@ -25,8 +25,8 @@
 namespace MicrosoftAzure\Storage\Table\Models;
 
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
 use MicrosoftAzure\Storage\Table\Internal\IODataReaderWriter;
+use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
 
 /**
  * Holds result of calling insertEntity wrapper
@@ -40,6 +40,7 @@ use MicrosoftAzure\Storage\Table\Internal\IODataReaderWriter;
  */
 class InsertEntityResult
 {
+
     private $entity;
 
     /**
@@ -51,9 +52,8 @@ class InsertEntityResult
      *
      * @internal
      *
-     * @return InsertEntityResult
      */
-    public static function create($body, $headers, $odataSerializer)
+    public static function create(string $body, array $headers, IODataReaderWriter $odataSerializer): InsertEntityResult
     {
         $result = new InsertEntityResult();
         $entity = $odataSerializer->parseEntity($body);
@@ -66,9 +66,8 @@ class InsertEntityResult
     /**
      * Gets table entity.
      *
-     * @return Entity
      */
-    public function getEntity()
+    public function getEntity(): Entity
     {
         return $this->entity;
     }
@@ -78,10 +77,10 @@ class InsertEntityResult
      *
      * @param Entity $entity The table entity instance.
      *
-     * @return void
      */
-    protected function setEntity($entity)
+    protected function setEntity(Entity $entity): void
     {
         $this->entity = $entity;
     }
+
 }

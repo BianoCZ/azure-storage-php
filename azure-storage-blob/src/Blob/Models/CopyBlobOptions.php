@@ -36,14 +36,14 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class CopyBlobOptions extends CopyBlobFromURLOptions
 {
+
     private $sourceSnapshot;
 
     /**
      * Gets source snapshot.
      *
-     * @return string
      */
-    public function getSourceSnapshot()
+    public function getSourceSnapshot(): string
     {
         return $this->sourceSnapshot;
     }
@@ -53,10 +53,10 @@ class CopyBlobOptions extends CopyBlobFromURLOptions
      *
      * @param string $sourceSnapshot value.
      *
-     * @return void
      */
-    public function setSourceSnapshot($sourceSnapshot)
+    public function setSourceSnapshot(string $sourceSnapshot): void
     {
         $this->sourceSnapshot = $sourceSnapshot;
     }
+
 }

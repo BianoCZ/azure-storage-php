@@ -21,13 +21,12 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
 use MicrosoftAzure\Storage\Queue\Models\QueueACL;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class QueueACL
@@ -39,12 +38,12 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class QueueACLTest extends \PHPUnit\Framework\TestCase
+class QueueACLTest extends TestCase
 {
-    public function testCreateEmpty()
+    public function testCreateEmpty(): void
     {
         // Setup
-        $sample = array();
+        $sample = [];
 
         // Test
         $acl = QueueACL::create($sample);
@@ -53,7 +52,7 @@ class QueueACLTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(0, $acl->getSignedIdentifiers());
     }
 
-    public function testCreateOneEntry()
+    public function testCreateOneEntry(): void
     {
         // Setup
         $sample = TestResources::getQueueACLOneEntrySample();
@@ -78,4 +77,5 @@ class QueueACLTest extends \PHPUnit\Framework\TestCase
 
         return $acl;
     }
+
 }

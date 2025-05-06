@@ -39,16 +39,18 @@ use MicrosoftAzure\Storage\Common\Models\Range;
  */
 class GetBlobOptions extends BlobServiceOptions
 {
+
     private $snapshot;
+
     private $range;
+
     private $rangeGetContentMD5;
 
     /**
      * Gets blob snapshot.
      *
-     * @return string
      */
-    public function getSnapshot()
+    public function getSnapshot(): string
     {
         return $this->snapshot;
     }
@@ -58,9 +60,8 @@ class GetBlobOptions extends BlobServiceOptions
      *
      * @param string $snapshot value.
      *
-     * @return void
      */
-    public function setSnapshot($snapshot)
+    public function setSnapshot(string $snapshot): void
     {
         $this->snapshot = $snapshot;
     }
@@ -68,9 +69,8 @@ class GetBlobOptions extends BlobServiceOptions
     /**
      * Gets Blob range.
      *
-     * @return Range
      */
-    public function getRange()
+    public function getRange(): Range
     {
         return $this->range;
     }
@@ -80,9 +80,8 @@ class GetBlobOptions extends BlobServiceOptions
      *
      * @param Range $range value.
      *
-     * @return void
      */
-    public function setRange(Range $range)
+    public function setRange(Range $range): void
     {
         $this->range = $range;
     }
@@ -90,9 +89,8 @@ class GetBlobOptions extends BlobServiceOptions
     /**
      * Gets rangeGetContentMD5
      *
-     * @return boolean
      */
-    public function getRangeGetContentMD5()
+    public function getRangeGetContentMD5(): bool
     {
         return $this->rangeGetContentMD5;
     }
@@ -100,13 +98,13 @@ class GetBlobOptions extends BlobServiceOptions
     /**
      * Sets rangeGetContentMD5
      *
-     * @param boolean $rangeGetContentMD5 value
+     * @param bool $rangeGetContentMD5 value
      *
-     * @return void
      */
-    public function setRangeGetContentMD5($rangeGetContentMD5)
+    public function setRangeGetContentMD5(bool $rangeGetContentMD5): void
     {
         Validate::isBoolean($rangeGetContentMD5);
         $this->rangeGetContentMD5 = $rangeGetContentMD5;
     }
+
 }

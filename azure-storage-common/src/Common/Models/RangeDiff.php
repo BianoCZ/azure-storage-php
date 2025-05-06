@@ -36,27 +36,28 @@ namespace MicrosoftAzure\Storage\Common\Models;
  */
 class RangeDiff extends Range
 {
+
     private $isClearedPageRange;
 
     /**
      * Constructor
      *
-     * @param integer $start              the resource start value
-     * @param integer $end                the resource end value
+     * @param int $start              the resource start value
+     * @param int $end                the resource end value
      * @param bool    $isClearedPageRange true if the page range is a cleared range, false otherwise.
      */
-    public function __construct($start, $end = null, $isClearedPageRange = false)
+    public function __construct(int $start, ?int $end = null, bool $isClearedPageRange = false)
     {
         parent::__construct($start, $end);
+
         $this->isClearedPageRange = $isClearedPageRange;
     }
 
     /**
      * True if the page range is a cleared range, false otherwise
      *
-     * @return bool
      */
-    public function isClearedPageRange()
+    public function isClearedPageRange(): bool
     {
         return $this->isClearedPageRange;
     }
@@ -64,12 +65,11 @@ class RangeDiff extends Range
     /**
      * Sets the isClearedPageRange property
      *
-     * @param bool $isClearedPageRange
      *
-     * @return bool
      */
-    public function setIsClearedPageRange($isClearedPageRange)
+    public function setIsClearedPageRange(bool $isClearedPageRange): bool
     {
         $this->isClearedPageRange = $isClearedPageRange;
     }
+
 }

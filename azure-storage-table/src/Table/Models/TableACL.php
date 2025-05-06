@@ -24,9 +24,9 @@
 
 namespace MicrosoftAzure\Storage\Table\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\ACLBase;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
-use MicrosoftAzure\Storage\Common\Internal\ACLBase;
 
 /**
  * Holds table ACL members.
@@ -57,9 +57,8 @@ class TableACL extends ACLBase
      *
      * @internal
      *
-     * @return TableACL
      */
-    public static function create(array $parsed = null)
+    public static function create(?array $parsed = null): TableACL
     {
         $result = new TableACL();
         $result->fromXmlArray($parsed);
@@ -76,9 +75,8 @@ class TableACL extends ACLBase
      *
      * @internal
      *
-     * @return void
      */
-    protected static function validateResourceType($resourceType)
+    protected static function validateResourceType(string $resourceType): void
     {
         Validate::isTrue(
             $resourceType == Resources::RESOURCE_TYPE_TABLE,
@@ -89,10 +87,10 @@ class TableACL extends ACLBase
     /**
      * Create a TableAccessPolicy object.
      *
-     * @return TableAccessPolicy
      */
-    protected static function createAccessPolicy()
+    protected static function createAccessPolicy(): TableAccessPolicy
     {
         return new TableAccessPolicy();
     }
+
 }

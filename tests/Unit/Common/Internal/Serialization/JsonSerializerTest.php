@@ -24,11 +24,11 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal\Serialization;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
-use MicrosoftAzure\Storage\Common\Exceptions\InvalidArgumentTypeException;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\JsonSerializer;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Serialization\JsonSerializer;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use function sprintf;
 
 /**
  * Unit tests for class XmlSerializer
@@ -40,9 +40,9 @@ use MicrosoftAzure\Storage\Common\Internal\Resources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class JsonSerializerTest extends \PHPUnit\Framework\TestCase
+class JsonSerializerTest extends TestCase
 {
-    public function testObjectSerialize()
+    public function testObjectSerialize(): void
     {
         // Setup
         $testData = TestResources::getSimpleJson();
@@ -56,7 +56,7 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testUnserializeArray()
+    public function testUnserializeArray(): void
     {
         // Setup
         $jsonSerializer = new JsonSerializer();
@@ -70,7 +70,7 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testUnserializeObject()
+    public function testUnserializeObject(): void
     {
         // Setup
         $jsonSerializer = new JsonSerializer();
@@ -84,7 +84,7 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testUnserializeEmptyString()
+    public function testUnserializeEmptyString(): void
     {
         // Setup
         $jsonSerializer = new JsonSerializer();
@@ -98,7 +98,7 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testUnserializeInvalidString()
+    public function testUnserializeInvalidString(): void
     {
         // Setup
         $jsonSerializer = new JsonSerializer();
@@ -112,7 +112,7 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSerialize()
+    public function testSerialize(): void
     {
         // Setup
         $jsonSerializer = new JsonSerializer();
@@ -126,7 +126,7 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSerializeNull()
+    public function testSerializeNull(): void
     {
         // Setup
         $jsonSerializer = new JsonSerializer();
@@ -137,4 +137,5 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
         // Test
         $actual = $jsonSerializer->serialize($testData);
     }
+
 }

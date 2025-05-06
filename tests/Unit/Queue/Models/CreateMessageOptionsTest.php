@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
 use MicrosoftAzure\Storage\Queue\Models\CreateMessageOptions;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class CreateMessageOptions
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Queue\Models\CreateMessageOptions;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CreateMessageOptionsTest extends \PHPUnit\Framework\TestCase
+class CreateMessageOptionsTest extends TestCase
 {
-    public function testGetVisibilityTimeoutInSeconds()
+    public function testGetVisibilityTimeoutInSeconds(): void
     {
         // Setup
         $createMessageOptions = new CreateMessageOptions();
@@ -52,7 +53,7 @@ class CreateMessageOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetVisibilityTimeoutInSeconds()
+    public function testSetVisibilityTimeoutInSeconds(): void
     {
         // Setup
         $createMessageOptions = new CreateMessageOptions();
@@ -66,7 +67,7 @@ class CreateMessageOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetTimeToLiveInSeconds()
+    public function testGetTimeToLiveInSeconds(): void
     {
         // Setup
         $createMessageOptions = new CreateMessageOptions();
@@ -80,7 +81,7 @@ class CreateMessageOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetTimeToLiveInSeconds()
+    public function testSetTimeToLiveInSeconds(): void
     {
         // Setup
         $createMessageOptions = new CreateMessageOptions();
@@ -93,4 +94,5 @@ class CreateMessageOptionsTest extends \PHPUnit\Framework\TestCase
         $actual = $createMessageOptions->getTimeToLiveInSeconds();
         $this->assertEquals($expected, $actual);
     }
+
 }

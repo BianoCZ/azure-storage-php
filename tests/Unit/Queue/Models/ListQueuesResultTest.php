@@ -26,6 +26,7 @@ namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
 use MicrosoftAzure\Storage\Queue\Models\ListQueuesResult;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class ListQueuesResult
@@ -37,9 +38,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ListQueuesResultTest extends \PHPUnit\Framework\TestCase
+class ListQueuesResultTest extends TestCase
 {
-    public function testCreateWithEmpty()
+    public function testCreateWithEmpty(): void
     {
         // Setup
         $sample = TestResources::listQueuesEmpty();
@@ -52,7 +53,7 @@ class ListQueuesResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($sample['NextMarker']);
     }
 
-    public function testCreateWithOneEntry()
+    public function testCreateWithOneEntry(): void
     {
         // Setup
         $sample = TestResources::listQueuesOneEntry();
@@ -92,4 +93,5 @@ class ListQueuesResultTest extends \PHPUnit\Framework\TestCase
 
         return $actual;
     }
+
 }

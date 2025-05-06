@@ -38,16 +38,17 @@ class LocationMode
 {
     //Request will only be sent to primary endpoint, except for
     //getServiceStats APIs.
-    const PRIMARY_ONLY           = 'PrimaryOnly';
+    public const string PRIMARY_ONLY = 'PrimaryOnly';
 
     //Request will only be sent to secondary endpoint.
-    const SECONDARY_ONLY         = 'SecondaryOnly';
+    public const string SECONDARY_ONLY = 'SecondaryOnly';
 
     //Request will be sent to primary endpoint first, and retry for secondary
     //endpoint.
-    const PRIMARY_THEN_SECONDARY = 'PrimaryThenSecondary';
+    public const string PRIMARY_THEN_SECONDARY = 'PrimaryThenSecondary';
 
     //Request will be sent to secondary endpoint first, and retry for primary
     //endpoint.
-    const SECONDARY_THEN_PRIMARY = 'SecondaryThenPrimary';
+    public const string SECONDARY_THEN_PRIMARY = 'SecondaryThenPrimary';
+
 }

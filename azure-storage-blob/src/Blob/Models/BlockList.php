@@ -25,8 +25,10 @@
 namespace MicrosoftAzure\Storage\Blob\Models;
 
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
-use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
+use function get_class;
+use function sprintf;
 
 /**
  * Holds block list used for commitBlobBlocks
@@ -40,7 +42,9 @@ use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
  */
 class BlockList
 {
+
     private $entries;
+
     private static $xmlRootName = 'BlockList';
 
     /**
@@ -48,9 +52,8 @@ class BlockList
      *
      * @param Block[] The blocks array.
      *
-     * @return BlockList
      */
-    public static function create(array $array)
+    public static function create(array $array): BlockList
     {
         $blockList = new BlockList();
 
@@ -67,9 +70,8 @@ class BlockList
      * @param string $blockId The block id.
      * @param string $type    The entry type, you can use BlobBlockType.
      *
-     * @return void
      */
-    public function addEntry($blockId, $type)
+    public function addEntry(string $blockId, string $type): void
     {
         Validate::canCastAsString($blockId, 'blockId');
         Validate::isTrue(
@@ -88,9 +90,8 @@ class BlockList
      *
      * @param string $blockId The block id.
      *
-     * @return void
      */
-    public function addCommittedEntry($blockId)
+    public function addCommittedEntry(string $blockId): void
     {
         $this->addEntry($blockId, BlobBlockType::COMMITTED_TYPE);
     }
@@ -100,9 +101,8 @@ class BlockList
      *
      * @param string $blockId The block id.
      *
-     * @return void
      */
-    public function addUncommittedEntry($blockId)
+    public function addUncommittedEntry(string $blockId): void
     {
         $this->addEntry($blockId, BlobBlockType::UNCOMMITTED_TYPE);
     }
@@ -112,9 +112,8 @@ class BlockList
      *
      * @param string $blockId The block id.
      *
-     * @return void
      */
-    public function addLatestEntry($blockId)
+    public function addLatestEntry(string $blockId): void
     {
         $this->addEntry($blockId, BlobBlockType::LATEST_TYPE);
     }
@@ -124,9 +123,8 @@ class BlockList
      *
      * @param string $blockId The id of the block.
      *
-     * @return Block
      */
-    public function getEntry($blockId)
+    public function getEntry(string $blockId): Block
     {
         foreach ($this->entries as $value) {
             if ($blockId == $value->getBlockId()) {
@@ -142,7 +140,7 @@ class BlockList
      *
      * @return Block[]
      */
-    public function getEntries()
+    public function getEntries(): array
     {
         return $this->entries;
     }
@@ -154,19 +152,19 @@ class BlockList
      *
      * @internal
      *
-     * @return string
      */
-    public function toXml(XmlSerializer $xmlSerializer)
+    public function toXml(XmlSerializer $xmlSerializer): string
     {
-        $properties = array(XmlSerializer::ROOT_NAME => self::$xmlRootName);
-        $array      = array();
+        $properties = [XmlSerializer::ROOT_NAME => self::$xmlRootName];
+        $array      = [];
 
         foreach ($this->entries as $value) {
-            $array[] = array(
-                $value->getType() => $value->getBlockId()
-            );
+            $array[] = [
+                $value->getType() => $value->getBlockId(),
+            ];
         }
 
         return $xmlSerializer->serialize($array, $properties);
     }
+
 }

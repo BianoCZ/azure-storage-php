@@ -25,6 +25,13 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal;
 
+use RuntimeException;
+use function func_get_args;
+use function func_num_args;
+use function implode;
+use function is_null;
+use function sprintf;
+
 /**
  * Base class for all REST services settings.
  *
@@ -52,13 +59,11 @@ abstract class ServiceSettings
      *
      * @param string $connectionString The invalid formatted connection string.
      *
-     * @return void
-     *
      * @throws \RuntimeException
      */
-    protected static function noMatch($connectionString)
+    protected static function noMatch(string $connectionString): void
     {
-        throw new \RuntimeException(
+        throw new RuntimeException(
             sprintf(Resources::MISSING_CONNECTION_STRING_SETTINGS, $connectionString)
         );
     }
@@ -73,7 +78,7 @@ abstract class ServiceSettings
      *
      * @throws \RuntimeException
      */
-    protected static function parseAndValidateKeys($connectionString)
+    protected static function parseAndValidateKeys(string $connectionString): array
     {
         // Initialize the static values if they are not initialized yet.
         if (!static::$isInitialized) {
@@ -89,7 +94,7 @@ abstract class ServiceSettings
         // Assure that all given keys are valid.
         foreach ($tokenizedSettings as $key => $value) {
             if (!Utilities::inArrayInsensitive($key, static::$validSettingKeys)) {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf(
                         Resources::INVALID_CONNECTION_STRING_SETTING_KEY,
                         $key,
@@ -106,18 +111,17 @@ abstract class ServiceSettings
      * Creates an anonymous function that acts as predicate.
      *
      * @param array   $requirements The array of conditions to satisfy.
-     * @param boolean $isRequired   Either these conditions are all required or all
+     * @param bool $isRequired   Either these conditions are all required or all
      * optional.
-     * @param boolean $atLeastOne   Indicates that at least one requirement must
+     * @param bool $atLeastOne   Indicates that at least one requirement must
      * succeed.
      *
-     * @return callable
      */
     protected static function getValidator(
         array $requirements,
-        $isRequired,
-        $atLeastOne
-    ) {
+        bool $isRequired,
+        bool $atLeastOne
+    ): callable {
         // @codingStandardsIgnoreStart
 
         return function ($userSettings) use ($requirements, $isRequired, $atLeastOne) {
@@ -159,9 +163,8 @@ abstract class ServiceSettings
     /**
      * Creates at lease one succeed predicate for the provided list of requirements.
      *
-     * @return callable
      */
-    protected static function atLeastOne()
+    protected static function atLeastOne(): callable
     {
         $allSettings = func_get_args();
         return self::getValidator($allSettings, false, true);
@@ -170,9 +173,8 @@ abstract class ServiceSettings
     /**
      * Creates an optional predicate for the provided list of requirements.
      *
-     * @return callable
      */
-    protected static function optional()
+    protected static function optional(): callable
     {
         $optionalSettings = func_get_args();
         return self::getValidator($optionalSettings, false, false);
@@ -181,9 +183,8 @@ abstract class ServiceSettings
     /**
      * Creates an required predicate for the provided list of requirements.
      *
-     * @return callable
      */
-    protected static function allRequired()
+    protected static function allRequired(): callable
     {
         $requiredSettings = func_get_args();
         return self::getValidator($requiredSettings, true, false);
@@ -195,11 +196,10 @@ abstract class ServiceSettings
      * @param string   $name      The setting key name.
      * @param callable $predicate The setting value predicate.
      *
-     * @return array
      */
-    protected static function settingWithFunc($name, $predicate)
+    protected static function settingWithFunc(string $name, callable $predicate): array
     {
-        $requirement                                = array();
+        $requirement                                = [];
         $requirement[Resources::SETTING_NAME]       = $name;
         $requirement[Resources::SETTING_CONSTRAINT] = $predicate;
 
@@ -212,9 +212,8 @@ abstract class ServiceSettings
      *
      * @param string $name The setting key name.
      *
-     * @return array
      */
-    protected static function setting($name)
+    protected static function setting(string $name): array
     {
         $validValues = func_get_args();
 
@@ -239,7 +238,7 @@ abstract class ServiceSettings
                 }
             }
 
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     Resources::INVALID_CONFIG_VALUE,
                     $settingValue,
@@ -259,10 +258,10 @@ abstract class ServiceSettings
      *
      * @param array $settings The settings to check.
      *
-     * @return boolean If any filter returns null, false. If there are any settings
+     * @return bool If any filter returns null, false. If there are any settings
      * left over after all filters are processed, false. Otherwise true.
      */
-    protected static function matchedSpecification(array $settings)
+    protected static function matchedSpecification(array $settings): bool
     {
         $constraints = func_get_args();
 
@@ -274,9 +273,9 @@ abstract class ServiceSettings
 
             if (is_null($remainingSettings)) {
                 return false;
-            } else {
-                $settings = $remainingSettings;
             }
+
+            $settings = $remainingSettings;
         }
 
         if (empty($settings)) {
@@ -285,4 +284,5 @@ abstract class ServiceSettings
 
         return false;
     }
+
 }

@@ -26,14 +26,19 @@ namespace MicrosoftAzure\Storage\Tests\Functional\Blob;
 
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
+use function error_log;
+use function strpos;
+use function substr;
 
 class FunctionalTestBase extends IntegrationTestBase
 {
+
     private static $isOneTimeSetup = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         $settings = StorageServiceSettings::createFromConnectionString($this->connectionString);
         $accountName = $settings->getBlobEndpointUri();
         $firstSlash = strpos($accountName, '/');
@@ -66,15 +71,16 @@ class FunctionalTestBase extends IntegrationTestBase
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         foreach (BlobServiceFunctionalTestData::$testContainerNames as $name) {
             $this->safeDeleteContainer($name);
         }
+
         parent::tearDown();
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$isOneTimeSetup) {
             $tmp = new FunctionalTestBase();
@@ -82,10 +88,11 @@ class FunctionalTestBase extends IntegrationTestBase
             $tmp->safeDeleteContainer('$root');
             self::$isOneTimeSetup = false;
         }
+
         parent::tearDownAfterClass();
     }
 
-    private function safeDeleteContainerContents($name)
+    private function safeDeleteContainerContents($name): void
     {
         $blobListResult = $this->restProxy->listBlobs($name);
         foreach ($blobListResult->getBlobs() as $blob) {
@@ -97,7 +104,7 @@ class FunctionalTestBase extends IntegrationTestBase
         }
     }
 
-    private function safeDeleteContainer($name)
+    private function safeDeleteContainer($name): void
     {
         try {
             $this->restProxy->deleteContainer($name);
@@ -106,7 +113,7 @@ class FunctionalTestBase extends IntegrationTestBase
         }
     }
 
-    private function safeCreateContainer($name)
+    private function safeCreateContainer($name): void
     {
         try {
             $this->restProxy->createContainer($name);
@@ -114,4 +121,5 @@ class FunctionalTestBase extends IntegrationTestBase
             error_log($e->getMessage());
         }
     }
+
 }

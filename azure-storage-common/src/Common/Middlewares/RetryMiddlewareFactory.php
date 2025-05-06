@@ -24,10 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Common\Middlewares;
 
-use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Common\Internal\Validate;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
+use function pow;
+use function sprintf;
 
 /**
  * This class provides static functions that creates retry handlers for Guzzle
@@ -44,14 +46,17 @@ class RetryMiddlewareFactory
 {
     //The interval will be increased linearly, the nth retry will have a
     //wait time equal to n * interval.
-    const LINEAR_INTERVAL_ACCUMULATION      = 'Linear';
+    public const string LINEAR_INTERVAL_ACCUMULATION = 'Linear';
+
     //The interval will be increased exponentially, the nth retry will have a
     //wait time equal to pow(2, n) * interval.
-    const EXPONENTIAL_INTERVAL_ACCUMULATION = 'Exponential';
+    public const string EXPONENTIAL_INTERVAL_ACCUMULATION = 'Exponential';
+
     //This is for the general type of logic that handles retry.
-    const GENERAL_RETRY_TYPE                = 'General';
+    public const string GENERAL_RETRY_TYPE = 'General';
+
     //This is for the append blob retry only.
-    const APPEND_BLOB_RETRY_TYPE            = 'Append Blob Retry';
+    public const string APPEND_BLOB_RETRY_TYPE = 'Append Blob Retry';
 
     /**
      * Create the retry handler for the Guzzle client, according to the given
@@ -75,12 +80,12 @@ class RetryMiddlewareFactory
      *                                     handled after a response.
      */
     public static function create(
-        $type = self::GENERAL_RETRY_TYPE,
-        $numberOfRetries = Resources::DEFAULT_NUMBER_OF_RETRIES,
-        $interval = Resources::DEFAULT_RETRY_INTERVAL,
-        $accumulationMethod = self::LINEAR_INTERVAL_ACCUMULATION,
-        $retryConnect = false
-    ) {
+        string $type = self::GENERAL_RETRY_TYPE,
+        int $numberOfRetries = Resources::DEFAULT_NUMBER_OF_RETRIES,
+        int $interval = Resources::DEFAULT_RETRY_INTERVAL,
+        string $accumulationMethod = self::LINEAR_INTERVAL_ACCUMULATION,
+        bool $retryConnect = false
+    ): RetryMiddleware {
         //Validate the input parameters
         //type
         Validate::isTrue(
@@ -146,7 +151,7 @@ class RetryMiddlewareFactory
      * @return callable     The callable that will return if the request should
      *                      be retried.
      */
-    protected static function createRetryDecider($type, $maxRetries, $retryConnect)
+    protected static function createRetryDecider(string $type, int $maxRetries, bool $retryConnect): callable
     {
         return function (
             $retries,
@@ -167,13 +172,15 @@ class RetryMiddlewareFactory
             if (!$response) {
                 if (!$exception || !($exception instanceof RequestException)) {
                     return false;
-                } elseif ($exception instanceof ConnectException) {
+                }
+
+                if ($exception instanceof ConnectException) {
                     return $retryConnect;
-                } else {
-                    $response = $exception->getResponse();
-                    if (!$response) {
-                        return true;
-                    }
+                }
+
+                $response = $exception->getResponse();
+                if (!$response) {
+                    return true;
                 }
             }
 
@@ -182,12 +189,12 @@ class RetryMiddlewareFactory
                     $response->getStatusCode(),
                     $isSecondary
                 );
-            } else {
-                return static::appendBlobRetryDecider(
-                    $response->getStatusCode(),
-                    $isSecondary
-                );
             }
+
+            return static::appendBlobRetryDecider(
+                $response->getStatusCode(),
+                $isSecondary
+            );
 
             return true;
         };
@@ -201,7 +208,7 @@ class RetryMiddlewareFactory
      *
      * @return bool            true if the request should be retried.
      */
-    protected static function generalRetryDecider($statusCode, $isSecondary)
+    protected static function generalRetryDecider(int $statusCode, bool $isSecondary): bool
     {
         $retry = false;
         if ($statusCode == 408) {
@@ -225,7 +232,7 @@ class RetryMiddlewareFactory
      *
      * @return bool            true if the request should be retried.
      */
-    protected static function appendBlobRetryDecider($statusCode, $isSecondary)
+    protected static function appendBlobRetryDecider(int $statusCode, bool $isSecondary): bool
     {
         //The retry logic is different for append blob.
         //First it will need to record the former status code if it is
@@ -233,8 +240,7 @@ class RetryMiddlewareFactory
         //needs to be retried. Currently this is not implemented so will
         //only adapt to the general retry decider.
         //TODO: add logic for append blob's retry when implemented.
-        $retry = static::generalRetryDecider($statusCode, $isSecondary);
-        return $retry;
+        return static::generalRetryDecider($statusCode, $isSecondary);
     }
 
     /**
@@ -246,7 +252,7 @@ class RetryMiddlewareFactory
      * @return callable      a calculator that will return the interval
      *                       according to the number of retries.
      */
-    protected static function createLinearDelayCalculator($interval)
+    protected static function createLinearDelayCalculator(int $interval): callable
     {
         return function ($retries) use ($interval) {
             return $retries * $interval;
@@ -262,10 +268,11 @@ class RetryMiddlewareFactory
      * @return callable      a calculator that will return the interval
      *                       according to the number of retries.
      */
-    protected static function createExponentialDelayCalculator($interval)
+    protected static function createExponentialDelayCalculator(int $interval): callable
     {
         return function ($retries) use ($interval) {
-            return $interval * ((int)\pow(2, $retries));
+            return $interval * (int) pow(2, $retries);
         };
     }
+
 }

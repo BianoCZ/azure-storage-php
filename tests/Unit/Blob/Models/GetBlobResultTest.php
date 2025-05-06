@@ -21,13 +21,15 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Blob\Models\GetBlobResult;
-use MicrosoftAzure\Storage\Blob\Models\BlobProperties;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
 use GuzzleHttp\Psr7;
+use MicrosoftAzure\Storage\Blob\Models\BlobProperties;
+use MicrosoftAzure\Storage\Blob\Models\GetBlobResult;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use function stream_get_contents;
 
 /**
  * Unit tests for class GetBlobResult
@@ -39,10 +41,10 @@ use GuzzleHttp\Psr7;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetBlobResultTest extends \PHPUnit\Framework\TestCase
+class GetBlobResultTest extends TestCase
 {
 
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::listBlobsOneEntry();
@@ -64,4 +66,5 @@ class GetBlobResultTest extends \PHPUnit\Framework\TestCase
         $actualContent = stream_get_contents($actual->getContentStream());
         $this->assertEquals($expectedBody, $actualContent);
     }
+
 }

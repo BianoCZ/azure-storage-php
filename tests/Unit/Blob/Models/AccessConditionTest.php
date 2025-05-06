@@ -21,11 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Models\AccessCondition;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class AccessCondition
@@ -37,9 +39,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class AccessConditionTest extends \PHPUnit\Framework\TestCase
+class AccessConditionTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         // Setup
         $expectedHeaderType = Resources::IF_MATCH;
@@ -53,7 +55,7 @@ class AccessConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $actual->getValue());
     }
 
-    public function testNone()
+    public function testNone(): void
     {
         // Setup
         $expectedHeader = Resources::EMPTY_STRING;
@@ -67,11 +69,11 @@ class AccessConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $actual->getValue());
     }
 
-    public function testIfModifiedSince()
+    public function testIfModifiedSince(): void
     {
         // Setup
         $expectedHeader = Resources::IF_MODIFIED_SINCE;
-        $expectedValue = new \DateTime('Sun, 25 Sep 2011 00:42:49 GMT');
+        $expectedValue = new DateTime('Sun, 25 Sep 2011 00:42:49 GMT');
 
         // Test
         $actual = AccessCondition::ifModifiedSince($expectedValue);
@@ -81,7 +83,7 @@ class AccessConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $actual->getValue());
     }
 
-    public function testIfMatch()
+    public function testIfMatch(): void
     {
         // Setup
         $expectedHeader = Resources::IF_MATCH;
@@ -95,7 +97,7 @@ class AccessConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $actual->getValue());
     }
 
-    public function testIfNoneMatch()
+    public function testIfNoneMatch(): void
     {
         // Setup
         $expectedHeader = Resources::IF_NONE_MATCH;
@@ -109,11 +111,11 @@ class AccessConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $actual->getValue());
     }
 
-    public function testIfNotModifiedSince()
+    public function testIfNotModifiedSince(): void
     {
         // Setup
         $expectedHeader = Resources::IF_UNMODIFIED_SINCE;
-        $expectedValue = new \DateTime('Sun, 25 Sep 2011 00:42:49 GMT');
+        $expectedValue = new DateTime('Sun, 25 Sep 2011 00:42:49 GMT');
 
         // Test
         $actual = AccessCondition::ifNotModifiedSince($expectedValue);
@@ -123,7 +125,7 @@ class AccessConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $actual->getValue());
     }
 
-    public function testIsValidWithValid()
+    public function testIsValidWithValid(): void
     {
         // Test
         $actual = AccessCondition::isValid(Resources::IF_MATCH);
@@ -132,7 +134,7 @@ class AccessConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($actual);
     }
 
-    public function testIsValidWithInvalid()
+    public function testIsValidWithInvalid(): void
     {
         // Test
         $actual = AccessCondition::isValid('1234');
@@ -140,4 +142,5 @@ class AccessConditionTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertFalse($actual);
     }
+
 }

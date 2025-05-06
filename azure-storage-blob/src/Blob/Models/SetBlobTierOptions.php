@@ -38,5 +38,7 @@ use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
  */
 class SetBlobTierOptions extends ServiceOptions
 {
+
     use AccessTierTrait;
+
 }

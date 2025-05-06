@@ -65,7 +65,7 @@ interface IMiddleware
      * ```
      *
      * @param  callable $handler The next handler.
-     * @return callable
      */
-    public function __invoke(callable $handler);
+    public function __invoke(callable $handler): callable;
+
 }

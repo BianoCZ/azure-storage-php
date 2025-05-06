@@ -39,9 +39,11 @@ use MicrosoftAzure\Storage\Common\MarkerContinuationTokenTrait;
  */
 class ListDirectoriesAndFilesOptions extends FileServiceOptions
 {
+
     use MarkerContinuationTokenTrait;
 
     private $maxResults;
+
     private $prefix;
 
     /**
@@ -52,9 +54,8 @@ class ListDirectoriesAndFilesOptions extends FileServiceOptions
      * If the parameter is set to a value less than or equal to zero,
      * the server will return status code 400 (Bad Request).
      *
-     * @return string
      */
-    public function getMaxResults()
+    public function getMaxResults(): string
     {
         return $this->maxResults;
     }
@@ -69,9 +70,8 @@ class ListDirectoriesAndFilesOptions extends FileServiceOptions
      *
      * @param string $maxResults value.
      *
-     * @return void
      */
-    public function setMaxResults($maxResults)
+    public function setMaxResults(string $maxResults): void
     {
         Validate::canCastAsString($maxResults, 'maxResults');
         $this->maxResults = $maxResults;
@@ -80,9 +80,8 @@ class ListDirectoriesAndFilesOptions extends FileServiceOptions
     /**
      * Get the prefix.
      *
-     * @return string
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->prefix;
     }
@@ -90,12 +89,11 @@ class ListDirectoriesAndFilesOptions extends FileServiceOptions
     /**
      * Set a specified prefix.
      *
-     * @param string $prefix
      *
-     * @return void
      */
-    public function setPrefix($prefix)
+    public function setPrefix(string $prefix): void
     {
         $this->prefix = $prefix;
     }
+
 }

@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
 use MicrosoftAzure\Storage\Table\Models\BatchOperationParameterName;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class BatchOperationParameterName
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Table\Models\BatchOperationParameterName;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BatchOperationParameterNameTest extends \PHPUnit\Framework\TestCase
+class BatchOperationParameterNameTest extends TestCase
 {
-    public function testIsValid()
+    public function testIsValid(): void
     {
         // Setup
         $name = BatchOperationParameterName::BP_ETAG;
@@ -50,7 +51,7 @@ class BatchOperationParameterNameTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($actual);
     }
 
-    public function testIsValidWithInvalid()
+    public function testIsValidWithInvalid(): void
     {
         // Setup
         $name = 'zeta el senen';
@@ -61,4 +62,5 @@ class BatchOperationParameterNameTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertFalse($actual);
     }
+
 }

@@ -24,23 +24,25 @@
 
 namespace MicrosoftAzure\Storage\Tests\Functional\File;
 
-use MicrosoftAzure\Storage\Tests\Framework\FileServiceRestProxyTestBase;
 use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Tests\Framework\FileServiceRestProxyTestBase;
 
 class IntegrationTestBase extends FileServiceRestProxyTestBase
 {
+
     private static $isOneTimeSetup = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         if (!self::$isOneTimeSetup) {
             self::$isOneTimeSetup = true;
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$isOneTimeSetup) {
             $integrationTestBase = new IntegrationTestBase();
@@ -51,6 +53,7 @@ class IntegrationTestBase extends FileServiceRestProxyTestBase
             }
             self::$isOneTimeSetup = false;
         }
+
         parent::tearDownAfterClass();
     }
 
@@ -60,4 +63,5 @@ class IntegrationTestBase extends FileServiceRestProxyTestBase
         $uri = $settings->getFileEndpointUri();
         return Utilities::startsWith($uri, 'https://');
     }
+
 }

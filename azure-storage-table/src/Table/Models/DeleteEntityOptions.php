@@ -36,14 +36,14 @@ namespace MicrosoftAzure\Storage\Table\Models;
  */
 class DeleteEntityOptions extends TableServiceOptions
 {
+
     private $_etag;
 
     /**
      * Gets entity etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->_etag;
     }
@@ -53,10 +53,10 @@ class DeleteEntityOptions extends TableServiceOptions
      *
      * @param string $etag The entity ETag.
      *
-     * @return void
      */
-    public function setETag($etag)
+    public function setETag(string $etag): void
     {
         $this->_etag = $etag;
     }
+
 }

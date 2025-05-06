@@ -26,8 +26,9 @@ namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal\Authentication;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
-use MicrosoftAzure\Storage\Tests\Mock\Common\Internal\Authentication\SharedAccessSignatureAuthSchemeMock;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use MicrosoftAzure\Storage\Tests\Mock\Common\Internal\Authentication\SharedAccessSignatureAuthSchemeMock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for SharedAccessSignatureAuthScheme class.
@@ -38,9 +39,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license    https://github.com/azure/azure-storage-php/LICENSE
  * @link       https://github.com/azure/azure-storage-php
  */
-class SharedAccessSignatureAuthSchemeTest extends \PHPUnit\Framework\TestCase
+class SharedAccessSignatureAuthSchemeTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $mock = new SharedAccessSignatureAuthSchemeMock(TestResources::SAS_TOKEN);
         $this->assertEquals(TestResources::SAS_TOKEN, $mock->getSasToken());
@@ -52,18 +53,18 @@ class SharedAccessSignatureAuthSchemeTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testConstructFromInvalidSASToken()
+    public function testConstructFromInvalidSASToken(): void
     {
         $mock = new SharedAccessSignatureAuthSchemeMock('?' . TestResources::SAS_TOKEN . '?foo=bar');
         $this->assertEquals(TestResources::SAS_TOKEN, $mock->getSasToken());
     }
 
-    public function testSignRequest()
+    public function testSignRequest(): void
     {
         // Setup
         $mock = new SharedAccessSignatureAuthSchemeMock(TestResources::SAS_TOKEN);
         $uri = new Uri(TestResources::URI2);
-        $request = new Request('Get', $uri, array(), null);
+        $request = new Request('Get', $uri, [], null);
         $expected = new Uri(TestResources::URI2 . '&' . TestResources::SAS_TOKEN);
 
         // Test
@@ -71,4 +72,5 @@ class SharedAccessSignatureAuthSchemeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
 }

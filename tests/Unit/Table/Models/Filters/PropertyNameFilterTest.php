@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models\Filters;
 
 use MicrosoftAzure\Storage\Table\Models\Filters\PropertyNameFilter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class PropertyNameFilter
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Table\Models\Filters\PropertyNameFilter;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class PropertyNameFilterTest extends \PHPUnit\Framework\TestCase
+class PropertyNameFilterTest extends TestCase
 {
-    public function testGetPropertyName()
+    public function testGetPropertyName(): void
     {
         // Setup
         $expected = 'x';
@@ -47,4 +48,5 @@ class PropertyNameFilterTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $filter->getPropertyName());
     }
+
 }

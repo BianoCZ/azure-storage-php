@@ -24,9 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Common;
 
+use MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
-use MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource;
+use function array_merge;
+use function call_user_func_array;
+use function is_null;
 
 /**
  * Configuration manager for accessing Windows Azure settings.
@@ -40,7 +43,9 @@ use MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource;
  */
 class CloudConfigurationManager
 {
+
     private static $_isInitialized = false;
+
     private static $_sources;
 
     /**
@@ -53,12 +58,11 @@ class CloudConfigurationManager
     /**
      * Initializes the connection string source providers.
      *
-     * @return void
      */
-    private static function _init()
+    private static function _init(): void
     {
         if (!self::$_isInitialized) {
-            self::$_sources = array();
+            self::$_sources = [];
 
             // Get list of default connection string sources.
             $default = ConnectionStringSource::getDefaultSources();
@@ -77,7 +81,7 @@ class CloudConfigurationManager
      *
      * @return string If the key does not exist return null.
      */
-    public static function getConnectionString($key)
+    public static function getConnectionString(string $key): string
     {
         Validate::canCastAsString($key, 'key');
 
@@ -85,7 +89,7 @@ class CloudConfigurationManager
         $value = null;
 
         foreach (self::$_sources as $source) {
-            $value = call_user_func_array($source, array($key));
+            $value = call_user_func_array($source, [$key]);
 
             if (!empty($value)) {
                 break;
@@ -101,13 +105,12 @@ class CloudConfigurationManager
      *
      * @param string   $name     The source name.
      * @param callable $provider The source callback.
-     * @param boolean  $prepend  When true, the $provider is processed first when
+     * @param bool  $prepend  When true, the $provider is processed first when
      * calling getConnectionString. When false (the default) the $provider is
      * processed after the existing callbacks.
      *
-     * @return void
      */
-    public static function registerSource($name, $provider = null, $prepend = false)
+    public static function registerSource(string $name, ?callable $provider = null, bool $prepend = false): void
     {
         Validate::canCastAsString($name, 'name');
         Validate::notNullOrEmpty($name, 'name');
@@ -122,7 +125,7 @@ class CloudConfigurationManager
 
         if ($prepend) {
             self::$_sources = array_merge(
-                array($name => $provider),
+                [$name => $provider],
                 self::$_sources
             );
         } else {
@@ -135,9 +138,8 @@ class CloudConfigurationManager
      *
      * @param string $name The source name.
      *
-     * @return callable
      */
-    public static function unregisterSource($name)
+    public static function unregisterSource(string $name): callable
     {
         Validate::canCastAsString($name, 'name');
         Validate::notNullOrEmpty($name, 'name');
@@ -152,4 +154,5 @@ class CloudConfigurationManager
 
         return $sourceCallback;
     }
+
 }

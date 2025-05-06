@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Blob\Models;
 
 use Psr\Http\Message\StreamInterface;
+use function is_null;
 
 /**
  * Holds result of GetBlob API.
@@ -38,8 +39,11 @@ use Psr\Http\Message\StreamInterface;
  */
 class GetBlobResult
 {
+
     private $properties;
+
     private $metadata;
+
     private $contentStream;
 
     /**
@@ -51,17 +55,16 @@ class GetBlobResult
      *
      * @internal
      *
-     * @return GetBlobResult
      */
     public static function create(
         array $headers,
         StreamInterface $body,
         array $metadata
-    ) {
+    ): GetBlobResult {
         $result = new GetBlobResult();
         $result->setContentStream($body->detach());
         $result->setProperties(BlobProperties::createFromHttpHeaders($headers));
-        $result->setMetadata(is_null($metadata) ? array() : $metadata);
+        $result->setMetadata(is_null($metadata) ? [] : $metadata);
 
         return $result;
     }
@@ -69,9 +72,8 @@ class GetBlobResult
     /**
      * Gets blob metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
@@ -81,9 +83,8 @@ class GetBlobResult
      *
      * @param array $metadata value.
      *
-     * @return void
      */
-    protected function setMetadata(array $metadata)
+    protected function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;
     }
@@ -91,9 +92,8 @@ class GetBlobResult
     /**
      * Gets blob properties.
      *
-     * @return BlobProperties
      */
-    public function getProperties()
+    public function getProperties(): BlobProperties
     {
         return $this->properties;
     }
@@ -103,9 +103,8 @@ class GetBlobResult
      *
      * @param BlobProperties $properties value.
      *
-     * @return void
      */
-    protected function setProperties(BlobProperties $properties)
+    protected function setProperties(BlobProperties $properties): void
     {
         $this->properties = $properties;
     }
@@ -125,10 +124,10 @@ class GetBlobResult
      *
      * @param resource $contentStream The stream handle.
      *
-     * @return void
      */
-    protected function setContentStream($contentStream)
+    protected function setContentStream($contentStream): void
     {
         $this->contentStream = $contentStream;
     }
+
 }

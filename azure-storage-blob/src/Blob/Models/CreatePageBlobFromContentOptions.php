@@ -38,5 +38,7 @@ use MicrosoftAzure\Storage\Common\Models\TransactionalMD5Trait;
  */
 class CreatePageBlobFromContentOptions extends CreatePageBlobOptions
 {
+
     use TransactionalMD5Trait;
+
 }

@@ -38,10 +38,15 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class Logging
 {
+
     private $_version;
+
     private $_delete;
+
     private $_read;
+
     private $_write;
+
     private $_retentionPolicy;
 
     /**
@@ -50,9 +55,8 @@ class Logging
      * @internal
      * @param array $parsedResponse XML response parsed into array.
      *
-     * @return Logging
      */
-    public static function create(array $parsedResponse)
+    public static function create(array $parsedResponse): Logging
     {
         $result = new Logging();
         $result->setVersion($parsedResponse['Version']);
@@ -69,10 +73,9 @@ class Logging
     /**
      * Gets the retention policy
      *
-     * @return MicrosoftAzure\Storage\Common\Models\RetentionPolicy
      *
      */
-    public function getRetentionPolicy()
+    public function getRetentionPolicy(): MicrosoftAzure\Storage\Common\Models\RetentionPolicy
     {
         return $this->_retentionPolicy;
     }
@@ -82,9 +85,8 @@ class Logging
      *
      * @param RetentionPolicy $policy object to use
      *
-     * @return void
      */
-    public function setRetentionPolicy(RetentionPolicy $policy)
+    public function setRetentionPolicy(RetentionPolicy $policy): void
     {
         $this->_retentionPolicy = $policy;
     }
@@ -104,9 +106,8 @@ class Logging
      *
      * @param bool $write new value.
      *
-     * @return void
      */
-    public function setWrite($write)
+    public function setWrite(bool $write): void
     {
         $this->_write = $write;
     }
@@ -114,9 +115,8 @@ class Logging
     /**
      * Gets whether all read requests should be logged.
      *
-     * @return bool
      */
-    public function getRead()
+    public function getRead(): bool
     {
         return $this->_read;
     }
@@ -126,9 +126,8 @@ class Logging
      *
      * @param bool $read new value.
      *
-     * @return void
      */
-    public function setRead($read)
+    public function setRead(bool $read): void
     {
         $this->_read = $read;
     }
@@ -148,9 +147,8 @@ class Logging
      *
      * @param bool $delete new value.
      *
-     * @return void
      */
-    public function setDelete($delete)
+    public function setDelete(bool $delete): void
     {
         $this->_delete = $delete;
     }
@@ -158,9 +156,8 @@ class Logging
     /**
      * Gets the version of Storage Analytics to configure
      *
-     * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->_version;
     }
@@ -170,9 +167,8 @@ class Logging
      *
      * @param string $version new value.
      *
-     * @return void
      */
-    public function setVersion($version)
+    public function setVersion(string $version): void
     {
         $this->_version = $version;
     }
@@ -181,18 +177,18 @@ class Logging
      * Converts this object to array with XML tags
      *
      * @internal
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        return array(
+        return [
             'Version'         => $this->_version,
             'Delete'          => Utilities::booleanToString($this->_delete),
             'Read'            => Utilities::booleanToString($this->_read),
             'Write'           => Utilities::booleanToString($this->_write),
             'RetentionPolicy' => !empty($this->_retentionPolicy)
                 ? $this->_retentionPolicy->toArray()
-                : null
-        );
+                : null,
+        ];
     }
+
 }

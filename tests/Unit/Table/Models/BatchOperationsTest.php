@@ -24,9 +24,10 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
-use MicrosoftAzure\Storage\Table\Models\BatchOperations;
 use MicrosoftAzure\Storage\Table\Models\BatchOperation;
+use MicrosoftAzure\Storage\Table\Models\BatchOperations;
 use MicrosoftAzure\Storage\Table\Models\Entity;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class BatchOperations
@@ -38,7 +39,7 @@ use MicrosoftAzure\Storage\Table\Models\Entity;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BatchOperationsTest extends \PHPUnit\Framework\TestCase
+class BatchOperationsTest extends TestCase
 {
     public function testConstruct()
     {
@@ -52,13 +53,13 @@ class BatchOperationsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-                    * @depends testConstruct
+     * @depends testConstruct
      */
-    public function testSetOperations($operations)
+    public function testSetOperations($operations): void
     {
         // Setup
         $operation = new BatchOperation();
-        $expected = array($operation);
+        $expected = [$operation];
         $operations->addOperation($operation);
 
         // Test
@@ -68,7 +69,7 @@ class BatchOperationsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $operations->getOperations());
     }
 
-    public function testAddInsertEntity()
+    public function testAddInsertEntity(): void
     {
         // Setup
         $table = 'mytable';
@@ -82,7 +83,7 @@ class BatchOperationsTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $operations->getOperations());
     }
 
-    public function testAddUpdateEntity()
+    public function testAddUpdateEntity(): void
     {
         // Setup
         $table = 'mytable';
@@ -96,7 +97,7 @@ class BatchOperationsTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $operations->getOperations());
     }
 
-    public function testAddMergeEntity()
+    public function testAddMergeEntity(): void
     {
         // Setup
         $table = 'mytable';
@@ -110,7 +111,7 @@ class BatchOperationsTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $operations->getOperations());
     }
 
-    public function testAddInsertOrReplaceEntity()
+    public function testAddInsertOrReplaceEntity(): void
     {
         // Setup
         $table = 'mytable';
@@ -124,7 +125,7 @@ class BatchOperationsTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $operations->getOperations());
     }
 
-    public function testAddInsertOrMergeEntity()
+    public function testAddInsertOrMergeEntity(): void
     {
         // Setup
         $table = 'mytable';
@@ -138,12 +139,12 @@ class BatchOperationsTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $operations->getOperations());
     }
 
-    public function testAddDeleteEntity()
+    public function testAddDeleteEntity(): void
     {
         // Setup
         $table = 'mytable';
         $partitionKey = '123';
-        $rowKey= '456';
+        $rowKey = '456';
         $etag = 'W/datetime:2009';
         $operations = new BatchOperations();
 
@@ -153,4 +154,5 @@ class BatchOperationsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertCount(1, $operations->getOperations());
     }
+
 }

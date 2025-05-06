@@ -24,6 +24,14 @@
 
 namespace MicrosoftAzure\Storage\Common\Internal;
 
+use RuntimeException;
+use function base64_decode;
+use function is_null;
+use function parse_url;
+use function sprintf;
+use const PHP_URL_HOST;
+use const PHP_URL_SCHEME;
+
 /**
  * Represents the settings used to sign and access a request against the storage
  * service. For more information about storage service connection strings check this
@@ -39,49 +47,72 @@ namespace MicrosoftAzure\Storage\Common\Internal;
  */
 class StorageServiceSettings extends ServiceSettings
 {
+
     private $name;
+
     private $key;
+
     private $sas;
+
     private $blobEndpointUri;
+
     private $queueEndpointUri;
+
     private $tableEndpointUri;
+
     private $fileEndpointUri;
+
     private $blobSecondaryEndpointUri;
+
     private $queueSecondaryEndpointUri;
+
     private $tableSecondaryEndpointUri;
+
     private $fileSecondaryEndpointUri;
 
     private static $devStoreAccount;
+
     private static $useDevelopmentStorageSetting;
+
     private static $developmentStorageProxyUriSetting;
+
     private static $defaultEndpointsProtocolSetting;
+
     private static $accountNameSetting;
+
     private static $accountKeySetting;
+
     private static $sasTokenSetting;
+
     private static $blobEndpointSetting;
+
     private static $queueEndpointSetting;
+
     private static $tableEndpointSetting;
+
     private static $fileEndpointSetting;
+
     private static $endpointSuffixSetting;
 
     /**
      * If initialized or not
+     *
      * @internal
      */
     protected static $isInitialized = false;
 
     /**
      * Valid setting keys
+     *
      * @internal
      */
-    protected static $validSettingKeys = array();
+    protected static $validSettingKeys = [];
 
     /**
      * Initializes static members of the class.
      *
-     * @return void
      */
-    protected static function init()
+    protected static function init(): void
     {
         self::$useDevelopmentStorageSetting = self::setting(
             Resources::USE_DEVELOPMENT_STORAGE_NAME,
@@ -108,11 +139,11 @@ class StorageServiceSettings extends ServiceSettings
                 $isValidBase64String = base64_decode($key, true);
                 if ($isValidBase64String) {
                     return true;
-                } else {
-                    throw new \RuntimeException(
-                        sprintf(Resources::INVALID_ACCOUNT_KEY_FORMAT, $key)
-                    );
                 }
+
+                throw new RuntimeException(
+                    sprintf(Resources::INVALID_ACCOUNT_KEY_FORMAT, $key)
+                );
             }
         );
 
@@ -180,17 +211,17 @@ class StorageServiceSettings extends ServiceSettings
      * @param string $sas                       The storage service SAS token.
      */
     public function __construct(
-        $name,
-        $key,
-        $blobEndpointUri,
-        $queueEndpointUri,
-        $tableEndpointUri,
-        $fileEndpointUri,
-        $blobSecondaryEndpointUri = null,
-        $queueSecondaryEndpointUri = null,
-        $tableSecondaryEndpointUri = null,
-        $fileSecondaryEndpointUri = null,
-        $sas = null
+        string $name,
+        string $key,
+        string $blobEndpointUri,
+        string $queueEndpointUri,
+        string $tableEndpointUri,
+        string $fileEndpointUri,
+        ?string $blobSecondaryEndpointUri = null,
+        ?string $queueSecondaryEndpointUri = null,
+        ?string $tableSecondaryEndpointUri = null,
+        ?string $fileSecondaryEndpointUri = null,
+        ?string $sas = null
     ) {
         $this->name                      = $name;
         $this->key                       = $key;
@@ -211,9 +242,8 @@ class StorageServiceSettings extends ServiceSettings
      *
      * @param string $proxyUri The proxy endpoint to use.
      *
-     * @return StorageServiceSettings
      */
-    private static function getDevelopmentStorageAccount($proxyUri)
+    private static function getDevelopmentStorageAccount(string $proxyUri): StorageServiceSettings
     {
         if (is_null($proxyUri)) {
             return self::developmentStorageAccount();
@@ -237,9 +267,8 @@ class StorageServiceSettings extends ServiceSettings
      * Gets a StorageServiceSettings object that references the development storage
      * account.
      *
-     * @return StorageServiceSettings
      */
-    public static function developmentStorageAccount()
+    public static function developmentStorageAccount(): StorageServiceSettings
     {
         if (is_null(self::$devStoreAccount)) {
             self::$devStoreAccount = self::getDevelopmentStorageAccount(
@@ -260,15 +289,14 @@ class StorageServiceSettings extends ServiceSettings
      * @param string $dnsSuffix   The service DNS suffix.
      * @param bool   $isSecondary If generating secondary endpoint.
      *
-     * @return string
      */
     private static function getServiceEndpoint(
-        $scheme,
-        $accountName,
-        $dnsPrefix,
-        $dnsSuffix = null,
-        $isSecondary = false
-    ) {
+        string $scheme,
+        string $accountName,
+        string $dnsPrefix,
+        ?string $dnsSuffix = null,
+        bool $isSecondary = false
+    ): string {
         if ($isSecondary) {
             $accountName .= Resources::SECONDARY_STRING;
         }
@@ -279,7 +307,7 @@ class StorageServiceSettings extends ServiceSettings
             Resources::SERVICE_URI_FORMAT,
             $scheme,
             $accountName,
-            $dnsPrefix.$dnsSuffix
+            $dnsPrefix . $dnsSuffix
         );
     }
 
@@ -296,19 +324,18 @@ class StorageServiceSettings extends ServiceSettings
      * @param string $tableSecondaryEndpointUri The table secondary endpoint uri.
      * @param string $fileSecondaryEndpointUri  The file secondary endpoint uri.
      *
-     * @return StorageServiceSettings
      */
     private static function createStorageServiceSettings(
         array $settings,
-        $blobEndpointUri = null,
-        $queueEndpointUri = null,
-        $tableEndpointUri = null,
-        $fileEndpointUri = null,
-        $blobSecondaryEndpointUri = null,
-        $queueSecondaryEndpointUri = null,
-        $tableSecondaryEndpointUri = null,
-        $fileSecondaryEndpointUri = null
-    ) {
+        ?string $blobEndpointUri = null,
+        ?string $queueEndpointUri = null,
+        ?string $tableEndpointUri = null,
+        ?string $fileEndpointUri = null,
+        ?string $blobSecondaryEndpointUri = null,
+        ?string $queueSecondaryEndpointUri = null,
+        ?string $tableSecondaryEndpointUri = null,
+        ?string $fileSecondaryEndpointUri = null
+    ): StorageServiceSettings {
         $blobEndpointUri  = Utilities::tryGetValueInsensitive(
             Resources::BLOB_ENDPOINT_NAME,
             $settings,
@@ -362,9 +389,8 @@ class StorageServiceSettings extends ServiceSettings
      *
      * @param string $connectionString The storage settings connection string.
      *
-     * @return StorageServiceSettings
      */
-    public static function createFromConnectionString($connectionString)
+    public static function createFromConnectionString(string $connectionString): StorageServiceSettings
     {
         $tokenizedSettings = self::parseAndValidateKeys($connectionString);
 
@@ -514,9 +540,8 @@ class StorageServiceSettings extends ServiceSettings
      *
      * @param string $connectionString The storage settings connection string.
      *
-     * @return StorageServiceSettings
      */
-    public static function createFromConnectionStringForTokenCredential($connectionString)
+    public static function createFromConnectionStringForTokenCredential(string $connectionString): StorageServiceSettings
     {
         // Explicit case for AAD token, Connection string could only have account
         // name.
@@ -594,9 +619,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service name.
      *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -604,9 +628,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service key.
      *
-     * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -614,9 +637,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Checks if there is a SAS token.
      *
-     * @return boolean
      */
-    public function hasSasToken()
+    public function hasSasToken(): bool
     {
         return !empty($this->sas);
     }
@@ -624,9 +646,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service SAS token.
      *
-     * @return string
      */
-    public function getSasToken()
+    public function getSasToken(): string
     {
         return $this->sas;
     }
@@ -634,9 +655,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service blob endpoint uri.
      *
-     * @return string
      */
-    public function getBlobEndpointUri()
+    public function getBlobEndpointUri(): string
     {
         return $this->blobEndpointUri;
     }
@@ -644,9 +664,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service queue endpoint uri.
      *
-     * @return string
      */
-    public function getQueueEndpointUri()
+    public function getQueueEndpointUri(): string
     {
         return $this->queueEndpointUri;
     }
@@ -654,9 +673,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service table endpoint uri.
      *
-     * @return string
      */
-    public function getTableEndpointUri()
+    public function getTableEndpointUri(): string
     {
         return $this->tableEndpointUri;
     }
@@ -664,9 +682,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service file endpoint uri.
      *
-     * @return string
      */
-    public function getFileEndpointUri()
+    public function getFileEndpointUri(): string
     {
         return $this->fileEndpointUri;
     }
@@ -674,9 +691,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service secondary blob endpoint uri.
      *
-     * @return string
      */
-    public function getBlobSecondaryEndpointUri()
+    public function getBlobSecondaryEndpointUri(): string
     {
         return $this->blobSecondaryEndpointUri;
     }
@@ -684,9 +700,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service secondary queue endpoint uri.
      *
-     * @return string
      */
-    public function getQueueSecondaryEndpointUri()
+    public function getQueueSecondaryEndpointUri(): string
     {
         return $this->queueSecondaryEndpointUri;
     }
@@ -694,9 +709,8 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service secondary table endpoint uri.
      *
-     * @return string
      */
-    public function getTableSecondaryEndpointUri()
+    public function getTableSecondaryEndpointUri(): string
     {
         return $this->tableSecondaryEndpointUri;
     }
@@ -704,10 +718,10 @@ class StorageServiceSettings extends ServiceSettings
     /**
      * Gets storage service secondary file endpoint uri.
      *
-     * @return string
      */
-    public function getFileSecondaryEndpointUri()
+    public function getFileSecondaryEndpointUri(): string
     {
         return $this->fileSecondaryEndpointUri;
     }
+
 }

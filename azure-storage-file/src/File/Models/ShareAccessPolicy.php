@@ -42,13 +42,10 @@ class ShareAccessPolicy extends AccessPolicy
     /**
      * Get the valid permissions for the given resource.
      *
-     * @return array
      */
-    public static function getResourceValidPermissions()
+    public static function getResourceValidPermissions(): array
     {
-        return FileResources::ACCESS_PERMISSIONS[
-            FileResources::RESOURCE_TYPE_SHARE
-        ];
+        return FileResources::ACCESS_PERMISSIONS[FileResources::RESOURCE_TYPE_SHARE];
     }
 
     /**
@@ -58,4 +55,5 @@ class ShareAccessPolicy extends AccessPolicy
     {
         parent::__construct(FileResources::RESOURCE_TYPE_SHARE);
     }
+
 }

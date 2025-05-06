@@ -24,12 +24,11 @@
 
 namespace Tests\Unit\MicrosoftAzure\Storage\Table\Models\internal;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
-use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Table\Internal\JsonODataReaderWriter;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
-use MicrosoftAzure\Storage\Table\Models\Entity;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class JsonODataReaderWriter
@@ -41,7 +40,7 @@ use MicrosoftAzure\Storage\Table\Models\Entity;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class JsonODataReaderWriterTest extends \PHPUnit\Framework\TestCase
+class JsonODataReaderWriterTest extends TestCase
 {
     public function testGetTable()
     {
@@ -76,7 +75,7 @@ class JsonODataReaderWriterTest extends \PHPUnit\Framework\TestCase
         return $actual;
     }
 
-    public function testParseTable()
+    public function testParseTable(): void
     {
         // Setup
         $serializer = new JsonODataReaderWriter();
@@ -90,11 +89,11 @@ class JsonODataReaderWriterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testParseTables()
+    public function testParseTables(): void
     {
         // Setup
         $serializer = new JsonODataReaderWriter();
-        $expected = array('mytable1', 'mytable2', 'mytable3', 'mytable4', 'mytable5');
+        $expected = ['mytable1', 'mytable2', 'mytable3', 'mytable4', 'mytable5'];
         $tableJSON0 = TestResources::getTableEntriesMinimalMetaResult();
         $tableJSON1 = TestResources::getTableEntriesNoMetaResult();
         $tableJSON2 = TestResources::getTableEntriesFullMetaResult();
@@ -110,7 +109,7 @@ class JsonODataReaderWriterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual2);
     }
 
-    public function testParseEntity()
+    public function testParseEntity(): void
     {
         // Setup
         $serializer = new JsonODataReaderWriter();
@@ -135,8 +134,7 @@ class JsonODataReaderWriterTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-
-    public function testParseEntityStringKeys()
+    public function testParseEntityStringKeys(): void
     {
         // Setup
         $serializer = new JsonODataReaderWriter();
@@ -157,7 +155,7 @@ class JsonODataReaderWriterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testParseEntities()
+    public function testParseEntities(): void
     {
         // Setup
         $serializer = new JsonODataReaderWriter();
@@ -173,7 +171,7 @@ class JsonODataReaderWriterTest extends \PHPUnit\Framework\TestCase
         $e1->setTimestamp(Utilities::convertToDateTime('2012-05-17T00:59:32.1131734Z'));
         $e2->setTimestamp(Utilities::convertToDateTime('2012-05-17T00:59:32.4252358Z'));
         $e3->setTimestamp(Utilities::convertToDateTime('2012-05-17T00:59:32.7533014Z'));
-        $expected = array($e1, $e2, $e3);
+        $expected = [$e1, $e2, $e3];
         $entitiesJSON = TestResources::getEntitiesMinimalMetaResult();
 
         // Test
@@ -196,7 +194,7 @@ class JsonODataReaderWriterTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testVariousTypes()
+    public function testVariousTypes(): void
     {
         $serializer = new JsonODataReaderWriter();
         $e = TestResources::getVariousTypesEntity();
@@ -207,4 +205,5 @@ class JsonODataReaderWriterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($e, $a);
     }
+
 }

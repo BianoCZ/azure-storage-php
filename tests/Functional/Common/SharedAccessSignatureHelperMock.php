@@ -47,4 +47,5 @@ class SharedAccessSignatureHelperMock extends SharedAccessSignatureHelper
     {
         return $this->accountKey;
     }
+
 }

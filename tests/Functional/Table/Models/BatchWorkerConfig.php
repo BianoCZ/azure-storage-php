@@ -26,9 +26,15 @@ namespace MicrosoftAzure\Storage\Tests\Functional\Table\Models;
 
 class BatchWorkerConfig
 {
+
     public $opType;
+
     public $concurType;
+
     public $mutatePivot;
+
     public $ent;
+
     public $options;
+
 }

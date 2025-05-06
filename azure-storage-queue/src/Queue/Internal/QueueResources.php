@@ -66,4 +66,5 @@ class QueueResources extends Resources
     ];
 
     // @codingStandardsIgnoreEnd
+
 }

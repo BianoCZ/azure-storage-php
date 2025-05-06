@@ -26,6 +26,8 @@ namespace MicrosoftAzure\Storage\Tests\Unit\Common\Exceptions;
 
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_Error_Warning;
 
 /**
  * Unit tests for class ServiceException
@@ -37,9 +39,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class ServiceExceptionTest extends \PHPUnit\Framework\TestCase
+class ServiceExceptionTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         // Setup
         $response = TestResources::getFailedResponse(400, 'test info');
@@ -53,7 +55,7 @@ class ServiceExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($response, $e->getResponse());
     }
 
-    public function testGetErrorText()
+    public function testGetErrorText(): void
     {
         // Setup
         $response = TestResources::getFailedResponse(210, 'test info');
@@ -65,7 +67,7 @@ class ServiceExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test info', $actualError);
     }
 
-    public function testGetErrorMessage()
+    public function testGetErrorMessage(): void
     {
         // Setup
         $response = TestResources::getFailedResponse(210, 'test info');
@@ -78,7 +80,7 @@ class ServiceExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($actualErrorMessage, TestResources::ERROR_MESSAGE);
     }
 
-    public function testGetRequestID()
+    public function testGetRequestID(): void
     {
         // Setup
         $response = TestResources::getFailedResponse(210, 'test info');
@@ -88,7 +90,7 @@ class ServiceExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($e->getRequestID(), TestResources::REQUEST_ID1);
     }
 
-    public function testGetDate()
+    public function testGetDate(): void
     {
         // Setup
         $response = TestResources::getFailedResponse(210, 'test info');
@@ -98,7 +100,7 @@ class ServiceExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($e->getDate(), TestResources::DATE1);
     }
 
-    public function testGetResponse()
+    public function testGetResponse(): void
     {
         // Setup
         $response = TestResources::getFailedResponse(210, 'test info');
@@ -108,10 +110,10 @@ class ServiceExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($e->getResponse(), $response);
     }
 
-    public function testNoWarningForNonXmlErrorMessage()
+    public function testNoWarningForNonXmlErrorMessage(): void
     {
         // Warnings are silenced in parseErrorMessage once they are converted to exceptions
-        \PHPUnit_Framework_Error_Warning::$enabled = false;
+        PHPUnit_Framework_Error_Warning::$enabled = false;
 
         // Setup
         $response = TestResources::getFailedResponseJson(210, 'test info');
@@ -120,4 +122,5 @@ class ServiceExceptionTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($e->getErrorMessage(), TestResources::RESPONSE_BODY_JSON);
     }
+
 }

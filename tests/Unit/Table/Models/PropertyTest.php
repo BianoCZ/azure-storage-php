@@ -21,10 +21,12 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
-use MicrosoftAzure\Storage\Table\Models\Property;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
+use MicrosoftAzure\Storage\Table\Models\Property;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class Property
@@ -36,9 +38,9 @@ use MicrosoftAzure\Storage\Table\Models\EdmType;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class PropertyTest extends \PHPUnit\Framework\TestCase
+class PropertyTest extends TestCase
 {
-    public function testSetEdmType()
+    public function testSetEdmType(): void
     {
         // Setup
         $pro = new Property();
@@ -51,7 +53,7 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $pro->getEdmType());
     }
 
-    public function testSetValue()
+    public function testSetValue(): void
     {
         // Setup
         $pro = new Property();
@@ -63,4 +65,5 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $pro->getValue());
     }
+
 }

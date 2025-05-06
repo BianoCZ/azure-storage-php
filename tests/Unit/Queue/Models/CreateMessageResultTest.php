@@ -27,6 +27,7 @@ namespace MicrosoftAzure\Storage\Tests\unit\Queue\Models;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Queue\Models\CreateMessageResult;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class CreateMessageResult
@@ -38,9 +39,9 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CreateMessageResultTest extends \PHPUnit\Framework\TestCase
+class CreateMessageResultTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         // Setup
         $sample = TestResources::createMessageSample();
@@ -51,23 +52,32 @@ class CreateMessageResultTest extends \PHPUnit\Framework\TestCase
         // Assert
         $actual = $result->getQueueMessage();
         $this->assertNotNull($actual);
-        $this->assertEquals($sample['QueueMessage']['MessageId'],
+        $this->assertEquals(
+            $sample['QueueMessage']['MessageId'],
             $actual->getMessageId()
         );
-        $this->assertEquals(Utilities::rfc1123ToDateTime(
-            $sample['QueueMessage']['InsertionTime']),
+        $this->assertEquals(
+            Utilities::rfc1123ToDateTime(
+                $sample['QueueMessage']['InsertionTime']
+            ),
             $actual->getInsertionDate()
         );
-        $this->assertEquals(Utilities::rfc1123ToDateTime(
-            $sample['QueueMessage']['ExpirationTime']),
+        $this->assertEquals(
+            Utilities::rfc1123ToDateTime(
+                $sample['QueueMessage']['ExpirationTime']
+            ),
             $actual->getExpirationDate()
         );
-        $this->assertEquals($sample['QueueMessage']['PopReceipt'],
+        $this->assertEquals(
+            $sample['QueueMessage']['PopReceipt'],
             $actual->getPopReceipt()
         );
-        $this->assertEquals(Utilities::rfc1123ToDateTime(
-            $sample['QueueMessage']['TimeNextVisible']),
+        $this->assertEquals(
+            Utilities::rfc1123ToDateTime(
+                $sample['QueueMessage']['TimeNextVisible']
+            ),
             $actual->getTimeNextVisible()
         );
     }
+
 }

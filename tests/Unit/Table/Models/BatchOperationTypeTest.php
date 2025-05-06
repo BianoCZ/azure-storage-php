@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
 use MicrosoftAzure\Storage\Table\Models\BatchOperationType;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class BatchOperationType
@@ -36,9 +37,9 @@ use MicrosoftAzure\Storage\Table\Models\BatchOperationType;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class BatchOperationTypeTest extends \PHPUnit\Framework\TestCase
+class BatchOperationTypeTest extends TestCase
 {
-    public function testIsValid()
+    public function testIsValid(): void
     {
         // Setup
         $name = BatchOperationType::DELETE_ENTITY_OPERATION;
@@ -50,7 +51,7 @@ class BatchOperationTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($actual);
     }
 
-    public function testIsValidWithInvalid()
+    public function testIsValidWithInvalid(): void
     {
         // Setup
         $name = 'zeta el senen';
@@ -61,4 +62,5 @@ class BatchOperationTypeTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertFalse($actual);
     }
+
 }

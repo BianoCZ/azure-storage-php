@@ -24,9 +24,10 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
-use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 
 /**
  * Holds result of calling setBlobProperties wrapper
@@ -40,8 +41,11 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class SetBlobPropertiesResult
 {
+
     private $_lastModified;
+
     private $_etag;
+
     private $_sequenceNumber;
 
     /**
@@ -51,9 +55,8 @@ class SetBlobPropertiesResult
      *
      * @internal
      *
-     * @return SetBlobPropertiesResult
      */
-    public static function create(array $headers)
+    public static function create(array $headers): SetBlobPropertiesResult
     {
         $result = new SetBlobPropertiesResult();
         $date   = Utilities::tryGetValueInsensitive(
@@ -76,9 +79,8 @@ class SetBlobPropertiesResult
     /**
      * Gets blob lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->_lastModified;
     }
@@ -88,9 +90,8 @@ class SetBlobPropertiesResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         Validate::isDate($lastModified);
         $this->_lastModified = $lastModified;
@@ -99,9 +100,8 @@ class SetBlobPropertiesResult
     /**
      * Gets blob etag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->_etag;
     }
@@ -111,9 +111,8 @@ class SetBlobPropertiesResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         Validate::canCastAsString($etag, 'etag');
         $this->_etag = $etag;
@@ -122,9 +121,8 @@ class SetBlobPropertiesResult
     /**
      * Gets blob sequenceNumber.
      *
-     * @return int
      */
-    public function getSequenceNumber()
+    public function getSequenceNumber(): int
     {
         return $this->_sequenceNumber;
     }
@@ -134,11 +132,11 @@ class SetBlobPropertiesResult
      *
      * @param int $sequenceNumber value.
      *
-     * @return void
      */
-    protected function setSequenceNumber($sequenceNumber)
+    protected function setSequenceNumber(int $sequenceNumber): void
     {
         Validate::isInteger($sequenceNumber, 'sequenceNumber');
         $this->_sequenceNumber = $sequenceNumber;
     }
+
 }

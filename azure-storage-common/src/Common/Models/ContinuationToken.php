@@ -24,9 +24,10 @@
 
 namespace MicrosoftAzure\Storage\Common\Models;
 
-use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\LocationMode;
+use function sprintf;
 
 /**
  * Provides functionality and data structure for continuation token.
@@ -40,6 +41,7 @@ use MicrosoftAzure\Storage\Common\LocationMode;
  */
 class ContinuationToken
 {
+
     private $location;
 
     public function __construct(
@@ -53,7 +55,7 @@ class ContinuationToken
      *
      * @param string $location the location to be set.
      */
-    public function setLocation($location)
+    public function setLocation(string $location): void
     {
         Validate::canCastAsString($location, 'location');
         Validate::isTrue(
@@ -73,10 +75,10 @@ class ContinuationToken
     /**
      * Getter for location
      *
-     * @return string
      */
-    public function getLocation()
+    public function getLocation(): string
     {
         return $this->location;
     }
+
 }

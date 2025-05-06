@@ -21,11 +21,13 @@
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
+
 namespace MicrosoftAzure\Storage\Tests\Unit\Blob\Models;
 
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
 use MicrosoftAzure\Storage\Blob\Models\AccessCondition;
 use MicrosoftAzure\Storage\Blob\Models\GetBlobPropertiesOptions;
+use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class GetBlobPropertiesOptions
@@ -37,9 +39,9 @@ use MicrosoftAzure\Storage\Blob\Models\GetBlobPropertiesOptions;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class GetBlobPropertiesOptionsTest extends \PHPUnit\Framework\TestCase
+class GetBlobPropertiesOptionsTest extends TestCase
 {
-    public function testSetLeaseId()
+    public function testSetLeaseId(): void
     {
         // Setup
         $expected = '0x8CAFB82EFF70C46';
@@ -53,7 +55,7 @@ class GetBlobPropertiesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $options->getLeaseId());
     }
 
-    public function testGetAccessConditions()
+    public function testGetAccessConditions(): void
     {
         // Setup
         $expected = AccessCondition::none();
@@ -67,7 +69,7 @@ class GetBlobPropertiesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual[0]);
     }
 
-    public function testSetAccessConditions()
+    public function testSetAccessConditions(): void
     {
         // Setup
         $expected = AccessCondition::none();
@@ -80,7 +82,7 @@ class GetBlobPropertiesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $result->getAccessConditions()[0]);
     }
 
-    public function testSetSnapshot()
+    public function testSetSnapshot(): void
     {
         // Setup
         $blob = new GetBlobPropertiesOptions();
@@ -93,7 +95,7 @@ class GetBlobPropertiesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $blob->getSnapshot());
     }
 
-    public function testGetSnapshot()
+    public function testGetSnapshot(): void
     {
         // Setup
         $blob = new GetBlobPropertiesOptions();
@@ -106,4 +108,5 @@ class GetBlobPropertiesOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+
 }

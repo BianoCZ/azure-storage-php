@@ -24,10 +24,13 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
+use DateTime;
+use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Queue\Models\QueueMessage;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use PHPUnit\Framework\TestCase;
+use function intval;
 
 /**
  * Unit tests for class QueueMessage
@@ -39,17 +42,17 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class QueueMessageTest extends \PHPUnit\Framework\TestCase
+class QueueMessageTest extends TestCase
 {
-    public function testToXml()
+    public function testToXml(): void
     {
         // Setup
         $queueMessage = new QueueMessage();
         $messageText = 'this is message text';
-        $array = array('MessageText' => $messageText);
+        $array = ['MessageText' => $messageText];
         $queueMessage->setMessageText($messageText);
         $xmlSerializer = new XmlSerializer();
-        $properties = array(XmlSerializer::ROOT_NAME => "QueueMessage");
+        $properties = [XmlSerializer::ROOT_NAME => "QueueMessage"];
         $expected = $xmlSerializer->serialize($array, $properties);
 
         // Test
@@ -59,7 +62,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testCreateListMessages()
+    public function testCreateListMessages(): void
     {
         // Setup
         $sample = TestResources::listMessagesSample();
@@ -78,7 +81,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($sample['MessageText'], $actual->getMessageText());
     }
 
-    public function testCreateFromPeekMessages()
+    public function testCreateFromPeekMessages(): void
     {
         // Setup
         $sample = TestResources::listMessagesSample();
@@ -95,11 +98,11 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($sample['MessageText'], $actual->getMessageText());
     }
 
-    public function testGetMessageText()
+    public function testGetMessageText(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
-        $expected = 'PHRlc3Q+dGhpcyBpcyBhIHRlc3QgbWVzc2FnZTwvdGVzdD4=' ;
+        $expected = 'PHRlc3Q+dGhpcyBpcyBhIHRlc3QgbWVzc2FnZTwvdGVzdD4=';
         $azureQueueMessage->setMessageText($expected);
 
         // Test
@@ -109,7 +112,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetMessageText()
+    public function testSetMessageText(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
@@ -123,7 +126,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetMessageId()
+    public function testGetMessageId(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
@@ -137,7 +140,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetMessageId()
+    public function testSetMessageId(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
@@ -151,11 +154,11 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetInsertionDate()
+    public function testGetInsertionDate(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
-        $expected = new \DateTime('Fri, 09 Oct 2009 21:04:30 GMT');
+        $expected = new DateTime('Fri, 09 Oct 2009 21:04:30 GMT');
         $azureQueueMessage->setInsertionDate($expected);
 
         // Test
@@ -165,11 +168,11 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetInsertionDate()
+    public function testSetInsertionDate(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
-        $expected = new \DateTime('Fri, 09 Oct 2009 21:04:30 GMT');
+        $expected = new DateTime('Fri, 09 Oct 2009 21:04:30 GMT');
 
         // Test
         $azureQueueMessage->setInsertionDate($expected);
@@ -179,11 +182,11 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetExpirationDate()
+    public function testGetExpirationDate(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
-        $expected = new \DateTime('Fri, 16 Oct 2009 21:04:30 GMT');
+        $expected = new DateTime('Fri, 16 Oct 2009 21:04:30 GMT');
         $azureQueueMessage->setExpirationDate($expected);
 
         // Test
@@ -193,11 +196,11 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetExpirationDate()
+    public function testSetExpirationDate(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
-        $expected = new \DateTime('Fri, 16 Oct 2009 21:04:30 GMT');
+        $expected = new DateTime('Fri, 16 Oct 2009 21:04:30 GMT');
 
         // Test
         $azureQueueMessage->setExpirationDate($expected);
@@ -207,7 +210,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetPopReceipt()
+    public function testGetPopReceipt(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
@@ -221,7 +224,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetPopReceipt()
+    public function testSetPopReceipt(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
@@ -235,7 +238,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetTimeNextVisible()
+    public function testGetTimeNextVisible(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
@@ -249,7 +252,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetTimeNextVisible()
+    public function testSetTimeNextVisible(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
@@ -263,7 +266,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testGetDequeueCount()
+    public function testGetDequeueCount(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
@@ -277,7 +280,7 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetDequeueCount()
+    public function testSetDequeueCount(): void
     {
         // Setup
         $azureQueueMessage = new QueueMessage();
@@ -290,4 +293,5 @@ class QueueMessageTest extends \PHPUnit\Framework\TestCase
         $actual = $azureQueueMessage->getDequeueCount();
         $this->assertEquals($expected, $actual);
     }
+
 }

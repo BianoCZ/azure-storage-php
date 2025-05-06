@@ -38,6 +38,7 @@ use MicrosoftAzure\Storage\Common\Internal\MetadataTrait;
  */
 class GetFileMetadataResult
 {
+
     use MetadataTrait;
 
     /**
@@ -45,10 +46,10 @@ class GetFileMetadataResult
      *
      * @param  array $parsed Parsed headers
      *
-     * @return GetFileMetadataResult
      */
-    public static function create(array $parsed)
+    public static function create(array $parsed): GetFileMetadataResult
     {
         return static::createMetadataResult($parsed);
     }
+
 }

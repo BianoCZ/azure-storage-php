@@ -24,10 +24,19 @@
 
 namespace MicrosoftAzure\Storage\Blob;
 
+use Datetime;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\SharedAccessSignatureHelper;
+use function base64_decode;
+use function base64_encode;
+use function hash_hmac;
+use function implode;
+use function sprintf;
+use function strlen;
+use function strtolower;
+use function urlencode;
 
 /**
  * Provides methods to generate Azure Storage Shared Access Signature
@@ -48,7 +57,7 @@ class BlobSharedAccessSignatureHelper extends SharedAccessSignatureHelper
      * @param string $accountKey the shared key of the storage account
      *
      */
-    public function __construct($accountName, $accountKey)
+    public function __construct(string $accountName, string $accountKey)
     {
         parent::__construct($accountName, $accountKey);
     }
@@ -82,31 +91,29 @@ class BlobSharedAccessSignatureHelper extends SharedAccessSignatureHelper
      *
      * @see Constructing an service SAS at
      * https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
-     * @return string
      */
     public function generateBlobServiceSharedAccessSignatureToken(
-        $signedResource,
-        $resourceName,
-        $signedPermissions,
-        $signedExpiry,
-        $signedStart = "",
-        $signedIP = "",
-        $signedProtocol = "",
-        $signedIdentifier = "",
-        $cacheControl = "",
-        $contentDisposition = "",
-        $contentEncoding = "",
-        $contentLanguage = "",
-        $contentType = ""
-    )
-    {
+        string $signedResource,
+        string $resourceName,
+        string $signedPermissions,
+        Datetime|string $signedExpiry,
+        Datetime|string $signedStart = "",
+        string $signedIP = "",
+        string $signedProtocol = "",
+        string $signedIdentifier = "",
+        string $cacheControl = "",
+        string $contentDisposition = "",
+        string $contentEncoding = "",
+        string $contentLanguage = "",
+        string $contentType = ""
+    ): string {
         // check that the resource name is valid.
         Validate::canCastAsString($signedResource, 'signedResource');
         Validate::notNullOrEmpty($signedResource, 'signedResource');
         Validate::isTrue(
             $signedResource == Resources::RESOURCE_TYPE_BLOB ||
             $signedResource == Resources::RESOURCE_TYPE_CONTAINER,
-            \sprintf(
+            sprintf(
                 Resources::INVALID_VALUE_MSG,
                 '$signedResource',
                 'Can only be \'b\' or \'c\'.'
@@ -124,7 +131,7 @@ class BlobSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         );
 
         // check that expiry is valid
-        if ($signedExpiry instanceof \Datetime) {
+        if ($signedExpiry instanceof Datetime) {
             $signedExpiry = Utilities::isoDate($signedExpiry);
         }
         Validate::notNullOrEmpty($signedExpiry, 'signedExpiry');
@@ -132,7 +139,7 @@ class BlobSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         Validate::isDateString($signedExpiry, 'signedExpiry');
 
         // check that signed start is valid
-        if ($signedStart instanceof \Datetime) {
+        if ($signedStart instanceof Datetime) {
             $signedStart = Utilities::isoDate($signedStart);
         }
         Validate::canCastAsString($signedStart, 'signedStart');
@@ -160,7 +167,7 @@ class BlobSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         Validate::canCastAsString($contentType, 'contentType');
 
         // construct an array with the parameters to generate the shared access signature at the account level
-        $parameters = array();
+        $parameters = [];
         $parameters[] = $signedPermissions;
         $parameters[] = $signedStart;
         $parameters[] = $signedExpiry;
@@ -210,4 +217,5 @@ class BlobSharedAccessSignatureHelper extends SharedAccessSignatureHelper
 
         return $sas;
     }
+
 }

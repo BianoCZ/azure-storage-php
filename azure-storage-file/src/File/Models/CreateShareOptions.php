@@ -38,15 +38,16 @@ use MicrosoftAzure\Storage\Common\Internal\Validate;
  */
 class CreateShareOptions extends FileServiceOptions
 {
+
     private $quota;
+
     private $metadata;
 
     /**
      * Gets share quota.
      *
-     * @return int
      */
-    public function getQuota()
+    public function getQuota(): int
     {
         return $this->quota;
     }
@@ -57,9 +58,8 @@ class CreateShareOptions extends FileServiceOptions
      *
      * @param int $quota quota for the share
      *
-     * @return void
      */
-    public function setQuota($quota)
+    public function setQuota(int $quota): void
     {
         Validate::isInteger($quota, 'quota');
         $this->quota = $quota;
@@ -68,9 +68,8 @@ class CreateShareOptions extends FileServiceOptions
     /**
      * Gets user defined metadata.
      *
-     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
@@ -81,9 +80,8 @@ class CreateShareOptions extends FileServiceOptions
      *
      * @param array $metadata user defined metadata object in array form.
      *
-     * @return void
      */
-    public function setMetadata(array $metadata)
+    public function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;
     }
@@ -95,10 +93,10 @@ class CreateShareOptions extends FileServiceOptions
      * @param string $key   metadata key element.
      * @param string $value metadata value element.
      *
-     * @return void
      */
-    public function addMetadata($key, $value)
+    public function addMetadata(string $key, string $value): void
     {
         $this->metadata[$key] = $value;
     }
+
 }

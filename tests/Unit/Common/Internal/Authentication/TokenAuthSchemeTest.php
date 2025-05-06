@@ -28,9 +28,9 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use MicrosoftAzure\Storage\Common\Internal\Authentication\TokenAuthScheme;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
-use MicrosoftAzure\Storage\Common\Internal\ServiceRestProxy;
 use MicrosoftAzure\Storage\Tests\Framework\ReflectionTestBase;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+use function strtolower;
 
 /**
  * Unit tests for TokenAuthScheme class.
@@ -43,7 +43,7 @@ use MicrosoftAzure\Storage\Tests\Framework\TestResources;
  */
 class TokenAuthSchemeTest extends ReflectionTestBase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $bearerToken = '';
         $mock = new TokenAuthScheme($bearerToken, TestResources::TOKEN_CS);
@@ -53,12 +53,12 @@ class TokenAuthSchemeTest extends ReflectionTestBase
         $this->assertEquals('changed', $this->getProperty('tokenRef', $mock)->getValue($mock));
     }
 
-    public function testSignRequest()
+    public function testSignRequest(): void
     {
         $bearerToken = '';
         $mock = new TokenAuthScheme($bearerToken, TestResources::TOKEN_CS);
         $uri = new Uri(TestResources::URI2);
-        $request = new Request('Get', $uri, array(), null);
+        $request = new Request('Get', $uri, [], null);
         $actual = $mock->signRequest($request);
         $this->assertArrayHasKey(strtolower(Resources::AUTHENTICATION), $actual->getHeaders());
         $this->assertEquals(
@@ -67,7 +67,7 @@ class TokenAuthSchemeTest extends ReflectionTestBase
         );
 
         $bearerToken = 'changed';
-        $request = new Request('Get', $uri, array(), null);
+        $request = new Request('Get', $uri, [], null);
         $actual = $mock->signRequest($request);
         $this->assertArrayHasKey(strtolower(Resources::AUTHENTICATION), $actual->getHeaders());
         $this->assertEquals(
@@ -75,4 +75,5 @@ class TokenAuthSchemeTest extends ReflectionTestBase
             $actual->getHeaders()[strtolower(Resources::AUTHENTICATION)][0]
         );
     }
+
 }

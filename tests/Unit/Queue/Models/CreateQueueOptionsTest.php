@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Queue\Models;
 
 use MicrosoftAzure\Storage\Queue\Models\CreateQueueOptions;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for class CreateQueueOptions
@@ -36,13 +37,13 @@ use MicrosoftAzure\Storage\Queue\Models\CreateQueueOptions;
  * @license   https://github.com/azure/azure-storage-php/LICENSE
  * @link      https://github.com/azure/azure-storage-php
  */
-class CreateQueueOptionsTest extends \PHPUnit\Framework\TestCase
+class CreateQueueOptionsTest extends TestCase
 {
-    public function testSetMetadata()
+    public function testSetMetadata(): void
     {
         // Setup
         $queue = new CreateQueueOptions();
-        $expected = array('key1' => 'value1', 'key2' => 'value2');
+        $expected = ['key1' => 'value1', 'key2' => 'value2'];
 
         // Test
         $queue->setMetadata($expected);
@@ -51,11 +52,11 @@ class CreateQueueOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $queue->getMetadata());
     }
 
-    public function testGetMetadata()
+    public function testGetMetadata(): void
     {
         // Setup
         $queue = new CreateQueueOptions();
-        $expected = array('key1' => 'value1', 'key2' => 'value2');
+        $expected = ['key1' => 'value1', 'key2' => 'value2'];
         $queue->setMetadata($expected);
 
         // Test
@@ -65,13 +66,13 @@ class CreateQueueOptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testAddMetadata()
+    public function testAddMetadata(): void
     {
         // Setup
         $queue = new CreateQueueOptions();
         $key = 'key1';
         $value = 'value1';
-        $expected = array($key => $value);
+        $expected = [$key => $value];
 
         // Test
         $queue->addMetadata($key, $value);
@@ -79,4 +80,5 @@ class CreateQueueOptionsTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertEquals($expected, $queue->getMetadata());
     }
+
 }

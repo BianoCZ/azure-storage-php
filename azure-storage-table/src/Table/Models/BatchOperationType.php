@@ -36,12 +36,12 @@ namespace MicrosoftAzure\Storage\Table\Models;
  */
 class BatchOperationType
 {
-    const INSERT_ENTITY_OPERATION         = 'InsertEntityOperation';
-    const UPDATE_ENTITY_OPERATION         = 'UpdateEntityOperation';
-    const DELETE_ENTITY_OPERATION         = 'DeleteEntityOperation';
-    const MERGE_ENTITY_OPERATION          = 'MergeEntityOperation';
-    const INSERT_REPLACE_ENTITY_OPERATION = 'InsertOrReplaceEntityOperation';
-    const INSERT_MERGE_ENTITY_OPERATION   = 'InsertOrMergeEntityOperation';
+    public const string INSERT_ENTITY_OPERATION         = 'InsertEntityOperation';
+    public const string UPDATE_ENTITY_OPERATION         = 'UpdateEntityOperation';
+    public const string DELETE_ENTITY_OPERATION         = 'DeleteEntityOperation';
+    public const string MERGE_ENTITY_OPERATION          = 'MergeEntityOperation';
+    public const string INSERT_REPLACE_ENTITY_OPERATION = 'InsertOrReplaceEntityOperation';
+    public const string INSERT_MERGE_ENTITY_OPERATION   = 'InsertOrMergeEntityOperation';
 
     /**
      * Validates if $type is already defined.
@@ -50,9 +50,8 @@ class BatchOperationType
      *
      * @internal
      *
-     * @return boolean
      */
-    public static function isValid($type)
+    public static function isValid(string $type): bool
     {
         switch ($type) {
             case self::INSERT_ENTITY_OPERATION:
@@ -62,8 +61,10 @@ class BatchOperationType
             case self::INSERT_REPLACE_ENTITY_OPERATION:
             case self::INSERT_MERGE_ENTITY_OPERATION:
                 return true;
+
             default:
                 return false;
         }
     }
+
 }

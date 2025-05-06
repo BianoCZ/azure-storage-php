@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\Blob\Models;
 
+use DateTime;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 
@@ -39,9 +40,13 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
  */
 class CopyBlobResult
 {
+
     private $_etag;
+
     private $_lastModified;
+
     private $_copyId;
+
     private $_copyStatus;
 
     /**
@@ -51,9 +56,8 @@ class CopyBlobResult
      *
      * @internal
      *
-     * @return CopyBlobResult
      */
-    public static function create(array $headers)
+    public static function create(array $headers): CopyBlobResult
     {
         $result = new CopyBlobResult();
         $result->setETag(
@@ -88,9 +92,8 @@ class CopyBlobResult
     /**
      * Gets copy Id
      *
-     * @return string
      */
-    public function getCopyId()
+    public function getCopyId(): string
     {
         return $this->_copyId;
     }
@@ -102,9 +105,8 @@ class CopyBlobResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setCopyId($copyId)
+    protected function setCopyId(string $copyId): void
     {
         $this->_copyId = $copyId;
     }
@@ -112,9 +114,8 @@ class CopyBlobResult
     /**
      * Gets copy status
      *
-     * @return string
      */
-    public function getCopyStatus()
+    public function getCopyStatus(): string
     {
         return $this->_copyStatus;
     }
@@ -126,9 +127,8 @@ class CopyBlobResult
      *
      * @internal
      *
-     * @return void
      */
-    protected function setCopyStatus($copystatus)
+    protected function setCopyStatus($copystatus): void
     {
         $this->_copyStatus = $copystatus;
     }
@@ -136,9 +136,8 @@ class CopyBlobResult
     /**
      * Gets ETag.
      *
-     * @return string
      */
-    public function getETag()
+    public function getETag(): string
     {
         return $this->_etag;
     }
@@ -148,9 +147,8 @@ class CopyBlobResult
      *
      * @param string $etag value.
      *
-     * @return void
      */
-    protected function setETag($etag)
+    protected function setETag(string $etag): void
     {
         $this->_etag = $etag;
     }
@@ -158,9 +156,8 @@ class CopyBlobResult
     /**
      * Gets blob lastModified.
      *
-     * @return \DateTime
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->_lastModified;
     }
@@ -170,10 +167,10 @@ class CopyBlobResult
      *
      * @param \DateTime $lastModified value.
      *
-     * @return void
      */
-    protected function setLastModified(\DateTime $lastModified)
+    protected function setLastModified(DateTime $lastModified): void
     {
         $this->_lastModified = $lastModified;
     }
+
 }
