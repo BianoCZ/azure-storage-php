@@ -290,7 +290,7 @@ class ServiceRestProxy extends RestProxy
         array $queryParams,
         array $postParameters,
         string $path,
-        $locationMode,
+        string $locationMode,
         string $body = Resources::EMPTY_STRING
     ): Request {
         if (
@@ -634,7 +634,7 @@ class ServiceRestProxy extends RestProxy
      */
     private static function addLocationHeaderToResponse(
         ResponseInterface $response,
-        $locationMode
+        string $locationMode
     ): ResponseInterface {
         //If the response already has this header, return itself.
         if ($response->hasHeader(Resources::X_MS_CONTINUATION_LOCATION_MODE)) {

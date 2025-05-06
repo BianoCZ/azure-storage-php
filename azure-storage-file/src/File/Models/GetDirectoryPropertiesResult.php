@@ -54,7 +54,7 @@ class GetDirectoryPropertiesResult
      *
      * @return \DateTime.
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }

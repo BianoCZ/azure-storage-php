@@ -57,8 +57,6 @@ class TableSharedKeyLiteAuthScheme extends SharedKeyAuthScheme
      *
      * @param string $accountName storage account name.
      * @param string $accountKey  storage account primary or secondary key.
-     *
-     * @return TableSharedKeyLiteAuthScheme
      */
     public function __construct(string $accountName, string $accountKey)
     {

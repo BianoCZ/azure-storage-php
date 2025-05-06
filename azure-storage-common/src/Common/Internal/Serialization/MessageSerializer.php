@@ -56,7 +56,7 @@ class MessageSerializer
      * @param object $message The message to be serialized.
      *
      */
-    public static function objectSerialize($targetObject): string
+    public static function objectSerialize(object $targetObject): string
     {
         //if the object is of exception type, serialize it using the methods
         //without checking the methods.

@@ -233,10 +233,8 @@ class Validate
      * @param string $name           The name of the object.
      *
      * @throws \InvalidArgumentException
-     *
-     * @return void
      */
-    public static function isInstanceOf(mixed $objectInstance, mixed $classInstance, string $name)
+    public static function isInstanceOf(mixed $objectInstance, mixed $classInstance, string $name): bool
     {
         self::notNull($classInstance, 'classInstance');
         if (is_null($objectInstance)) {

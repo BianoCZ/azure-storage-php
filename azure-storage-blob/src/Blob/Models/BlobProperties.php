@@ -560,7 +560,7 @@ class BlobProperties
      * @param string rangeContentMD5 value.
      *
      */
-    public function setRangeContentMD5($rangeContentMD5): void
+    public function setRangeContentMD5(string $rangeContentMD5): void
     {
         $this->rangeContentMD5 = $rangeContentMD5;
     }

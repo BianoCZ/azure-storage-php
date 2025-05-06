@@ -41,7 +41,7 @@ use MicrosoftAzure\Storage\File\Internal\FileResources as Resources;
  */
 class FileServiceOptions extends ServiceOptions
 {
-    public function setLocationMode($locationMode): void
+    public function setLocationMode(string $locationMode): void
     {
         Validate::canCastAsString($locationMode, 'locationMode');
         Validate::isTrue(

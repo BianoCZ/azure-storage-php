@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\File\Internal;
 
 use GuzzleHttp\Promise\PromiseInterface;
+use MicrosoftAzure\Storage\Common\Models\GetServicePropertiesResult;
 use MicrosoftAzure\Storage\Common\Models\Range;
 use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
@@ -859,7 +860,7 @@ interface IFile
         string $path,
         $content,
         ?FileModels\CreateFileFromContentOptions $options = null
-    ): void;
+    ): PromiseInterface;
 
     /**
      * Clears range of bytes of a file. If the specified range is not 512-byte
@@ -1041,6 +1042,6 @@ interface IFile
         string $path,
         string $copyID,
         ?FileModels\FileServiceOptions $options = null
-    ): void;
+    ): PromiseInterface;
 
 }

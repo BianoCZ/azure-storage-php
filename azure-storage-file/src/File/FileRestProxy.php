@@ -1488,8 +1488,8 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         string $path,
         int $size,
         ?CreateFileOptions $options = null
-    ) {
-        return $this->createFileAsync(
+    ): void {
+        $this->createFileAsync(
             $share,
             $path,
             $size,
@@ -2016,8 +2016,8 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         string $path,
         array $metadata,
         ?FileServiceOptions $options = null
-    ) {
-        return $this->setFileMetadataAsync(
+    ): void {
+        $this->setFileMetadataAsync(
             $share,
             $path,
             $metadata,
@@ -2604,8 +2604,8 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         string $path,
         string $copyID,
         ?FileServiceOptions $options = null
-    ) {
-        return $this->abortCopyAsync(
+    ): void {
+        $this->abortCopyAsync(
             $share,
             $path,
             $copyID,
@@ -2621,8 +2621,6 @@ class FileRestProxy extends ServiceRestProxy implements IFile
      * @param string                  $copyID  copy operation identifier.
      * @param FileServiceOptions|null $options optional parameters
      *
-     * @return void
-     *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/abort-copy-file
      */
     public function abortCopyAsync(
@@ -2630,7 +2628,7 @@ class FileRestProxy extends ServiceRestProxy implements IFile
         string $path,
         string $copyID,
         ?FileServiceOptions $options = null
-    ) {
+    ): PromiseInterface {
         Validate::canCastAsString($share, 'share');
         Validate::canCastAsString($path, 'path');
         Validate::canCastAsString($copyID, 'copyID');

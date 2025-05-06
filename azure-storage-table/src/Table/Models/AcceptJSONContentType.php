@@ -39,11 +39,11 @@ use MicrosoftAzure\Storage\Table\Internal\TableResources as Resources;
  */
 class AcceptJSONContentType
 {
-    public const NO_METADATA      = Resources::JSON_NO_METADATA_CONTENT_TYPE;
-    public const MINIMAL_METADATA = Resources::JSON_MINIMAL_METADATA_CONTENT_TYPE;
-    public const FULL_METADATA    = Resources::JSON_FULL_METADATA_CONTENT_TYPE;
+    public const string NO_METADATA      = Resources::JSON_NO_METADATA_CONTENT_TYPE;
+    public const string MINIMAL_METADATA = Resources::JSON_MINIMAL_METADATA_CONTENT_TYPE;
+    public const string FULL_METADATA    = Resources::JSON_FULL_METADATA_CONTENT_TYPE;
 
-    public static function validateAcceptContentType($contentType): void
+    public static function validateAcceptContentType(string $contentType): void
     {
         Validate::isTrue(
             $contentType == self::NO_METADATA ||

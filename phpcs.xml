@@ -14,10 +14,17 @@
     <file>tests</file>
 
     <rule ref="BianoCodingStandard">
+        <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
         <exclude name="Generic.CodeAnalysis.UselessOverridingMethod.Found"/>
+        <exclude name="Generic.PHP.DeprecatedFunctions.Deprecated"/>
         <exclude name="Generic.PHP.ForbiddenFunctions.Found"/>
+        <exclude name="Generic.PHP.ForbiddenFunctions.FoundWithAlternative"/>
+        <exclude name="Generic.Strings.UnnecessaryStringConcat.Found"/>
         <exclude name="Squiz.Commenting.FunctionComment.MissingParamName"/>
         <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamName"/>
+        <exclude name="Squiz.NamingConventions.ValidVariableName.NotCamelCaps"/>
+        <exclude name="Squiz.Strings.DoubleQuoteUsage.ContainsVar"/>
         <exclude name="Squiz.Strings.DoubleQuoteUsage.NotRequired"/>
         <exclude name="Squiz.PHP.NonExecutableCode.Unreachable"/>
         <exclude name="Squiz.WhiteSpace.FunctionSpacing.BeforeFirst"/>
@@ -29,19 +36,24 @@
         <exclude name="SlevomatCodingStandard.Commenting.ForbiddenComments.CommentForbidden"/>
         <exclude name="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing.IncorrectLinesCountAfterControlStructure"/>
         <exclude name="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing.IncorrectLinesCountBeforeControlStructure"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn.UselessIfCondition"/>
         <exclude name="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.NoEmptyLineAfterOpeningBrace"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousTraitNaming.SuperfluousSuffix"/>
         <exclude name="SlevomatCodingStandard.Functions.StaticClosure.ClosureNotStatic"/>
         <exclude name="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall.MissingTrailingComma"/>
         <exclude name="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse.MissingTrailingComma"/>
         <exclude name="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration.MissingTrailingComma"/>
         <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation.NonFullyQualifiedClassName"/>
-<!--        <exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFallbackGlobalName"/>-->
-<!--        <exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName"/>-->
+        <!--        <exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFallbackGlobalName"/>-->
+        <!--        <exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName"/>-->
         <exclude name="SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedEqualOperator"/>
         <exclude name="SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedNotEqualOperator"/>
         <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing"/>
         <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification"/>
         <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation"/>
     </rule>
 
 </ruleset>

@@ -45,7 +45,7 @@ class ContinuationToken
     private $location;
 
     public function __construct(
-        $location = ''
+        string $location = ''
     ) {
         $this->setLocation($location);
     }

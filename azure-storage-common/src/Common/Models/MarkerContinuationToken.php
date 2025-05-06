@@ -43,8 +43,8 @@ class MarkerContinuationToken extends ContinuationToken
     private $nextMarker;
 
     public function __construct(
-        $nextMarker = '',
-        $location = ''
+        string $nextMarker = '',
+        string $location = ''
     ) {
         parent::__construct($location);
 

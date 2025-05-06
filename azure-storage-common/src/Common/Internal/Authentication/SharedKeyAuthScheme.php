@@ -81,8 +81,6 @@ class SharedKeyAuthScheme implements IAuthScheme
      *
      * @param string $accountName storage account name.
      * @param string $accountKey  storage account primary or secondary key.
-     *
-     * @return SharedKeyAuthScheme
      */
     public function __construct(string $accountName, string $accountKey)
     {

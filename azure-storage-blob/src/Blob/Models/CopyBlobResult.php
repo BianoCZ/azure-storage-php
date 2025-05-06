@@ -128,7 +128,7 @@ class CopyBlobResult
      * @internal
      *
      */
-    protected function setCopyStatus($copystatus): void
+    protected function setCopyStatus(string $copystatus): void
     {
         $this->_copyStatus = $copystatus;
     }

@@ -86,7 +86,7 @@ abstract class AccessPolicy
      *
      * @return \DateTime.
      */
-    public function getStart()
+    public function getStart(): DateTime
     {
         return $this->start;
     }
@@ -110,7 +110,7 @@ abstract class AccessPolicy
      *
      * @return \DateTime.
      */
-    public function getExpiry()
+    public function getExpiry(): DateTime
     {
         return $this->expiry;
     }
@@ -132,7 +132,7 @@ abstract class AccessPolicy
      *
      * @return string.
      */
-    public function getPermission()
+    public function getPermission(): string
     {
         return $this->permission;
     }
@@ -155,7 +155,7 @@ abstract class AccessPolicy
      *
      * @return string.
      */
-    public function getResourceType()
+    public function getResourceType(): string
     {
         return $this->resourceType;
     }

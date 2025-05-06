@@ -71,7 +71,7 @@ trait TableContinuationTokenTrait
         return $this->continuationToken->getLocation();
     }
 
-    public function getLocationMode()
+    public function getLocationMode(): ?string
     {
         if ($this->continuationToken == null) {
             return parent::getLocationMode();

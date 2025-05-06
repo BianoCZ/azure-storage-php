@@ -159,7 +159,7 @@ abstract class ACLBase
      * @internal
      *
      */
-    protected function setResourceType($resourceType): void
+    protected function setResourceType(string $resourceType): void
     {
         static::validateResourceType($resourceType);
         $this->resourceType = $resourceType;

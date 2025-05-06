@@ -127,10 +127,9 @@ class CommonRequestMiddleware extends MiddlewareBase
     /**
      * Gets the user agent string used in request header.
      *
-     * @param $serviceSDKVersion
      *
      */
-    private static function getUserAgent($serviceSDKVersion): string
+    private static function getUserAgent(string $serviceSDKVersion): string
     {
         // e.g. User-Agent: Azure-Storage/1.0.1-1.1.1 (PHP 5.5.32)/WINNT
         return 'Azure-Storage/' . $serviceSDKVersion . '-' .

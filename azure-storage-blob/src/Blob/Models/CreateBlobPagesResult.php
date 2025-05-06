@@ -44,15 +44,15 @@ use function intval;
 class CreateBlobPagesResult
 {
 
-    private $contentMD5;
+    private string $contentMD5;
 
-    private $etag;
+    private string $etag;
 
-    private $lastModified;
+    private DateTime $lastModified;
 
-    private $requestServerEncrypted;
+    private bool $requestServerEncrypted;
 
-    private $sequenceNumber;
+    private int $sequenceNumber;
 
     /**
      * Creates CreateBlobPagesResult object from $parsed response in array
@@ -104,7 +104,7 @@ class CreateBlobPagesResult
      *
      * @return \DateTime.
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }

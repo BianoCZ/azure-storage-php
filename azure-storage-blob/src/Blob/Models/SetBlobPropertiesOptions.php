@@ -179,10 +179,8 @@ class SetBlobPropertiesOptions extends BlobServiceOptions
 
     /**
      * Gets ContentMD5.
-     *
-     * @return void
      */
-    public function getContentMD5()
+    public function getContentMD5(): string
     {
         return $this->_blobProperties->getContentMD5();
     }

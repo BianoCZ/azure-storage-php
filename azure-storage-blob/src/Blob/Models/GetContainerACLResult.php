@@ -39,11 +39,11 @@ use DateTime;
 class GetContainerACLResult
 {
 
-    private $containerACL;
+    private ContainerACL $containerACL;
 
-    private $lastModified;
+    private DateTime $lastModified;
 
-    private $etag;
+    private string $etag;
 
     /**
      * Parses the given array into signed identifiers
@@ -97,7 +97,7 @@ class GetContainerACLResult
      *
      * @return \DateTime.
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }

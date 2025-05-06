@@ -47,10 +47,10 @@ class TableContinuationToken extends ContinuationToken
     private $nextTableName;
 
     public function __construct(
-        $nextTableName = '',
-        $nextPartitionKey = '',
-        $nextRowKey = '',
-        $location = ''
+        string $nextTableName = '',
+        string $nextPartitionKey = '',
+        string $nextRowKey = '',
+        string $location = ''
     ) {
         parent::__construct($location);
 

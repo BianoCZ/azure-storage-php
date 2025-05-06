@@ -48,8 +48,6 @@ class Queue
      *
      * @param string $name queue name.
      * @param string $url  queue url.
-     *
-     * @return Queue
      */
     public function __construct(string $name, string $url)
     {

@@ -46,8 +46,6 @@ class Range
      *
      * @param int $start the resource start value
      * @param int $end   the resource end value
-     *
-     * @return Range
      */
     public function __construct(int $start, ?int $end = null)
     {

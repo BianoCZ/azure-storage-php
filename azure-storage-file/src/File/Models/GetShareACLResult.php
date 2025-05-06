@@ -95,7 +95,7 @@ class GetShareACLResult
      *
      * @return \DateTime.
      */
-    public function getLastModified()
+    public function getLastModified(): DateTime
     {
         return $this->lastModified;
     }

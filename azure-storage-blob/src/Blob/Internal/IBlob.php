@@ -26,6 +26,9 @@ namespace MicrosoftAzure\Storage\Blob\Internal;
 
 use GuzzleHttp\Promise\PromiseInterface;
 use MicrosoftAzure\Storage\Blob\Models as BlobModels;
+use MicrosoftAzure\Storage\Blob\Models\BreakLeaseResult;
+use MicrosoftAzure\Storage\Common\Models\GetServicePropertiesResult;
+use MicrosoftAzure\Storage\Common\Models\GetServiceStatsResult;
 use MicrosoftAzure\Storage\Common\Models\Range;
 use MicrosoftAzure\Storage\Common\Models\ServiceOptions;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
@@ -531,7 +534,7 @@ interface IBlob
         string $blob,
         Range $range,
         ?BlobModels\CreateBlobPagesOptions $options = null
-    ): void;
+    ): BlobModels\CreateBlobPagesResult;
 
     /**
      * Creates promise to clear a range of pages from the blob.
@@ -614,7 +617,7 @@ interface IBlob
         string $blockId,
         string $content,
         ?BlobModels\CreateBlobBlockOptions $options = null
-    ): void;
+    ): BlobModels\PutBlockResult;
 
     /**
      * Creates a new block to be committed as part of a block blob.
@@ -1410,7 +1413,7 @@ interface IBlob
         string $blob,
         string $leaseId,
         ?BlobModels\BlobServiceOptions $options = null
-    ): BlobModels\AcquireLeaseResult;
+    ): BlobModels\LeaseResult;
 
     /**
      * Creates promise to renew an existing lease
@@ -1478,9 +1481,9 @@ interface IBlob
     public function breakLease(
         string $container,
         string $blob,
-        $breakPeriod = null,
+        ?int $breakPeriod = null,
         ?BlobModels\BlobServiceOptions $options = null
-    ): void;
+    ): BreakLeaseResult;
 
     /**
      * Creates promise to end the lease but ensure that another client cannot
@@ -1495,7 +1498,7 @@ interface IBlob
     public function breakLeaseAsync(
         string $container,
         string $blob,
-        $breakPeriod = null,
+        ?int $breakPeriod = null,
         ?BlobModels\BlobServiceOptions $options = null
     ): PromiseInterface;
 

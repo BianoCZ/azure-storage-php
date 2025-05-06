@@ -39,15 +39,15 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
 class Logging
 {
 
-    private $_version;
+    private string $_version;
 
-    private $_delete;
+    private bool $_delete;
 
-    private $_read;
+    private bool $_read;
 
-    private $_write;
+    private bool $_write;
 
-    private $_retentionPolicy;
+    private RetentionPolicy $_retentionPolicy;
 
     /**
      * Creates object from $parsedResponse.
@@ -96,7 +96,7 @@ class Logging
      *
      * @return bool.
      */
-    public function getWrite()
+    public function getWrite(): bool
     {
         return $this->_write;
     }
@@ -134,10 +134,8 @@ class Logging
 
     /**
      * Gets whether all delete requests should be logged.
-     *
-     * @return void
      */
-    public function getDelete()
+    public function getDelete(): bool
     {
         return $this->_delete;
     }

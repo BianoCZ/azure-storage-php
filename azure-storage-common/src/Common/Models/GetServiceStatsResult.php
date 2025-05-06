@@ -41,9 +41,9 @@ use MicrosoftAzure\Storage\Common\Internal\Utilities;
 class GetServiceStatsResult
 {
 
-    private $status;
+    private string $status;
 
-    private $lastSyncTime;
+    private DateTime $lastSyncTime;
 
     /**
      * Creates object from $parsedResponse.
@@ -107,7 +107,7 @@ class GetServiceStatsResult
      * Sets status of the result.
      *
      */
-    protected function setStatus($status): void
+    protected function setStatus(string $status): void
     {
         $this->status = $status;
     }

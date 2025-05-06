@@ -53,7 +53,7 @@ trait MarkerContinuationTokenTrait
         $this->continuationToken = $continuationToken;
     }
 
-    public function setMarker($marker): void
+    public function setMarker(string $marker): void
     {
         if ($this->continuationToken == null) {
             $this->continuationToken = new MarkerContinuationToken();
@@ -86,7 +86,7 @@ trait MarkerContinuationTokenTrait
      * Gets for location for previous request.
      *
      */
-    public function getLocation(): string
+    public function getLocation(): ?string
     {
         if ($this->continuationToken == null) {
             return null;
@@ -94,7 +94,7 @@ trait MarkerContinuationTokenTrait
         return $this->continuationToken->getLocation();
     }
 
-    public function getLocationMode()
+    public function getLocationMode(): ?string
     {
         if ($this->continuationToken == null) {
             return parent::getLocationMode();

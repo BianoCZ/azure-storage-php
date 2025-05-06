@@ -40,9 +40,9 @@ use MicrosoftAzure\Storage\Common\Models\Range;
 class GetFileOptions extends FileServiceOptions
 {
 
-    private $range = null;
+    private ?Range $range = null;
 
-    private $rangeGetContentMD5 = false;
+    private bool $rangeGetContentMD5 = false;
 
     /**
      * Gets File range.
@@ -85,7 +85,7 @@ class GetFileOptions extends FileServiceOptions
         $this->rangeGetContentMD5 = (bool) $rangeGetContentMD5;
     }
 
-    public function getRangeString()
+    public function getRangeString(): ?string
     {
         if ($this->range != null) {
             return $this->range->getRangeString();

@@ -127,9 +127,9 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
 
     use ServiceRestTrait;
 
-    private $singleBlobUploadThresholdInBytes = Resources::MB_IN_BYTES_32;
+    private int $singleBlobUploadThresholdInBytes = Resources::MB_IN_BYTES_32;
 
-    private $blockSize = Resources::MB_IN_BYTES_4;
+    private int $blockSize = Resources::MB_IN_BYTES_4;
 
     /**
      * Builds a blob service object, it accepts the following
@@ -4145,8 +4145,8 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         string $blob,
         string $copyId,
         ?Models\BlobServiceOptions $options = null
-    ) {
-        return $this->abortCopyAsync(
+    ): void {
+        $this->abortCopyAsync(
             $container,
             $blob,
             $copyId,

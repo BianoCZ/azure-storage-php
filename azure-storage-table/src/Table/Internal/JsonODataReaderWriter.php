@@ -157,7 +157,7 @@ class JsonODataReaderWriter implements IODataReaderWriter
         return $entities;
     }
 
-    private function parseOneEntity($rawEntity)
+    private function parseOneEntity(array $rawEntity): Entity
     {
         $entity = new Entity();
         $timestamp;

@@ -62,8 +62,6 @@ class ServiceException extends LogicException
      *                                    exception.
      *
      * @internal
-     *
-     * @return ServiceException
      */
     public function __construct(ResponseInterface $response)
     {

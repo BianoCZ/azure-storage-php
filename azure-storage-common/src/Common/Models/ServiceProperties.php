@@ -64,7 +64,7 @@ class ServiceProperties
      *
      * @return ServiceProperties.
      */
-    public static function create(array $parsedResponse)
+    public static function create(array $parsedResponse): ServiceProperties
     {
         $result = new ServiceProperties();
 
