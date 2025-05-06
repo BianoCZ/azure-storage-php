@@ -41,9 +41,9 @@ use function is_null;
 class BlobServiceOptions extends ServiceOptions
 {
 
-    private $_leaseId;
+    private string $_leaseId;
 
-    private $_accessConditions;
+    private array $_accessConditions = [];
 
     /**
      * Gets lease Id for the blob
